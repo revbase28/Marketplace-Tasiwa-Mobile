@@ -39,3 +39,11 @@ app.*.symbols
 
 # Obfuscation related
 app.*.map.json
+
+
+# For signing the app
+/android/app/upload-keystore.jks
+/android/key.properties
+
+# Facebook app data
+/android/app/src/main/res/values/strings.xml
