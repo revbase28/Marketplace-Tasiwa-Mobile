@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:zcart/helper/get_recently_viewed.dart';
 import 'package:zcart/riverpod/providers/product_provider.dart';
 import 'package:zcart/riverpod/providers/product_slug_list_provider.dart';
 import 'package:zcart/riverpod/providers/provider.dart';
@@ -12,6 +13,7 @@ import 'package:zcart/riverpod/state/scroll_state.dart';
 import 'package:zcart/riverpod/state/wishlist_state.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:zcart/views/screens/product_details/product_details_screen.dart';
+import 'package:zcart/views/screens/product_list/recently_viewed.dart';
 import 'package:zcart/views/screens/tabs/home_tab/components/error_widget.dart';
 import 'package:zcart/views/shared_widgets/product_details_card.dart';
 import 'package:zcart/views/shared_widgets/product_loading_widget.dart';
@@ -55,6 +57,8 @@ class WishListTab extends ConsumerWidget {
                           Text(LocaleKeys.no_item_found.tr()),
 
                           SizedBox(height: 100),
+
+                          RecentlyViewed().p(10),
 
                           /// Popular Items
                           Padding(
@@ -325,7 +329,10 @@ class WishListTab extends ConsumerWidget {
                             context
                                 .read(productNotifierProvider.notifier)
                                 .getProductDetails(
-                                    wishListState.wishList[index].slug);
+                                    wishListState.wishList[index].slug)
+                                .then((value) {
+                              getRecentlyViewedItems(context);
+                            });
                             context
                                 .read(productSlugListProvider.notifier)
                                 .addProductSlug(

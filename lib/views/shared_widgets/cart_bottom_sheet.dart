@@ -35,7 +35,7 @@ Future<dynamic> addToCartBottomSheet(BuildContext context, responseBody) async {
             ElevatedButton(
                 onPressed: () {
                   context
-                      .nextAndRemoveUntilPage(BottomNavBar(selectedIndex: 3));
+                      .nextAndRemoveUntilPage(BottomNavBar(selectedIndex: 4));
                 },
                 child: Text(LocaleKeys.view_cart.tr())),
             ElevatedButton(

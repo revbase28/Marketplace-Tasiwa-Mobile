@@ -2,6 +2,7 @@ import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:zcart/helper/get_recently_viewed.dart';
 import 'package:zcart/riverpod/providers/dispute_provider.dart';
 import 'package:zcart/riverpod/providers/order_provider.dart';
 import 'package:zcart/riverpod/providers/product_provider.dart';
@@ -295,9 +296,10 @@ class OrderDetailsScreen extends ConsumerWidget {
                                           .read(
                                               productNotifierProvider.notifier)
                                           .getProductDetails(orderDetailsState
-                                              .orderDetails!
-                                              .items![index]
-                                              .slug);
+                                              .orderDetails!.items![index].slug)
+                                          .then((value) {
+                                        getRecentlyViewedItems(context);
+                                      });
                                       context
                                           .read(
                                               productSlugListProvider.notifier)

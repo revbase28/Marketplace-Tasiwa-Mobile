@@ -6,7 +6,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 #Only Chnage this value to update your version
 #1.0.0 is version number and 1 is build number
-version: 2.0.0+1
+version: 2.0.1+2
 
 
 #Don't Change Anything From here
@@ -18,7 +18,7 @@ dependencies:
     sdk: flutter
   flutter_riverpod: ^0.14.0
   http: ^0.13.3
-  flutter_widget_from_html: ^0.6.1
+  flutter_widget_from_html: ^0.7.0
   carousel_slider: ^4.0.0
   flutter_rating_bar: ^4.0.0
   shimmer: ^2.0.0
@@ -37,6 +37,8 @@ dependencies:
   easy_dynamic_theme: ^2.2.0
   google_sign_in: ^5.0.7
   flutter_facebook_auth: ^3.5.1
+  hive: ^2.0.4
+  hive_flutter: ^1.1.0
 
 
 dev_dependencies:

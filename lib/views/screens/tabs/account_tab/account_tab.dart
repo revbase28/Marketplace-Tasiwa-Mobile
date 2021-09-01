@@ -17,6 +17,7 @@ import 'package:zcart/riverpod/state/wishlist_state.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:zcart/views/screens/bottom_nav_bar/bottom_nav_bar.dart';
 import 'package:zcart/views/screens/brand/featured_brands.dart';
+import 'package:zcart/views/screens/product_list/recently_viewed.dart';
 import 'package:zcart/views/screens/tabs/account_tab/account/account_details_screen.dart';
 import 'package:zcart/views/screens/tabs/account_tab/account/address_list.dart';
 import 'package:zcart/views/screens/tabs/account_tab/blogs/blogs_screen.dart';
@@ -53,7 +54,10 @@ class AccountTab extends StatelessWidget {
                 Account_dashboard(),
                 UserActivityCard(),
                 ActionCard(),
+                RecentlyViewed().p(10),
                 FeaturedBrands().p(10),
+
+                /// Recently viewed
               ],
             ),
           ),

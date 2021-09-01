@@ -241,7 +241,9 @@ class CodegenLoader extends AssetLoader{
   "addresses": "ঠিকানা",
   "settings": "সেটিংস",
   "go_shopping": "কেনাকাটা করো",
-  "featured_brands": "বৈশিষ্ট্যযুক্ত ব্র্যান্ড"
+  "featured_brands": "বৈশিষ্ট্যযুক্ত ব্র্যান্ড",
+  "view_all": "সব দেখুন",
+  "recently_viewed": "সম্প্রতি দেখা হয়েছে"
 };
 static const Map<String,dynamic> en = {
   "home_text": "Home",
@@ -470,7 +472,9 @@ static const Map<String,dynamic> en = {
   "addresses": "Addresses",
   "settings": "Settings",
   "go_shopping": "Go Shopping",
-  "featured_brands": "Featured Brands"
+  "featured_brands": "Featured Brands",
+  "view_all": "View all",
+  "recently_viewed": "Recently Viewed"
 };
 static const Map<String,dynamic> es = {
   "about_us": "Sobre nosotros",
@@ -699,7 +703,9 @@ static const Map<String,dynamic> es = {
   "addresses": "Direcciones",
   "settings": "Configuración",
   "go_shopping": "Hacer Compras",
-  "featured_brands": "Marcas destacadas"
+  "featured_brands": "Marcas destacadas",
+  "view_all": "Ver todo",
+  "recently_viewed": "Recientemente Vivek"
 };
 static const Map<String,dynamic> fa = {
   "about_us": "درباره ما",
@@ -928,7 +934,9 @@ static const Map<String,dynamic> fa = {
   "addresses": "آدرس",
   "settings": "تنظیمات",
   "go_shopping": "خرید کنید",
-  "featured_brands": "مارک های معروف"
+  "featured_brands": "مارک های معروف",
+  "view_all": "مشاهده همه",
+  "recently_viewed": "اخیراً ویوک"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"bn": bn, "en": en, "es": es, "fa": fa};
 }

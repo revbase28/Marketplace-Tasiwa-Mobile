@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:zcart/Theme/styles/colors.dart';
+import 'package:flutter/cupertino.dart';
 
 class ProductImageSlider extends StatelessWidget {
   const ProductImageSlider(this.sliderList);
@@ -48,7 +49,7 @@ class ProductImageSlider extends StatelessWidget {
             color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
                 ? kLightColor
                 : kDarkColor,
-            onPressed: () {
+            onPressed: () async {
               context.pop();
             },
           ),

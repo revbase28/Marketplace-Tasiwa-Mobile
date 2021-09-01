@@ -23,10 +23,14 @@ class ProductDetailsModel {
   factory ProductDetailsModel.fromJson(Map<String, dynamic> json) =>
       ProductDetailsModel(
         data: Data.fromJson(json["data"]),
-        variants: Variants.fromJson(json["variants"]),
+        variants: json["variants"] == null
+            ? null
+            : Variants.fromJson(json["variants"]),
         shippingCountryId: json["shipping_country_id"],
-        shippingOptions: List<ShippingOption>.from(
-            json["shipping_options"].map((x) => ShippingOption.fromJson(x))),
+        shippingOptions: json["shipping_options"] == null
+            ? null
+            : List<ShippingOption>.from(json["shipping_options"]
+                .map((x) => ShippingOption.fromJson(x))),
         countries: Map.from(json["countries"])
             .map((k, v) => MapEntry<String, String>(k, v)),
       );
@@ -550,7 +554,8 @@ class AttributeValue {
 
   Map<String, dynamic> toJson() => {
         "name": name,
-        "value": Map.from(value!).map((k, v) => MapEntry<String, dynamic>(k, v)),
+        "value":
+            Map.from(value!).map((k, v) => MapEntry<String, dynamic>(k, v)),
       };
 }
 

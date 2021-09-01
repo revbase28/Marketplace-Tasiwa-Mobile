@@ -2,6 +2,7 @@ import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:zcart/data/models/product/product_details_model.dart';
+import 'package:zcart/helper/get_recently_viewed.dart';
 import 'package:zcart/riverpod/providers/product_slug_list_provider.dart';
 import 'package:zcart/riverpod/providers/product_provider.dart';
 import 'package:zcart/views/screens/product_details/product_details_screen.dart';
@@ -46,7 +47,10 @@ class ProductDetailsCard extends StatelessWidget {
                 onTap: () {
                   context
                       .read(productNotifierProvider.notifier)
-                      .getProductDetails(productList![index].slug);
+                      .getProductDetails(productList![index].slug)
+                      .then((value) {
+                    getRecentlyViewedItems(context);
+                  });
                   context
                       .read(productSlugListProvider.notifier)
                       .addProductSlug(productList![index].slug);

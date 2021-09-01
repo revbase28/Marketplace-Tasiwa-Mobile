@@ -5,14 +5,13 @@ import 'package:zcart/data/controller/cart/coupon_controller.dart';
 import 'package:zcart/data/network/api.dart';
 import 'package:zcart/helper/constants.dart';
 import 'package:zcart/data/network/network_utils.dart';
-import 'package:zcart/helper/images.dart';
+import 'package:zcart/helper/get_recently_viewed.dart';
 import 'package:zcart/riverpod/providers/brand_provider.dart';
 import 'package:zcart/riverpod/providers/deals_provider.dart';
 import 'package:zcart/riverpod/providers/dispute_provider.dart';
 import 'package:zcart/riverpod/providers/provider.dart';
 import 'package:zcart/views/screens/bottom_nav_bar/bottom_nav_bar.dart';
 import 'package:zcart/views/shared_widgets/shared_widgets.dart';
-
 import 'package:velocity_x/velocity_x.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -30,13 +29,11 @@ class _LoadingScreenState extends State<LoadingScreen> {
   }
 
   goToNextScreen() async {
-    //Shared Pref Initialization
-    await initialize();
     var responseBody = await handleResponse(
         await getRequest(API.orders, bearerToken: true),
         showToast: false);
     if (responseBody.runtimeType == int && responseBody == 401) {
-      await getSharedPref().then((value) => value.clear());
+      await clearSharedPref();
     }
     accessAllowed = await getBoolAsync(LOGGED_IN, defaultValue: false);
     initialData();
@@ -59,6 +56,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
         .getAllDealsUnderThePrice();
     context.read(featuredBrandsNotifierProvider.notifier).getFeaturedBrands();
     context.read(cartNotifierProvider.notifier).getCartList();
+    getRecentlyViewedItems(context);
 
     if (accessAllowed) {
       context.read(ordersProvider.notifier).orders();

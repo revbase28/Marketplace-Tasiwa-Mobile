@@ -1,6 +1,6 @@
 # zCart Customer App
 
-An eCommerce customer app for zCart Multi-vendor Marketplace built with Flutter. More details can be fount here https://incevio.com/
+An eCommerce customer app for zCart Multi-vendor Marketplace built with Flutter. More details can be fount on [incevio.com] (https://incevio.com)
 
 ## Getting Started
 

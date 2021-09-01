@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:zcart/data/controller/blog/blog_controller.dart';
 import 'package:zcart/data/controller/blog/blog_state.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
@@ -53,11 +54,22 @@ class BlogsScreen extends ConsumerWidget {
                             subtitle: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  blogsState.blogList![index].excerpt!,
-                                  style: context.textTheme.subtitle2,
-                                  maxLines: 3,
-                                  overflow: TextOverflow.ellipsis,
+                                HtmlWidget(
+                                  blogsState.blogList![index].excerpt!
+                                          .substring(
+                                              0,
+                                              blogsState.blogList![index]
+                                                          .excerpt!.length >
+                                                      60
+                                                  ? 60
+                                                  : blogsState.blogList![index]
+                                                      .excerpt!.length) +
+                                      (blogsState.blogList![index].excerpt!
+                                                  .length >
+                                              60
+                                          ? "..."
+                                          : ""),
+                                  textStyle: context.textTheme.subtitle2!,
                                 ).pOnly(bottom: 5),
                                 Text(
                                   "${LocaleKeys.author.tr()} : ${blogsState.blogList![index].author!.name}",

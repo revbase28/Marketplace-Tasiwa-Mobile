@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:zcart/data/controller/search/search_controller.dart';
 import 'package:zcart/data/controller/search/search_state.dart';
+import 'package:zcart/helper/get_recently_viewed.dart';
 import 'package:zcart/riverpod/providers/provider.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:zcart/views/screens/product_details/product_details_screen.dart';
+import 'package:zcart/views/screens/product_list/recently_viewed.dart';
 import 'package:zcart/views/screens/tabs/home_tab/components/error_widget.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -86,7 +88,10 @@ class _SearchScreenState extends State<SearchScreen> {
                               context
                                   .read(productNotifierProvider.notifier)
                                   .getProductDetails(
-                                      searchState.searchedItem![index].slug);
+                                      searchState.searchedItem![index].slug)
+                                  .then((value) {
+                                getRecentlyViewedItems(context);
+                              });
                               context
                                   .read(productSlugListProvider.notifier)
                                   .addProductSlug(
@@ -104,22 +109,30 @@ class _SearchScreenState extends State<SearchScreen> {
                         Text(
                           LocaleKeys.no_item_found.tr(),
                           textAlign: TextAlign.center,
-                        )
+                        ),
                       ],
                     )
               : searchState is SearchLoadingState
                   ? LoadingWidget()
                   : searchState is SearchInitialState
-                      ? Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            Icon(Icons.info_outline).pOnly(bottom: 10),
-                            Text(
-                              LocaleKeys.search_for_something.tr(),
-                              textAlign: TextAlign.center,
-                            )
-                          ],
+                      ? SingleChildScrollView(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              SizedBox(
+                                height: 100,
+                              ),
+                              Icon(Icons.info_outline).pOnly(bottom: 10),
+                              Text(
+                                LocaleKeys.search_for_something.tr(),
+                                textAlign: TextAlign.center,
+                              ),
+                              SizedBox(
+                                height: 100,
+                              ),
+                              RecentlyViewed().p(10),
+                            ],
+                          ),
                         )
                       : searchState is SearchErrorState
                           ? ErrorMessageWidget(searchState.message)

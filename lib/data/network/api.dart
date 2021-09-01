@@ -13,6 +13,10 @@ class API {
 
   //
 
+  //
+
+  //
+
   //Don't change anything below this line
 
   /// User
@@ -55,6 +59,9 @@ class API {
 
   /// Random Items
   static const random = 'listings/random';
+
+  /// Recently Viewed Items
+  static const recentlyViewed = 'recently_viewed_items';
 
   /// Shops
   static const vendors = 'shops';

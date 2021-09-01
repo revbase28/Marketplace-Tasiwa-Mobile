@@ -6,11 +6,13 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:zcart/data/models/cart/cart_model.dart';
 import 'package:zcart/data/network/network_utils.dart';
+import 'package:zcart/helper/get_recently_viewed.dart';
 import 'package:zcart/riverpod/providers/provider.dart';
 import 'package:zcart/riverpod/state/state.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:zcart/views/screens/bottom_nav_bar/bottom_nav_bar.dart';
 import 'package:zcart/views/screens/product_details/product_details_screen.dart';
+import 'package:zcart/views/screens/product_list/recently_viewed.dart';
 import 'package:zcart/views/screens/tabs/home_tab/components/error_widget.dart';
 import 'package:zcart/views/screens/tabs/myCart_tab/checkout/checkout_screen.dart';
 import 'package:zcart/views/shared_widgets/product_details_card.dart';
@@ -82,6 +84,8 @@ class _MyCartTabState extends State<MyCartTab> {
                                     child: Text(LocaleKeys.go_shopping.tr())),
                                 SizedBox(height: 100),
 
+                                RecentlyViewed().p(10),
+
                                 /// Popular Items
                                 Padding(
                                   padding: EdgeInsets.symmetric(horizontal: 16),
@@ -150,7 +154,10 @@ class CartItemCard extends StatelessWidget {
                         .onInkTap(() {
                       context
                           .read(productNotifierProvider.notifier)
-                          .getProductDetails(cartItem.items![index].slug);
+                          .getProductDetails(cartItem.items![index].slug)
+                          .then((value) {
+                        getRecentlyViewedItems(context);
+                      });
                       context
                           .read(productSlugListProvider.notifier)
                           .addProductSlug(cartItem.items![index].slug);

@@ -9,6 +9,7 @@ class ProductSlugListNotifier extends StateNotifier<List<String?>> {
 
   addProductSlug(String? slug) {
     state.add(slug);
+
     print("Addition: $state");
   }
 

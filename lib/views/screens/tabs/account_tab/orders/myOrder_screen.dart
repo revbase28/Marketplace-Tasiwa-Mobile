@@ -5,6 +5,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:zcart/data/controller/chat/chat_controller.dart';
+import 'package:zcart/helper/get_recently_viewed.dart';
 import 'package:zcart/riverpod/providers/dispute_provider.dart';
 import 'package:zcart/riverpod/providers/order_provider.dart';
 import 'package:zcart/riverpod/providers/provider.dart';
@@ -178,7 +179,10 @@ class OrderCard extends StatelessWidget {
                         context
                             .read(productNotifierProvider.notifier)
                             .getProductDetails(orderListState
-                                .orders![orderIndex!].items![itemsIndex].slug);
+                                .orders![orderIndex!].items![itemsIndex].slug)
+                            .then((value) {
+                          getRecentlyViewedItems(context);
+                        });
                         context
                             .read(productSlugListProvider.notifier)
                             .addProductSlug(orderListState

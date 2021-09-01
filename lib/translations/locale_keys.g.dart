@@ -228,5 +228,7 @@ abstract class  LocaleKeys {
   static const settings = 'settings';
   static const go_shopping = 'go_shopping';
   static const featured_brands = 'featured_brands';
+  static const view_all = 'view_all';
+  static const recently_viewed = 'recently_viewed';
 
 }

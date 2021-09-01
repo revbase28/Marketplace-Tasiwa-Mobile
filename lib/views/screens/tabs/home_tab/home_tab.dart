@@ -100,8 +100,6 @@ class HomeTab extends ConsumerWidget {
                         : Container(),
 
                 ///Deals under the price
-                // DealsUnderThePrice().pOnly(top: 15),
-
                 dealsUnderThePrice is DealsUnderThePriceStateLoadedState
                     ? ProductCard(
                             title: dealsUnderThePrice
@@ -110,18 +108,18 @@ class HomeTab extends ConsumerWidget {
                                 dealsUnderThePrice.dealsUnderThePrice!.data)
                         .py(15)
                     : dealsUnderThePrice is DealsUnderThePriceStateErrorState
-                        ? ErrorMessageWidget(dealsUnderThePrice.message)
+                        ? Container()
                         : ProductLoadingWidget(),
 
                 ///Featured Brands
-                FeaturedBrands().pOnly(top: 15),
+                FeaturedBrands(),
 
                 /// Recently Added (Latest Item)
                 latestItemState is LatestItemLoadedState
                     ? ProductCard(
                             title: LocaleKeys.recently_added.tr(),
                             productList: latestItemState.latestItemList)
-                        .py(15)
+                        .pOnly(bottom: 15)
                     : latestItemState is LatestItemErrorState
                         ? ErrorMessageWidget(latestItemState.message)
                         : ProductLoadingWidget(),
@@ -156,9 +154,10 @@ class HomeTab extends ConsumerWidget {
                 /// Random Items (Additional Items to Explore in the UI)
                 randomItemState is RandomItemLoadedState
                     ? ProductDetailsCard(
+                            isTitleCentered: true,
                             title: LocaleKeys.additional_items.tr(),
                             productList: randomItemState.randomItemList)
-                        .py(15)
+                        .py(20)
                     : randomItemState is RandomItemErrorState
                         ? ErrorMessageWidget(randomItemState.message)
                         : ProductLoadingWidget(),

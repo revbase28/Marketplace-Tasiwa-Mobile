@@ -89,11 +89,12 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 context
                     .read(productSlugListProvider.notifier)
                     .removeProductSlug();
-                if (context.read(productSlugListProvider).isNotEmpty)
+                if (context.read(productSlugListProvider).isNotEmpty) {
                   context
                       .read(productNotifierProvider.notifier)
                       .getProductDetails(
                           context.read(productSlugListProvider).last);
+                }
 
                 Navigator.of(context).pop(true);
 
@@ -124,11 +125,15 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                           _decreaseQuantity(),
                                       formKey: _formKey,
                                     ).cornerRadius(10).p(10),
-                                    ShippingCard(
-                                            productDetailsState:
-                                                productDetailsState)
-                                        .cornerRadius(10)
-                                        .px(10),
+                                    productDetailsState
+                                                .productModel.shippingOptions ==
+                                            null
+                                        ? Container()
+                                        : ShippingCard(
+                                                productDetailsState:
+                                                    productDetailsState)
+                                            .cornerRadius(10)
+                                            .px(10),
                                     ProductDetailsWidget(
                                         productDetailsState:
                                             productDetailsState),
@@ -212,7 +217,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                   ),
                                   onPressed: () {
                                     context.nextAndRemoveUntilPage(
-                                        BottomNavBar(selectedIndex: 3));
+                                        BottomNavBar(selectedIndex: 4));
                                   },
                                   icon: Icon(CupertinoIcons.cart,
                                       color: kDarkColor, size: 20),
@@ -275,12 +280,23 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                             productDetailsState
                                                 .productModel.shippingCountryId,
                                             productDetailsState.productModel
-                                                .shippingOptions!.first.id,
-                                            productDetailsState
-                                                .productModel
-                                                .shippingOptions!
-                                                .first
-                                                .shippingZoneId);
+                                                        .shippingOptions ==
+                                                    null
+                                                ? null
+                                                : productDetailsState
+                                                    .productModel
+                                                    .shippingOptions!
+                                                    .first
+                                                    .id,
+                                            productDetailsState.productModel
+                                                        .shippingOptions ==
+                                                    null
+                                                ? null
+                                                : productDetailsState
+                                                    .productModel
+                                                    .shippingOptions!
+                                                    .first
+                                                    .shippingZoneId);
                                   }
                                 }
                               }),
