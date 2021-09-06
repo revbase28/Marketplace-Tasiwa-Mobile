@@ -8,6 +8,7 @@
 .buildlog/
 .history
 .svn/
+.vscode/
 
 # IntelliJ related
 *.iml
@@ -42,8 +43,8 @@ app.*.map.json
 
 
 # For signing the app
-/android/app/upload-keystore.jks
-/android/key.properties
+**/android/app/upload-keystore.jks
+**/android/key.properties
 
 # Facebook app data
-/android/app/src/main/res/values/strings.xml
+**/android/app/src/main/res/values/strings.xml
