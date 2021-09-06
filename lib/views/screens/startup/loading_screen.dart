@@ -35,7 +35,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
     if (responseBody.runtimeType == int && responseBody == 401) {
       await clearSharedPref();
     }
-    accessAllowed = await getBoolAsync(LOGGED_IN, defaultValue: false);
+    accessAllowed = getBoolAsync(LOGGED_IN, defaultValue: false);
     initialData();
     Future.delayed(Duration(milliseconds: 300),
         () => context.nextReplacementPage(BottomNavBar()));

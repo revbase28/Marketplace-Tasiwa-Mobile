@@ -38,10 +38,10 @@ class UserRepository implements IUserRepository {
 
   /// Login user Using Google
   @override
-  Future<User?> logInUsingGoogle(String access_token) async {
+  Future<User?> logInUsingGoogle(String accessToken) async {
     await setValue(LOGGED_IN, false);
 
-    var requestBody = {'access_token': access_token};
+    var requestBody = {'access_token': accessToken};
     var responseBody;
 
     try {
@@ -64,10 +64,10 @@ class UserRepository implements IUserRepository {
   }
 
   @override
-  Future<User?> logInUsingFacebook(String access_token) async {
+  Future<User?> logInUsingFacebook(String accessToken) async {
     await setValue(LOGGED_IN, false);
 
-    var requestBody = {'access_token': access_token};
+    var requestBody = {'access_token': accessToken};
     var responseBody;
 
     try {

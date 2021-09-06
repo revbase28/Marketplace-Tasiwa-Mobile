@@ -20,20 +20,20 @@ class UserNotifier extends StateNotifier<UserState> {
     }
   }
 
-  Future<void> loginUsingGoogle(String access_token) async {
+  Future<void> loginUsingGoogle(String accessToken) async {
     try {
       state = UserLoadingState();
-      final user = await _iUserRepository.logInUsingGoogle(access_token);
+      final user = await _iUserRepository.logInUsingGoogle(accessToken);
       state = UserLoadedState(user);
     } on NetworkException {
       state = UserErrorState(LocaleKeys.something_went_wrong.tr());
     }
   }
 
-  Future<void> loginUsingFacebook(String access_token) async {
+  Future<void> loginUsingFacebook(String accessToken) async {
     try {
       state = UserLoadingState();
-      final user = await _iUserRepository.logInUsingFacebook(access_token);
+      final user = await _iUserRepository.logInUsingFacebook(accessToken);
       state = UserLoadedState(user);
     } on NetworkException {
       state = UserErrorState(LocaleKeys.something_went_wrong.tr());

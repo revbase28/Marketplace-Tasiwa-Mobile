@@ -30,7 +30,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
   }
 
   getLoginState() async {
-    accessAllowed = await getBoolAsync(LOGGED_IN, defaultValue: false);
+    accessAllowed = getBoolAsync(LOGGED_IN, defaultValue: false);
   }
 
   @override

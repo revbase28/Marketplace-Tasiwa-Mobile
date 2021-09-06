@@ -51,7 +51,7 @@ class AccountTab extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Account_dashboard(),
+                AccountDashboard(),
                 UserActivityCard(),
                 ActionCard(),
                 RecentlyViewed().p(10),
@@ -65,7 +65,7 @@ class AccountTab extends StatelessWidget {
   }
 }
 
-class Account_dashboard extends StatelessWidget {
+class AccountDashboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer(builder: (context, watch, _) {

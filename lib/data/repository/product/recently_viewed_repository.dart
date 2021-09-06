@@ -17,10 +17,10 @@ class RecentlyViewedRepository implements IRecentlyViewedRepository {
     if (responseBody is List) {
       return null;
     } else {
-      ProductModel RecentlyReviewedItemModel =
+      ProductModel recentlyReviewedItemModel =
           ProductModel.fromJson(responseBody);
 
-      return RecentlyReviewedItemModel.data;
+      return recentlyReviewedItemModel.data;
     }
   }
 }

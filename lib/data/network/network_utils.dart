@@ -24,7 +24,7 @@ Future<Response> getRequest(String? endPoint,
   if (await isNetworkAvailable()) {
     var headers;
     Response response;
-    var accessToken = await getStringAsync(ACCESS);
+    var accessToken = getStringAsync(ACCESS);
 
     if (bearerToken) {
       headers = {
@@ -64,7 +64,7 @@ postRequest(String endPoint, Map? requestBody,
       print('URL: $endPoint');
     print('body: $requestBody');
 
-    var accessToken = await getStringAsync(ACCESS);
+    var accessToken = getStringAsync(ACCESS);
 
     var headers = {
       HttpHeaders.acceptHeader: 'application/json; charset=utf-8',
@@ -100,7 +100,7 @@ putRequest(String endPoint, Map request, {bool bearerToken = true}) async {
     print('URL: ${API.base}$endPoint');
     print('Request: $request');
 
-    var accessToken = await getStringAsync(ACCESS);
+    var accessToken = getStringAsync(ACCESS);
 
     var headers = {
       HttpHeaders.acceptHeader: 'application/json; charset=utf-8',
@@ -136,7 +136,7 @@ multiPartRequest(String endPoint, Map body,
       Uri.parse('${API.base}' + '$endPoint'),
     );
 
-    var accessToken = await getStringAsync(ACCESS);
+    var accessToken = getStringAsync(ACCESS);
 
     var headers = {
       HttpHeaders.acceptHeader: 'application/json; charset=utf-8',
@@ -183,7 +183,7 @@ patchRequest(String endPoint, Map request,
 
 deleteRequest(String endPoint, {bool bearerToken = true}) async {
   if (await isNetworkAvailable()) {
-    var accessToken = await getStringAsync(ACCESS);
+    var accessToken = getStringAsync(ACCESS);
     print('URL: ${API.base}$endPoint');
 
     var headers = {

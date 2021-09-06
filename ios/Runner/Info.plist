@@ -45,6 +45,8 @@
 		<array>
 			<string>en</string>
 			<string>bn</string>
+			<string>es</string>
+			<string>fa</string>
 		</array>
 		<key>UIStatusBarHidden</key>
 		<true/>
