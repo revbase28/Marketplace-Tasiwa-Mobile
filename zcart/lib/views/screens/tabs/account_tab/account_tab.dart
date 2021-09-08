@@ -211,7 +211,7 @@ class UserActivityCard extends StatelessWidget {
 
                   return Text(
                     orderListState is OrdersLoadedState
-                        ? orderListState.orders!.length.toString()
+                        ? orderListState.totalOrder.toString()
                         : "0",
                     style: context.textTheme.headline4!.copyWith(
                         color: kPrimaryColor, fontWeight: FontWeight.bold),

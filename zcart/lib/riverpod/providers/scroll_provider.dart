@@ -14,6 +14,11 @@ final categoryDetailsScrollNotifierProvider =
 final disputesScrollNotifierProvider =
     StateNotifierProvider<DisputesScrollNotifier, ScrollState>(
         (ref) => DisputesScrollNotifier());
+
 final wishlistScrollNotifierProvider =
     StateNotifierProvider<WishListScrollNotifier, ScrollState>(
         (ref) => WishListScrollNotifier());
+
+final orderScrollNotifierProvider =
+    StateNotifierProvider<OrderScrollNotifier, ScrollState>(
+        (ref) => OrderScrollNotifier());

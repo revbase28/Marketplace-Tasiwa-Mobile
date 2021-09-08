@@ -18,8 +18,9 @@ class OrdersLoadingState extends OrdersState {
 
 class OrdersLoadedState extends OrdersState {
   final List<Orders>? orders;
+  final int totalOrder;
 
-  const OrdersLoadedState(this.orders);
+  const OrdersLoadedState(this.orders, {this.totalOrder = 0});
 }
 
 class OrdersErrorState extends OrdersState {

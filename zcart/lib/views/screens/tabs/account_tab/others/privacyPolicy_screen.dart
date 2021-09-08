@@ -17,35 +17,32 @@ class PrivacyPolicyScreen extends StatelessWidget {
         elevation: 0,
       ),
       body: SafeArea(
-        child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Consumer(
-                builder: (context, watch, _) {
-                  final privacyPolicyState = watch(privacyPolicyProvider);
-                  return privacyPolicyState is PrivacyPolicyLoadedState
-                      ? HtmlWidget(
-                          privacyPolicyState.privacyPolicyModel.data!.content!,
-                          webView: true,
-                        )
-                      : privacyPolicyState is PrivacyPolicyLoadingState
-                          ? LoadingWidget()
-                          : Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  Icon(Icons.info_outline),
-                                  const SizedBox(height: 10),
-                                  Text(LocaleKeys.no_data_yet.tr())
-                                ],
-                              ),
-                            );
-                },
-              )
-            ],
+        child: SingleChildScrollView(
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+            child: Consumer(
+              builder: (context, watch, _) {
+                final privacyPolicyState = watch(privacyPolicyProvider);
+                return privacyPolicyState is PrivacyPolicyLoadedState
+                    ? HtmlWidget(
+                        privacyPolicyState.privacyPolicyModel.data!.content!,
+                        webView: true,
+                      )
+                    : privacyPolicyState is PrivacyPolicyLoadingState
+                        ? LoadingWidget()
+                        : Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                Icon(Icons.info_outline),
+                                const SizedBox(height: 10),
+                                Text(LocaleKeys.no_data_yet.tr())
+                              ],
+                            ),
+                          );
+              },
+            ),
           ),
         ),
       ),

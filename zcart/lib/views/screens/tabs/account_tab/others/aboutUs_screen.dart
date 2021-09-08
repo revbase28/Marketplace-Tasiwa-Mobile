@@ -18,36 +18,33 @@ class AboutUsScreen extends StatelessWidget {
         elevation: 0,
       ),
       body: SafeArea(
-        child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Consumer(
-                builder: (context, watch, _) {
-                  final aboutUsState = watch(aboutUsProvider);
-                  return aboutUsState is AboutUsLoadedState
-                      ? HtmlWidget(
-                          aboutUsState.aboutUsModel.data!.content!,
-                          textStyle: context.textTheme.bodyText2!,
-                          webView: true,
-                        )
-                      : aboutUsState is AboutUsLoadingState
-                          ? LoadingWidget()
-                          : Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  Icon(Icons.info_outline),
-                                  const SizedBox(height: 10),
-                                  Text(LocaleKeys.no_data_yet.tr())
-                                ],
-                              ),
-                            );
-                },
-              )
-            ],
+        child: SingleChildScrollView(
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+            child: Consumer(
+              builder: (context, watch, _) {
+                final aboutUsState = watch(aboutUsProvider);
+                return aboutUsState is AboutUsLoadedState
+                    ? HtmlWidget(
+                        aboutUsState.aboutUsModel.data!.content!,
+                        textStyle: context.textTheme.bodyText2!,
+                        webView: true,
+                      )
+                    : aboutUsState is AboutUsLoadingState
+                        ? LoadingWidget()
+                        : Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                Icon(Icons.info_outline),
+                                const SizedBox(height: 10),
+                                Text(LocaleKeys.no_data_yet.tr())
+                              ],
+                            ),
+                          );
+              },
+            ),
           ),
         ),
       ),

@@ -18,6 +18,20 @@ class OrdersNotifier extends StateNotifier<OrdersState> {
       else
         toast(LocaleKeys.please_wait.tr());
       final orderList = await _iOrderRepository.orders();
+      final orderCount = _iOrderRepository.orderCount();
+      state = OrdersLoadedState(orderList, totalOrder: orderCount);
+    } on NetworkException {
+      state = OrdersErrorState(LocaleKeys.something_went_wrong.tr());
+    }
+  }
+
+  Future moreOrders({bool ignoreLoadingState = false}) async {
+    try {
+      if (!ignoreLoadingState)
+        state = OrdersLoadingState();
+      else
+        toast(LocaleKeys.please_wait.tr());
+      final orderList = await _iOrderRepository.moreOrders();
       state = OrdersLoadedState(orderList);
     } on NetworkException {
       state = OrdersErrorState(LocaleKeys.something_went_wrong.tr());

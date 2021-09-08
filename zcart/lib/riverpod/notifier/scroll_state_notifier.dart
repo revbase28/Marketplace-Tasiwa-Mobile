@@ -106,3 +106,24 @@ class WishListScrollNotifier extends StateNotifier<ScrollState> {
     }
   }
 }
+
+class OrderScrollNotifier extends StateNotifier<ScrollState> {
+  OrderScrollNotifier() : super(ScrollInitialState());
+
+  final _scrollController = ScrollController();
+
+  get controller {
+    _scrollController.addListener(scrollListener);
+    return _scrollController;
+  }
+
+  get scrollNotifierState => state;
+
+  scrollListener() {
+    if (_scrollController.offset >=
+            _scrollController.position.maxScrollExtent &&
+        !_scrollController.position.outOfRange) {
+      state = ScrollReachedBottomState();
+    }
+  }
+}

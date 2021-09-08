@@ -10,6 +10,7 @@ import 'package:zcart/riverpod/providers/dispute_provider.dart';
 import 'package:zcart/riverpod/providers/order_provider.dart';
 import 'package:zcart/riverpod/providers/provider.dart';
 import 'package:zcart/riverpod/state/order_state.dart';
+import 'package:zcart/riverpod/state/scroll_state.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:zcart/views/screens/bottom_nav_bar/bottom_nav_bar.dart';
 import 'package:zcart/views/screens/product_details/product_details_screen.dart';
@@ -24,6 +25,9 @@ class MyOrderScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final ordersState = watch(ordersProvider);
+    final scrollControllerProvider =
+        watch(orderScrollNotifierProvider.notifier);
+
     return Scaffold(
       appBar: AppBar(
         title: Text(LocaleKeys.orders.tr()),
@@ -52,13 +56,24 @@ class MyOrderScreen extends ConsumerWidget {
                           ),
                         ),
                       )
-                    : ListView.builder(
-                        itemCount: ordersState.orders!.length,
-                        itemBuilder: (context, orderIndex) {
-                          return OrderCard(
-                              orderListState: ordersState,
-                              orderIndex: orderIndex);
-                        }),
+                    : ProviderListener<ScrollState>(
+                        onChange: (context, state) {
+                          if (state is ScrollReachedBottomState) {
+                            context
+                                .read(ordersProvider.notifier)
+                                .moreOrders(ignoreLoadingState: true);
+                          }
+                        },
+                        provider: orderScrollNotifierProvider,
+                        child: ListView.builder(
+                            controller: scrollControllerProvider.controller,
+                            itemCount: ordersState.orders!.length,
+                            itemBuilder: (context, orderIndex) {
+                              return OrderCard(
+                                  orderListState: ordersState,
+                                  orderIndex: orderIndex);
+                            }),
+                      ),
               )
             : ordersState is OrdersErrorState
                 ? Container(
@@ -118,12 +133,15 @@ class OrderCard extends StatelessWidget {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            orderListState.orders![orderIndex!].shop!.name!,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
+                          orderListState.orders![orderIndex!].shop!.name == null
+                              ? Text("")
+                              : Text(
+                                  orderListState
+                                      .orders![orderIndex!].shop!.name!,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
                           RatingBar.builder(
                             initialRating: double.parse(orderListState
                                     .orders![orderIndex!].shop!.rating ??
