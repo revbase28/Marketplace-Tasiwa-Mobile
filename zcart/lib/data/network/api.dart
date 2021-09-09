@@ -11,6 +11,10 @@ class API {
   //Point the API to the base URL
   static const base = test;
 
+  // Stripe Publishable Key
+  static const STRIPE_PUBLISHABLE_KEY =
+      "pk_test_51Gyxp2JewI4n8wVFDHRNMHmzOLaoc0fbcS9qzlWMDUAqrJ0yHgrXY5sWett0K6wskEWqauH8Sj4qL4A5zsBmPmxC00jHvnpCfL";
+
   //
 
   //

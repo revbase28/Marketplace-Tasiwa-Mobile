@@ -225,81 +225,92 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                       ? "+"
                                       : cartItems.toString())),
                               Spacer(),
-                              Container(
-                                height: 40,
-                                width: context.screenWidth * 0.50,
-                                color: kPrimaryColor,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(LocaleKeys.add_to_cart.tr(),
-                                            style: context.textTheme.subtitle2!
-                                                .copyWith(
-                                                    color:
-                                                        kPrimaryLightTextColor)),
-                                        Text(
-                                          "${LocaleKeys.total.tr()} - \$${_totalPrice.toDoubleStringAsPrecised(length: 2)}",
-                                          style: context.textTheme.overline!
-                                              .copyWith(
-                                                  color:
-                                                      kPrimaryLightTextColor),
-                                        )
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    Icon(CupertinoIcons.cart_badge_plus,
-                                            color: kPrimaryLightTextColor,
-                                            size: 20)
-                                        .pOnly(left: 10)
-                                  ],
-                                ).px(10),
-                              ).cornerRadius(10).onInkTap(() async {
-                                if (productDetailsState is ProductLoadedState) {
-                                  if (productDetailsState.productModel.variants!
-                                              .attributes !=
-                                          null
-                                      ? _formKey.currentState!.validate()
-                                      : true) {
-                                    toast(LocaleKeys.please_wait.tr());
-                                    context
-                                        .read(cartNotifierProvider.notifier)
-                                        .addToCart(
-                                            context,
-                                            productDetailsState
-                                                .productModel.data!.slug,
-                                            _quantity,
-                                            productDetailsState
-                                                .productModel.shippingCountryId,
-                                            productDetailsState.productModel
-                                                        .shippingOptions ==
-                                                    null
-                                                ? null
-                                                : productDetailsState
-                                                    .productModel
-                                                    .shippingOptions!
-                                                    .first
-                                                    .id,
-                                            productDetailsState.productModel
-                                                        .shippingOptions ==
-                                                    null
-                                                ? null
-                                                : productDetailsState
-                                                    .productModel
-                                                    .shippingOptions!
-                                                    .first
-                                                    .shippingZoneId);
-                                  }
-                                }
-                              }),
+                              productDetailsState is ProductLoadedState
+                                  ? Container(
+                                      height: 40,
+                                      width: context.screenWidth * 0.50,
+                                      color: kPrimaryColor,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(LocaleKeys.add_to_cart.tr(),
+                                                  style: context
+                                                      .textTheme.subtitle2!
+                                                      .copyWith(
+                                                          color:
+                                                              kPrimaryLightTextColor)),
+                                              Text(
+                                                "${LocaleKeys.total.tr()} - ${productDetailsState.productModel.data!.currencySymbol!}${_totalPrice.toDoubleStringAsPrecised(length: 2)}",
+                                                style: context
+                                                    .textTheme.overline!
+                                                    .copyWith(
+                                                        color:
+                                                            kPrimaryLightTextColor),
+                                              )
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          Icon(CupertinoIcons.cart_badge_plus,
+                                                  color: kPrimaryLightTextColor,
+                                                  size: 20)
+                                              .pOnly(left: 10)
+                                        ],
+                                      ).px(10),
+                                    ).cornerRadius(10).onInkTap(() async {
+                                      if (productDetailsState
+                                          is ProductLoadedState) {
+                                        if (productDetailsState.productModel
+                                                    .variants!.attributes !=
+                                                null
+                                            ? _formKey.currentState!.validate()
+                                            : true) {
+                                          toast(LocaleKeys.please_wait.tr());
+                                          context
+                                              .read(
+                                                  cartNotifierProvider.notifier)
+                                              .addToCart(
+                                                  context,
+                                                  productDetailsState
+                                                      .productModel.data!.slug,
+                                                  _quantity,
+                                                  productDetailsState
+                                                      .productModel
+                                                      .shippingCountryId,
+                                                  productDetailsState
+                                                              .productModel
+                                                              .shippingOptions ==
+                                                          null
+                                                      ? null
+                                                      : productDetailsState
+                                                          .productModel
+                                                          .shippingOptions!
+                                                          .first
+                                                          .id,
+                                                  productDetailsState
+                                                              .productModel
+                                                              .shippingOptions ==
+                                                          null
+                                                      ? null
+                                                      : productDetailsState
+                                                          .productModel
+                                                          .shippingOptions!
+                                                          .first
+                                                          .shippingZoneId);
+                                        }
+                                      }
+                                    })
+                                  : Container(),
                             ],
                           ),
                         ),
