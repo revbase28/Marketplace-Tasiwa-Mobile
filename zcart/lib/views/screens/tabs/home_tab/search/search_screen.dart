@@ -17,6 +17,8 @@ import 'package:zcart/Theme/styles/colors.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 class SearchScreen extends StatefulWidget {
+  const SearchScreen({Key? key}) : super(key: key);
+
   @override
   _SearchScreenState createState() => _SearchScreenState();
 }
@@ -29,22 +31,20 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Container(
-          child: TextField(
-            autofocus: true,
-            style: TextStyle(color: kPrimaryLightTextColor),
-            cursorColor: kDarkColor,
-            controller: searchController,
-            decoration: InputDecoration(
-                border: InputBorder.none,
-                hintText: LocaleKeys.search_keyword.tr(),
-                hintStyle: TextStyle(color: kPrimaryLightTextColor)),
-            onChanged: (value) {
-              if (value.length > 3) {
-                context.read(searchProvider.notifier).search(value);
-              }
-            },
-          ),
+        title: TextField(
+          autofocus: true,
+          style: const TextStyle(color: kPrimaryLightTextColor),
+          cursorColor: kDarkColor,
+          controller: searchController,
+          decoration: InputDecoration(
+              border: InputBorder.none,
+              hintText: LocaleKeys.search_keyword.tr(),
+              hintStyle: const TextStyle(color: kPrimaryLightTextColor)),
+          onChanged: (value) {
+            if (value.length > 3) {
+              context.read(searchProvider.notifier).search(value);
+            }
+          },
         ),
         actions: [
           IconButton(
@@ -53,7 +53,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       .read(searchProvider.notifier)
                       .search(searchController.text)
                   : toast(LocaleKeys.type_something.tr()),
-              icon: Icon(CupertinoIcons.search))
+              icon: const Icon(CupertinoIcons.search))
         ],
       ),
       body: Consumer(
@@ -61,10 +61,10 @@ class _SearchScreenState extends State<SearchScreen> {
           final searchState = watch(searchProvider);
 
           return searchState is SearchLoadedState
-              ? searchState.searchedItem!.length > 0
+              ? searchState.searchedItem!.isNotEmpty
                   ? ListView.builder(
                       shrinkWrap: true,
-                      physics: BouncingScrollPhysics(),
+                      physics: const BouncingScrollPhysics(),
                       itemCount: searchState.searchedItem!.length,
                       itemBuilder: (context, index) {
                         return Container(
@@ -72,7 +72,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                   ThemeMode.dark
                               ? kDarkCardBgColor
                               : kLightColor,
-                          padding: EdgeInsets.symmetric(vertical: 5),
+                          padding: const EdgeInsets.symmetric(vertical: 5),
                           child: ListTile(
                             leading: Image.network(
                               searchState.searchedItem![index].image!,
@@ -96,7 +96,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                   .read(productSlugListProvider.notifier)
                                   .addProductSlug(
                                       searchState.searchedItem![index].slug);
-                              context.nextPage(ProductDetailsScreen());
+                              context.nextPage(const ProductDetailsScreen());
                             },
                           ),
                         ).cornerRadius(10).pOnly(bottom: 10);
@@ -105,7 +105,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        Icon(Icons.info_outline).pOnly(bottom: 10),
+                        const Icon(Icons.info_outline).pOnly(bottom: 10),
                         Text(
                           LocaleKeys.no_item_found.tr(),
                           textAlign: TextAlign.center,
@@ -119,18 +119,18 @@ class _SearchScreenState extends State<SearchScreen> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
-                              SizedBox(
+                              const SizedBox(
                                 height: 100,
                               ),
-                              Icon(Icons.info_outline).pOnly(bottom: 10),
+                              const Icon(Icons.info_outline).pOnly(bottom: 10),
                               Text(
                                 LocaleKeys.search_for_something.tr(),
                                 textAlign: TextAlign.center,
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 100,
                               ),
-                              RecentlyViewed().p(10),
+                              const RecentlyViewed().p(10),
                             ],
                           ),
                         )

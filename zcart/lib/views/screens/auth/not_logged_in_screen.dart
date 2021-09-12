@@ -28,7 +28,7 @@ class NotLoggedInScreen extends StatelessWidget {
             Center(
               child: SingleChildScrollView(
                 child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -36,7 +36,7 @@ class NotLoggedInScreen extends StatelessWidget {
                       CircleAvatar(
                         radius: 24,
                         backgroundColor: kDarkColor.withOpacity(0.5),
-                        child: Icon(
+                        child: const Icon(
                           Icons.person,
                           color: kLightColor,
                           size: 28,
@@ -48,12 +48,12 @@ class NotLoggedInScreen extends StatelessWidget {
                         style: context.textTheme.subtitle2!
                             .copyWith(fontWeight: FontWeight.bold),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       CustomButton(
                         onTap: () {
-                          context.nextPage(LoginScreen(
+                          context.nextPage(const LoginScreen(
                             needBackButton: true,
                           ));
                         },
@@ -71,7 +71,7 @@ class NotLoggedInScreen extends StatelessWidget {
                         child: ListTile(
                           title: Text(LocaleKeys.language.tr(),
                               style: context.textTheme.subtitle2!),
-                          trailing: Icon(Icons.translate),
+                          trailing: const Icon(Icons.translate),
                           onTap: () {
                             updateLanguage(context);
                           },
@@ -90,10 +90,10 @@ class NotLoggedInScreen extends StatelessWidget {
                         child: ListTile(
                           title: Text(LocaleKeys.blogs.tr(),
                               style: context.textTheme.subtitle2!),
-                          trailing: Icon(Icons.arrow_forward_ios),
+                          trailing: const Icon(Icons.arrow_forward_ios),
                           onTap: () {
                             context.read(blogsProvider.notifier).blogs();
-                            context.nextPage(BlogsScreen());
+                            context.nextPage(const BlogsScreen());
                           },
                         ),
                       ),
@@ -102,12 +102,12 @@ class NotLoggedInScreen extends StatelessWidget {
                         child: ListTile(
                           title: Text(LocaleKeys.about_us.tr(),
                               style: context.textTheme.subtitle2!),
-                          trailing: Icon(Icons.arrow_forward_ios),
+                          trailing: const Icon(Icons.arrow_forward_ios),
                           onTap: () {
                             context
                                 .read(aboutUsProvider.notifier)
                                 .fetchAboutUs();
-                            context.nextPage(AboutUsScreen());
+                            context.nextPage(const AboutUsScreen());
                           },
                         ),
                       ),
@@ -116,12 +116,12 @@ class NotLoggedInScreen extends StatelessWidget {
                         child: ListTile(
                           title: Text(LocaleKeys.privacy_policy.tr(),
                               style: context.textTheme.subtitle2!),
-                          trailing: Icon(Icons.arrow_forward_ios),
+                          trailing: const Icon(Icons.arrow_forward_ios),
                           onTap: () {
                             context
                                 .read(privacyPolicyProvider.notifier)
                                 .fetchPrivacyPolicy();
-                            context.nextPage(PrivacyPolicyScreen());
+                            context.nextPage(const PrivacyPolicyScreen());
                           },
                         ),
                       ),
@@ -130,12 +130,12 @@ class NotLoggedInScreen extends StatelessWidget {
                         child: ListTile(
                           title: Text(LocaleKeys.terms_condition.tr(),
                               style: context.textTheme.subtitle2!),
-                          trailing: Icon(Icons.arrow_forward_ios),
+                          trailing: const Icon(Icons.arrow_forward_ios),
                           onTap: () {
                             context
                                 .read(termsAndConditionProvider.notifier)
                                 .fetchTermsAndCondition();
-                            context.nextPage(TermsAndConditionScreen());
+                            context.nextPage(const TermsAndConditionScreen());
                           },
                         ),
                       ),

@@ -16,6 +16,8 @@ import 'components/vendors_card.dart';
 import 'package:zcart/views/shared_widgets/shared_widgets.dart';
 
 class VendorsDetailsScreen extends ConsumerWidget {
+  const VendorsDetailsScreen({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final vendorDetailsState = watch(vendorDetailsNotifierProvider);
@@ -45,7 +47,7 @@ class VendorsDetailsScreen extends ConsumerWidget {
               vendorDetailsState is VendorDetailsLoadedState
                   ? Column(
                       children: [
-                        Container(
+                        SizedBox(
                           height: context.screenHeight * .30,
                           width: context.screenWidth,
                           child: Image.network(
@@ -91,7 +93,8 @@ class VendorsDetailsScreen extends ConsumerWidget {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => LoginScreen(
+                                          builder: (context) =>
+                                              const LoginScreen(
                                                 needBackButton: true,
                                               )));
                                 }

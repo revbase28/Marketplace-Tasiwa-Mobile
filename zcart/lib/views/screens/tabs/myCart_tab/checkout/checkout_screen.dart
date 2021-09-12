@@ -25,6 +25,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class CheckoutScreen extends StatefulWidget {
+  const CheckoutScreen({Key? key}) : super(key: key);
+
   @override
   _CheckoutScreenState createState() => _CheckoutScreenState();
 }
@@ -70,42 +72,39 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               final cartItemDetailsState =
                   watch(cartItemDetailsNotifierProvider);
 
-              return Container(
-                child: Column(
-                  children: [
-                    Expanded(
-                      child: Theme(
-                        data: ThemeData(
-                          accentColor: kAccentColor,
-                          textTheme: EasyDynamicTheme.of(context).themeMode ==
-                                  ThemeMode.dark
-                              ? darkTextTheme(context)
-                              : lightTextTheme(context),
-                          colorScheme:
-                              ColorScheme.light(primary: kPrimaryColor),
-                        ),
-                        child: Stepper(
-                          type: StepperType.vertical,
-                          physics: ScrollPhysics(),
-                          currentStep: _currentStep,
-                          onStepTapped: (step) => tapped(step),
-                          onStepContinue: continued,
-                          onStepCancel: cancel,
-                          steps: <Step>[
-                            /// Shipping
-                            _shipping(context, cartItemDetailsState),
+              return Column(
+                children: [
+                  Expanded(
+                    child: Theme(
+                      data: ThemeData(
+                        textTheme: EasyDynamicTheme.of(context).themeMode ==
+                                ThemeMode.dark
+                            ? darkTextTheme(context)
+                            : lightTextTheme(context),
+                        colorScheme: const ColorScheme.light(
+                            primary: kPrimaryColor, secondary: kAccentColor),
+                      ),
+                      child: Stepper(
+                        type: StepperType.vertical,
+                        physics: const ScrollPhysics(),
+                        currentStep: _currentStep,
+                        onStepTapped: (step) => tapped(step),
+                        onStepContinue: continued,
+                        onStepCancel: cancel,
+                        steps: <Step>[
+                          /// Shipping
+                          _shipping(context, cartItemDetailsState),
 
-                            /// Order options
-                            _orderOptions(cartItemDetailsState),
+                          /// Order options
+                          _orderOptions(cartItemDetailsState),
 
-                            /// Place order
-                            _placeOrder(cartItemDetailsState, context),
-                          ],
-                        ),
+                          /// Place order
+                          _placeOrder(cartItemDetailsState, context),
+                        ],
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               );
             })),
       ),
@@ -123,14 +122,14 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
             ? kDarkCardBgColor
             : kLightColor,
-        padding: EdgeInsets.all(10),
+        padding: const EdgeInsets.all(10),
         child: cartItemDetailsState is CartItemDetailsLoadedState
             ? Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   ListView.builder(
                       shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
+                      physics: const NeverScrollableScrollPhysics(),
                       itemCount:
                           cartItemDetailsState.cartItemDetails!.items!.length,
                       itemBuilder: (context, index) {
@@ -300,7 +299,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                         .cartItemDetails!.id));
                           },
                           child: Text(LocaleKeys.apply.tr(),
-                              style: TextStyle(color: kPrimaryColor)),
+                              style: const TextStyle(color: kPrimaryColor)),
                         ),
                       ],
                     ),
@@ -342,7 +341,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               final shippingState = watch(shippingNotifierProvider);
               return shippingState is ShippingLoadedState
                   ? cartItemDetailsState is CartItemDetailsLoadedState
-                      ? shippingState.shippingOptions!.length != 0
+                      ? shippingState.shippingOptions!.isNotEmpty
                           ? ShippingOptionsBuilder(
                               shippingOptions: shippingState.shippingOptions,
                               cartItem: cartItemDetailsState.cartItemDetails,
@@ -354,11 +353,12 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                             ).cornerRadius(10)
                           : Container(
                               color: kLightColor,
-                              padding: EdgeInsets.all(10),
+                              padding: const EdgeInsets.all(10),
                               width: context.screenWidth,
                               child: Column(
                                 children: [
-                                  Icon(Icons.info_outline).pOnly(bottom: 5),
+                                  const Icon(Icons.info_outline)
+                                      .pOnly(bottom: 5),
                                   Text(
                                     LocaleKeys.no_shipping_zone.tr(),
                                     textAlign: TextAlign.center,
@@ -382,7 +382,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
                 ? kDarkCardBgColor
                 : kLightColor,
-            padding: EdgeInsets.symmetric(vertical: 10),
+            padding: const EdgeInsets.symmetric(vertical: 10),
             child: cartItemDetailsState is CartItemDetailsLoadedState
                 ? PackagingListBuilder(
                     cartItem: cartItemDetailsState.cartItemDetails,
@@ -392,7 +392,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       });
                     },
                   )
-                : PackagingListBuilder(),
+                : const PackagingListBuilder(),
           ).cornerRadius(10),
           Row(
             children: [
@@ -432,10 +432,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
                 ? kDarkCardBgColor
                 : kLightColor,
-            padding: EdgeInsets.all(10),
+            padding: const EdgeInsets.all(10),
             child: Row(
               children: [
-                Icon(Icons.add_circle_outlined, color: kPrimaryColor)
+                const Icon(Icons.add_circle_outlined, color: kPrimaryColor)
                     .pOnly(right: 10),
                 Text(LocaleKeys.add_address.tr(),
                     style: context.textTheme.subtitle2)
@@ -444,7 +444,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           ).onInkTap(() {
             context.read(countryNotifierProvider.notifier).getCountries();
             context.read(statesNotifierProvider.notifier).resetState();
-            context.nextPage(AddNewAddressScreen(
+            context.nextPage(const AddNewAddressScreen(
               isAccessed: false,
             ));
           }).cornerRadius(10),
@@ -455,7 +455,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               return addressState is AddressLoadedState
                   ? addressState.addresses == null
                       ? Container()
-                      : addressState.addresses!.length == 0
+                      : addressState.addresses!.isEmpty
                           ? Container()
                           : cartItemDetailsState is CartItemDetailsLoadedState
                               ? AddressListBuilder(
@@ -471,12 +471,12 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               : AddressListBuilder(
                                   addressesList: addressState.addresses)
                   : addressState is AddressLoadingState
-                      ? FieldLoading().py(5)
+                      ? const FieldLoading().py(5)
                       : addressState is AddressErrorState
                           ? ListTile(
                               title: Text(addressState.message,
-                                  style: TextStyle(color: kPrimaryColor)),
-                              leading: Icon(Icons.dangerous),
+                                  style: const TextStyle(color: kPrimaryColor)),
+                              leading: const Icon(Icons.dangerous),
                               contentPadding: EdgeInsets.zero,
                               horizontalTitleGap: 0,
                             )
@@ -519,7 +519,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             bgColor: kPrimaryColor, gravity: ToastGravity.CENTER);
         context.read(checkoutNotifierProvider.notifier).checkout();
       }
-    } else if (_currentStep < 2) setState(() => _currentStep += 1);
+    } else if (_currentStep < 2) {
+      setState(() => _currentStep += 1);
+    }
   }
 
   cancel() {
@@ -547,14 +549,14 @@ class _PaymentOptionsListBuilderState extends State<PaymentOptionsListBuilder> {
       color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
           ? kDarkCardBgColor
           : kLightColor,
-      padding: EdgeInsets.symmetric(vertical: 10),
+      padding: const EdgeInsets.symmetric(vertical: 10),
       child: Consumer(
         builder: (context, watch, _) {
           final paymentOptionsState = watch(paymentOptionsNotifierProvider);
           return paymentOptionsState is PaymentOptionsLoadedState
               ? ListView.builder(
                   shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
+                  physics: const NeverScrollableScrollPhysics(),
                   itemCount: paymentOptionsState.paymentOptions!.length,
                   itemBuilder: (context, index) {
                     return ListTile(
@@ -572,7 +574,7 @@ class _PaymentOptionsListBuilderState extends State<PaymentOptionsListBuilder> {
                           paymentOptionsState.paymentOptions![index].name!),
                       //subtitle: Text(paymentOptionsState.paymentOptions[index].name),
                       trailing: index == selectedIndex
-                          ? Icon(Icons.check_circle, color: kPrimaryColor)
+                          ? const Icon(Icons.check_circle, color: kPrimaryColor)
                           : Icon(
                               Icons.radio_button_unchecked,
                               color: EasyDynamicTheme.of(context).themeMode ==
@@ -611,7 +613,7 @@ class _PackagingListBuilderState extends State<PackagingListBuilder> {
         return packagingState is PackagingLoadedState
             ? ListView.builder(
                 shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 itemCount: packagingState.packagingList.length,
                 itemBuilder: (context, index) {
                   return ListTile(
@@ -637,7 +639,7 @@ class _PackagingListBuilderState extends State<PackagingListBuilder> {
                                 3))),
                     subtitle: Text(packagingState.packagingList[index].name!),
                     trailing: index == selectedIndex
-                        ? Icon(Icons.check_circle, color: kPrimaryColor)
+                        ? const Icon(Icons.check_circle, color: kPrimaryColor)
                         : Icon(
                             Icons.radio_button_unchecked,
                             color: EasyDynamicTheme.of(context).themeMode ==
@@ -678,10 +680,10 @@ class _ShippingOptionsBuilderState extends State<ShippingOptionsBuilder> {
       color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
           ? kDarkCardBgColor
           : kLightColor,
-      padding: EdgeInsets.symmetric(vertical: 10),
+      padding: const EdgeInsets.symmetric(vertical: 10),
       child: ListView.builder(
           shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
+          physics: const NeverScrollableScrollPhysics(),
           itemCount: widget.shippingOptions!.length,
           itemBuilder: (context, index) {
             return ListTile(
@@ -706,7 +708,7 @@ class _ShippingOptionsBuilderState extends State<ShippingOptionsBuilder> {
               ).pOnly(bottom: 5),
               trailing: Text(
                 widget.shippingOptions![index].cost!,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
                 ),
@@ -723,7 +725,7 @@ class _ShippingOptionsBuilderState extends State<ShippingOptionsBuilder> {
                 ],
               ).pOnly(right: 10),
               leading: index == selectedIndex
-                  ? Icon(Icons.check_circle, color: kPrimaryColor)
+                  ? const Icon(Icons.check_circle, color: kPrimaryColor)
                   : Icon(
                       Icons.radio_button_unchecked,
                       color: EasyDynamicTheme.of(context).themeMode ==

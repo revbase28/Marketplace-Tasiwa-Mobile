@@ -9,8 +9,9 @@ class DealsRepository extends IDealsRepository {
   Future<DealsUnderThePrice> fetchDealsUnderThePrice() async {
     var responseBody =
         await handleResponse(await getRequest(API.dealsUnderThePrice));
-    if (responseBody.runtimeType == int) if (responseBody > 206)
+    if (responseBody.runtimeType == int && responseBody > 206) {
       throw NetworkException();
+    }
 
     DealsUnderThePrice dealsUnderThePrice =
         DealsUnderThePrice.fromMap(responseBody);

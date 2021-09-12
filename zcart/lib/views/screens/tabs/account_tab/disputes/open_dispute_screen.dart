@@ -12,6 +12,8 @@ import 'package:velocity_x/velocity_x.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 class OpenDisputeScreen extends StatefulWidget {
+  const OpenDisputeScreen({Key? key}) : super(key: key);
+
   @override
   _OpenDisputeScreenState createState() => _OpenDisputeScreenState();
 }
@@ -186,8 +188,9 @@ class _OpenDisputeScreenState extends State<OpenDisputeScreen> {
                                             .read(openDisputeInfoProvider
                                                 .notifier)
                                             .orderReceived = id.toString();
-                                        if (!showItemsDropdownField)
+                                        if (!showItemsDropdownField) {
                                           selected = false;
+                                        }
                                       });
                                     },
                                     validator: (text) {
@@ -235,24 +238,25 @@ class _OpenDisputeScreenState extends State<OpenDisputeScreen> {
                                         horizontalTitleGap: 5,
                                         contentPadding: EdgeInsets.zero,
                                         leading: selected
-                                            ? Icon(
+                                            ? const Icon(
                                                 Icons.check_circle,
                                                 color: kPrimaryColor,
                                               )
-                                            : Icon(
+                                            : const Icon(
                                                 Icons.radio_button_unchecked),
                                         onTap: () {
                                           setState(() {
                                             selected = !selected;
                                           });
                                           /* NO - 0, YES - 1*/
-                                          if (showItemsDropdownField)
+                                          if (showItemsDropdownField) {
                                             context
                                                     .read(
                                                         openDisputeInfoProvider
                                                             .notifier)
                                                     .returnGoods =
                                                 selected == true ? '1' : '0';
+                                          }
                                         },
                                         title:
                                             Text(LocaleKeys.return_goods.tr()),
@@ -275,19 +279,18 @@ class _OpenDisputeScreenState extends State<OpenDisputeScreen> {
                                     controller: refundAmountController,
                                     widthMultiplier: 1,
                                     validator: (value) {
-                                      if (value
-                                          .toString()
-                                          .isNotBlank) if (double.parse(
-                                              value!) >
-                                          double.parse(disputeInfoState
-                                              .disputeInfo!.totalRaw!
-                                              .split('\$')
-                                              .last)) {
-                                        return LocaleKeys
-                                            .refund_amount_validation
-                                            .tr(args: [
-                                          "${disputeInfoState.disputeInfo!.totalRaw}"
-                                        ]);
+                                      if (value.toString().isNotBlank) {
+                                        if (double.parse(value!) >
+                                            double.parse(disputeInfoState
+                                                .disputeInfo!.totalRaw!
+                                                .split('\$')
+                                                .last)) {
+                                          return LocaleKeys
+                                              .refund_amount_validation
+                                              .tr(args: [
+                                            "${disputeInfoState.disputeInfo!.totalRaw}"
+                                          ]);
+                                        }
                                       }
                                       context
                                           .read(
@@ -377,7 +380,7 @@ class _OpenDisputeScreenState extends State<OpenDisputeScreen> {
                                   Text('${LocaleKeys.second_step.tr()}:',
                                       style: context.textTheme.subtitle2),
                                   Text(
-                                    '''${LocaleKeys.dispute_second_step.tr()}''',
+                                    LocaleKeys.dispute_second_step.tr(),
                                     style: context.textTheme.subtitle2,
                                   ),
                                   Text('${LocaleKeys.third_step.tr()}:',

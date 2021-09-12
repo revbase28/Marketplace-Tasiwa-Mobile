@@ -9,11 +9,11 @@ class VendorDetailsNotifier extends StateNotifier<VendorDetailsState> {
   final IVendorsRepository _iVendorsRepository;
 
   VendorDetailsNotifier(this._iVendorsRepository)
-      : super(VendorDetailsInitialState());
+      : super(const VendorDetailsInitialState());
 
   Future<void> getVendorDetails(String? slug) async {
     try {
-      state = VendorDetailsLoadingState();
+      state = const VendorDetailsLoadingState();
       final vendorsDetails = await _iVendorsRepository.fetchVendorDetails(slug);
       state = VendorDetailsLoadedState(vendorsDetails);
     } on NetworkException {

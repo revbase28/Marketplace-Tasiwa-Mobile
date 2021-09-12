@@ -9,18 +9,20 @@ import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:zcart/views/screens/tabs/home_tab/search/search_screen.dart';
 
 class CustomSearchBar extends StatelessWidget {
+  const CustomSearchBar({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
         Container(
-          padding: EdgeInsets.all(4),
+          padding: const EdgeInsets.all(4),
           width: 50,
           child: Image.asset(AppImages.logo),
         ).pOnly(left: 10),
         Expanded(
           child: GestureDetector(
-            onTap: () => context.nextPage(SearchScreen()),
+            onTap: () => context.nextPage(const SearchScreen()),
             child: Container(
               decoration: customBoxDecoration.copyWith(
                 color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
@@ -33,7 +35,7 @@ class CustomSearchBar extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Icon(
+                      const Icon(
                         CupertinoIcons.search,
                         size: 18,
                         color: kFadeColor,
@@ -48,9 +50,9 @@ class CustomSearchBar extends StatelessWidget {
                   IconButton(
                       onPressed: () {
                         //TODO: Add Image Search
-                        context.nextPage(SearchScreen());
+                        context.nextPage(const SearchScreen());
                       },
-                      icon: Icon(
+                      icon: const Icon(
                         CupertinoIcons.camera,
                         size: 18,
                         color: kFadeColor,
@@ -73,6 +75,6 @@ var customBoxDecoration = BoxDecoration(
         blurRadius: 20,
         color: kDarkColor.withOpacity(0.1),
         spreadRadius: 3,
-        offset: Offset(1, 1)),
+        offset: const Offset(1, 1)),
   ],
 );

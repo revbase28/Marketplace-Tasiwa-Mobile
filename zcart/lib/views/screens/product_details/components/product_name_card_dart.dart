@@ -1,28 +1,31 @@
 import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:share/share.dart';
+import 'package:velocity_x/velocity_x.dart';
+import 'package:zcart/Theme/styles/colors.dart';
 import 'package:zcart/data/models/product/product_details_model.dart';
 import 'package:zcart/data/network/api.dart';
 import 'package:zcart/riverpod/providers/wishlist_provider.dart';
-import 'package:zcart/Theme/styles/colors.dart';
-import 'package:easy_localization/easy_localization.dart';
-import 'package:velocity_x/velocity_x.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 
 class ProductNameCard extends StatelessWidget {
-  const ProductNameCard({required this.productModel});
+  const ProductNameCard({
+    Key? key,
+    required this.productModel,
+  }) : super(key: key);
 
   final ProductDetailsModel productModel;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(10),
+      padding: const EdgeInsets.all(10),
       color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
           ? kDarkCardBgColor
           : kLightColor,
@@ -33,10 +36,10 @@ class ProductNameCard extends StatelessWidget {
           productModel.data!.hasOffer!
               ? Container(
                   width: context.screenWidth,
-                  padding: EdgeInsets.symmetric(vertical: 16),
-                  margin: EdgeInsets.symmetric(vertical: 5),
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  margin: const EdgeInsets.symmetric(vertical: 5),
                   decoration: BoxDecoration(
-                      gradient: LinearGradient(
+                      gradient: const LinearGradient(
                         colors: [kGradientColor1, kGradientColor2],
                       ),
                       borderRadius: BorderRadius.circular(5)),
@@ -90,7 +93,7 @@ class ProductNameCard extends StatelessWidget {
                 children: [
                   Column(
                     children: [
-                      Icon(
+                      const Icon(
                         CupertinoIcons.share,
                         size: 18,
                       ),
@@ -100,11 +103,11 @@ class ProductNameCard extends StatelessWidget {
                     ],
                   ).px(10).onInkTap(() async {
                     await Share.share(
-                        '${productModel.data!.title}.\n${API.APP_URL}/product/${productModel.data!.slug}');
+                        '${productModel.data!.title}.\n${API.appUrl}/product/${productModel.data!.slug}');
                   }),
                   Column(
                     children: [
-                      Icon(CupertinoIcons.heart, size: 18),
+                      const Icon(CupertinoIcons.heart, size: 18),
                       Text(LocaleKeys.wishlist_text.tr(),
                               style: context.textTheme.overline)
                           .pOnly(top: 3),
@@ -144,7 +147,7 @@ class ProductNameCard extends StatelessWidget {
                       itemSize: 12,
                       unratedColor: kFadeColor,
                       itemBuilder: (context, _) =>
-                          Icon(Icons.star, color: kPrimaryColor),
+                          const Icon(Icons.star, color: kPrimaryColor),
                       onRatingUpdate: (rating) => print(rating),
                     ),
                     Text(
@@ -154,30 +157,29 @@ class ProductNameCard extends StatelessWidget {
                     ).px(5),
                   ],
                 ).paddingBottom(10),
-          Container(
-            width: productModel.data!.labels!.length == 0
-                ? null
-                : context.screenWidth,
-            height: productModel.data!.labels!.length == 0 ? null : 40,
-            child: productModel.data!.labels!.length == 0
+          SizedBox(
+            width:
+                productModel.data!.labels!.isEmpty ? null : context.screenWidth,
+            height: productModel.data!.labels!.isEmpty ? null : 40,
+            child: productModel.data!.labels!.isEmpty
                 ? Align(
                     alignment: Alignment.centerLeft,
                     child: Container(
                       decoration: BoxDecoration(
                           color: kPrimaryColor,
                           borderRadius: BorderRadius.circular(10)),
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                      margin: EdgeInsets.symmetric(vertical: 5),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 5),
+                      margin: const EdgeInsets.symmetric(vertical: 5),
                       child: Text(productModel.data!.condition!,
                           style: context.textTheme.overline!
                               .copyWith(color: kPrimaryLightTextColor)),
                     ).onInkTap(() {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          duration: Duration(seconds: 8),
+                          duration: const Duration(seconds: 8),
                           content: Text(productModel.data!.conditionNote!),
-                          shape: RoundedRectangleBorder(
+                          shape: const RoundedRectangleBorder(
                               borderRadius: BorderRadius.only(
                                   topLeft: Radius.circular(10),
                                   topRight: Radius.circular(10))),
@@ -189,7 +191,7 @@ class ProductNameCard extends StatelessWidget {
                     shrinkWrap: true,
                     itemCount: productModel.data!.labels!.length,
                     scrollDirection: Axis.horizontal,
-                    physics: NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     itemBuilder: (context, index) {
                       return Row(
                         children: [
@@ -198,9 +200,10 @@ class ProductNameCard extends StatelessWidget {
                                   decoration: BoxDecoration(
                                       color: kPrimaryColor,
                                       borderRadius: BorderRadius.circular(10)),
-                                  padding: EdgeInsets.symmetric(
+                                  padding: const EdgeInsets.symmetric(
                                       horizontal: 10, vertical: 5),
-                                  margin: EdgeInsets.symmetric(vertical: 5),
+                                  margin:
+                                      const EdgeInsets.symmetric(vertical: 5),
                                   child: Text(productModel.data!.condition!,
                                       style: context.textTheme.overline!
                                           .copyWith(
@@ -208,10 +211,10 @@ class ProductNameCard extends StatelessWidget {
                                 ).onInkTap(() {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
-                                      duration: Duration(seconds: 8),
+                                      duration: const Duration(seconds: 8),
                                       content: Text(
                                           productModel.data!.conditionNote!),
-                                      shape: RoundedRectangleBorder(
+                                      shape: const RoundedRectangleBorder(
                                           borderRadius: BorderRadius.only(
                                               topLeft: Radius.circular(10),
                                               topRight: Radius.circular(10))),
@@ -223,9 +226,9 @@ class ProductNameCard extends StatelessWidget {
                             decoration: BoxDecoration(
                                 color: kPrimaryColor,
                                 borderRadius: BorderRadius.circular(10)),
-                            padding: EdgeInsets.symmetric(
+                            padding: const EdgeInsets.symmetric(
                                 horizontal: 10, vertical: 5),
-                            margin: EdgeInsets.symmetric(vertical: 5),
+                            margin: const EdgeInsets.symmetric(vertical: 5),
                             child: Text(productModel.data!.labels![index],
                                 style: context.textTheme.overline!
                                     .copyWith(color: kPrimaryLightTextColor)),

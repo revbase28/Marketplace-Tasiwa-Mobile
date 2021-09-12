@@ -12,16 +12,18 @@ import 'package:zcart/views/shared_widgets/shared_widgets.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 class DisputeResponseScreen extends StatelessWidget {
-  final TextEditingController messageController = TextEditingController();
-
-  final Map<String, String> _statuses = {
-    'NEW': '1',
-    'OPEN': '2',
-    'SOLVED': '5',
-  };
+  const DisputeResponseScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final TextEditingController messageController = TextEditingController();
+
+    final Map<String, String> _statuses = {
+      'NEW': '1',
+      'OPEN': '2',
+      'SOLVED': '5',
+    };
+
     return Consumer(
       builder: (context, watch, _) {
         final disputeDetailsState = watch(disputeDetailsProvider);
@@ -39,7 +41,7 @@ class DisputeResponseScreen extends StatelessWidget {
                             .getDisputeDetails(
                                 disputeDetailsState.disputeDetails!.id);
                       },
-                      icon: Icon(Icons.refresh),
+                      icon: const Icon(Icons.refresh),
                     )
                   : Container()
             ],
@@ -60,7 +62,7 @@ class DisputeResponseScreen extends StatelessWidget {
                         children: [
                           Expanded(
                             child: Container(
-                              padding: EdgeInsets.only(right: 16),
+                              padding: const EdgeInsets.only(right: 16),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(30),
                                 border:
@@ -77,7 +79,7 @@ class DisputeResponseScreen extends StatelessWidget {
                                     onPressed: () {
                                       //TODO: Attach Images
                                     },
-                                    icon: Icon(Icons.image),
+                                    icon: const Icon(Icons.image),
                                   ),
                                   Expanded(
                                     child: TextField(
@@ -96,15 +98,15 @@ class DisputeResponseScreen extends StatelessWidget {
                               ),
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 4,
                           ),
                           Container(
-                            padding: EdgeInsets.all(12),
+                            padding: const EdgeInsets.all(12),
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(50),
                                 color: kPrimaryColor),
-                            child: Icon(Icons.send, color: kLightColor),
+                            child: const Icon(Icons.send, color: kLightColor),
                           ).onInkTap(() async {
                             //TODO: Status Need To be created
                             print(_statuses[
@@ -132,9 +134,7 @@ class DisputeResponseScreen extends StatelessWidget {
                     ),
                   ],
                 )
-              : Container(
-                  child: LoadingWidget(),
-                ),
+              : LoadingWidget(),
         );
       },
     );
@@ -144,91 +144,86 @@ class DisputeResponseScreen extends StatelessWidget {
       BuildContext context, DisputeDetailsLoadedState disputeDetailsState) {
     List<dynamic> _messageList = disputeDetailsState.disputeDetails!.replies!;
     List<dynamic> _reversedMessageList = _messageList.reversed.toList();
-    return Container(
-      child: ListView(
-        reverse: true,
-        children: _reversedMessageList.map((message) {
-          return Container(
-            color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-                ? kDarkBgColor
-                : kLightBgColor,
-            child: Column(
-              children: [
-                Container(
-                  padding: EdgeInsets.only(left: 16, right: 16, bottom: 5),
-                  child: Align(
-                    alignment: (message['customer'] == null
-                        ? Alignment.topLeft
-                        : Alignment.topRight),
-                    child: Container(
-                      constraints:
-                          BoxConstraints(maxWidth: context.screenWidth * 0.75),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: (message['customer'] == null
-                            ? Colors.grey.shade200
-                            : kPrimaryColor.withOpacity(0.1)),
-                      ),
-                      padding: EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: message['customer'] == null
-                            ? CrossAxisAlignment.start
-                            : CrossAxisAlignment.end,
-                        children: [
-                          //TODO: Attachment Issue
-                          if (!message["attachments"].isEmpty)
-                            for (var i = 0;
-                                i < message["attachments"].length;
-                                i++)
-                              Container(
-                                child: SelectableText(
-                                    "${message["attachments"].first}"),
+    return ListView(
+      reverse: true,
+      children: _reversedMessageList.map((message) {
+        return Container(
+          color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+              ? kDarkBgColor
+              : kLightBgColor,
+          child: Column(
+            children: [
+              Container(
+                padding: const EdgeInsets.only(left: 16, right: 16, bottom: 5),
+                child: Align(
+                  alignment: (message['customer'] == null
+                      ? Alignment.topLeft
+                      : Alignment.topRight),
+                  child: Container(
+                    constraints:
+                        BoxConstraints(maxWidth: context.screenWidth * 0.75),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: (message['customer'] == null
+                          ? Colors.grey.shade200
+                          : kPrimaryColor.withOpacity(0.1)),
+                    ),
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      crossAxisAlignment: message['customer'] == null
+                          ? CrossAxisAlignment.start
+                          : CrossAxisAlignment.end,
+                      children: [
+                        //TODO: Attachment Issue
+                        if (!message["attachments"].isEmpty)
+                          for (var i = 0;
+                              i < message["attachments"].length;
+                              i++)
+                            SelectableText("${message["attachments"].first}"),
+                        HtmlWidget(message['reply']),
+                        const SizedBox(height: 5),
+                        message['customer'] != null
+                            ? Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(message['updated_at'],
+                                      style: const TextStyle(fontSize: 10)),
+                                  const SizedBox(
+                                    width: 5,
+                                  ),
+                                  Icon(
+                                    message['read'] == null
+                                        ? Icons.watch_later_outlined
+                                        : Icons.check,
+                                    size: 14,
+                                  )
+                                ],
+                              )
+                            : Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(
+                                    message['read'] == null
+                                        ? Icons.watch_later_outlined
+                                        : Icons.check,
+                                    size: 14,
+                                  ),
+                                  const SizedBox(width: 5),
+                                  Text(
+                                    message['updated_at'],
+                                    style: const TextStyle(fontSize: 10),
+                                  ),
+                                ],
                               ),
-                          HtmlWidget(message['reply']),
-                          SizedBox(height: 5),
-                          message['customer'] != null
-                              ? Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Text(message['updated_at'],
-                                        style: TextStyle(fontSize: 10)),
-                                    SizedBox(
-                                      width: 5,
-                                    ),
-                                    Icon(
-                                      message['read'] == null
-                                          ? Icons.watch_later_outlined
-                                          : Icons.check,
-                                      size: 14,
-                                    )
-                                  ],
-                                )
-                              : Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Icon(
-                                      message['read'] == null
-                                          ? Icons.watch_later_outlined
-                                          : Icons.check,
-                                      size: 14,
-                                    ),
-                                    SizedBox(width: 5),
-                                    Text(
-                                      message['updated_at'],
-                                      style: TextStyle(fontSize: 10),
-                                    ),
-                                  ],
-                                ),
-                        ],
-                      ),
+                      ],
                     ),
                   ),
                 ),
-              ],
-            ),
-          );
-        }).toList(),
-      ),
+              ),
+            ],
+          ),
+        );
+      }).toList(),
     );
   }
 }

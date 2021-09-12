@@ -9,11 +9,11 @@ class TrendingNowNotifier extends StateNotifier<TrendingNowState> {
   final ITrendingNowRepository _iTrendingNowRepository;
 
   TrendingNowNotifier(this._iTrendingNowRepository)
-      : super(TrendingNowInitialState());
+      : super(const TrendingNowInitialState());
 
   Future<void> getTrendingNowItems() async {
     try {
-      state = TrendingNowLoadingState();
+      state = const TrendingNowLoadingState();
       final trendingNow = await _iTrendingNowRepository.fetchTrendingNowItems();
       state = TrendingNowLoadedState(trendingNow);
     } on NetworkException {

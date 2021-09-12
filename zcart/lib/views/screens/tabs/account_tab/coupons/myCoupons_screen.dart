@@ -1,17 +1,19 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:velocity_x/velocity_x.dart';
+import 'package:zcart/Theme/styles/colors.dart';
 import 'package:zcart/data/controller/cart/coupon_controller.dart';
 import 'package:zcart/data/controller/cart/coupon_state.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:zcart/views/shared_widgets/loading_widget.dart';
-import 'package:zcart/Theme/styles/colors.dart';
-import 'package:easy_localization/easy_localization.dart';
-import 'package:velocity_x/velocity_x.dart';
-import 'package:flutter/services.dart';
 
 class MyCouponsScreen extends ConsumerWidget {
+  const MyCouponsScreen({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final couponState = watch(couponsProvider);
@@ -22,7 +24,7 @@ class MyCouponsScreen extends ConsumerWidget {
       body: RefreshIndicator(
           onRefresh: () => context.read(couponsProvider.notifier).coupons(),
           child: couponState is CouponLoadedState
-              ? couponState.coupon!.length != 0
+              ? couponState.coupon!.isNotEmpty
                   ? ListView.builder(
                       itemCount: couponState.coupon!.length,
                       itemBuilder: (context, index) {
@@ -38,7 +40,7 @@ class MyCouponsScreen extends ConsumerWidget {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(Icons.info_outline).pOnly(bottom: 10),
+                          const Icon(Icons.info_outline).pOnly(bottom: 10),
                           Text(LocaleKeys.coupons_not_available.tr()),
                         ],
                       ),
@@ -56,22 +58,27 @@ class CouponsCard extends StatelessWidget {
   final String? shopImage;
   final String? code;
   final String? notice;
-
-  CouponsCard(
-      {this.amount, this.shopTitle, this.shopImage, this.code, this.notice});
+  const CouponsCard({
+    Key? key,
+    this.amount,
+    this.shopTitle,
+    this.shopImage,
+    this.code,
+    this.notice,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          gradient: LinearGradient(
+          gradient: const LinearGradient(
             colors: [kGradientColor1, kGradientColor2],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           )),
-      margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-      padding: EdgeInsets.only(top: 24, bottom: 16, left: 8, right: 8),
+      margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+      padding: const EdgeInsets.only(top: 24, bottom: 16, left: 8, right: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -95,7 +102,7 @@ class CouponsCard extends StatelessWidget {
                       color: kPrimaryLightTextColor,
                     ),
                   ).onInkTap(() {
-                    Clipboard.setData(new ClipboardData(text: code))
+                    Clipboard.setData(ClipboardData(text: code))
                         .then((value) => toast('Code is copied to clipboard'));
                   }),
                 ],
@@ -103,7 +110,8 @@ class CouponsCard extends StatelessWidget {
               Column(
                 children: [
                   Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(

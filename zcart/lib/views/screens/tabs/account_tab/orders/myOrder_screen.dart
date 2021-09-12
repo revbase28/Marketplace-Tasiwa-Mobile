@@ -22,6 +22,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:zcart/views/screens/tabs/home_tab/components/error_widget.dart';
 
 class MyOrderScreen extends ConsumerWidget {
+  const MyOrderScreen({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final ordersState = watch(ordersProvider);
@@ -39,21 +41,19 @@ class MyOrderScreen extends ConsumerWidget {
                     .read(ordersProvider.notifier)
                     .orders(ignoreLoadingState: true),
                 child: ordersState.orders!.isEmpty
-                    ? Container(
-                        child: Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(Icons.info_outline),
-                              Text(LocaleKeys.no_item_found.tr()),
-                              TextButton(
-                                  onPressed: () {
-                                    context.nextReplacementPage(
-                                        BottomNavBar(selectedIndex: 0));
-                                  },
-                                  child: Text(LocaleKeys.go_shopping.tr())),
-                            ],
-                          ),
+                    ? Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(Icons.info_outline),
+                            Text(LocaleKeys.no_item_found.tr()),
+                            TextButton(
+                                onPressed: () {
+                                  context.nextReplacementPage(
+                                      const BottomNavBar(selectedIndex: 0));
+                                },
+                                child: Text(LocaleKeys.go_shopping.tr())),
+                          ],
                         ),
                       )
                     : ProviderListener<ScrollState>(
@@ -76,9 +76,7 @@ class MyOrderScreen extends ConsumerWidget {
                       ),
               )
             : ordersState is OrdersErrorState
-                ? Container(
-                    child: ErrorMessageWidget(ordersState.message),
-                  )
+                ? ErrorMessageWidget(ordersState.message)
                 : Container(),
       ),
     );
@@ -104,8 +102,8 @@ class OrderCard extends StatelessWidget {
                 : kLightColor,
             borderRadius: BorderRadius.circular(10),
           ),
-          margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-          padding: EdgeInsets.all(16),
+          margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -117,7 +115,7 @@ class OrderCard extends StatelessWidget {
                     children: [
                       Card(
                         elevation: 0,
-                        child: Container(
+                        child: SizedBox(
                           height: 50,
                           width: 50,
                           child: Image.network(
@@ -134,11 +132,11 @@ class OrderCard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           orderListState.orders![orderIndex!].shop!.name == null
-                              ? Text("")
+                              ? const Text("")
                               : Text(
                                   orderListState
                                       .orders![orderIndex!].shop!.name!,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -152,9 +150,10 @@ class OrderCard extends StatelessWidget {
                             itemCount: 5,
                             ignoreGestures: true,
                             itemSize: 12,
-                            itemPadding: EdgeInsets.symmetric(horizontal: 0.0),
+                            itemPadding:
+                                const EdgeInsets.symmetric(horizontal: 0.0),
                             itemBuilder: (context, _) =>
-                                Icon(Icons.star, color: Colors.amber),
+                                const Icon(Icons.star, color: Colors.amber),
                             onRatingUpdate: (rating) => print(rating),
                           ).pOnly(top: 5)
                         ],
@@ -169,7 +168,8 @@ class OrderCard extends StatelessWidget {
                                 ? kPrimaryColor
                                 : Colors.green,
                         borderRadius: BorderRadius.circular(10)),
-                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                     child: Text(
                         orderListState.orders![orderIndex!].orderStatus!,
                         style: context.textTheme.overline!
@@ -177,7 +177,7 @@ class OrderCard extends StatelessWidget {
                   ),
                 ],
               ),
-              Container(
+              SizedBox(
                 height: 60,
                 child: ListView.builder(
                     itemCount:
@@ -205,7 +205,7 @@ class OrderCard extends StatelessWidget {
                             .read(productSlugListProvider.notifier)
                             .addProductSlug(orderListState
                                 .orders![orderIndex!].items![itemsIndex].slug);
-                        context.nextPage(ProductDetailsScreen());
+                        context.nextPage(const ProductDetailsScreen());
                       });
                     }),
               ),
@@ -229,12 +229,13 @@ class OrderCard extends StatelessWidget {
                           decoration: BoxDecoration(
                               color: kPrimaryColor,
                               borderRadius: BorderRadius.circular(5)),
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 10, vertical: 7),
-                          margin: EdgeInsets.symmetric(vertical: 5),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 7),
+                          margin: const EdgeInsets.symmetric(vertical: 5),
                           child: Text(
                             LocaleKeys.contact_seller.tr(),
-                            style: TextStyle(fontSize: 12, color: kLightColor),
+                            style: const TextStyle(
+                                fontSize: 12, color: kLightColor),
                           ),
                         ).onInkTap(() {
                           context
@@ -248,17 +249,18 @@ class OrderCard extends StatelessWidget {
                           decoration: BoxDecoration(
                               color: kPrimaryColor,
                               borderRadius: BorderRadius.circular(5)),
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 10, vertical: 7),
-                          margin: EdgeInsets.symmetric(vertical: 5),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 7),
+                          margin: const EdgeInsets.symmetric(vertical: 5),
                           child: Text(
                             LocaleKeys.order_details.tr(),
-                            style: TextStyle(fontSize: 12, color: kLightColor),
+                            style: const TextStyle(
+                                fontSize: 12, color: kLightColor),
                           ),
                         ).onInkTap(() {
                           context.read(orderProvider.notifier).getOrderDetails(
                               orderListState.orders![orderIndex!].id);
-                          context.nextPage(OrderDetailsScreen());
+                          context.nextPage(const OrderDetailsScreen());
                         }),
                         Visibility(
                           visible:
@@ -268,20 +270,20 @@ class OrderCard extends StatelessWidget {
                             decoration: BoxDecoration(
                                 color: kPrimaryColor,
                                 borderRadius: BorderRadius.circular(5)),
-                            padding: EdgeInsets.symmetric(
+                            padding: const EdgeInsets.symmetric(
                                 horizontal: 10, vertical: 7),
-                            margin: EdgeInsets.symmetric(vertical: 5),
+                            margin: const EdgeInsets.symmetric(vertical: 5),
                             child: Text(
                               LocaleKeys.open_a_dispute.tr(),
-                              style:
-                                  TextStyle(fontSize: 12, color: kLightColor),
+                              style: const TextStyle(
+                                  fontSize: 12, color: kLightColor),
                             ),
                           ).onInkTap(() {
                             context
                                 .read(disputeInfoProvider.notifier)
                                 .getDisputeInfo(
                                     orderListState.orders![orderIndex!].id);
-                            context.nextPage(OpenDisputeScreen());
+                            context.nextPage(const OpenDisputeScreen());
                           }),
                         ),
                         Visibility(
@@ -292,21 +294,21 @@ class OrderCard extends StatelessWidget {
                             decoration: BoxDecoration(
                                 color: kPrimaryColor,
                                 borderRadius: BorderRadius.circular(5)),
-                            padding: EdgeInsets.symmetric(
+                            padding: const EdgeInsets.symmetric(
                                 horizontal: 10, vertical: 7),
-                            margin: EdgeInsets.symmetric(vertical: 5),
+                            margin: const EdgeInsets.symmetric(vertical: 5),
                             child: Text(
                               orderListState.orders![orderIndex!].orderStatus ==
                                       "DELIVERED"
                                   ? ""
                                   : LocaleKeys.confirm_received.tr(),
-                              style:
-                                  TextStyle(fontSize: 12, color: kLightColor),
+                              style: const TextStyle(
+                                  fontSize: 12, color: kLightColor),
                             ),
                           ).onInkTap(() {
                             if (orderListState
                                     .orders![orderIndex!].orderStatus !=
-                                "DELIVERED")
+                                "DELIVERED") {
                               showDialog(
                                   context: context,
                                   builder: (context) {
@@ -336,6 +338,7 @@ class OrderCard extends StatelessWidget {
                                       ],
                                     );
                                   });
+                            }
 
                             // if (orderListState.orders[orderIndex].orderStatus ==
                             //     "DELIVERED") if (!orderListState.orders[orderIndex].canEvaluate)
@@ -372,7 +375,7 @@ class OrderCard extends StatelessWidget {
           top: 5,
           left: 10,
           child: Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(10),
                 bottomRight: Radius.circular(50),
@@ -383,7 +386,7 @@ class OrderCard extends StatelessWidget {
             height: 35,
             child: Padding(
               padding: const EdgeInsets.only(top: 8, left: 10),
-              child: new Text(
+              child: Text(
                 "${orderIndex! + 1}",
                 style: context.textTheme.overline!.copyWith(
                   fontSize: 12,

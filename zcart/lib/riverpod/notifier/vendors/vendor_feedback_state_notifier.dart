@@ -9,11 +9,11 @@ class VendorFeedbackNotifier extends StateNotifier<VendorFeedbackState> {
   final IVendorsRepository _iVendorsRepository;
 
   VendorFeedbackNotifier(this._iVendorsRepository)
-      : super(VendorFeedbackInitialState());
+      : super(const VendorFeedbackInitialState());
 
   Future<void> getVendorFeedback(String slug) async {
     try {
-      state = VendorFeedbackLoadingState();
+      state = const VendorFeedbackLoadingState();
       final vendorFeddbacks =
           await _iVendorsRepository.fetchVendorFeedback(slug);
       state = VendorFeedbackLoadedState(vendorFeddbacks);

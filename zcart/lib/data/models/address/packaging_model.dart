@@ -21,9 +21,9 @@ class PackagingModel {
         id: json["id"],
         name: json["name"],
         cost: json["cost"],
-        height: json["height"] == null ? null : json["height"],
-        width: json["width"] == null ? null : json["width"],
-        depth: json["depth"] == null ? null : json["depth"],
+        height: json["height"],
+        width: json["width"],
+        depth: json["depth"],
         packagingModelDefault: json["default"],
       );
 
@@ -31,9 +31,9 @@ class PackagingModel {
         "id": id,
         "name": name,
         "cost": cost,
-        "height": height == null ? null : height,
-        "width": width == null ? null : width,
-        "depth": depth == null ? null : depth,
+        "height": height,
+        "width": width,
+        "depth": depth,
         "default": packagingModelDefault,
       };
 }

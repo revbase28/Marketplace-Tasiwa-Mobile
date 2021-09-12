@@ -1,8 +1,9 @@
 import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:velocity_x/velocity_x.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:velocity_x/velocity_x.dart';
 import 'package:zcart/Theme/styles/colors.dart';
 import 'package:zcart/data/models/brand/brand_profile_model.dart';
 import 'package:zcart/riverpod/providers/brand_provider.dart';
@@ -10,9 +11,10 @@ import 'package:zcart/riverpod/state/brand_state.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:zcart/views/screens/brand/brand_items_list.dart';
 import 'package:zcart/views/shared_widgets/product_loading_widget.dart';
-import 'package:easy_localization/easy_localization.dart';
 
 class BrandProfileScreen extends ConsumerWidget {
+  const BrandProfileScreen({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final brandProfileState = watch(brandProfileNotifierProvider);
@@ -28,7 +30,7 @@ class BrandProfileScreen extends ConsumerWidget {
                 ? Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Container(
+                      SizedBox(
                         height: context.screenHeight * .30,
                         width: context.screenWidth,
                         child: Image.network(
@@ -48,7 +50,7 @@ class BrandProfileScreen extends ConsumerWidget {
                           style: context.textTheme.headline6!,
                         ),
                         leading: Container(
-                          padding: EdgeInsets.symmetric(vertical: 5),
+                          padding: const EdgeInsets.symmetric(vertical: 5),
                           width: context.screenWidth * .10,
                           child: Image.network(
                             brandProfileState.brandProfile.data!.image!,
@@ -101,23 +103,19 @@ class BrandProfileScreen extends ConsumerWidget {
                           .py(5)
                           .px(10),
 
-                      BrandItemsListView(),
+                      const BrandItemsListView(),
                     ],
                   )
                 : brandProfileState is BrandProfileLoadingState ||
                         brandProfileState is BrandProfileInitialState
-                    ? Container(
-                        child: ProductLoadingWidget(),
-                      ).px(10)
+                    ? ProductLoadingWidget().px(10)
                     : brandProfileState is BrandProfileErrorState
-                        ? Container(
-                            child: Center(
-                              child: Column(
-                                children: [
-                                  Icon(Icons.info_outline),
-                                  Text(LocaleKeys.something_went_wrong.tr()),
-                                ],
-                              ),
+                        ? Center(
+                            child: Column(
+                              children: [
+                                const Icon(Icons.info_outline),
+                                Text(LocaleKeys.something_went_wrong.tr()),
+                              ],
                             ),
                           ).px(10)
                         : Container(),
@@ -146,7 +144,7 @@ class _BrandDescriptionState extends State<BrandDescription> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 5),
+      padding: const EdgeInsets.symmetric(vertical: 5),
       color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
           ? kDarkBgColor
           : kLightColor,
@@ -169,7 +167,11 @@ class _BrandDescriptionState extends State<BrandDescription> {
 }
 
 class BrandDetailsRowItem extends StatelessWidget {
-  BrandDetailsRowItem({required this.title, required this.value});
+  const BrandDetailsRowItem({
+    Key? key,
+    required this.title,
+    required this.value,
+  }) : super(key: key);
 
   final String title;
   final String value;

@@ -1,4 +1,3 @@
-
 class AddressModel {
   AddressModel({
     this.data,
@@ -7,7 +6,8 @@ class AddressModel {
   List<Addresses>? data;
 
   factory AddressModel.fromJson(Map<String, dynamic> json) => AddressModel(
-        data: List<Addresses>.from(json["data"].map((x) => Addresses.fromJson(x))),
+        data: List<Addresses>.from(
+            json["data"].map((x) => Addresses.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -48,8 +48,10 @@ class Addresses {
         addressLine2: json["address_line_2"],
         city: json["city"],
         zipCode: json["zip_code"],
-        country: json["country"] != null ? Country.fromJson(json["country"]) : null,
-        state: json["state"] != null ? CountryState.fromJson(json["state"]) : null,
+        country:
+            json["country"] != null ? Country.fromJson(json["country"]) : null,
+        state:
+            json["state"] != null ? CountryState.fromJson(json["state"]) : null,
         phone: json["phone"],
       );
 
@@ -84,14 +86,14 @@ class Country {
         id: json["id"],
         name: json["name"],
         isoCode: json["iso_code"],
-        countryId: json["country_id"] == null ? null : json["country_id"],
+        countryId: json["country_id"],
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
         "name": name,
         "iso_code": isoCode,
-        "country_id": countryId == null ? null : countryId,
+        "country_id": countryId,
       };
 }
 

@@ -15,12 +15,13 @@ class OrderRepository extends IOrderRepository {
   @override
   Future<List<Orders>> orders() async {
     items.clear();
-    var responseBody;
+    dynamic responseBody;
     try {
       responseBody =
           await handleResponse(await getRequest(API.orders, bearerToken: true));
-      if (responseBody.runtimeType == int) if (responseBody > 206)
+      if (responseBody.runtimeType == int && responseBody > 206) {
         throw NetworkException();
+      }
       ordersModel = OrdersModel.fromJson(responseBody);
       items.addAll(ordersModel.data!);
 
@@ -35,8 +36,9 @@ class OrderRepository extends IOrderRepository {
     return ordersModel.meta != null ? ordersModel.meta!.total ?? 0 : 0;
   }
 
+  @override
   Future<List<Orders>> moreOrders() async {
-    var responseBody;
+    dynamic responseBody;
     print("Fetch More Orders (before): ${items.length}");
 
     if (ordersModel.links!.next != null) {
@@ -57,12 +59,13 @@ class OrderRepository extends IOrderRepository {
 
   @override
   Future order(orderId) async {
-    var responseBody;
+    dynamic responseBody;
     try {
       responseBody = await handleResponse(
           await getRequest(API.order(orderId), bearerToken: true));
-      if (responseBody.runtimeType == int) if (responseBody > 206)
+      if (responseBody.runtimeType == int && responseBody > 206) {
         throw NetworkException();
+      }
       OrderModel orderDetailsModel = OrderModel.fromJson(responseBody);
       return orderDetailsModel.data;
     } catch (e) {
@@ -72,14 +75,15 @@ class OrderRepository extends IOrderRepository {
 
   @override
   Future orderReceived(orderId) async {
-    var responseBody;
+    dynamic responseBody;
     var requestBody = {'goods_received': true.toString()};
     try {
       responseBody = await handleResponse(await postRequest(
           API.orderReceived(orderId), requestBody,
           bearerToken: true));
-      if (responseBody.runtimeType == int) if (responseBody > 206)
+      if (responseBody.runtimeType == int && responseBody > 206) {
         throw NetworkException();
+      }
       /*OrderDetailsModel orderDetailsModel = OrderDetailsModel.fromJson(responseBody);
       return orderDetailsModel.data;*/
     } catch (e) {

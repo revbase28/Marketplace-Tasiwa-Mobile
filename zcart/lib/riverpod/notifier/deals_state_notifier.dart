@@ -10,11 +10,11 @@ class DealsUnderThePriceNotifier
   final IDealsRepository _iDealsRepository;
 
   DealsUnderThePriceNotifier(this._iDealsRepository)
-      : super(DealsUnderThePriceStateInitialState());
+      : super(const DealsUnderThePriceStateInitialState());
 
   Future<void> getAllDealsUnderThePrice() async {
     try {
-      state = DealsUnderThePriceStateLoadingState();
+      state = const DealsUnderThePriceStateLoadingState();
       final deals = await _iDealsRepository.fetchDealsUnderThePrice();
       state = DealsUnderThePriceStateLoadedState(deals);
     } on NetworkException {

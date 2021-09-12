@@ -9,11 +9,12 @@ import 'package:zcart/translations/locale_keys.g.dart';
 class ProductNotifier extends StateNotifier<ProductState> {
   final IProductRepository _iProductRepository;
 
-  ProductNotifier(this._iProductRepository) : super(ProductInitialState());
+  ProductNotifier(this._iProductRepository)
+      : super(const ProductInitialState());
 
   Future<void> getProductDetails(String? slug) async {
     try {
-      state = ProductLoadingState();
+      state = const ProductLoadingState();
       final productDetails =
           await _iProductRepository.fetchProductDetails(slug);
       await setRecentlyViewedItems(productDetails.data!.id!);
@@ -32,7 +33,7 @@ class ProductVariantNotifier extends StateNotifier<ProductVariantState> {
   final IProductRepository _iProductRepository;
 
   ProductVariantNotifier(this._iProductRepository)
-      : super(ProductVariantInitialState());
+      : super(const ProductVariantInitialState());
 
   Future<void> getProductVariantDetails(
       String? slug, attributeId, attributeValue) async {
@@ -40,12 +41,12 @@ class ProductVariantNotifier extends StateNotifier<ProductVariantState> {
       'attributes[$attributeId]': attributeValue,
     };
     try {
-      state = ProductVariantLoadingState();
+      state = const ProductVariantLoadingState();
       final productVariantDetails = await _iProductRepository
           .fetchProductVariantDetails(slug, requestBody);
       state = ProductVariantLoadedState(productVariantDetails);
     } on NetworkException {
-      state = ProductVariantErrorState("Something went wrong! Try again later");
+      state = ProductVariantErrorState(LocaleKeys.something_went_wrong.tr());
     }
   }
 }
@@ -54,15 +55,15 @@ class ProductListNotifier extends StateNotifier<ProductListState> {
   final IProductRepository _iProductRepository;
 
   ProductListNotifier(this._iProductRepository)
-      : super(ProducListtInitialState());
+      : super(const ProducListtInitialState());
 
   Future<void> getProductList(String slug) async {
     try {
-      state = ProductListLoadingState();
+      state = const ProductListLoadingState();
       final productDetails = await _iProductRepository.fetchProductList(slug);
       state = ProductListLoadedState(productDetails);
     } on NetworkException {
-      state = ProductListErrorState("Something went wrong! Try again later");
+      state = ProductListErrorState(LocaleKeys.something_went_wrong.tr());
     }
   }
 
@@ -72,8 +73,7 @@ class ProductListNotifier extends StateNotifier<ProductListState> {
       final productDetails = await _iProductRepository.fetchMoreProductList();
       state = ProductListLoadedState(productDetails);
     } on NetworkException {
-      state = ProductListErrorState(
-          "Couldn't fetch Random Item Data. Something went wrong!");
+      state = ProductListErrorState(LocaleKeys.something_went_wrong.tr());
     }
   }
 }

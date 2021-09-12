@@ -15,6 +15,7 @@ class ProductDetailsCard extends StatelessWidget {
   final String? title;
   final bool isTitleCentered;
 
+  // ignore: use_key_in_widget_constructors
   const ProductDetailsCard(
       {this.productList, this.title, this.isTitleCentered = false});
 
@@ -32,15 +33,15 @@ class ProductDetailsCard extends StatelessWidget {
                         .copyWith(color: kPrimaryFadeTextColor))
                 .pOnly(bottom: 5),
         GridView.builder(
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
               childAspectRatio: .75,
               crossAxisSpacing: 10,
               mainAxisSpacing: 10,
             ),
             shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            padding: EdgeInsets.symmetric(vertical: 10),
+            physics: const NeverScrollableScrollPhysics(),
+            padding: const EdgeInsets.symmetric(vertical: 10),
             itemCount: productList!.length,
             itemBuilder: (context, index) {
               return GestureDetector(
@@ -54,7 +55,7 @@ class ProductDetailsCard extends StatelessWidget {
                   context
                       .read(productSlugListProvider.notifier)
                       .addProductSlug(productList![index].slug);
-                  context.nextPage(ProductDetailsScreen());
+                  context.nextPage(const ProductDetailsScreen());
                 },
                 child: Card(
                   elevation: 0,
@@ -67,7 +68,7 @@ class ProductDetailsCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         productList![index] is LinkedItem
-                            ? SizedBox()
+                            ? const SizedBox()
                             : productList![index].hotItem
                                 ? ShaderMask(
                                     shaderCallback: (bounds) => LinearGradient(
@@ -86,7 +87,7 @@ class ProductDetailsCard extends StatelessWidget {
                                               fontWeight: FontWeight.bold,
                                               shadows: <Shadow>[
                                                 Shadow(
-                                                    offset: Offset(1, 1),
+                                                    offset: const Offset(1, 1),
                                                     blurRadius: 10,
                                                     color: kDarkColor
                                                         .withOpacity(0.4)),
@@ -100,7 +101,7 @@ class ProductDetailsCard extends StatelessWidget {
                           children: [
                             productList![index].condition == "New"
                                 ? Container(
-                                    padding: EdgeInsets.symmetric(
+                                    padding: const EdgeInsets.symmetric(
                                         vertical: 4, horizontal: 6),
                                     child: Text(
                                       productList![index].condition,
@@ -117,7 +118,7 @@ class ProductDetailsCard extends StatelessWidget {
                                 : Container(),
                             productList![index].discount != null
                                 ? Container(
-                                    padding: EdgeInsets.symmetric(
+                                    padding: const EdgeInsets.symmetric(
                                         vertical: 4, horizontal: 6),
                                     child: Text(
                                       productList![index].discount,
@@ -145,19 +146,18 @@ class ProductDetailsCard extends StatelessWidget {
                           fit: BoxFit.fitWidth,
                           loadingBuilder: (BuildContext context, Widget child,
                               ImageChunkEvent? loadingProgress) {
-                            if (loadingProgress == null)
+                            if (loadingProgress == null) {
                               return child;
-                            else
-                              return Center(child: Icon(Icons.image));
+                            } else {
+                              return const Center(child: Icon(Icons.image));
+                            }
                           },
                           errorBuilder: (BuildContext context, Object exception,
                               StackTrace? stackTrace) {
-                            return Container(
-                              child: Center(
-                                child: Icon(
-                                  Icons.image_not_supported,
-                                  color: kDarkColor,
-                                ),
+                            return const Center(
+                              child: Icon(
+                                Icons.image_not_supported,
+                                color: kDarkColor,
                               ),
                             );
                           },
@@ -204,7 +204,7 @@ class ProductDetailsCard extends StatelessWidget {
                                                       : kPriceColor,
                                               fontWeight: FontWeight.bold)),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 3,
                             ),
                             productList![index].hasOffer
@@ -216,7 +216,7 @@ class ProductDetailsCard extends StatelessWidget {
                                         fontSize: 10,
                                         color: kPrimaryFadeTextColor),
                                   )
-                                : SizedBox(),
+                                : const SizedBox(),
                           ],
                         )
                       ],

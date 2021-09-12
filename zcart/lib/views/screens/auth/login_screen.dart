@@ -1,10 +1,15 @@
 import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:nb_utils/nb_utils.dart';
+import 'package:velocity_x/velocity_x.dart';
+import 'package:zcart/Theme/styles/colors.dart';
 import 'package:zcart/config/config.dart';
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:zcart/data/controller/cart/coupon_controller.dart';
 import 'package:zcart/riverpod/providers/dispute_provider.dart';
 import 'package:zcart/riverpod/providers/provider.dart';
@@ -14,16 +19,14 @@ import 'package:zcart/views/screens/auth/reset_password.dart';
 import 'package:zcart/views/screens/auth/sign_up_screen.dart';
 import 'package:zcart/views/screens/bottom_nav_bar/bottom_nav_bar.dart';
 import 'package:zcart/views/shared_widgets/shared_widgets.dart';
-import 'package:zcart/Theme/styles/colors.dart';
-import 'package:easy_localization/easy_localization.dart';
-import 'package:velocity_x/velocity_x.dart';
-import 'package:nb_utils/nb_utils.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
 class LoginScreen extends StatefulWidget {
-  final needBackButton;
+  final bool needBackButton;
 
-  LoginScreen({this.needBackButton = false});
+  const LoginScreen({
+    Key? key,
+    required this.needBackButton,
+  }) : super(key: key);
 
   @override
   _LoginScreenState createState() => _LoginScreenState();
@@ -53,7 +56,7 @@ class _LoginScreenState extends State<LoginScreen> {
           context.read(wishListNotifierProvider.notifier).getWishList();
           context.read(disputesProvider.notifier).getDisputes();
           context.read(couponsProvider.notifier).coupons();
-          context.nextAndRemoveUntilPage(BottomNavBar(selectedIndex: 0));
+          context.nextAndRemoveUntilPage(const BottomNavBar(selectedIndex: 0));
         }
         if (state is UserErrorState) {
           toast(state.message, bgColor: kPrimaryColor);
@@ -70,21 +73,21 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: Form(
                       key: _formKey,
                       child: Container(
-                        margin: EdgeInsets.all(16),
-                        padding: EdgeInsets.all(16),
+                        margin: const EdgeInsets.all(16),
+                        padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
                             color: EasyDynamicTheme.of(context).themeMode ==
                                     ThemeMode.dark
                                 ? kDarkCardBgColor
                                 : kLightCardBgColor,
                             borderRadius:
-                                BorderRadius.all(Radius.circular(10))),
+                                const BorderRadius.all(Radius.circular(10))),
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Container(
+                            SizedBox(
                               width: MediaQuery.of(context).size.width * 0.8,
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -119,7 +122,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   decoration: TextDecoration.underline,
                                 ),
                               ).onInkTap(() {
-                                context.nextPage(ResetPassword());
+                                context.nextPage(const ResetPassword());
                               }).py(5),
                             ),
                             CustomButton(
@@ -134,6 +137,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 }).pOnly(top: 10),
                             if (!(!MyConfig.isGoogleLoginActive &&
                                 !MyConfig.isFacebookLoginActive))
+                              //TODO: Add social login
                               Text("Or Continue With")
                                   .text
                                   .textStyle(context.textTheme.caption!)
@@ -162,17 +166,17 @@ class _LoginScreenState extends State<LoginScreen> {
                                     },
                                     style: ButtonStyle(
                                         padding: MaterialStateProperty.all(
-                                          EdgeInsets.symmetric(
+                                          const EdgeInsets.symmetric(
                                               horizontal: 24, vertical: 12),
                                         ),
                                         backgroundColor:
                                             MaterialStateProperty.all(
-                                                Color(0xffCE3927))),
-                                    icon: Icon(
+                                                const Color(0xffCE3927))),
+                                    icon: const Icon(
                                       FontAwesomeIcons.google,
                                       size: 18,
                                     ),
-                                    label: Text("Google"),
+                                    label: const Text("Google"),
                                   ).px(5),
                                 if (MyConfig.isFacebookLoginActive)
                                   ElevatedButton.icon(
@@ -196,17 +200,17 @@ class _LoginScreenState extends State<LoginScreen> {
                                     },
                                     style: ButtonStyle(
                                         padding: MaterialStateProperty.all(
-                                          EdgeInsets.symmetric(
+                                          const EdgeInsets.symmetric(
                                               horizontal: 24, vertical: 12),
                                         ),
                                         backgroundColor:
                                             MaterialStateProperty.all(
-                                                Color(0xff3b5998))),
-                                    icon: Icon(
+                                                const Color(0xff3b5998))),
+                                    icon: const Icon(
                                       FontAwesomeIcons.facebook,
                                       size: 18,
                                     ),
-                                    label: Text("Facebook"),
+                                    label: const Text("Facebook"),
                                   ).px(5),
                               ],
                             ),

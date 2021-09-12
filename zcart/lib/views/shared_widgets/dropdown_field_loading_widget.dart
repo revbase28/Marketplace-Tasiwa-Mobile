@@ -4,6 +4,8 @@ import 'package:nb_utils/nb_utils.dart';
 import 'package:zcart/Theme/styles/colors.dart';
 
 class FieldLoading extends StatefulWidget {
+  const FieldLoading({Key? key}) : super(key: key);
+
   @override
   _FieldLoadingState createState() => _FieldLoadingState();
 }
@@ -12,7 +14,7 @@ class _FieldLoadingState extends State<FieldLoading> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 5),
+      margin: const EdgeInsets.symmetric(vertical: 5),
       child: Shimmer.fromColors(
         baseColor: Colors.grey[300]!,
         highlightColor: Colors.grey[100]!,
@@ -27,7 +29,7 @@ class _FieldLoadingState extends State<FieldLoading> {
             ),
             Container(
               height: 50,
-              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
               width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
                 color: kLightCardBgColor,

@@ -9,16 +9,18 @@ import 'package:zcart/data/network/network_utils.dart';
 
 /*Order - Chat*/
 final orderChatProvider =
-    StateNotifierProvider<OrderChatRepository, OrderChatState>((ref) => OrderChatRepository());
-final orderChatSendProvider = StateNotifierProvider<OrderChatSendRepository, OrderChatSendState>(
-    (ref) => OrderChatSendRepository());
+    StateNotifierProvider<OrderChatRepository, OrderChatState>(
+        (ref) => OrderChatRepository());
+final orderChatSendProvider =
+    StateNotifierProvider<OrderChatSendRepository, OrderChatSendState>(
+        (ref) => OrderChatSendRepository());
 
 class OrderChatRepository extends StateNotifier<OrderChatState> {
-  OrderChatRepository() : super(OrderChatInitialState());
+  OrderChatRepository() : super(const OrderChatInitialState());
 
   Future orderConversation(orderId, {bool update = false}) async {
-    if (!update) state = OrderChatLoadingState();
-    var responseBody;
+    if (!update) state = const OrderChatLoadingState();
+    dynamic responseBody;
     try {
       responseBody = await handleResponse(
           await getRequest(API.orderConversation(orderId), bearerToken: true));
@@ -33,18 +35,18 @@ class OrderChatRepository extends StateNotifier<OrderChatState> {
         state = OrderChatInitialLoadedState(orderChatInitialModel);
       }
     } on NetworkException {
-      state = OrderChatErrorState("Failed to fetch chat!");
+      state = const OrderChatErrorState("Failed to fetch chat!");
     }
   }
 }
 
 class OrderChatSendRepository extends StateNotifier<OrderChatSendState> {
-  OrderChatSendRepository() : super(OrderChatSendInitialState());
+  OrderChatSendRepository() : super(const OrderChatSendInitialState());
 
   Future sendMessage(orderId, message) async {
     var body = {'message': message};
-    state = OrderChatSendLoadingState();
-    var responseBody;
+    state = const OrderChatSendLoadingState();
+    dynamic responseBody;
     try {
       responseBody = await handleResponse(await postRequest(
         API.orderSendMessage(orderId),
@@ -52,26 +54,27 @@ class OrderChatSendRepository extends StateNotifier<OrderChatSendState> {
         bearerToken: true,
       ));
       if (responseBody is int) if (responseBody > 206) throw NetworkException();
-      state = OrderChatSendLoadedState();
+      state = const OrderChatSendLoadedState();
     } on NetworkException {
-      state = OrderChatSendErrorState("Failed to fetch chat!");
+      state = const OrderChatSendErrorState("Failed to fetch chat!");
     }
   }
 }
 
 /*Product- Chat*/
-final productChatProvider = StateNotifierProvider<ProductChatRepository, ProductChatState>(
-    (ref) => ProductChatRepository());
+final productChatProvider =
+    StateNotifierProvider<ProductChatRepository, ProductChatState>(
+        (ref) => ProductChatRepository());
 final productChatSendProvider =
     StateNotifierProvider<ProductChatSendRepository, ProductChatSendState>(
         (ref) => ProductChatSendRepository());
 
 class ProductChatRepository extends StateNotifier<ProductChatState> {
-  ProductChatRepository() : super(ProductChatInitialState());
+  ProductChatRepository() : super(const ProductChatInitialState());
 
   Future productConversation(shopId, {bool update = false}) async {
-    if (!update) state = ProductChatLoadingState();
-    var responseBody;
+    if (!update) state = const ProductChatLoadingState();
+    dynamic responseBody;
     try {
       responseBody = await handleResponse(
           await getRequest(API.productConversation(shopId), bearerToken: true));
@@ -87,19 +90,19 @@ class ProductChatRepository extends StateNotifier<ProductChatState> {
         state = ProductChatInitialLoadedState(productChatInitialModel);
       }
     } on NetworkException {
-      state = ProductChatErrorState("Failed to fetch chat!");
+      state = const ProductChatErrorState("Failed to fetch chat!");
     }
   }
 }
 
 class ProductChatSendRepository extends StateNotifier<ProductChatSendState> {
-  ProductChatSendRepository() : super(ProductChatSendInitialState());
+  ProductChatSendRepository() : super(const ProductChatSendInitialState());
 
   Future sendMessage(shopId, message) async {
     //TODO: Send Attachment as a body
     var body = {'message': message};
-    state = ProductChatSendLoadingState();
-    var responseBody;
+    state = const ProductChatSendLoadingState();
+    dynamic responseBody;
     try {
       responseBody = await handleResponse(await postRequest(
         API.productSendMessage(shopId),
@@ -107,9 +110,9 @@ class ProductChatSendRepository extends StateNotifier<ProductChatSendState> {
         bearerToken: true,
       ));
       if (responseBody is int) if (responseBody > 206) throw NetworkException();
-      state = ProductChatSendLoadedState();
+      state = const ProductChatSendLoadedState();
     } on NetworkException {
-      state = ProductChatSendErrorState("Failed to fetch chat!");
+      state = const ProductChatSendErrorState("Failed to fetch chat!");
     }
   }
 }
@@ -121,11 +124,11 @@ final conversationProvider =
 });
 
 class ConversationRepository extends StateNotifier<ConversationState> {
-  ConversationRepository() : super(ConversationInitialState());
+  ConversationRepository() : super(const ConversationInitialState());
 
   Future conversation({bool update = false}) async {
-    if (!update) state = ConversationLoadingState();
-    var responseBody;
+    if (!update) state = const ConversationLoadingState();
+    dynamic responseBody;
     try {
       responseBody = await handleResponse(
           await getRequest(API.conversations, bearerToken: true));
@@ -135,7 +138,7 @@ class ConversationRepository extends StateNotifier<ConversationState> {
           ConversationModel.fromJson(responseBody);
       state = ConversationLoadedState(conversationModel);
     } on NetworkException {
-      state = ConversationErrorState("Failed to fetch chat!");
+      state = const ConversationErrorState("Failed to fetch chat!");
     }
   }
 }

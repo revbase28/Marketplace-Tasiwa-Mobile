@@ -10,6 +10,8 @@ import 'vendors_details.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 class VendorsTab extends ConsumerWidget {
+  const VendorsTab({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final vendorsState = watch(vendorsNotifierProvider);
@@ -19,7 +21,7 @@ class VendorsTab extends ConsumerWidget {
       ),
       body: vendorsState is VendorsLoadedState
           ? ListView.builder(
-              padding: EdgeInsets.only(top: 5),
+              padding: const EdgeInsets.only(top: 5),
               itemCount: vendorsState.vendorsList!.length,
               itemBuilder: (context, index) {
                 return VendorCard(
@@ -36,7 +38,7 @@ class VendorsTab extends ConsumerWidget {
                     context
                         .read(vendorItemsNotifierProvider.notifier)
                         .getVendorItems(vendorsState.vendorsList![index].slug);
-                    context.nextPage(VendorsDetailsScreen());
+                    context.nextPage(const VendorsDetailsScreen());
                   },
                 );
               })

@@ -4,39 +4,46 @@ import 'package:zcart/data/network/api.dart';
 import 'package:zcart/data/network/network_exception.dart';
 import 'package:zcart/data/network/network_utils.dart';
 
-final sellerFeedbackProvider = StateNotifierProvider<SellerFeedbackRepository, SellerFeedbackState>((ref) => SellerFeedbackRepository());
+final sellerFeedbackProvider =
+    StateNotifierProvider<SellerFeedbackRepository, SellerFeedbackState>(
+        (ref) => SellerFeedbackRepository());
 
 class SellerFeedbackRepository extends StateNotifier<SellerFeedbackState> {
-  SellerFeedbackRepository() : super(SellerFeedbackInitialState());
+  SellerFeedbackRepository() : super(const SellerFeedbackInitialState());
 
   Future postFeedback(orderId, rating, comment) async {
-    state = SellerFeedbackLoadingState();
+    state = const SellerFeedbackLoadingState();
 
-    var responseBody;
+    dynamic responseBody;
 
     var requestBody = {
       'rating': rating,
       'comment': comment,
     };
     try {
-      responseBody = await handleResponse(await postRequest(API.sellerFeedback(orderId), requestBody, bearerToken: true));
+      responseBody = await handleResponse(await postRequest(
+          API.sellerFeedback(orderId), requestBody,
+          bearerToken: true));
       if (responseBody is int) if (responseBody > 206) throw NetworkException();
-      state = SellerFeedbackLoadedState();
+      state = const SellerFeedbackLoadedState();
     } on NetworkException {
-      state = SellerFeedbackErrorState('Something went wrong');
+      state = const SellerFeedbackErrorState('Something went wrong');
     }
   }
 }
 
-final productFeedbackProvider = StateNotifierProvider<ProductFeedbackRepository, ProductFeedbackState>((ref) => ProductFeedbackRepository());
+final productFeedbackProvider =
+    StateNotifierProvider<ProductFeedbackRepository, ProductFeedbackState>(
+        (ref) => ProductFeedbackRepository());
 
 class ProductFeedbackRepository extends StateNotifier<ProductFeedbackState> {
-  ProductFeedbackRepository() : super(ProductFeedbackInitialState());
+  ProductFeedbackRepository() : super(const ProductFeedbackInitialState());
 
-  Future postFeedback(orderId, List listingId, List ratings, List comments) async {
-    state = ProductFeedbackLoadingState();
+  Future postFeedback(
+      orderId, List listingId, List ratings, List comments) async {
+    state = const ProductFeedbackLoadingState();
 
-    var responseBody;
+    dynamic responseBody;
 
     var requestBody = {};
     for (int i = 0; i < listingId.length; i++) {
@@ -45,11 +52,13 @@ class ProductFeedbackRepository extends StateNotifier<ProductFeedbackState> {
     }
     print(requestBody);
     try {
-      responseBody = await handleResponse(await postRequest(API.productFeedback(orderId), requestBody, bearerToken: true));
+      responseBody = await handleResponse(await postRequest(
+          API.productFeedback(orderId), requestBody,
+          bearerToken: true));
       if (responseBody is int) if (responseBody > 206) throw NetworkException();
-      state = ProductFeedbackLoadedState();
+      state = const ProductFeedbackLoadedState();
     } on NetworkException {
-      state = ProductFeedbackErrorState('Something went wrong');
+      state = const ProductFeedbackErrorState('Something went wrong');
     }
   }
 }

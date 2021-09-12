@@ -8,6 +8,8 @@ import 'package:zcart/views/shared_widgets/shared_widgets.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 class PrivacyPolicyScreen extends StatelessWidget {
+  const PrivacyPolicyScreen({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,7 +21,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
             child: Consumer(
               builder: (context, watch, _) {
                 final privacyPolicyState = watch(privacyPolicyProvider);
@@ -35,7 +37,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
-                                Icon(Icons.info_outline),
+                                const Icon(Icons.info_outline),
                                 const SizedBox(height: 10),
                                 Text(LocaleKeys.no_data_yet.tr())
                               ],

@@ -1,17 +1,20 @@
 import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:zcart/data/models/product/product_details_model.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:velocity_x/velocity_x.dart';
+import 'package:zcart/Theme/styles/colors.dart';
+import 'package:zcart/data/models/product/product_details_model.dart';
 import 'package:zcart/riverpod/providers/address_provider.dart';
 import 'package:zcart/riverpod/providers/product_provider.dart';
 import 'package:zcart/riverpod/state/address/address_state.dart';
-import 'package:zcart/Theme/styles/colors.dart';
-import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 
 class ShippingAddressScreen extends StatefulWidget {
-  const ShippingAddressScreen({required this.productModel});
+  const ShippingAddressScreen({
+    Key? key,
+    required this.productModel,
+  }) : super(key: key);
 
   final ProductDetailsModel productModel;
 
@@ -20,8 +23,8 @@ class ShippingAddressScreen extends StatefulWidget {
 }
 
 class _ShippingAddressScreenState extends State<ShippingAddressScreen> {
-  var selectedCountry;
-  var selectedShippingMethod;
+  dynamic selectedCountry;
+  dynamic selectedShippingMethod;
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +47,7 @@ class _ShippingAddressScreenState extends State<ShippingAddressScreen> {
               color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
                   ? kDarkCardBgColor
                   : kLightColor,
-              padding: EdgeInsets.all(10),
+              padding: const EdgeInsets.all(10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -56,7 +59,7 @@ class _ShippingAddressScreenState extends State<ShippingAddressScreen> {
                         EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
                             ? kDarkBgColor
                             : kPrimaryColor.withOpacity(0.10),
-                    padding: EdgeInsets.only(left: 10),
+                    padding: const EdgeInsets.only(left: 10),
                     width: context.screenWidth,
                     child: DropdownButtonHideUnderline(
                       child: DropdownButton<String>(
@@ -84,7 +87,7 @@ class _ShippingAddressScreenState extends State<ShippingAddressScreen> {
                               ));
                         }).toList(),
                         hint: Text(LocaleKeys.select_options.tr(),
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontSize: 14, fontWeight: FontWeight.w500)),
                         onChanged: (String? value) {
                           setState(() {
@@ -119,7 +122,7 @@ class _ShippingAddressScreenState extends State<ShippingAddressScreen> {
                         EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
                             ? kDarkBgColor
                             : kPrimaryColor.withOpacity(0.10),
-                    padding: EdgeInsets.only(left: 10),
+                    padding: const EdgeInsets.only(left: 10),
                     width: context.screenWidth,
                     child: DropdownButtonHideUnderline(
                       child: DropdownButton<String>(
@@ -142,7 +145,7 @@ class _ShippingAddressScreenState extends State<ShippingAddressScreen> {
                               ));
                         }).toList(),
                         hint: Text(LocaleKeys.select_options.tr(),
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontSize: 14, fontWeight: FontWeight.w500)),
                         onChanged: (String? value) {
                           setState(() {

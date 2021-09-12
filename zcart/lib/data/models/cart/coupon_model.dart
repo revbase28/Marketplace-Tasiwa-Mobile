@@ -1,6 +1,7 @@
 import 'dart:convert';
 
-CouponModel couponModelFromJson(String str) => CouponModel.fromJson(json.decode(str));
+CouponModel couponModelFromJson(String str) =>
+    CouponModel.fromJson(json.decode(str));
 
 String couponModelToJson(CouponModel data) => json.encode(data.toJson());
 
@@ -93,7 +94,7 @@ class Shop {
         slug: json["slug"],
         verified: json["verified"],
         verifiedText: json["verified_text"],
-        rating: json["rating"] == null ? null : json["rating"],
+        rating: json["rating"],
         image: json["image"],
       );
 
@@ -103,7 +104,7 @@ class Shop {
         "slug": slug,
         "verified": verified,
         "verified_text": verifiedText,
-        "rating": rating == null ? null : rating,
+        "rating": rating,
         "image": image,
       };
 }

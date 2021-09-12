@@ -38,7 +38,7 @@ class VendorCard extends StatelessWidget {
                 blurRadius: 20,
                 color: kDarkColor.withOpacity(0.1),
                 spreadRadius: 3,
-                offset: Offset(1, 1)),
+                offset: const Offset(1, 1)),
           ],
         ),
         child: Column(
@@ -51,10 +51,8 @@ class VendorCard extends StatelessWidget {
                 fit: BoxFit.cover,
                 errorBuilder: (BuildContext context, Object exception,
                     StackTrace? stackTrace) {
-                  return Container(
-                    child: Icon(
-                      Icons.image_not_supported,
-                    ),
+                  return const Icon(
+                    Icons.image_not_supported,
                   );
                 },
               ).p(5),
@@ -66,7 +64,8 @@ class VendorCard extends StatelessWidget {
                     style: context.textTheme.headline6!,
                   ),
                   isVerified!
-                      ? Icon(Icons.check_circle, color: kPrimaryColor, size: 15)
+                      ? const Icon(Icons.check_circle,
+                              color: kPrimaryColor, size: 15)
                           .px2()
                           .pOnly(top: 3)
                           .onInkTap(() {
@@ -86,9 +85,9 @@ class VendorCard extends StatelessWidget {
                     allowHalfRating: true,
                     itemCount: 5,
                     itemSize: 12,
-                    itemPadding: EdgeInsets.symmetric(horizontal: 0.0),
+                    itemPadding: const EdgeInsets.symmetric(horizontal: 0.0),
                     itemBuilder: (context, _) =>
-                        Icon(Icons.star, color: Colors.amber),
+                        const Icon(Icons.star, color: Colors.amber),
                     onRatingUpdate: (rating) => print(rating),
                   ),
                   Text(
@@ -99,7 +98,8 @@ class VendorCard extends StatelessWidget {
                 ],
               ),
               trailing: trailingEnabled
-                  ? Icon(Icons.arrow_forward_ios, size: 15).pOnly(right: 10)
+                  ? const Icon(Icons.arrow_forward_ios, size: 15)
+                      .pOnly(right: 10)
                   : null,
               onTap: onTap as void Function()?,
             )

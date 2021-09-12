@@ -11,7 +11,7 @@ class AppTheme {
       textTheme: lightTextTheme(context),
       appBarTheme: appBarTheme.copyWith(
         textTheme: lightTextTheme(context).copyWith(
-          headline6: TextStyle(
+          headline6: const TextStyle(
             color: kPrimaryLightTextColor,
             fontWeight: FontWeight.bold,
             fontSize: 16,
@@ -26,7 +26,7 @@ class AppTheme {
       textTheme: darkTextTheme(context),
       appBarTheme: darkAppBarTheme.copyWith(
         textTheme: darkTextTheme(context).copyWith(
-          headline6: TextStyle(
+          headline6: const TextStyle(
             color: kPrimaryLightTextColor,
             fontWeight: FontWeight.bold,
             fontSize: 16,

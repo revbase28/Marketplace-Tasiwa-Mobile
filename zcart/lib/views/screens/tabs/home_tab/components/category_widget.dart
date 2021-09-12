@@ -17,7 +17,8 @@ import 'package:zcart/views/screens/tabs/home_tab/components/search_bar.dart';
 class CategoryWidget extends StatelessWidget {
   final List<CategoryList> categoryList;
 
-  CategoryWidget(this.categoryList);
+  // ignore: use_key_in_widget_constructors
+  const CategoryWidget(this.categoryList);
 
   @override
   Widget build(BuildContext context) {
@@ -26,10 +27,10 @@ class CategoryWidget extends StatelessWidget {
       child: ListView.builder(
           itemCount: categoryList.length,
           scrollDirection: Axis.horizontal,
-          padding: EdgeInsets.symmetric(vertical: 10),
+          padding: const EdgeInsets.symmetric(vertical: 10),
           itemBuilder: (BuildContext context, int index) {
             return Container(
-              padding: EdgeInsets.all(10),
+              padding: const EdgeInsets.all(10),
               decoration: customBoxDecoration.copyWith(
                 boxShadow: [],
                 color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
@@ -58,10 +59,10 @@ class CategoryWidget extends StatelessWidget {
               )),
             )
                 .onInkTap(() {
-                  if (index == 0)
+                  if (index == 0) {
                     context.nextPage(CategoryListScreen(
                         categoryList: categoryList.sublist(1)));
-                  else {
+                  } else {
                     context
                         .read(subgroupCategoryNotifierProvider.notifier)
                         .resetState();
@@ -84,6 +85,8 @@ class CategoryWidget extends StatelessWidget {
 }
 
 class CategoryLoadingWidget extends StatelessWidget {
+  const CategoryLoadingWidget({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -93,7 +96,7 @@ class CategoryLoadingWidget extends StatelessWidget {
         child: ListView.builder(
             itemCount: 8,
             scrollDirection: Axis.horizontal,
-            padding: EdgeInsets.symmetric(vertical: 10),
+            padding: const EdgeInsets.symmetric(vertical: 10),
             itemBuilder: (BuildContext context, int index) {
               return Chip(
                 backgroundColor:

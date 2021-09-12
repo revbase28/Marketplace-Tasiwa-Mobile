@@ -1,7 +1,7 @@
 class API {
   //Change these values as your app requires
-  static const APP_NAME = "zCart";
-  static const APP_URL = "https://zcart.incevio.com";
+  static const String appName = "zCart";
+  static const String appUrl = "https://zcart.incevio.com";
 
   /// Base URL
   //Change the base URL to point to your own API server.
@@ -9,10 +9,10 @@ class API {
   static const live = 'https://zcart.incevio.com/api/';
 
   //Point the API to the base URL
-  static const base = test;
+  static const base = live;
 
   // Stripe Publishable Key
-  static const STRIPE_PUBLISHABLE_KEY =
+  static const String stripePublishableKey =
       "pk_test_51Gyxp2JewI4n8wVFDHRNMHmzOLaoc0fbcS9qzlWMDUAqrJ0yHgrXY5sWett0K6wskEWqauH8Sj4qL4A5zsBmPmxC00jHvnpCfL";
 
   //

@@ -7,6 +7,7 @@ class DataList extends StatelessWidget {
   final Color backgroundColor;
   final Color textColor;
 
+  // ignore: use_key_in_widget_constructors
   const DataList(
       {this.title,
       this.valueText,
@@ -16,11 +17,11 @@ class DataList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: 15),
+      margin: const EdgeInsets.only(top: 15),
       child: Row(
         children: [
-          Container(child: Text(title!)),
-          SizedBox(width: 5),
+          Text(title!),
+          const SizedBox(width: 5),
           Flexible(
             child: Column(
               mainAxisSize: MainAxisSize.max,
@@ -29,8 +30,8 @@ class DataList extends StatelessWidget {
                 Container(
                   child: Text(valueText!,
                       overflow: TextOverflow.ellipsis, softWrap: false),
-                  padding:
-                      EdgeInsets.only(left: 8, right: 8, top: 2, bottom: 2),
+                  padding: const EdgeInsets.only(
+                      left: 8, right: 8, top: 2, bottom: 2),
                   decoration: BoxDecoration(
                       color: backgroundColor,
                       borderRadius: BorderRadius.circular(6)),

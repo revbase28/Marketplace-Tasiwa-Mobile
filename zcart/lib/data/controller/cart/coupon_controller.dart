@@ -14,12 +14,12 @@ final applyCouponProvider =
 
 /*Repository & Notifier class Combined*/
 class CouponRepository extends StateNotifier<CouponState> {
-  CouponRepository() : super(CouponInitialState());
+  CouponRepository() : super(const CouponInitialState());
 
   Future coupons() async {
-    state = CouponLoadingState();
-    print(state);
-    var responseBody;
+    state = const CouponLoadingState();
+
+    dynamic responseBody;
     try {
       responseBody = await handleResponse(
           await getRequest(API.coupons, bearerToken: true));
@@ -28,25 +28,25 @@ class CouponRepository extends StateNotifier<CouponState> {
 
       state = CouponLoadedState(couponModel.data);
     } on NetworkException {
-      state = CouponErrorState("Failed to fetch coupon data!");
+      state = const CouponErrorState("Failed to fetch coupon data!");
     }
   }
 }
 
 class ApplyCouponRepository extends StateNotifier<ApplyCouponState> {
-  ApplyCouponRepository() : super(ApplyCouponInitialState());
+  ApplyCouponRepository() : super(const ApplyCouponInitialState());
 
   Future applyCoupon(cartId, coupon) async {
-    state = ApplyCouponLoadingState();
-    var responseBody;
+    state = const ApplyCouponLoadingState();
+    dynamic responseBody;
     try {
       responseBody = await handleResponse(await postRequest(
           API.applyCoupon(cartId, coupon), {},
           bearerToken: true));
       if (responseBody is int) if (responseBody > 206) throw NetworkException();
-      state = ApplyCouponLoadedState();
+      state = const ApplyCouponLoadedState();
     } on NetworkException {
-      state = ApplyCouponErrorState("Failed to apply coupon!");
+      state = const ApplyCouponErrorState("Failed to apply coupon!");
     }
   }
 }

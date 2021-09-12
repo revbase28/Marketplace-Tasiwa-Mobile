@@ -69,7 +69,11 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
                       widget.isAccessed
                           ? CustomDropDownField(
                               title: LocaleKeys.address_type.tr(),
-                              optionsList: ["Primary", "Billing", "Shipping"],
+                              optionsList: const [
+                                "Primary",
+                                "Billing",
+                                "Shipping"
+                              ],
                               value: "Select",
                               controller: addressTypeController,
                               widthMultiplier: 1,
@@ -82,7 +86,7 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
                                 return null;
                               },
                             )
-                          : SizedBox(),
+                          : const SizedBox(),
                       CustomTextField(
                         color: kLightCardBgColor,
                         title: LocaleKeys.contact_person_name.tr(),
@@ -139,7 +143,7 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
                                   },
                                 )
                               : countryState is CountryLoadingState
-                                  ? FieldLoading()
+                                  ? const FieldLoading()
                                   : Container();
                         },
                       ),
@@ -147,20 +151,18 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
                         builder: (context, watch, _) {
                           final statesState = watch(statesNotifierProvider);
                           if (statesState is StatesLoadedState) {
-                            selectedStateID =
-                                statesState.statesList!.length == 0
-                                    ? null
-                                    : statesState.statesList![0].id;
+                            selectedStateID = statesState.statesList!.isEmpty
+                                ? null
+                                : statesState.statesList![0].id;
                           }
                           return statesState is StatesLoadedState
                               ? CustomDropDownField(
                                   title: LocaleKeys.states.tr(),
-                                  optionsList:
-                                      statesState.statesList!.length == 0
-                                          ? ["Select"]
-                                          : statesState.statesList!
-                                              .map((e) => e.name)
-                                              .toList(),
+                                  optionsList: statesState.statesList!.isEmpty
+                                      ? ["Select"]
+                                      : statesState.statesList!
+                                          .map((e) => e.name)
+                                          .toList(),
                                   //value: "Select",
                                   controller: statesController,
                                   widthMultiplier: 1,
@@ -177,7 +179,7 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
                                   },
                                 )
                               : statesState is StatesLoadingState
-                                  ? FieldLoading()
+                                  ? const FieldLoading()
                                   : Container();
                         },
                       ),

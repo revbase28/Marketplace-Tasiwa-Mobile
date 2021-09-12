@@ -15,7 +15,8 @@ class BannerWidget extends StatelessWidget {
   final List<BannerList> bannerList;
   final bool isReverse;
 
-  BannerWidget(this.bannerList, {this.isReverse = true});
+  // ignore: use_key_in_widget_constructors
+  const BannerWidget(this.bannerList, {this.isReverse = true});
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +31,7 @@ class BannerWidget extends StatelessWidget {
         items: bannerList
             .map((item) => Stack(
                   children: [
-                    Container(
+                    SizedBox(
                         height: context.percentHeight * 15,
                         width: double.infinity,
                         child: Image.network(
@@ -54,12 +55,12 @@ class BannerWidget extends StatelessWidget {
                     )
                   ],
                 ).onInkTap(() {
-                  if (item.link!.length > 0) {
+                  if (item.link!.isNotEmpty) {
                     context
                         .read(categoryItemNotifierProvider.notifier)
                         .getCategoryItem(item.link.splitAfter(
                             '.${API.base.split(".").last.split("/").first}'));
-                    context.nextPage(ProductListScreen());
+                    context.nextPage(const ProductListScreen());
                   } else {
                     toast(LocaleKeys.no_offer.tr(), bgColor: kPrimaryColor);
                   }
@@ -72,11 +73,12 @@ class BannerTextWidget extends StatelessWidget {
   final String? text;
   final String type;
 
-  BannerTextWidget(this.text, this.type);
+  // ignore: use_key_in_widget_constructors
+  const BannerTextWidget(this.text, this.type);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: context.screenWidth * .60,
       child: Row(
         children: [

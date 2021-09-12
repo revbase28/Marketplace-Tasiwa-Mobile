@@ -22,9 +22,9 @@ bool isSuccessful(int code) {
 Future<Response> getRequest(String? endPoint,
     {bool bearerToken = false, bool noBaseUrl = false}) async {
   if (await isNetworkAvailable()) {
-    var headers;
+    Map<String, String>? headers;
     Response response;
-    var accessToken = getStringAsync(ACCESS);
+    var accessToken = getStringAsync(access);
 
     if (bearerToken) {
       headers = {
@@ -33,10 +33,11 @@ Future<Response> getRequest(String? endPoint,
       };
     }
 
-    if (!noBaseUrl)
+    if (!noBaseUrl) {
       print('URL: ${API.base}$endPoint');
-    else
+    } else {
       print('URL: $endPoint');
+    }
     //print('Header: $headers');
 
     if (bearerToken) {
@@ -58,13 +59,14 @@ postRequest(String endPoint, Map? requestBody,
     {bool bearerToken = false, bool noBaseUrl = false}) async {
   if (await isNetworkAvailable()) {
     Response? response;
-    if (!noBaseUrl)
+    if (!noBaseUrl) {
       print('URL: ${API.base}$endPoint');
-    else
+    } else {
       print('URL: $endPoint');
+    }
     print('body: $requestBody');
 
-    var accessToken = getStringAsync(ACCESS);
+    var accessToken = getStringAsync(access);
 
     var headers = {
       HttpHeaders.acceptHeader: 'application/json; charset=utf-8',
@@ -78,10 +80,10 @@ postRequest(String endPoint, Map? requestBody,
     print("Headers: $headers");
     try {
       if (!noBaseUrl) {
-        response = await post(Uri.parse('${API.base}' + '$endPoint'),
+        response = await post(Uri.parse('${API.base}$endPoint'),
             body: requestBody, headers: headers);
       } else {
-        response = await post(Uri.parse('$endPoint'),
+        response = await post(Uri.parse(endPoint),
             body: requestBody, headers: headers);
       }
     } catch (e) {
@@ -100,7 +102,7 @@ putRequest(String endPoint, Map request, {bool bearerToken = true}) async {
     print('URL: ${API.base}$endPoint');
     print('Request: $request');
 
-    var accessToken = getStringAsync(ACCESS);
+    var accessToken = getStringAsync(access);
 
     var headers = {
       HttpHeaders.acceptHeader: 'application/json; charset=utf-8',
@@ -113,7 +115,7 @@ putRequest(String endPoint, Map request, {bool bearerToken = true}) async {
 
     print("Headers: $headers");
     try {
-      response = await put(Uri.parse('${API.base}' + '$endPoint'),
+      response = await put(Uri.parse('${API.base}$endPoint'),
           body: request, headers: headers);
     } catch (e) {
       print(e.toString());
@@ -133,10 +135,10 @@ multiPartRequest(String endPoint, Map body,
     ///MultiPart request
     var request = MultipartRequest(
       'PUT',
-      Uri.parse('${API.base}' + '$endPoint'),
+      Uri.parse('${API.base}$endPoint'),
     );
 
-    var accessToken = getStringAsync(ACCESS);
+    var accessToken = getStringAsync(access);
 
     var headers = {
       HttpHeaders.acceptHeader: 'application/json; charset=utf-8',
@@ -183,7 +185,7 @@ patchRequest(String endPoint, Map request,
 
 deleteRequest(String endPoint, {bool bearerToken = true}) async {
   if (await isNetworkAvailable()) {
-    var accessToken = getStringAsync(ACCESS);
+    var accessToken = getStringAsync(access);
     print('URL: ${API.base}$endPoint');
 
     var headers = {
@@ -197,7 +199,7 @@ deleteRequest(String endPoint, {bool bearerToken = true}) async {
 
     print(headers);
     Response response =
-        await delete(Uri.parse('${API.base}' + '$endPoint'), headers: headers);
+        await delete(Uri.parse('${API.base}$endPoint'), headers: headers);
     print('Response: ${response.statusCode} ${response.body}');
     return response;
   } else {

@@ -1,25 +1,26 @@
 import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:velocity_x/velocity_x.dart';
+import 'package:zcart/Theme/styles/colors.dart';
 import 'package:zcart/data/models/product/product_details_model.dart';
 import 'package:zcart/riverpod/providers/product_provider.dart';
 import 'package:zcart/riverpod/providers/product_slug_list_provider.dart';
 import 'package:zcart/riverpod/state/product/product_state.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:zcart/views/shared_widgets/custom_dropdownfield.dart';
-import 'package:zcart/Theme/styles/colors.dart';
-import 'package:easy_localization/easy_localization.dart';
-import 'package:velocity_x/velocity_x.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AttributeCard extends StatefulWidget {
   const AttributeCard({
+    Key? key,
     required this.productModel,
     required this.quantity,
     required this.increaseQuantity,
     required this.decreaseQuantity,
     this.formKey,
-  });
+  }) : super(key: key);
 
   final ProductDetailsModel productModel;
   final int? quantity;
@@ -55,7 +56,7 @@ class _AttributeCardState extends State<AttributeCard> {
               ),
               ButtonBar(
                 mainAxisSize: MainAxisSize.min,
-                buttonPadding: EdgeInsets.only(left: 10),
+                buttonPadding: const EdgeInsets.only(left: 10),
                 buttonMinWidth: 30,
                 buttonHeight: 20,
                 children: <Widget>[
@@ -74,7 +75,7 @@ class _AttributeCardState extends State<AttributeCard> {
                         shape: MaterialStateProperty.all(RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10))),
                       ),
-                      child: Icon(Icons.remove),
+                      child: const Icon(Icons.remove),
                       onPressed: widget.quantity ==
                               widget.productModel.data!.minOrderQuantity
                           ? () {
@@ -105,7 +106,7 @@ class _AttributeCardState extends State<AttributeCard> {
                           shape: MaterialStateProperty.all(
                               RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10)))),
-                      child: Icon(Icons.add),
+                      child: const Icon(Icons.add),
                       onPressed: widget.quantity ==
                               widget.productModel.data!.stockQuantity
                           ? () {
@@ -125,7 +126,7 @@ class _AttributeCardState extends State<AttributeCard> {
               key: widget.formKey,
               child: ListView.builder(
                   shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
+                  physics: const NeverScrollableScrollPhysics(),
                   itemCount:
                       widget.productModel.variants!.attributes!.values.length,
                   itemBuilder: (context, index) {
@@ -176,10 +177,11 @@ class _AttributeCardState extends State<AttributeCard> {
                               state.productVariantDetails!.rating;
                           widget.productModel.data!.imageId =
                               state.productVariantDetails!.imageId;
-                          state.productVariantDetails!.attributes!.forEach(
-                            (element) => widget.productModel.data!.attributes!
-                                .add(Attribute.fromJson(element.toJson())),
-                          );
+                          for (var element
+                              in state.productVariantDetails!.attributes!) {
+                            widget.productModel.data!.attributes!
+                                .add(Attribute.fromJson(element.toJson()));
+                          }
                           context
                               .read(productNotifierProvider.notifier)
                               .updateState(widget.productModel);
@@ -223,12 +225,11 @@ class _AttributeDropdownFieldState extends State<AttributeDropdownField> {
             .value;
 
         if (widget.productModel!.variants!.attributes!.values
-                .toList()[widget.index!]
-                .value!
-                .keys
-                .toList()
-                .indexOf(key.toString()) !=
-            -1) {
+            .toList()[widget.index!]
+            .value!
+            .keys
+            .toList()
+            .contains(key.toString())) {
           controller.text = widget.productModel!.variants!.attributes!.values
                   .toList()[widget.index!]
                   .value!

@@ -15,12 +15,12 @@ class CustomTextField extends StatefulWidget {
   final bool isPassword;
 
   final TextEditingController? controller;
-  final minLines;
-  final maxLines;
+  final int? minLines;
+  final int? maxLines;
   final Color color;
   final double widthMultiplier;
 
-  CustomTextField({
+  const CustomTextField({
     Key? key,
     this.hintText,
     this.title,
@@ -51,7 +51,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 5),
+      margin: const EdgeInsets.symmetric(vertical: 5),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -62,7 +62,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                   style: context.theme.textTheme.subtitle2,
                 ).paddingBottom(10),
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
             width: MediaQuery.of(context).size.width * widget.widthMultiplier,
             decoration: BoxDecoration(
               color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark

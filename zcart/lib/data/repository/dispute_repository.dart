@@ -19,8 +19,9 @@ class DisputeRepository implements IDisputeRepository {
 
     var responseBody =
         await handleResponse(await getRequest(API.disputes, bearerToken: true));
-    if (responseBody.runtimeType == int) if (responseBody > 206)
+    if (responseBody.runtimeType == int && responseBody > 206) {
       throw NetworkException();
+    }
 
     disputesModel = DisputesModel.fromJson(responseBody);
     disputes.addAll(disputesModel.data!);
@@ -29,7 +30,7 @@ class DisputeRepository implements IDisputeRepository {
 
   @override
   Future<List<Disputes>> fetchMoreDisputes() async {
-    var responseBody;
+    dynamic responseBody;
 
     if (disputesModel.links!.next != null) {
       toast(LocaleKeys.loading.tr());
@@ -49,8 +50,9 @@ class DisputeRepository implements IDisputeRepository {
   Future<DisputeInfo?> fetchDisputeInfo(orderId) async {
     var responseBody = await handleResponse(
         await getRequest(API.disputeInfo(orderId), bearerToken: true));
-    if (responseBody.runtimeType == int) if (responseBody > 206)
+    if (responseBody.runtimeType == int && responseBody > 206) {
       throw NetworkException();
+    }
 
     DisputeInfoModel disputeInfoModel = DisputeInfoModel.fromJson(responseBody);
     return disputeInfoModel.data;
@@ -58,13 +60,14 @@ class DisputeRepository implements IDisputeRepository {
 
   @override
   Future openDispute(orderId, requestBody) async {
-    var responseBody;
+    dynamic responseBody;
     try {
       responseBody = await handleResponse(await postRequest(
           API.openDispute(orderId), requestBody,
           bearerToken: true));
-      if (responseBody.runtimeType == int) if (responseBody > 206)
+      if (responseBody.runtimeType == int && responseBody > 206) {
         throw NetworkException();
+      }
     } catch (e) {
       throw NetworkException();
     }
@@ -74,16 +77,18 @@ class DisputeRepository implements IDisputeRepository {
   Future markAsSolved(disputeId) async {
     var responseBody = await handleResponse(
         await putRequest(API.markAsSolved(disputeId), {}, bearerToken: true));
-    if (responseBody.runtimeType == int) if (responseBody > 206)
+    if (responseBody.runtimeType == int && responseBody > 206) {
       throw NetworkException();
+    }
   }
 
   @override
   Future<DisputeDetails?> disputeDetails(disputeId) async {
     var responseBody = await handleResponse(
         await getRequest(API.disputeDetails(disputeId), bearerToken: true));
-    if (responseBody.runtimeType == int) if (responseBody > 206)
+    if (responseBody.runtimeType == int && responseBody > 206) {
       throw NetworkException();
+    }
 
     DisputeDetailsModel disputeDetailsModel =
         DisputeDetailsModel.fromJson(responseBody);
@@ -92,13 +97,14 @@ class DisputeRepository implements IDisputeRepository {
 
   @override
   Future responseDispute(disputeId, requestBody) async {
-    var responseBody;
+    dynamic responseBody;
     try {
       responseBody = await handleResponse(await postRequest(
           API.responseDispute(disputeId), requestBody,
           bearerToken: true));
-      if (responseBody.runtimeType == int) if (responseBody > 206)
+      if (responseBody.runtimeType == int && responseBody > 206) {
         throw NetworkException();
+      }
     } catch (e) {
       throw NetworkException();
     }
@@ -106,13 +112,14 @@ class DisputeRepository implements IDisputeRepository {
 
   @override
   Future appealDispute(disputeId, requestBody) async {
-    var responseBody;
+    dynamic responseBody;
     try {
       responseBody = await handleResponse(await postRequest(
           API.appealDispute(disputeId), requestBody,
           bearerToken: true));
-      if (responseBody.runtimeType == int) if (responseBody > 206)
+      if (responseBody.runtimeType == int && responseBody > 206) {
         throw NetworkException();
+      }
     } catch (e) {
       throw NetworkException();
     }

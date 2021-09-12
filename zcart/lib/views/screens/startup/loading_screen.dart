@@ -16,6 +16,8 @@ import 'package:velocity_x/velocity_x.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class LoadingScreen extends StatefulWidget {
+  const LoadingScreen({Key? key}) : super(key: key);
+
   @override
   _LoadingScreenState createState() => _LoadingScreenState();
 }
@@ -35,10 +37,10 @@ class _LoadingScreenState extends State<LoadingScreen> {
     if (responseBody.runtimeType == int && responseBody == 401) {
       await clearSharedPref();
     }
-    accessAllowed = getBoolAsync(LOGGED_IN, defaultValue: false);
+    accessAllowed = getBoolAsync(loggedIn, defaultValue: false);
     initialData();
-    Future.delayed(Duration(milliseconds: 300),
-        () => context.nextReplacementPage(BottomNavBar()));
+    Future.delayed(const Duration(milliseconds: 300),
+        () => context.nextReplacementPage(const BottomNavBar()));
   }
 
   initialData() async {
@@ -70,10 +72,8 @@ class _LoadingScreenState extends State<LoadingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Container(
-      child: Center(
-        child: LoadingWidget(),
-      ),
+        body: Center(
+      child: LoadingWidget(),
     ));
   }
 }

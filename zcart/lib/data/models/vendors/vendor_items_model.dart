@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 
 class VendorItemsModel {
@@ -12,21 +11,24 @@ class VendorItemsModel {
   Links? links;
   Meta? meta;
 
-  factory VendorItemsModel.fromRawJson(String str) => VendorItemsModel.fromJson(json.decode(str));
+  factory VendorItemsModel.fromRawJson(String str) =>
+      VendorItemsModel.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
-  factory VendorItemsModel.fromJson(Map<String, dynamic> json) => VendorItemsModel(
-    data: List<VendorItemList>.from(json["data"].map((x) => VendorItemList.fromJson(x))),
-    links: Links.fromJson(json["links"]),
-    meta: Meta.fromJson(json["meta"]),
-  );
+  factory VendorItemsModel.fromJson(Map<String, dynamic> json) =>
+      VendorItemsModel(
+        data: List<VendorItemList>.from(
+            json["data"].map((x) => VendorItemList.fromJson(x))),
+        links: Links.fromJson(json["links"]),
+        meta: Meta.fromJson(json["meta"]),
+      );
 
   Map<String, dynamic> toJson() => {
-    "data": List<dynamic>.from(data!.map((x) => x.toJson())),
-    "links": links!.toJson(),
-    "meta": meta!.toJson(),
-  };
+        "data": List<dynamic>.from(data!.map((x) => x.toJson())),
+        "links": links!.toJson(),
+        "meta": meta!.toJson(),
+      };
 }
 
 class VendorItemList {
@@ -74,55 +76,61 @@ class VendorItemList {
   bool? hotItem;
   List<String>? labels;
 
-  factory VendorItemList.fromRawJson(String str) => VendorItemList.fromJson(json.decode(str));
+  factory VendorItemList.fromRawJson(String str) =>
+      VendorItemList.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
   factory VendorItemList.fromJson(Map<String, dynamic> json) => VendorItemList(
-    id: json["id"],
-    slug: json["slug"],
-    productId: json["product_id"],
-    title: json["title"],
-    condition: json["condition"],
-    hasOffer: json["has_offer"],
-    rawPrice: json["raw_price"],
-    currency: json["currency"],
-    currencySymbol: json["currency_symbol"],
-    price: json["price"],
-    offerPrice: json["offer_price"] == null ? null : json["offer_price"],
-    discount: json["discount"] == null ? null : json["discount"],
-    offerStart: json["offer_start"] == null ? null : DateTime.parse(json["offer_start"]),
-    offerEnd: json["offer_end"] == null ? null : DateTime.parse(json["offer_end"]),
-    image: json["image"],
-    rating: json["rating"] == null ? null : json["rating"].toString(),
-    stuffPick: json["stuff_pick"],
-    freeShipping: json["free_shipping"],
-    hotItem: json["hot_item"],
-    labels: List<String>.from(json["labels"].map((x) => x)),
-  );
+        id: json["id"],
+        slug: json["slug"],
+        productId: json["product_id"],
+        title: json["title"],
+        condition: json["condition"],
+        hasOffer: json["has_offer"],
+        rawPrice: json["raw_price"],
+        currency: json["currency"],
+        currencySymbol: json["currency_symbol"],
+        price: json["price"],
+        offerPrice: json["offer_price"],
+        discount: json["discount"],
+        offerStart: json["offer_start"] == null
+            ? null
+            : DateTime.parse(json["offer_start"]),
+        offerEnd: json["offer_end"] == null
+            ? null
+            : DateTime.parse(json["offer_end"]),
+        image: json["image"],
+        rating: json["rating"]?.toString(),
+        stuffPick: json["stuff_pick"],
+        freeShipping: json["free_shipping"],
+        hotItem: json["hot_item"],
+        labels: List<String>.from(json["labels"].map((x) => x)),
+      );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "slug": slug,
-    "product_id": productId,
-    "title": title,
-    "condition": condition,
-    "has_offer": hasOffer,
-    "raw_price": rawPrice,
-    "currency": currency,
-    "currency_symbol": currencySymbol,
-    "price": price,
-    "offer_price": offerPrice == null ? null : offerPrice,
-    "discount": discount == null ? null : discount,
-    "offer_start": offerStart == null ? null : offerStart!.toIso8601String(),
-    "offer_end": offerEnd == null ? null : offerEnd!.toIso8601String(),
-    "image": image,
-    "rating": rating == null ? null : rating,
-    "stuff_pick": stuffPick,
-    "free_shipping": freeShipping,
-    "hot_item": hotItem,
-    "labels": List<dynamic>.from(labels!.map((x) => x)),
-  };
+        "id": id,
+        "slug": slug,
+        "product_id": productId,
+        "title": title,
+        "condition": condition,
+        "has_offer": hasOffer,
+        "raw_price": rawPrice,
+        "currency": currency,
+        "currency_symbol": currencySymbol,
+        "price": price,
+        "offer_price": offerPrice,
+        "discount": discount,
+        "offer_start":
+            offerStart == null ? null : offerStart!.toIso8601String(),
+        "offer_end": offerEnd == null ? null : offerEnd!.toIso8601String(),
+        "image": image,
+        "rating": rating,
+        "stuff_pick": stuffPick,
+        "free_shipping": freeShipping,
+        "hot_item": hotItem,
+        "labels": List<dynamic>.from(labels!.map((x) => x)),
+      };
 }
 
 class Links {
@@ -143,18 +151,18 @@ class Links {
   String toRawJson() => json.encode(toJson());
 
   factory Links.fromJson(Map<String, dynamic> json) => Links(
-    first: json["first"],
-    last: json["last"],
-    prev: json["prev"],
-    next: json["next"],
-  );
+        first: json["first"],
+        last: json["last"],
+        prev: json["prev"],
+        next: json["next"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "first": first,
-    "last": last,
-    "prev": prev,
-    "next": next,
-  };
+        "first": first,
+        "last": last,
+        "prev": prev,
+        "next": next,
+      };
 }
 
 class Meta {
@@ -181,22 +189,22 @@ class Meta {
   String toRawJson() => json.encode(toJson());
 
   factory Meta.fromJson(Map<String, dynamic> json) => Meta(
-    currentPage: json["current_page"],
-    from: json["from"],
-    lastPage: json["last_page"],
-    path: json["path"],
-    perPage: json["per_page"],
-    to: json["to"],
-    total: json["total"],
-  );
+        currentPage: json["current_page"],
+        from: json["from"],
+        lastPage: json["last_page"],
+        path: json["path"],
+        perPage: json["per_page"],
+        to: json["to"],
+        total: json["total"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "current_page": currentPage,
-    "from": from,
-    "last_page": lastPage,
-    "path": path,
-    "per_page": perPage,
-    "to": to,
-    "total": total,
-  };
+        "current_page": currentPage,
+        "from": from,
+        "last_page": lastPage,
+        "path": path,
+        "per_page": perPage,
+        "to": to,
+        "total": total,
+      };
 }

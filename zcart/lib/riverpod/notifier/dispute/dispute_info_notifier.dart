@@ -9,11 +9,11 @@ class DisputeInfoNotifier extends StateNotifier<DisputeInfoState> {
   final IDisputeRepository _iDisputeRepository;
 
   DisputeInfoNotifier(this._iDisputeRepository)
-      : super(DisputeInfoInitialState());
+      : super(const DisputeInfoInitialState());
 
   Future getDisputeInfo(orderId) async {
     try {
-      state = DisputeInfoLoadingState();
+      state = const DisputeInfoLoadingState();
       final disputeInfo = await _iDisputeRepository.fetchDisputeInfo(orderId);
       state = DisputeInfoLoadedState(disputeInfo);
     } on NetworkException {

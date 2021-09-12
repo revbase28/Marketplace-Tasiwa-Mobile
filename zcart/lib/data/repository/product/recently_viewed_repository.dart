@@ -11,8 +11,9 @@ class RecentlyViewedRepository implements IRecentlyViewedRepository {
     var _endPoint =
         API.recentlyViewed + "?" + 'recently_viewed_ids' + "=$productList";
     var responseBody = await handleResponse(await getRequest(_endPoint));
-    if (responseBody.runtimeType == int) if (responseBody > 206)
+    if (responseBody.runtimeType == int && responseBody > 206) {
       throw NetworkException();
+    }
 
     if (responseBody is List) {
       return null;

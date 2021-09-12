@@ -1,8 +1,10 @@
 import 'dart:convert';
 
-ProductChatModel productChatModelFromJson(String str) => ProductChatModel.fromJson(json.decode(str));
+ProductChatModel productChatModelFromJson(String str) =>
+    ProductChatModel.fromJson(json.decode(str));
 
-String productChatModelToJson(ProductChatModel data) => json.encode(data.toJson());
+String productChatModelToJson(ProductChatModel data) =>
+    json.encode(data.toJson());
 
 class ProductChatModel {
   ProductChatModel({
@@ -11,7 +13,8 @@ class ProductChatModel {
 
   Data? data;
 
-  factory ProductChatModel.fromJson(Map<String, dynamic> json) => ProductChatModel(
+  factory ProductChatModel.fromJson(Map<String, dynamic> json) =>
+      ProductChatModel(
         data: Data.fromJson(json["data"]),
       );
 
@@ -58,7 +61,8 @@ class Data {
         status: json["status"],
         label: json["label"],
         attachments: List<dynamic>.from(json["attachments"].map((x) => x)),
-        replies: List<Reply>.from(json["replies"].map((x) => Reply.fromJson(x))),
+        replies:
+            List<Reply>.from(json["replies"].map((x) => Reply.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -99,7 +103,7 @@ class Customer {
         email: json["email"],
         active: json["active"],
         avatar: json["avatar"],
-        memberSince: json["member_since"] == null ? null : json["member_since"],
+        memberSince: json["member_since"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -108,7 +112,7 @@ class Customer {
         "email": email,
         "active": active,
         "avatar": avatar,
-        "member_since": memberSince == null ? null : memberSince,
+        "member_since": memberSince,
       };
 }
 
@@ -138,7 +142,9 @@ class Reply {
         read: json["read"],
         updatedAt: json["updated_at"],
         attachments: List<dynamic>.from(json["attachments"].map((x) => x)),
-        customer: json["customer"] == null ? null : Customer.fromJson(json["customer"]),
+        customer: json["customer"] == null
+            ? null
+            : Customer.fromJson(json["customer"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -196,11 +202,12 @@ class ProductChatInitialModel {
 
   String? message;
 
-  factory ProductChatInitialModel.fromJson(Map<String, dynamic> json) => ProductChatInitialModel(
-    message: json["message"],
-  );
+  factory ProductChatInitialModel.fromJson(Map<String, dynamic> json) =>
+      ProductChatInitialModel(
+        message: json["message"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "message": message,
-  };
+        "message": message,
+      };
 }

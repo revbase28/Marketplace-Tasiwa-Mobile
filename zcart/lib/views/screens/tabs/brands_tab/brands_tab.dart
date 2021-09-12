@@ -12,6 +12,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 class BrandsTab extends ConsumerWidget {
+  const BrandsTab({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final brandsState = watch(allBrandsNotifierProvider);
@@ -22,20 +24,20 @@ class BrandsTab extends ConsumerWidget {
       ),
       body: brandsState is BrandsLoadedState
           ? GridView.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 childAspectRatio: 0.9,
                 crossAxisSpacing: 10,
                 mainAxisSpacing: 10,
               ),
               shrinkWrap: true,
-              padding: EdgeInsets.symmetric(vertical: 10),
+              padding: const EdgeInsets.symmetric(vertical: 10),
               itemCount: brandsState.allBrands!.data.length,
               itemBuilder: (context, index) {
                 final brand = brandsState.allBrands!.data[index];
                 return GestureDetector(
                   onTap: () async {
-                    context.nextPage(BrandProfileScreen());
+                    context.nextPage(const BrandProfileScreen());
                     await context
                         .read(brandProfileNotifierProvider.notifier)
                         .getBrandProfile(brand.slug);
@@ -60,19 +62,18 @@ class BrandsTab extends ConsumerWidget {
                             fit: BoxFit.fitWidth,
                             loadingBuilder: (BuildContext context, Widget child,
                                 ImageChunkEvent? loadingProgress) {
-                              if (loadingProgress == null)
+                              if (loadingProgress == null) {
                                 return child;
-                              else
-                                return Center(child: Icon(Icons.image));
+                              } else {
+                                return const Center(child: Icon(Icons.image));
+                              }
                             },
                             errorBuilder: (BuildContext context,
                                 Object exception, StackTrace? stackTrace) {
-                              return Container(
-                                child: Center(
-                                  child: Icon(
-                                    Icons.image_not_supported,
-                                    color: kDarkColor,
-                                  ),
+                              return const Center(
+                                child: Icon(
+                                  Icons.image_not_supported,
+                                  color: kDarkColor,
                                 ),
                               );
                             },

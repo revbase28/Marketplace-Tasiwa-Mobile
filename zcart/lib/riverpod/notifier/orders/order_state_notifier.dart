@@ -9,14 +9,15 @@ import 'package:zcart/translations/locale_keys.g.dart';
 class OrdersNotifier extends StateNotifier<OrdersState> {
   final IOrderRepository _iOrderRepository;
 
-  OrdersNotifier(this._iOrderRepository) : super(OrdersInitialState());
+  OrdersNotifier(this._iOrderRepository) : super(const OrdersInitialState());
 
   Future orders({bool ignoreLoadingState = false}) async {
     try {
-      if (!ignoreLoadingState)
-        state = OrdersLoadingState();
-      else
+      if (!ignoreLoadingState) {
+        state = const OrdersLoadingState();
+      } else {
         toast(LocaleKeys.please_wait.tr());
+      }
       final orderList = await _iOrderRepository.orders();
       final orderCount = _iOrderRepository.orderCount();
       state = OrdersLoadedState(orderList, totalOrder: orderCount);
@@ -27,10 +28,11 @@ class OrdersNotifier extends StateNotifier<OrdersState> {
 
   Future moreOrders({bool ignoreLoadingState = false}) async {
     try {
-      if (!ignoreLoadingState)
-        state = OrdersLoadingState();
-      else
+      if (!ignoreLoadingState) {
+        state = const OrdersLoadingState();
+      } else {
         toast(LocaleKeys.please_wait.tr());
+      }
       final orderList = await _iOrderRepository.moreOrders();
       state = OrdersLoadedState(orderList);
     } on NetworkException {
@@ -43,13 +45,13 @@ class OrderReceivedNotifier extends StateNotifier<OrderReceivedState> {
   final IOrderRepository _iOrderRepository;
 
   OrderReceivedNotifier(this._iOrderRepository)
-      : super(OrderReceivedInitialState());
+      : super(const OrderReceivedInitialState());
 
   Future orderReceived(orderId, {bool ignoreLoadingState = false}) async {
     try {
-      if (!ignoreLoadingState) state = OrderReceivedLoadingState();
+      if (!ignoreLoadingState) state = const OrderReceivedLoadingState();
       await _iOrderRepository.orderReceived(orderId);
-      state = OrderReceivedLoadedState();
+      state = const OrderReceivedLoadedState();
     } on NetworkException {
       state = OrderReceivedErrorState(LocaleKeys.something_went_wrong.tr());
     }

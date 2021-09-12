@@ -20,6 +20,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 class OrderDetailsScreen extends ConsumerWidget {
+  const OrderDetailsScreen({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final orderDetailsState = watch(orderProvider);
@@ -240,7 +242,7 @@ class OrderDetailsScreen extends ConsumerWidget {
                                                         .textTheme.subtitle2)),
                                           ],
                                         )
-                                      : SizedBox(),
+                                      : const SizedBox(),
                                 ],
                               )
                             ],
@@ -272,7 +274,7 @@ class OrderDetailsScreen extends ConsumerWidget {
                                   style: context.textTheme.headline6!,
                                 ),
                                 orderDetailsState.orderDetails!.shop!.verified!
-                                    ? Icon(Icons.check_circle,
+                                    ? const Icon(Icons.check_circle,
                                             color: kPrimaryColor, size: 15)
                                         .px2()
                                         .pOnly(top: 3)
@@ -283,10 +285,10 @@ class OrderDetailsScreen extends ConsumerWidget {
                                     : Container()
                               ],
                             ),
-                            Divider(),
+                            const Divider(),
                             ListView.builder(
                                 shrinkWrap: true,
-                                physics: BouncingScrollPhysics(),
+                                physics: const BouncingScrollPhysics(),
                                 itemCount: orderDetailsState
                                     .orderDetails!.items!.length,
                                 itemBuilder: (context, index) {
@@ -307,7 +309,8 @@ class OrderDetailsScreen extends ConsumerWidget {
                                               .orderDetails!
                                               .items![index]
                                               .slug);
-                                      context.nextPage(ProductDetailsScreen());
+                                      context.nextPage(
+                                          const ProductDetailsScreen());
                                     },
                                     leading: Image.network(
                                       orderDetailsState
@@ -497,19 +500,20 @@ class OrderDetailsScreen extends ConsumerWidget {
                     borderRadius: BorderRadius.circular(5)),
                 child: Text(
                   LocaleKeys.feedback.tr(),
-                  style: TextStyle(fontSize: 12, color: kLightColor),
+                  style: const TextStyle(fontSize: 12, color: kLightColor),
                 ).pSymmetric(h: 8, v: 8),
               )
                   .visible(
                 orderDetailsState.orderDetails!.orderStatus == "DELIVERED",
               )
                   .onInkTap(() {
-                if (orderDetailsState.orderDetails!.canEvaluate!)
+                if (orderDetailsState.orderDetails!.canEvaluate!) {
                   context.nextPage(FeedbackScreen(
                     order: orderDetailsState.orderDetails,
                   ));
-                else
+                } else {
                   toast(LocaleKeys.feedback_already_given.tr());
+                }
               }),
               Container(
                 decoration: BoxDecoration(
@@ -517,7 +521,7 @@ class OrderDetailsScreen extends ConsumerWidget {
                     borderRadius: BorderRadius.circular(5)),
                 child: Text(
                   LocaleKeys.open_dispute.tr(),
-                  style: TextStyle(fontSize: 12, color: kLightColor),
+                  style: const TextStyle(fontSize: 12, color: kLightColor),
                 ).pSymmetric(h: 8, v: 8),
               )
                   .visible(
@@ -527,7 +531,7 @@ class OrderDetailsScreen extends ConsumerWidget {
                 context
                     .read(disputeInfoProvider.notifier)
                     .getDisputeInfo(orderDetailsState.orderDetails!.id);
-                context.nextPage(OpenDisputeScreen());
+                context.nextPage(const OpenDisputeScreen());
               }),
               Container(
                 decoration: BoxDecoration(
@@ -535,7 +539,7 @@ class OrderDetailsScreen extends ConsumerWidget {
                     borderRadius: BorderRadius.circular(5)),
                 child: Text(
                   LocaleKeys.dispute_details.tr(),
-                  style: TextStyle(fontSize: 12, color: kLightColor),
+                  style: const TextStyle(fontSize: 12, color: kLightColor),
                 ).pSymmetric(h: 8, v: 8),
               )
                   .visible(
@@ -544,7 +548,7 @@ class OrderDetailsScreen extends ConsumerWidget {
                   .onInkTap(() {
                 context.read(disputeDetailsProvider.notifier).getDisputeDetails(
                     orderDetailsState.orderDetails!.disputeId);
-                context.nextPage(DisputeDetailsScreen());
+                context.nextPage(const DisputeDetailsScreen());
               }),
               Container(
                 decoration: BoxDecoration(
@@ -552,7 +556,7 @@ class OrderDetailsScreen extends ConsumerWidget {
                     borderRadius: BorderRadius.circular(5)),
                 child: Text(
                   LocaleKeys.confirm_received.tr(),
-                  style: TextStyle(fontSize: 12, color: kLightColor),
+                  style: const TextStyle(fontSize: 12, color: kLightColor),
                 ).pSymmetric(h: 8, v: 8),
               )
                   .visible(
@@ -561,7 +565,8 @@ class OrderDetailsScreen extends ConsumerWidget {
                     : true,
               )
                   .onInkTap(() {
-                if (orderDetailsState.orderDetails!.orderStatus != "DELIVERED")
+                if (orderDetailsState.orderDetails!.orderStatus !=
+                    "DELIVERED") {
                   showDialog(
                       context: context,
                       builder: (context) {
@@ -572,7 +577,7 @@ class OrderDetailsScreen extends ConsumerWidget {
                             TextButton(
                               child: Text(
                                 LocaleKeys.no.tr(),
-                                style: TextStyle(color: kPrimaryColor),
+                                style: const TextStyle(color: kPrimaryColor),
                               ),
                               onPressed: () {
                                 context.pop();
@@ -594,6 +599,7 @@ class OrderDetailsScreen extends ConsumerWidget {
                           ],
                         );
                       });
+                }
               }),
             ],
           ),

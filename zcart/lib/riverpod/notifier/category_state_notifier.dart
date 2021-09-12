@@ -10,11 +10,12 @@ import 'package:easy_localization/easy_localization.dart';
 class CategoryNotifier extends StateNotifier<CategoryState> {
   final ICategoryRepository _iCategoryRepository;
 
-  CategoryNotifier(this._iCategoryRepository) : super(CategoryInitialState());
+  CategoryNotifier(this._iCategoryRepository)
+      : super(const CategoryInitialState());
 
   Future<void> getCategory() async {
     try {
-      state = CategoryLoadingState();
+      state = const CategoryLoadingState();
       final category = await (_iCategoryRepository.fetchCategory());
 
       category!.insert(
@@ -30,7 +31,7 @@ class CategorySubgroupNotifier extends StateNotifier<CategorySubgroupState> {
   final ICategoryRepository _iCategoryRepository;
 
   CategorySubgroupNotifier(this._iCategoryRepository)
-      : super(CategorySubgroupInitialState());
+      : super(const CategorySubgroupInitialState());
 
   int? _selectedSubgroup;
 
@@ -41,14 +42,14 @@ class CategorySubgroupNotifier extends StateNotifier<CategorySubgroupState> {
   }
 
   resetState() {
-    state = CategorySubgroupInitialState();
+    state = const CategorySubgroupInitialState();
     _selectedSubgroup = null;
   }
 
   Future<void> getCategorySubgroup(String categoryID) async {
     resetState();
     try {
-      state = CategorySubgroupLoadingState();
+      state = const CategorySubgroupLoadingState();
       final categorySubgroupList =
           await _iCategoryRepository.fetchCategorySubgroupList(categoryID);
       state = CategorySubgroupLoadedState(categorySubgroupList);
@@ -62,7 +63,7 @@ class SubgroupCategoryNotifier extends StateNotifier<SubgroupCategoryState> {
   final ICategoryRepository _iCategoryRepository;
 
   SubgroupCategoryNotifier(this._iCategoryRepository)
-      : super(SubgroupCategoryInitialState());
+      : super(const SubgroupCategoryInitialState());
 
   int? _selectedSubgroupCategory;
 
@@ -73,14 +74,14 @@ class SubgroupCategoryNotifier extends StateNotifier<SubgroupCategoryState> {
   }
 
   resetState() {
-    state = SubgroupCategoryInitialState();
+    state = const SubgroupCategoryInitialState();
     _selectedSubgroupCategory = null;
   }
 
   Future<void> getSubgroupCategory(String subgroupID) async {
     resetState();
     try {
-      state = SubgroupCategoryLoadingState();
+      state = const SubgroupCategoryLoadingState();
       final subgroupCategoryList =
           await _iCategoryRepository.fetchSubgroupCategoryList(subgroupID);
       state = SubgroupCategoryLoadedState(subgroupCategoryList);
@@ -94,11 +95,11 @@ class CategoryItemNotifier extends StateNotifier<CategoryItemState> {
   final ICategoryItemRepository _iCategoryItemRepository;
 
   CategoryItemNotifier(this._iCategoryItemRepository)
-      : super(CategoryItemInitialState());
+      : super(const CategoryItemInitialState());
 
   Future<void> getCategoryItem(String? slug) async {
     try {
-      state = CategoryItemLoadingState();
+      state = const CategoryItemLoadingState();
       final categoryItemList =
           await _iCategoryItemRepository.fetchCategoryItemList(slug);
       state = CategoryItemLoadedState(categoryItemList);

@@ -8,11 +8,11 @@ import 'package:easy_localization/easy_localization.dart';
 class BannerNotifier extends StateNotifier<BannerState> {
   final IBannerRepository _iBannerRepository;
 
-  BannerNotifier(this._iBannerRepository) : super(BannerInitialState());
+  BannerNotifier(this._iBannerRepository) : super(const BannerInitialState());
 
   Future<void> getBanner() async {
     try {
-      state = BannerLoadingState();
+      state = const BannerLoadingState();
       final banner = await _iBannerRepository.fetchBanner();
       state = BannerLoadedState(banner);
     } on NetworkException {

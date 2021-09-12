@@ -9,11 +9,11 @@ class LatestItemNotifier extends StateNotifier<LatestItemState> {
   final ILatestItemRepository _iLatestItemRepository;
 
   LatestItemNotifier(this._iLatestItemRepository)
-      : super(LatestItemInitialState());
+      : super(const LatestItemInitialState());
 
   Future<void> getLatestItem() async {
     try {
-      state = LatestItemLoadingState();
+      state = const LatestItemLoadingState();
       final latestItems = await _iLatestItemRepository.fetchLatestItems();
       state = LatestItemLoadedState(latestItems);
     } on NetworkException {

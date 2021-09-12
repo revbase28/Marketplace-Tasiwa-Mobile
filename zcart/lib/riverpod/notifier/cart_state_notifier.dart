@@ -9,7 +9,7 @@ import 'package:easy_localization/easy_localization.dart';
 class CartNotifier extends StateNotifier<CartState> {
   final ICartRepository _iCartRepository;
 
-  CartNotifier(this._iCartRepository) : super(CartInitialState());
+  CartNotifier(this._iCartRepository) : super(const CartInitialState());
 
   Future<void> getCartList() async {
     try {
@@ -84,7 +84,7 @@ class CartItemDetailsNotifier extends StateNotifier<CartItemDetailsState> {
   final ICartRepository _iCartRepository;
 
   CartItemDetailsNotifier(this._iCartRepository)
-      : super(CartItemDetailsInitialState());
+      : super(const CartItemDetailsInitialState());
 
   Future<void> getCartItemDetails(cartId) async {
     try {

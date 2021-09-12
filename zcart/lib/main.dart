@@ -25,10 +25,10 @@ void main() async {
 
   //Hive Initialization
   await Hive.initFlutter();
-  await Hive.openBox(HIVE_BOX);
+  await Hive.openBox(hiveBox);
 
   //Stripe Initialization
-  Stripe.publishableKey = API.STRIPE_PUBLISHABLE_KEY;
+  Stripe.publishableKey = API.stripePublishableKey;
 
   //Run the app
   runApp(
@@ -36,11 +36,11 @@ void main() async {
       child: EasyLocalization(
         path: "assets/translations",
         supportedLocales: supportedLocales,
-        fallbackLocale: Locale("en"),
-        assetLoader: CodegenLoader(),
+        fallbackLocale: const Locale("en"),
+        assetLoader: const CodegenLoader(),
         child: ProviderScope(
           observers: [Logger()],
-          child: MyApp(),
+          child: const MyApp(),
         ),
       ),
     ),
@@ -48,6 +48,8 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -55,7 +57,7 @@ class MyApp extends StatelessWidget {
       localizationsDelegates: context.localizationDelegates,
       locale: context.locale,
       debugShowCheckedModeBanner: false,
-      title: API.APP_NAME,
+      title: API.appName,
       themeMode: MyConfig.isChangeAbleThemeActive
           ? EasyDynamicTheme.of(context).themeMode == ThemeMode.system
               ? ThemeMode.light
@@ -63,7 +65,7 @@ class MyApp extends StatelessWidget {
           : ThemeMode.light,
       theme: AppTheme.light(context),
       darkTheme: AppTheme.dark(context),
-      home: LoadingScreen(),
+      home: const LoadingScreen(),
     );
   }
 }

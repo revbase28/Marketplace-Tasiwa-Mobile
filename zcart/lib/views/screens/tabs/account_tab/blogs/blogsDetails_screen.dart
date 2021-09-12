@@ -12,6 +12,8 @@ import 'package:zcart/Theme/styles/colors.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 class BlogDetailsScreen extends ConsumerWidget {
+  const BlogDetailsScreen({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final blogState = watch(blogProvider);
@@ -56,28 +58,28 @@ class BlogDetailsScreen extends ConsumerWidget {
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Icon(
+                                const Icon(
                                   CupertinoIcons.hand_thumbsup,
                                   size: 14,
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   width: 3,
                                 ),
                                 Text(blogState.blog!.likes.toString()),
                               ],
                             ),
-                            VerticalDivider(
+                            const VerticalDivider(
                               width: 5,
                               thickness: 2,
                             ),
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Icon(
+                                const Icon(
                                   CupertinoIcons.text_bubble,
                                   size: 14,
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   width: 3,
                                 ),
                                 Text(blogState.blog!.commentsCount.toString()),
@@ -88,7 +90,7 @@ class BlogDetailsScreen extends ConsumerWidget {
                       ),
                     ],
                   ).pOnly(bottom: 8).px(16),
-                  Container(
+                  SizedBox(
                     height: 50,
                     child: ListView.builder(
                       shrinkWrap: true,
@@ -97,7 +99,7 @@ class BlogDetailsScreen extends ConsumerWidget {
                       itemBuilder: (context, index) {
                         return Chip(
                           backgroundColor: kPrimaryColor,
-                          padding: EdgeInsets.symmetric(horizontal: 8),
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
                           label: Text(
                             blogState.blog!.tags![index].firstLetterUpperCase(),
                             style: context.textTheme.caption!.copyWith(
@@ -108,7 +110,7 @@ class BlogDetailsScreen extends ConsumerWidget {
                       },
                     ).pOnly(bottom: 10).pOnly(left: 8),
                   ),
-                  Container(
+                  SizedBox(
                     width: context.screenWidth,
                     child: Image.network(
                       blogState.blog!.featuredImage!,
@@ -134,12 +136,12 @@ class BlogDetailsScreen extends ConsumerWidget {
                   ).pOnly(left: 16, bottom: 10),
                   ListView.builder(
                       shrinkWrap: true,
-                      physics: BouncingScrollPhysics(),
+                      physics: const BouncingScrollPhysics(),
                       itemCount: blogState.blog!.comments!.length,
                       itemBuilder: (context, index) {
                         return Container(
                           color: kPrimaryColor.withOpacity(.03),
-                          padding: EdgeInsets.all(10),
+                          padding: const EdgeInsets.all(10),
                           child: Row(
                             children: [
                               CircleAvatar(

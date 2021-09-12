@@ -7,15 +7,16 @@ import 'package:easy_localization/easy_localization.dart';
 class CheckoutNotifier extends StateNotifier<CheckoutState> {
   final ICheckoutRepository _iCheckoutRepository;
 
-  CheckoutNotifier(this._iCheckoutRepository) : super(CheckoutInitialState());
+  CheckoutNotifier(this._iCheckoutRepository)
+      : super(const CheckoutInitialState());
 
   int? cartId;
   int? addressId;
-  var shippingAddress;
-  var paymentMethodId;
-  var shippingOptionId;
-  var packagingId;
-  var buyerNote;
+  dynamic shippingAddress;
+  dynamic paymentMethodId;
+  dynamic shippingOptionId;
+  dynamic packagingId;
+  dynamic buyerNote;
 
   Future checkout() async {
     var requestBody = {
@@ -27,9 +28,9 @@ class CheckoutNotifier extends StateNotifier<CheckoutState> {
       if (buyerNote != null) "buyer_note": buyerNote
     };
     try {
-      state = CheckoutLoadingState();
+      state = const CheckoutLoadingState();
       await _iCheckoutRepository.checkout(cartId, requestBody);
-      state = CheckoutLoadedState();
+      state = const CheckoutLoadedState();
     } catch (e) {
       state = CheckoutErrorState(LocaleKeys.something_went_wrong.tr());
     }
@@ -45,9 +46,9 @@ class CheckoutNotifier extends StateNotifier<CheckoutState> {
       if (buyerNote != null) "buyer_note": buyerNote
     };
     try {
-      state = CheckoutLoadingState();
+      state = const CheckoutLoadingState();
       await _iCheckoutRepository.guestCheckout(cartId, requestBody);
-      state = CheckoutLoadedState();
+      state = const CheckoutLoadedState();
     } catch (e) {
       state = CheckoutErrorState(LocaleKeys.something_went_wrong.tr());
     }

@@ -19,7 +19,8 @@ class CustomDropDownField extends StatefulWidget {
   final bool isProductDetailsView;
 
   CustomDropDownField(
-      {this.title,
+      {Key? key,
+      this.title,
       this.value,
       this.controller,
       this.onChange,
@@ -28,7 +29,8 @@ class CustomDropDownField extends StatefulWidget {
       this.callbackFunction,
       this.isCallback = false,
       this.validator,
-      this.isProductDetailsView = false});
+      this.isProductDetailsView = false})
+      : super(key: key);
 
   @override
   _CustomDropDownFieldState createState() => _CustomDropDownFieldState();
@@ -39,7 +41,7 @@ class _CustomDropDownFieldState extends State<CustomDropDownField> {
   Widget build(BuildContext context) {
     return Container(
       margin: !widget.isProductDetailsView
-          ? EdgeInsets.symmetric(vertical: 5)
+          ? const EdgeInsets.symmetric(vertical: 5)
           : null,
       child: Column(
         children: [
@@ -62,7 +64,7 @@ class _CustomDropDownFieldState extends State<CustomDropDownField> {
               borderRadius: BorderRadius.circular(10),
             ),
             child: DropdownButtonFormField(
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 border: InputBorder.none,
               ),
               value: widget.optionsList!.first,
@@ -71,7 +73,7 @@ class _CustomDropDownFieldState extends State<CustomDropDownField> {
                   value: value,
                   child: Text(
                     value!,
-                    style: TextStyle(fontSize: 12),
+                    style: const TextStyle(fontSize: 12),
                   ),
                   // child: Text(
                   //   value,
@@ -86,9 +88,10 @@ class _CustomDropDownFieldState extends State<CustomDropDownField> {
                 setState(() {
                   widget.controller!.text = newValue!;
                 });
-                if (widget.isCallback)
+                if (widget.isCallback) {
                   widget
                       .callbackFunction!(widget.optionsList!.indexOf(newValue));
+                }
               },
             ),
             // child: Row(

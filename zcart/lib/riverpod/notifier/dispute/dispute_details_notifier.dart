@@ -10,11 +10,11 @@ class DisputeDetailsNotifier extends StateNotifier<DisputeDetailsState> {
   final IDisputeRepository _iDisputeRepository;
 
   DisputeDetailsNotifier(this._iDisputeRepository)
-      : super(DisputeDetailsInitialState());
+      : super(const DisputeDetailsInitialState());
 
   Future getDisputeDetails(disputeId) async {
     try {
-      state = DisputeDetailsLoadingState();
+      state = const DisputeDetailsLoadingState();
       final disputeDetails =
           await _iDisputeRepository.disputeDetails(disputeId);
       state = DisputeDetailsLoadedState(disputeDetails);

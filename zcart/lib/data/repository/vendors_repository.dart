@@ -17,8 +17,9 @@ class VendorRepository implements IVendorsRepository {
   @override
   Future<List<VendorsList>?> fetchVendorsList() async {
     var responseBody = await handleResponse(await getRequest(API.vendors));
-    if (responseBody.runtimeType == int) if (responseBody > 206)
+    if (responseBody.runtimeType == int && responseBody > 206) {
       throw NetworkException();
+    }
 
     VendorModel vendorModel = VendorModel.fromJson(responseBody);
     return vendorModel.data;
@@ -28,8 +29,9 @@ class VendorRepository implements IVendorsRepository {
   Future<VendorDetails?> fetchVendorDetails(String? slug) async {
     var responseBody =
         await handleResponse(await getRequest(API.vendorDetails(slug)));
-    if (responseBody.runtimeType == int) if (responseBody > 206)
+    if (responseBody.runtimeType == int && responseBody > 206) {
       throw NetworkException();
+    }
 
     VendorDetailsModel vendorDetailsModel =
         VendorDetailsModel.fromJson(responseBody);
@@ -41,8 +43,9 @@ class VendorRepository implements IVendorsRepository {
     if (vendorItemList != null) vendorItemList!.clear();
     var responseBody =
         await handleResponse(await getRequest(API.vendorItem(slug)));
-    if (responseBody.runtimeType == int) if (responseBody > 206)
+    if (responseBody.runtimeType == int && responseBody > 206) {
       throw NetworkException();
+    }
 
     vendorItemsModel = VendorItemsModel.fromJson(responseBody);
     vendorItemList = vendorItemsModel.data;
@@ -51,14 +54,15 @@ class VendorRepository implements IVendorsRepository {
 
   @override
   Future<List<VendorItemList>?> fetchMoreVendorItemList() async {
-    var responseBody;
+    dynamic responseBody;
     if (vendorItemsModel.links!.next != null) {
       toast(LocaleKeys.loading.tr());
 
       responseBody = await handleResponse(
           await getRequest(vendorItemsModel.links!.next!.split('api/').last));
-      if (responseBody.runtimeType == int) if (responseBody > 206)
+      if (responseBody.runtimeType == int && responseBody > 206) {
         throw NetworkException();
+      }
 
       vendorItemsModel = VendorItemsModel.fromJson(responseBody);
       vendorItemList!.addAll(vendorItemsModel.data!);
@@ -72,8 +76,9 @@ class VendorRepository implements IVendorsRepository {
   Future<List<VendorFeedback>?> fetchVendorFeedback(String slug) async {
     var responseBody =
         await handleResponse(await getRequest(API.vendorFeedback(slug)));
-    if (responseBody.runtimeType == int) if (responseBody > 206)
+    if (responseBody.runtimeType == int && responseBody > 206) {
       throw NetworkException();
+    }
 
     VendorFeedbackModel vendorFeedbackModel =
         VendorFeedbackModel.fromJson(responseBody);

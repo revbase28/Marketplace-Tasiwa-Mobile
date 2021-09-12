@@ -6,19 +6,19 @@ import 'package:flutter/material.dart';
 // const kPrimaryColor = Color(0xff333E48);
 const kPrimaryColor = Color(0xFF0071A5);
 // final kAccentColor = Color(0xFF465058);
-final kAccentColor = Color(0xFF03A8C5);
+const kAccentColor = Color(0xFF03A8C5);
 
 //Light Background Colors - Scaffold BG Color
-final kLightBgColor = Color(0xfff5f5f5);
+const kLightBgColor = Color(0xfff5f5f5);
 
 //Dark Background Colors - Scaffold BG Color
-final kDarkBgColor = Color(0xFF2B2B2B);
+const kDarkBgColor = Color(0xFF2B2B2B);
 
 //Light, dark and fade colors
 const kLightColor = Colors.white;
 const kDarkColor = Color(0xFF282828);
-final kFadeColor = Color(0xFFB0B0B0);
-final kBottomBarUnselectedColor = Color(0xFFF3EBEB);
+const kFadeColor = Color(0xFFB0B0B0);
+const kBottomBarUnselectedColor = Color(0xFFF3EBEB);
 
 //Other Colors
 const kGreenColor = Colors.green;
@@ -41,4 +41,4 @@ const kGradientColor2 = Color(0xFF673AB7);
 
 //Card BG Color related to Primary Color
 final kLightCardBgColor = kPrimaryColor.withOpacity(0.1);
-final kDarkCardBgColor = Color(0xFF3D3C3C);
+const kDarkCardBgColor = Color(0xFF3D3C3C);

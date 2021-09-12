@@ -8,11 +8,12 @@ import 'package:zcart/translations/locale_keys.g.dart';
 class VendorsNotifier extends StateNotifier<VendorsState> {
   final IVendorsRepository _iVendorsRepository;
 
-  VendorsNotifier(this._iVendorsRepository) : super(VendorsInitialState());
+  VendorsNotifier(this._iVendorsRepository)
+      : super(const VendorsInitialState());
 
   Future<void> getVendors() async {
     try {
-      state = VendorsLoadingState();
+      state = const VendorsLoadingState();
       final vendors = await _iVendorsRepository.fetchVendorsList();
       state = VendorsLoadedState(vendors);
     } on NetworkException {

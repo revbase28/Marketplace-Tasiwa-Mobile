@@ -6,9 +6,4 @@ class Logger extends ProviderObserver {
     //print('["didUpdateProvider": "${provider.name ?? provider.runtimeType}", "newValue": "$newValue"]');
   }
 
-  @override
-  void didAddProvider(ProviderBase provider, Object? value) {
-    super.didAddProvider(provider, value);
-    //print('["didAddProvider": "${provider.name ?? provider.runtimeType}", "newValue": "$value"]');
-  }
 }

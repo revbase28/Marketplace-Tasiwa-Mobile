@@ -39,18 +39,18 @@ class VendorChatScreen extends StatelessWidget {
                 : kLightColor,
         flexibleSpace: SafeArea(
           child: Container(
-            padding: EdgeInsets.only(right: 16),
+            padding: const EdgeInsets.only(right: 16),
             child: Row(
               children: <Widget>[
                 IconButton(
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  icon: Icon(Icons.arrow_back),
+                  icon: const Icon(Icons.arrow_back),
                 ),
 
-                SizedBox(width: 20),
-                Container(
+                const SizedBox(width: 20),
+                SizedBox(
                   width: 20,
                   height: 20,
                   child: Image.network(
@@ -61,7 +61,7 @@ class VendorChatScreen extends StatelessWidget {
                     },
                   ),
                 ),
-                SizedBox(width: 20),
+                const SizedBox(width: 20),
 
                 Expanded(
                   child: Column(
@@ -70,10 +70,10 @@ class VendorChatScreen extends StatelessWidget {
                     children: <Widget>[
                       Text(
                         shopName!,
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 16, fontWeight: FontWeight.w600),
                       ),
-                      SizedBox(height: 6),
+                      const SizedBox(height: 6),
                       Text(
                         shopVerifiedText!,
                         style: context.textTheme.caption!
@@ -94,7 +94,7 @@ class VendorChatScreen extends StatelessWidget {
                     .read(productChatProvider.notifier)
                     .productConversation(shopId, update: true);
               },
-              icon: Icon(Icons.refresh))
+              icon: const Icon(Icons.refresh))
         ],
       ),
       body: _chatBody(context),
@@ -106,106 +106,102 @@ class VendorChatScreen extends StatelessWidget {
       onTap: () {
         hideKeyboard(context);
       },
-      child: Container(
-        child: Column(
-          children: [
-            Expanded(
-              child: Consumer(builder: (context, watch, _) {
-                final _productChatState = watch(productChatProvider);
-                return _productChatState is ProductChatInitialLoadedState
-                    ? Container(
-                        child: Center(
-                          child: Text(
-                            _productChatState.productChatModel.message!,
-                            textAlign: TextAlign.center,
+      child: Column(
+        children: [
+          Expanded(
+            child: Consumer(builder: (context, watch, _) {
+              final _productChatState = watch(productChatProvider);
+              return _productChatState is ProductChatInitialLoadedState
+                  ? Center(
+                      child: Text(
+                        _productChatState.productChatModel.message!,
+                        textAlign: TextAlign.center,
+                      ),
+                    )
+                  : _productChatState is ProductChatLoadedState
+                      ? _chatLoadedBody(context, _productChatState)
+                      : LoadingWidget();
+            }),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(4),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.only(right: 16),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(30),
+                      border: Border.all(width: 1, color: kAccentColor),
+                      color: EasyDynamicTheme.of(context).themeMode ==
+                              ThemeMode.dark
+                          ? kDarkCardBgColor
+                          : kLightColor,
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        IconButton(
+                          onPressed: () {
+                            //TODO: Attach Images
+                          },
+                          icon: const Icon(
+                            Icons.image,
                           ),
                         ),
-                      )
-                    : _productChatState is ProductChatLoadedState
-                        ? _chatLoadedBody(context, _productChatState)
-                        : LoadingWidget();
-              }),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(4),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Expanded(
-                    child: Container(
-                      padding: EdgeInsets.only(right: 16),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30),
-                        border: Border.all(width: 1, color: kAccentColor),
-                        color: EasyDynamicTheme.of(context).themeMode ==
-                                ThemeMode.dark
-                            ? kDarkCardBgColor
-                            : kLightColor,
-                      ),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          IconButton(
-                            onPressed: () {
-                              //TODO: Attach Images
-                            },
-                            icon: Icon(
-                              Icons.image,
+                        Expanded(
+                          child: TextField(
+                            controller: messageController,
+                            keyboardType: TextInputType.multiline,
+                            maxLines: 3,
+                            minLines: 1,
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                              hintText: LocaleKeys.type_a_message.tr(),
+                              hintStyle: context.textTheme.caption,
                             ),
                           ),
-                          Expanded(
-                            child: TextField(
-                              controller: messageController,
-                              keyboardType: TextInputType.multiline,
-                              maxLines: 3,
-                              minLines: 1,
-                              decoration: InputDecoration(
-                                border: InputBorder.none,
-                                hintText: LocaleKeys.type_a_message.tr(),
-                                hintStyle: context.textTheme.caption,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
-                  SizedBox(
-                    width: 4,
-                  ),
-                  Container(
-                    padding: EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(50),
-                        color: kPrimaryColor),
-                    child: Icon(Icons.send, color: kLightColor),
-                  ).onInkTap(() {
-                    if (messageController.text.isNotEmpty) {
-                      String message = messageController.text.trim();
-                      messageController.clear();
-                      context
-                          .read(productChatSendProvider.notifier)
-                          .sendMessage(
-                              //TODO: Send attachement
-                              shopId,
-                              message)
-                          .then(
-                        (value) {
-                          messageController.clear();
-                          context
-                              .read(productChatProvider.notifier)
-                              .productConversation(shopId, update: true);
-                        },
-                      );
-                    } else {
-                      toast(LocaleKeys.empty_message.tr());
-                    }
-                  }),
-                ],
-              ),
+                ),
+                const SizedBox(
+                  width: 4,
+                ),
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(50),
+                      color: kPrimaryColor),
+                  child: const Icon(Icons.send, color: kLightColor),
+                ).onInkTap(() {
+                  if (messageController.text.isNotEmpty) {
+                    String message = messageController.text.trim();
+                    messageController.clear();
+                    context
+                        .read(productChatSendProvider.notifier)
+                        .sendMessage(
+                            //TODO: Send attachement
+                            shopId,
+                            message)
+                        .then(
+                      (value) {
+                        messageController.clear();
+                        context
+                            .read(productChatProvider.notifier)
+                            .productConversation(shopId, update: true);
+                      },
+                    );
+                  } else {
+                    toast(LocaleKeys.empty_message.tr());
+                  }
+                }),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -221,95 +217,94 @@ class VendorChatScreen extends StatelessWidget {
                 FirstMessageBox(
                   productChatModel: productChatState.productChatModel,
                 ).py(10),
-                Expanded(child: SizedBox()),
+                const Expanded(child: SizedBox()),
               ],
             )
-          : Container(
-              child: ListView(
-                shrinkWrap: true,
-                reverse: true,
-                children: _reversedMessageList.map((message) {
-                  return Column(
-                    children: [
-                      Visibility(
-                        visible: _messageList.indexOf(message) == 0,
-                        child: FirstMessageBox(
-                          productChatModel: productChatState.productChatModel,
-                        ).py(10),
-                      ),
-                      Container(
-                        padding:
-                            EdgeInsets.only(left: 16, right: 16, bottom: 5),
-                        child: Align(
-                          alignment: (message.customer == null
-                              ? Alignment.topLeft
-                              : Alignment.topRight),
-                          child: Container(
-                            constraints: BoxConstraints(
-                                maxWidth: context.screenWidth * 0.75),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: (message.customer == null
-                                  ? EasyDynamicTheme.of(context).themeMode ==
-                                          ThemeMode.dark
-                                      ? kDarkCardBgColor
-                                      : Colors.grey.shade200
-                                  : kPrimaryColor.withOpacity(0.1)),
-                            ),
-                            padding: EdgeInsets.all(16),
-                            child: Column(
-                              crossAxisAlignment: message.customer == null
-                                  ? CrossAxisAlignment.start
-                                  : CrossAxisAlignment.end,
-                              children: [
-                                //TODO: Send Attachement
-                                message.attachments!.isEmpty
-                                    ? SizedBox()
-                                    : Text(message.attachments.toString()),
-                                HtmlWidget(message.reply!),
-                                const SizedBox(height: 5),
-                                message.customer != null
-                                    ? Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Text(message.updatedAt!,
-                                              style: TextStyle(fontSize: 10)),
-                                          SizedBox(
-                                            width: 5,
-                                          ),
-                                          Icon(
-                                            message.read == null
-                                                ? Icons.watch_later_outlined
-                                                : Icons.check,
-                                            size: 14,
-                                          )
-                                        ],
-                                      )
-                                    : Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Icon(
-                                            message.read == null
-                                                ? Icons.watch_later_outlined
-                                                : Icons.check,
-                                            size: 14,
-                                          ),
-                                          SizedBox(width: 5),
-                                          Text(
-                                            message.updatedAt!,
-                                            style: TextStyle(fontSize: 10),
-                                          ),
-                                        ],
-                                      ),
-                              ],
-                            ),
+          : ListView(
+              shrinkWrap: true,
+              reverse: true,
+              children: _reversedMessageList.map((message) {
+                return Column(
+                  children: [
+                    Visibility(
+                      visible: _messageList.indexOf(message) == 0,
+                      child: FirstMessageBox(
+                        productChatModel: productChatState.productChatModel,
+                      ).py(10),
+                    ),
+                    Container(
+                      padding:
+                          const EdgeInsets.only(left: 16, right: 16, bottom: 5),
+                      child: Align(
+                        alignment: (message.customer == null
+                            ? Alignment.topLeft
+                            : Alignment.topRight),
+                        child: Container(
+                          constraints: BoxConstraints(
+                              maxWidth: context.screenWidth * 0.75),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: (message.customer == null
+                                ? EasyDynamicTheme.of(context).themeMode ==
+                                        ThemeMode.dark
+                                    ? kDarkCardBgColor
+                                    : Colors.grey.shade200
+                                : kPrimaryColor.withOpacity(0.1)),
+                          ),
+                          padding: const EdgeInsets.all(16),
+                          child: Column(
+                            crossAxisAlignment: message.customer == null
+                                ? CrossAxisAlignment.start
+                                : CrossAxisAlignment.end,
+                            children: [
+                              //TODO: Send Attachement
+                              message.attachments!.isEmpty
+                                  ? const SizedBox()
+                                  : Text(message.attachments.toString()),
+                              HtmlWidget(message.reply!),
+                              const SizedBox(height: 5),
+                              message.customer != null
+                                  ? Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Text(message.updatedAt!,
+                                            style:
+                                                const TextStyle(fontSize: 10)),
+                                        const SizedBox(
+                                          width: 5,
+                                        ),
+                                        Icon(
+                                          message.read == null
+                                              ? Icons.watch_later_outlined
+                                              : Icons.check,
+                                          size: 14,
+                                        )
+                                      ],
+                                    )
+                                  : Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Icon(
+                                          message.read == null
+                                              ? Icons.watch_later_outlined
+                                              : Icons.check,
+                                          size: 14,
+                                        ),
+                                        const SizedBox(width: 5),
+                                        Text(
+                                          message.updatedAt!,
+                                          style: const TextStyle(fontSize: 10),
+                                        ),
+                                      ],
+                                    ),
+                            ],
                           ),
                         ),
                       ),
-                    ],
-                  );
-                }).toList(),
-              ),
+                    ),
+                  ],
+                );
+              }).toList(),
             ),
     );
   }
@@ -325,8 +320,8 @@ class FirstMessageBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 16),
-      padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+      margin: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         color: kPrimaryColor,
@@ -344,7 +339,7 @@ class FirstMessageBox extends StatelessWidget {
           ),
           HtmlWidget(
             productChatModel.data!.message!,
-            textStyle: TextStyle(color: kPrimaryLightTextColor),
+            textStyle: const TextStyle(color: kPrimaryLightTextColor),
           ).paddingBottom(5),
 
           //TODO: Attatchments

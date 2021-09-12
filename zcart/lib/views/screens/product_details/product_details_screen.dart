@@ -28,6 +28,8 @@ import 'components/product_name_card_dart.dart';
 import 'components/shipping_card.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
+  const ProductDetailsScreen({Key? key}) : super(key: key);
+
   @override
   _ProductDetailsScreenState createState() => _ProductDetailsScreenState();
 }
@@ -109,8 +111,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                           child: productDetailsState is ProductLoadedState
                               ? Column(
                                   children: [
-                                    ProductImageSlider(productDetailsState
-                                        .productModel.variants!.images),
+                                    ProductImageSlider(
+                                      sliderList: productDetailsState
+                                          .productModel.variants!.images,
+                                    ),
                                     ProductNameCard(
                                             productModel: productDetailsState
                                                 .productModel)
@@ -138,10 +142,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                         productDetailsState:
                                             productDetailsState),
                                     // BrandCards
-                                    ProductBrandCard(productDetailsState)
-                                        .cornerRadius(10)
-                                        .px(10)
-                                        .pOnly(top: 10),
+                                    ProductBrandCard(
+                                      productDetailsState: productDetailsState,
+                                    ).cornerRadius(10).px(10).pOnly(top: 10),
 
                                     MoreOffersFromSellerCard(
                                             productDetailsState:
@@ -163,14 +166,14 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         ),
                       ),
                       Visibility(
-                        visible: !(productDetailsState is ProductLoadingState),
+                        visible: productDetailsState is! ProductLoadingState,
                         child: Container(
                           color: kDarkColor,
-                          padding: EdgeInsets.all(10),
+                          padding: const EdgeInsets.all(10),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              CircleAvatar(
+                              const CircleAvatar(
                                 radius: 20,
                                 backgroundColor: kLightColor,
                                 child: Center(
@@ -200,7 +203,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) => LoginScreen(
+                                            builder: (context) =>
+                                                const LoginScreen(
                                                   needBackButton: true,
                                                 )));
                                   }
@@ -211,20 +215,20 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                     backgroundColor:
                                         MaterialStateProperty.all(kLightColor),
                                     shape: MaterialStateProperty.all(
-                                        StadiumBorder()),
+                                        const StadiumBorder()),
                                     foregroundColor:
                                         MaterialStateProperty.all(kDarkColor),
                                   ),
                                   onPressed: () {
                                     context.nextAndRemoveUntilPage(
-                                        BottomNavBar(selectedIndex: 4));
+                                        const BottomNavBar(selectedIndex: 4));
                                   },
-                                  icon: Icon(CupertinoIcons.cart,
+                                  icon: const Icon(CupertinoIcons.cart,
                                       color: kDarkColor, size: 20),
                                   label: Text(cartItems == null
                                       ? "+"
                                       : cartItems.toString())),
-                              Spacer(),
+                              const Spacer(),
                               productDetailsState is ProductLoadedState
                                   ? Container(
                                       height: 40,
@@ -258,10 +262,12 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                               )
                                             ],
                                           ),
-                                          SizedBox(
+                                          const SizedBox(
                                             width: 10,
                                           ),
-                                          Icon(CupertinoIcons.cart_badge_plus,
+                                          const Icon(
+                                                  CupertinoIcons
+                                                      .cart_badge_plus,
                                                   color: kPrimaryLightTextColor,
                                                   size: 20)
                                               .pOnly(left: 10)

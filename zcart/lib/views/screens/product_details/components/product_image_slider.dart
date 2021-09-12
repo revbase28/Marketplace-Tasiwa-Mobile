@@ -1,15 +1,18 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:zcart/Theme/styles/colors.dart';
-import 'package:flutter/cupertino.dart';
 
 class ProductImageSlider extends StatelessWidget {
-  const ProductImageSlider(this.sliderList);
-
   final List? sliderList;
+
+  const ProductImageSlider({
+    Key? key,
+    this.sliderList,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

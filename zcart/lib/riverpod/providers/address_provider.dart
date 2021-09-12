@@ -6,7 +6,7 @@ import 'package:zcart/riverpod/notifier/address/country_state_notifier.dart';
 import 'package:zcart/riverpod/notifier/address/states_state_notifier.dart';
 import 'package:zcart/riverpod/state/address/address_state.dart';
 import 'package:zcart/riverpod/state/address/country_state.dart'
-    as countryState;
+    as country_state;
 import 'package:zcart/riverpod/state/address/states_state.dart';
 
 final addressRepositoryProvider =
@@ -17,7 +17,7 @@ final addressNotifierProvider =
         (ref) => AddressNotifier(ref.watch(addressRepositoryProvider)));
 
 final countryNotifierProvider =
-    StateNotifierProvider<CountryNotifier, countryState.CountryState>(
+    StateNotifierProvider<CountryNotifier, country_state.CountryState>(
         (ref) => CountryNotifier(ref.watch(addressRepositoryProvider)));
 
 final statesNotifierProvider =

@@ -11,7 +11,9 @@ import 'package:nb_utils/nb_utils.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ProductCard extends StatelessWidget {
-  ProductCard({required this.productList, this.title, this.willShuffle = true});
+  // ignore: use_key_in_widget_constructors
+  const ProductCard(
+      {required this.productList, this.title, this.willShuffle = true});
 
   final List<dynamic>? productList;
   final String? title;
@@ -36,14 +38,14 @@ class ProductCard extends StatelessWidget {
                 ? kDarkCardBgColor
                 : kLightColor,
             child: GridView.builder(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 4,
                     childAspectRatio: .85,
                     crossAxisSpacing: 10,
                     mainAxisSpacing: 10),
                 itemCount: productList!.length > 12 ? 12 : productList!.length,
                 shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 itemBuilder: (BuildContext ctx, index) {
                   return Container(
                     alignment: Alignment.center,
@@ -55,11 +57,9 @@ class ProductCard extends StatelessWidget {
                           fit: BoxFit.fitWidth,
                           errorBuilder: (BuildContext context, Object exception,
                               StackTrace? stackTrace) {
-                            return Container(
-                              child: Center(
-                                child: Icon(
-                                  Icons.image_not_supported,
-                                ),
+                            return const Center(
+                              child: Icon(
+                                Icons.image_not_supported,
                               ),
                             );
                           },
@@ -109,7 +109,7 @@ class ProductCard extends StatelessWidget {
                     context
                         .read(productSlugListProvider.notifier)
                         .addProductSlug(productList![index].slug);
-                    context.nextPage(ProductDetailsScreen());
+                    context.nextPage(const ProductDetailsScreen());
                   });
                 }).p(10),
           ).cornerRadius(10),

@@ -9,7 +9,8 @@ import 'package:easy_localization/easy_localization.dart';
 class WishListNotifier extends StateNotifier<WishListState> {
   final IWishListRepository _iWishListRepository;
 
-  WishListNotifier(this._iWishListRepository) : super(WishListInitialState());
+  WishListNotifier(this._iWishListRepository)
+      : super(const WishListInitialState());
 
   Future getWishList() async {
     try {

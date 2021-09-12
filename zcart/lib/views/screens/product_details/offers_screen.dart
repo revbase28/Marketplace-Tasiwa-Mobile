@@ -10,17 +10,19 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 class OffersScreen extends ConsumerWidget {
+  const OffersScreen({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final offersState = watch(offersNotifierProvider);
     return Scaffold(
       appBar: AppBar(
-        title: Text("Offers"),
+        title: const Text("Offers"),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
           child: offersState is OffersLoadingState
-              ? Container(
+              ? SizedBox(
                   height: context.screenHeight - 100,
                   child: Center(child: LoadingWidget()))
               : offersState is OffersLoadedState
@@ -32,7 +34,7 @@ class OffersScreen extends ConsumerWidget {
                                   ThemeMode.dark
                               ? kDarkBgColor
                               : kLightColor,
-                          padding: EdgeInsets.all(10),
+                          padding: const EdgeInsets.all(10),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -60,7 +62,7 @@ class OffersScreen extends ConsumerWidget {
                                       LocaleKeys.not_available.tr(),
                                   style: context.textTheme.subtitle2),
                               Text(
-                                  "${offersState.offersModel.data!.gtinType ?? ""} : ${offersState.offersModel.data!.gtin ?? "${LocaleKeys.not_available.tr()}"}",
+                                  "${offersState.offersModel.data!.gtinType ?? ""} : ${offersState.offersModel.data!.gtin ?? LocaleKeys.not_available.tr()}",
                                   style: context.textTheme.subtitle2!),
                             ],
                           ),

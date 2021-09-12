@@ -77,7 +77,7 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
               context.read(addressNotifierProvider.notifier).fetchAddress();
               context.pop();
             },
-            icon: Icon(
+            icon: const Icon(
               CupertinoIcons.delete,
             ),
           ),
@@ -100,7 +100,7 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
                     children: [
                       CustomDropDownField(
                         title: LocaleKeys.address_type.tr(),
-                        optionsList: ["Primary", "Billing", "Shipping"],
+                        optionsList: const ["Primary", "Billing", "Shipping"],
                         value: widget.address.addressType,
                         controller: addressTypeController,
                         widthMultiplier: 1,
@@ -165,7 +165,7 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
                                   },
                                 )
                               : countryState is CountryLoadingState
-                                  ? FieldLoading()
+                                  ? const FieldLoading()
                                   : Container();
                         },
                       ),
@@ -173,21 +173,19 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
                         builder: (context, watch, _) {
                           final statesState = watch(statesNotifierProvider);
                           if (statesState is StatesLoadedState) {
-                            selectedStateID =
-                                statesState.statesList!.length == 0
-                                    ? null
-                                    : statesState.statesList![0].id;
+                            selectedStateID = statesState.statesList!.isEmpty
+                                ? null
+                                : statesState.statesList![0].id;
                           }
                           return statesState is StatesLoadedState
                               ? CustomDropDownField(
                                   title: LocaleKeys.states.tr(),
 
-                                  optionsList:
-                                      statesState.statesList!.length == 0
-                                          ? ["Select"]
-                                          : statesState.statesList!
-                                              .map((e) => e.name)
-                                              .toList(),
+                                  optionsList: statesState.statesList!.isEmpty
+                                      ? ["Select"]
+                                      : statesState.statesList!
+                                          .map((e) => e.name)
+                                          .toList(),
                                   //value: "Select",
                                   controller: statesController,
 
@@ -205,7 +203,7 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
                                   },
                                 )
                               : statesState is StatesLoadingState
-                                  ? FieldLoading()
+                                  ? const FieldLoading()
                                   : Container();
                         },
                       ),

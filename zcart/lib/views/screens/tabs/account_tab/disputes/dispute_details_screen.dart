@@ -14,6 +14,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 class DisputeDetailsScreen extends ConsumerWidget {
+  const DisputeDetailsScreen({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final disputeDetailsState = watch(disputeDetailsProvider);
@@ -220,17 +222,17 @@ class DisputeDetailsScreen extends ConsumerWidget {
                                 ),
                                 disputeDetailsState
                                         .disputeDetails!.shop!.verified!
-                                    ? Icon(Icons.check_circle,
+                                    ? const Icon(Icons.check_circle,
                                             color: kPrimaryColor, size: 15)
                                         .px2()
                                         .pOnly(top: 3)
                                     : Container()
                               ],
                             ),
-                            Divider(),
+                            const Divider(),
                             ListView.builder(
                                 shrinkWrap: true,
-                                physics: BouncingScrollPhysics(),
+                                physics: const BouncingScrollPhysics(),
                                 itemCount: disputeDetailsState.disputeDetails!
                                     .orderDetails!.items!.length,
                                 itemBuilder: (context, index) {
@@ -292,27 +294,29 @@ class DisputeDetailsScreen extends ConsumerWidget {
                 decoration: BoxDecoration(
                     color: kPrimaryColor,
                     borderRadius: BorderRadius.circular(10)),
-                padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                margin: EdgeInsets.symmetric(vertical: 5),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                margin: const EdgeInsets.symmetric(vertical: 5),
                 child: Text(
                   LocaleKeys.responses.tr(),
-                  style: TextStyle(color: kLightColor),
+                  style: const TextStyle(color: kLightColor),
                 ),
               ).onInkTap(() {
                 print(disputeDetailsState.disputeDetails!.replies);
-                context.nextPage(DisputeResponseScreen());
+                context.nextPage(const DisputeResponseScreen());
               }),
               Container(
                 decoration: BoxDecoration(
                     color: kPrimaryColor,
                     borderRadius: BorderRadius.circular(10)),
-                padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                margin: EdgeInsets.symmetric(vertical: 5),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                margin: const EdgeInsets.symmetric(vertical: 5),
                 child: Text(
                   disputeDetailsState.disputeDetails!.closed!
                       ? LocaleKeys.appeal.tr()
                       : LocaleKeys.mark_as_solved.tr(),
-                  style: TextStyle(color: kLightColor),
+                  style: const TextStyle(color: kLightColor),
                 ).onInkTap(() {
                   if (!disputeDetailsState.disputeDetails!.closed!) {
                     showDialog(
@@ -343,7 +347,7 @@ class DisputeDetailsScreen extends ConsumerWidget {
                         context: context,
                         builder: (context) {
                           return Container(
-                            margin: EdgeInsets.symmetric(vertical: 10),
+                            margin: const EdgeInsets.symmetric(vertical: 10),
                             // child: Center(
                             //   child: Row(
                             //     crossAxisAlignment: CrossAxisAlignment.center,
@@ -372,7 +376,7 @@ class DisputeDetailsScreen extends ConsumerWidget {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                SizedBox(height: 20),
+                                const SizedBox(height: 20),
                                 CustomTextField(
                                   title: LocaleKeys.appeal.tr(),
                                   controller: _appealTextController,
@@ -383,7 +387,7 @@ class DisputeDetailsScreen extends ConsumerWidget {
                                           ? kDarkBgColor
                                           : kLightCardBgColor,
                                 ),
-                                SizedBox(height: 10),
+                                const SizedBox(height: 10),
                                 Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceEvenly,
@@ -396,8 +400,8 @@ class DisputeDetailsScreen extends ConsumerWidget {
                                             Text(LocaleKeys.attach_files.tr())),
                                     ElevatedButton(
                                         onPressed: () {
-                                          if (!_appealTextController
-                                              .text.isEmpty) {
+                                          if (_appealTextController
+                                              .text.isNotEmpty) {
                                             context
                                                 .read(disputeDetailsProvider
                                                     .notifier)

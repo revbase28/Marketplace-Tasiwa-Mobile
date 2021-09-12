@@ -9,6 +9,8 @@ import 'package:velocity_x/velocity_x.dart';
 import 'package:zcart/views/shared_widgets/product_card.dart';
 
 class RecentlyViewed extends ConsumerWidget {
+  const RecentlyViewed({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final recentlyViewedItemState = watch(recentlyViewedNotifierProvider);

@@ -10,11 +10,11 @@ Future<dynamic> addToCartBottomSheet(BuildContext context, responseBody) async {
     context: context,
     builder: (context) {
       return Container(
-        padding: EdgeInsets.symmetric(horizontal: 32, vertical: 24),
+        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 24),
         height: 180,
         decoration: BoxDecoration(
             color: kDarkColor.withOpacity(0.8),
-            borderRadius: BorderRadius.only(
+            borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(20),
               topRight: Radius.circular(20),
             )),
@@ -29,13 +29,13 @@ Future<dynamic> addToCartBottomSheet(BuildContext context, responseBody) async {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             ElevatedButton(
                 onPressed: () {
-                  context
-                      .nextAndRemoveUntilPage(BottomNavBar(selectedIndex: 4));
+                  context.nextAndRemoveUntilPage(
+                      const BottomNavBar(selectedIndex: 4));
                 },
                 child: Text(LocaleKeys.view_cart.tr())),
             ElevatedButton(

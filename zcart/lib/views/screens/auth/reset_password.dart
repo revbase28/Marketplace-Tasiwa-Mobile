@@ -27,14 +27,14 @@ class ResetPassword extends StatelessWidget {
                     ? kDarkCardBgColor
                     : kLightColor,
                 borderRadius: BorderRadius.circular(10)),
-            padding: EdgeInsets.all(20),
+            padding: const EdgeInsets.all(20),
             child: Form(
               key: _formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   Text(

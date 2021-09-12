@@ -13,10 +13,10 @@ class UserRepository implements IUserRepository {
   /// Login user
   @override
   Future<User?> logIn(username, password) async {
-    await setValue(LOGGED_IN, false);
+    await setValue(loggedIn, false);
 
     var requestBody = {'email': username.trim(), 'password': password};
-    var responseBody;
+    dynamic responseBody;
 
     try {
       responseBody =
@@ -24,14 +24,15 @@ class UserRepository implements IUserRepository {
     } catch (e) {
       throw NetworkException();
     }
-    if (responseBody.runtimeType == int) if (responseBody > 206)
+    if (responseBody.runtimeType == int && responseBody > 206) {
       throw NetworkException();
+    }
 
     UserModel userModel = UserModel.fromJson(responseBody);
 
     toast(LocaleKeys.sign_in_successfull.tr());
-    await setValue(LOGGED_IN, true);
-    await setValue(ACCESS, userModel.data!.apiToken);
+    await setValue(loggedIn, true);
+    await setValue(access, userModel.data!.apiToken);
 
     return userModel.data;
   }
@@ -39,10 +40,10 @@ class UserRepository implements IUserRepository {
   /// Login user Using Google
   @override
   Future<User?> logInUsingGoogle(String accessToken) async {
-    await setValue(LOGGED_IN, false);
+    await setValue(loggedIn, false);
 
     var requestBody = {'access_token': accessToken};
-    var responseBody;
+    dynamic responseBody;
 
     try {
       responseBody = await handleResponse(
@@ -51,24 +52,25 @@ class UserRepository implements IUserRepository {
       throw NetworkException();
     }
 
-    if (responseBody.runtimeType == int) if (responseBody > 206)
+    if (responseBody.runtimeType == int && responseBody > 206) {
       throw NetworkException();
+    }
 
     UserModel userModel = UserModel.fromJson(responseBody);
 
     toast(LocaleKeys.sign_in_successfull.tr());
-    await setValue(LOGGED_IN, true);
-    await setValue(ACCESS, userModel.data!.apiToken);
+    await setValue(loggedIn, true);
+    await setValue(access, userModel.data!.apiToken);
 
     return userModel.data;
   }
 
   @override
   Future<User?> logInUsingFacebook(String accessToken) async {
-    await setValue(LOGGED_IN, false);
+    await setValue(loggedIn, false);
 
     var requestBody = {'access_token': accessToken};
-    var responseBody;
+    dynamic responseBody;
 
     try {
       responseBody = await handleResponse(
@@ -77,14 +79,15 @@ class UserRepository implements IUserRepository {
       throw NetworkException();
     }
 
-    if (responseBody.runtimeType == int) if (responseBody > 206)
+    if (responseBody.runtimeType == int && responseBody > 206) {
       throw NetworkException();
+    }
 
     UserModel userModel = UserModel.fromJson(responseBody);
 
     toast(LocaleKeys.sign_in_successfull.tr());
-    await setValue(LOGGED_IN, true);
-    await setValue(ACCESS, userModel.data!.apiToken);
+    await setValue(loggedIn, true);
+    await setValue(access, userModel.data!.apiToken);
 
     return userModel.data;
   }
@@ -101,7 +104,7 @@ class UserRepository implements IUserRepository {
       'agree': agreeToTermsAndCondition.toString(),
       'accepts_marketing': acceptMarkeing.toString()
     };
-    var responseBody;
+    dynamic responseBody;
 
     try {
       responseBody =
@@ -111,21 +114,22 @@ class UserRepository implements IUserRepository {
       throw NetworkException();
     }
 
-    if (responseBody.runtimeType == int) if (responseBody > 206)
+    if (responseBody.runtimeType == int && responseBody > 206) {
       throw NetworkException();
+    }
 
     UserModel userModel = UserModel.fromJson(responseBody);
 
     toast(LocaleKeys.register_successful.tr());
-    await setValue(LOGGED_IN, true);
-    await setValue(ACCESS, userModel.data!.apiToken);
+    await setValue(loggedIn, true);
+    await setValue(access, userModel.data!.apiToken);
     return userModel.data;
   }
 
   @override
   Future logout() async {
     var requestBody = {};
-    var responseBody;
+    dynamic responseBody;
 
     try {
       responseBody = await handleResponse(
@@ -133,8 +137,9 @@ class UserRepository implements IUserRepository {
     } catch (e) {
       throw NetworkException();
     }
-    if (responseBody.runtimeType == int) if (responseBody > 206)
+    if (responseBody.runtimeType == int && responseBody > 206) {
       throw NetworkException();
+    }
 
     toast(LocaleKeys.logged_out.tr());
     await getSharedPref().then((value) => value.clear());
@@ -143,7 +148,7 @@ class UserRepository implements IUserRepository {
   /// Fetch user info
   @override
   Future<User?> fetchUserInfo() async {
-    var responseBody;
+    dynamic responseBody;
 
     try {
       responseBody = await handleResponse(
@@ -151,8 +156,9 @@ class UserRepository implements IUserRepository {
     } catch (e) {
       throw NetworkException();
     }
-    if (responseBody.runtimeType == int) if (responseBody > 206)
+    if (responseBody.runtimeType == int && responseBody > 206) {
       throw NetworkException();
+    }
 
     UserModel userModel = UserModel.fromJson(responseBody);
 
@@ -174,7 +180,7 @@ class UserRepository implements IUserRepository {
       'dob': dob,
       'email': email
     };
-    var responseBody;
+    dynamic responseBody;
 
     try {
       responseBody =
@@ -182,8 +188,9 @@ class UserRepository implements IUserRepository {
     } catch (e) {
       throw NetworkException();
     }
-    if (responseBody.runtimeType == int) if (responseBody > 206)
+    if (responseBody.runtimeType == int && responseBody > 206) {
       throw NetworkException();
+    }
 
     toast(
       LocaleKeys.profile_updated_successfully.tr(),
@@ -201,7 +208,7 @@ class UserRepository implements IUserRepository {
       'password': newPassword,
       'password_confirmation': confirmPassword,
     };
-    var responseBody;
+    dynamic responseBody;
 
     try {
       responseBody = await handleResponse(
@@ -209,8 +216,9 @@ class UserRepository implements IUserRepository {
     } catch (e) {
       throw NetworkException();
     }
-    if (responseBody.runtimeType == int) if (responseBody > 206)
+    if (responseBody.runtimeType == int && responseBody > 206) {
       throw NetworkException();
+    }
 
     toast(
       LocaleKeys.password_updated_successfully.tr(),
@@ -225,7 +233,7 @@ class UserRepository implements IUserRepository {
     var requestBody = {
       'email': email,
     };
-    var responseBody;
+    dynamic responseBody;
 
     try {
       responseBody =
@@ -233,8 +241,9 @@ class UserRepository implements IUserRepository {
     } catch (e) {
       throw NetworkException();
     }
-    if (responseBody.runtimeType == int) if (responseBody > 206)
+    if (responseBody.runtimeType == int && responseBody > 206) {
       throw NetworkException();
+    }
 
     toast(
       LocaleKeys.password_reset_link_sent.tr(),

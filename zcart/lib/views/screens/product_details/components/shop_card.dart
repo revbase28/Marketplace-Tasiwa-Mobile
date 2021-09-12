@@ -1,17 +1,19 @@
 import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nb_utils/nb_utils.dart';
+import 'package:velocity_x/velocity_x.dart';
+import 'package:zcart/Theme/styles/colors.dart';
 import 'package:zcart/riverpod/providers/provider.dart';
 import 'package:zcart/riverpod/state/product/product_state.dart';
 import 'package:zcart/views/screens/tabs/vendors_tab/vendors_details.dart';
-import 'package:zcart/Theme/styles/colors.dart';
-
-import 'package:velocity_x/velocity_x.dart';
-import 'package:nb_utils/nb_utils.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ShopCard extends StatelessWidget {
-  const ShopCard({required this.productDetailsState});
+  const ShopCard({
+    Key? key,
+    required this.productDetailsState,
+  }) : super(key: key);
 
   final ProductLoadedState productDetailsState;
 
@@ -29,10 +31,8 @@ class ShopCard extends StatelessWidget {
           fit: BoxFit.cover,
           errorBuilder:
               (BuildContext context, Object exception, StackTrace? stackTrace) {
-            return Container(
-              child: Icon(
-                Icons.image_not_supported,
-              ),
+            return const Icon(
+              Icons.image_not_supported,
             );
           },
         ).p(5),
@@ -45,7 +45,7 @@ class ShopCard extends StatelessWidget {
                 style: context.textTheme.headline6,
               ),
             ),
-            Icon(Icons.check_circle, color: kPrimaryColor, size: 15)
+            const Icon(Icons.check_circle, color: kPrimaryColor, size: 15)
                 .px2()
                 .pOnly(top: 3)
                 .onInkTap(() {
@@ -66,9 +66,9 @@ class ShopCard extends StatelessWidget {
               unratedColor: kFadeColor,
               itemCount: 5,
               itemSize: 12,
-              itemPadding: EdgeInsets.symmetric(horizontal: 0.0),
+              itemPadding: const EdgeInsets.symmetric(horizontal: 0.0),
               itemBuilder: (context, _) =>
-                  Icon(Icons.star, color: kPrimaryColor),
+                  const Icon(Icons.star, color: kPrimaryColor),
               onRatingUpdate: (rating) => print(rating),
             ),
             Text(
@@ -83,7 +83,7 @@ class ShopCard extends StatelessWidget {
               productDetailsState.productModel.data!.shop!.slug);
           context.read(vendorItemsNotifierProvider.notifier).getVendorItems(
               productDetailsState.productModel.data!.shop!.slug);
-          context.nextPage(VendorsDetailsScreen());
+          context.nextPage(const VendorsDetailsScreen());
         },
       ),
     ).cornerRadius(10).p(10);

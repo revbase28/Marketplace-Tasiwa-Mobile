@@ -1,9 +1,12 @@
 import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:velocity_x/velocity_x.dart';
+import 'package:zcart/Theme/styles/colors.dart';
 import 'package:zcart/data/models/cart/cart_model.dart';
 import 'package:zcart/data/network/network_utils.dart';
 import 'package:zcart/helper/get_recently_viewed.dart';
@@ -17,12 +20,10 @@ import 'package:zcart/views/screens/tabs/home_tab/components/error_widget.dart';
 import 'package:zcart/views/screens/tabs/myCart_tab/checkout/checkout_screen.dart';
 import 'package:zcart/views/shared_widgets/product_details_card.dart';
 import 'package:zcart/views/shared_widgets/product_loading_widget.dart';
-import 'package:zcart/Theme/styles/colors.dart';
-
-import 'package:velocity_x/velocity_x.dart';
-import 'package:easy_localization/easy_localization.dart';
 
 class MyCartTab extends StatefulWidget {
+  const MyCartTab({Key? key}) : super(key: key);
+
   @override
   _MyCartTabState createState() => _MyCartTabState();
 }
@@ -49,7 +50,7 @@ class _MyCartTabState extends State<MyCartTab> {
                 title: Text(LocaleKeys.cart_text.tr()),
                 actions: [
                   (cartState is CartErrorState || cartState is CartLoadingState)
-                      ? Icon(Icons.refresh).pOnly(right: 10).onInkTap(() {
+                      ? const Icon(Icons.refresh).pOnly(right: 10).onInkTap(() {
                           context
                               .read(cartNotifierProvider.notifier)
                               .getCartList();
@@ -58,7 +59,7 @@ class _MyCartTabState extends State<MyCartTab> {
                 ],
               ),
               body: cartState is CartLoadedState
-                  ? cartState.cartList!.length == 0
+                  ? cartState.cartList!.isEmpty
                       ? ProviderListener(
                           provider: randomItemScrollNotifierProvider,
                           onChange: (context, state) {
@@ -73,22 +74,23 @@ class _MyCartTabState extends State<MyCartTab> {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                SizedBox(height: 100),
-                                Icon(Icons.info_outline),
+                                const SizedBox(height: 100),
+                                const Icon(Icons.info_outline),
                                 Text(LocaleKeys.no_item_found.tr()),
                                 TextButton(
                                     onPressed: () {
                                       context.nextReplacementPage(
-                                          BottomNavBar(selectedIndex: 0));
+                                          const BottomNavBar(selectedIndex: 0));
                                     },
                                     child: Text(LocaleKeys.go_shopping.tr())),
-                                SizedBox(height: 100),
+                                const SizedBox(height: 100),
 
-                                RecentlyViewed().p(10),
+                                const RecentlyViewed().p(10),
 
                                 /// Popular Items
                                 Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 16),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16),
                                   child: randomItemState
                                           is RandomItemLoadedState
                                       ? ProductDetailsCard(
@@ -109,7 +111,7 @@ class _MyCartTabState extends State<MyCartTab> {
                         )
                       : ListView.builder(
                           itemCount: cartState.cartList!.length,
-                          padding: EdgeInsets.only(top: 5),
+                          padding: const EdgeInsets.only(top: 5),
                           itemBuilder: (context, index) {
                             return CartItemCard(
                                 cartItem: cartState.cartList![index]);
@@ -122,7 +124,10 @@ class _MyCartTabState extends State<MyCartTab> {
 class CartItemCard extends StatelessWidget {
   final CartItem cartItem;
 
-  const CartItemCard({required this.cartItem});
+  const CartItemCard({
+    Key? key,
+    required this.cartItem,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -132,8 +137,8 @@ class CartItemCard extends StatelessWidget {
               ? kDarkCardBgColor
               : kLightColor,
           borderRadius: BorderRadius.circular(10)),
-      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      padding: EdgeInsets.all(10),
+      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      padding: const EdgeInsets.all(10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -143,7 +148,7 @@ class CartItemCard extends StatelessWidget {
               .pOnly(bottom: 10),
           ListView.builder(
               shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               itemCount: cartItem.items!.length,
               itemBuilder: (context, index) {
                 return Column(
@@ -161,7 +166,7 @@ class CartItemCard extends StatelessWidget {
                       context
                           .read(productSlugListProvider.notifier)
                           .addProductSlug(cartItem.items![index].slug);
-                      context.nextPage(ProductDetailsScreen());
+                      context.nextPage(const ProductDetailsScreen());
                     }),
                     Container(
                       height: 3,
@@ -215,7 +220,7 @@ class CartItemCard extends StatelessWidget {
                     context
                         .read(countryNotifierProvider.notifier)
                         .getCountries();
-                    context.nextPage(CheckoutScreen());
+                    context.nextPage(const CheckoutScreen());
                   },
                   child: Text(LocaleKeys.checkout.tr()))
             ],
@@ -227,7 +232,11 @@ class CartItemCard extends StatelessWidget {
 }
 
 class ItemCard extends StatefulWidget {
-  const ItemCard({required this.cartItem, required this.cartID});
+  const ItemCard({
+    Key? key,
+    this.cartID,
+    required this.cartItem,
+  }) : super(key: key);
 
   final int? cartID;
   final Item cartItem;
@@ -240,7 +249,7 @@ class _ItemCardState extends State<ItemCard> {
   @override
   Widget build(BuildContext context) {
     return Slidable(
-      actionPane: SlidableStrechActionPane(),
+      actionPane: const SlidableStrechActionPane(),
       actionExtentRatio: 0.25,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -283,12 +292,12 @@ class _ItemCardState extends State<ItemCard> {
                 ),
                 ButtonBar(
                   mainAxisSize: MainAxisSize.min,
-                  buttonPadding: EdgeInsets.symmetric(horizontal: 5),
+                  buttonPadding: const EdgeInsets.symmetric(horizontal: 5),
                   buttonMinWidth:
                       30, // this will take space as minimum as posible(to center)
                   children: <Widget>[
                     OutlinedButton(
-                        child: Icon(Icons.remove),
+                        child: const Icon(Icons.remove),
                         style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.all(
                               EasyDynamicTheme.of(context).themeMode ==
@@ -337,7 +346,7 @@ class _ItemCardState extends State<ItemCard> {
                       ),
                     ),
                     OutlinedButton(
-                        child: Icon(Icons.add),
+                        child: const Icon(Icons.add),
                         style: ButtonStyle(
                             backgroundColor: MaterialStateProperty.all(
                                 EasyDynamicTheme.of(context).themeMode ==

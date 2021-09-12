@@ -11,6 +11,7 @@ import 'package:zcart/Theme/styles/colors.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 class SliderWidget extends StatelessWidget {
+  // ignore: use_key_in_widget_constructors
   const SliderWidget(this.sliderList);
 
   final List<SliderList>? sliderList;
@@ -25,7 +26,7 @@ class SliderWidget extends StatelessWidget {
           autoPlay: true,
         ),
         items: sliderList!
-            .map((item) => Container(
+            .map((item) => SizedBox(
                   width: double.infinity,
                   child: Image.network(
                     item.image!.path!,
@@ -37,11 +38,11 @@ class SliderWidget extends StatelessWidget {
                     },
                   ),
                 ).cornerRadius(10).onInkTap(() {
-                  if (item.link!.length > 0) {
+                  if (item.link!.isNotEmpty) {
                     context
                         .read(categoryItemNotifierProvider.notifier)
                         .getCategoryItem(item.link);
-                    context.nextPage(ProductListScreen());
+                    context.nextPage(const ProductListScreen());
                   } else {
                     toast(LocaleKeys.no_offer.tr(), bgColor: kPrimaryColor);
                   }

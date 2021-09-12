@@ -11,11 +11,11 @@ final searchProvider =
 });
 
 class SearchRepository extends StateNotifier<SearchState> {
-  SearchRepository() : super(SearchInitialState());
+  SearchRepository() : super(const SearchInitialState());
 
   Future search(String searchedText) async {
-    state = SearchLoadingState();
-    var responseBody;
+    state = const SearchLoadingState();
+    dynamic responseBody;
     try {
       responseBody =
           await handleResponse(await getRequest(API.search(searchedText)));
@@ -23,7 +23,7 @@ class SearchRepository extends StateNotifier<SearchState> {
       SearchModel searchModel = SearchModel.fromJson(responseBody);
       state = SearchLoadedState(searchModel.data);
     } on NetworkException {
-      state = SearchErrorState("There is an error!");
+      state = const SearchErrorState("There is an error!");
     }
   }
 }

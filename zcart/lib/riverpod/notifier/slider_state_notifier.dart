@@ -8,11 +8,11 @@ import 'package:zcart/translations/locale_keys.g.dart';
 class SliderNotifier extends StateNotifier<SliderState> {
   final ISliderRepository _iSliderRepository;
 
-  SliderNotifier(this._iSliderRepository) : super(SliderInitialState());
+  SliderNotifier(this._iSliderRepository) : super(const SliderInitialState());
 
   Future<void> getSlider() async {
     try {
-      state = SliderLoadingState();
+      state = const SliderLoadingState();
       final slider = await _iSliderRepository.fetchSlider();
       state = SliderLoadedState(slider);
     } on NetworkException {

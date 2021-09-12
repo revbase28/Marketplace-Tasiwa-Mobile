@@ -21,6 +21,8 @@ class SignUpScreen extends StatelessWidget {
 
   final _formKey = GlobalKey<FormState>();
 
+  SignUpScreen({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return ProviderListener<UserState>(
@@ -29,7 +31,8 @@ class SignUpScreen extends StatelessWidget {
           if (state is UserLoadedState) {
             context.read(cartNotifierProvider.notifier).getCartList();
             context.read(wishListNotifierProvider.notifier).getWishList();
-            context.nextAndRemoveUntilPage(BottomNavBar(selectedIndex: 0));
+            context
+                .nextAndRemoveUntilPage(const BottomNavBar(selectedIndex: 0));
           }
           if (state is UserErrorState) {
             toast(state.message, bgColor: kPrimaryColor);
@@ -45,21 +48,21 @@ class SignUpScreen extends StatelessWidget {
                     child: Form(
                       key: _formKey,
                       child: Container(
-                        margin: EdgeInsets.all(16),
-                        padding: EdgeInsets.all(16),
+                        margin: const EdgeInsets.all(16),
+                        padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
                             color: EasyDynamicTheme.of(context).themeMode ==
                                     ThemeMode.dark
                                 ? kDarkCardBgColor
                                 : kLightCardBgColor,
                             borderRadius:
-                                BorderRadius.all(Radius.circular(10))),
+                                const BorderRadius.all(Radius.circular(10))),
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Container(
+                            SizedBox(
                               width: MediaQuery.of(context).size.width * 0.8,
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -123,9 +126,9 @@ class SignUpScreen extends StatelessWidget {
                                 .make()
                                 .w(context.screenWidth * 0.8)
                                 .onInkTap(() => context.nextReplacementPage(
-                                    TermsAndConditionScreen()))
+                                    const TermsAndConditionScreen()))
                                 .pOnly(bottom: 10),
-                            Divider(
+                            const Divider(
                               height: 20,
                             ),
                             Text(

@@ -9,11 +9,11 @@ class VendorItemNotifier extends StateNotifier<VendorItemsState> {
   final IVendorsRepository _iVendorsRepository;
 
   VendorItemNotifier(this._iVendorsRepository)
-      : super(VendorItemInitialState());
+      : super(const VendorItemInitialState());
 
   Future<void> getVendorItems(String? slug) async {
     try {
-      state = VendorItemLoadingState();
+      state = const VendorItemLoadingState();
       final vendorsDetails =
           await _iVendorsRepository.fetchVendorItemList(slug);
       state = VendorItemLoadedState(vendorsDetails);
@@ -29,7 +29,7 @@ class VendorItemNotifier extends StateNotifier<VendorItemsState> {
           await _iVendorsRepository.fetchMoreVendorItemList();
       state = VendorItemLoadedState(vendorsDetails);
     } on NetworkException {
-      state = VendorItemErrorState(
+      state = const VendorItemErrorState(
           "Couldn't fetch Vendors Item Data. Something went wrong!");
     }
   }

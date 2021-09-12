@@ -1,7 +1,9 @@
 import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:velocity_x/velocity_x.dart';
+import 'package:zcart/Theme/styles/colors.dart';
 import 'package:zcart/data/models/categories/category_model.dart';
 import 'package:zcart/riverpod/providers/product_provider.dart';
 import 'package:zcart/riverpod/providers/provider.dart';
@@ -12,12 +14,14 @@ import 'package:zcart/views/screens/tabs/home_tab/components/category_widget.dar
 import 'package:zcart/views/screens/tabs/home_tab/components/error_widget.dart';
 import 'package:zcart/views/shared_widgets/product_details_card.dart';
 import 'package:zcart/views/shared_widgets/product_loading_widget.dart';
-import 'package:zcart/Theme/styles/colors.dart';
-import 'package:easy_localization/easy_localization.dart';
 
 class CategoryDetailsScreen extends ConsumerWidget {
   final CategoryList categoryListItem;
-  CategoryDetailsScreen({required this.categoryListItem});
+  // ignore: use_key_in_widget_constructors
+  const CategoryDetailsScreen({
+    required this.categoryListItem,
+  });
+
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final categorySubgroupState = watch(categorySubgroupNotifierProvider);
@@ -44,7 +48,7 @@ class CategoryDetailsScreen extends ConsumerWidget {
           child: Column(
             children: [
               /// Cover image
-              Container(
+              SizedBox(
                 height: context.screenHeight * .15,
                 width: context.screenWidth,
                 child: Image.network(categoryListItem.coverImage!, errorBuilder:
@@ -56,7 +60,7 @@ class CategoryDetailsScreen extends ConsumerWidget {
               /// Category subgroup list
               (categorySubgroupState is CategorySubgroupInitialState ||
                       categorySubgroupState is CategorySubgroupLoadingState)
-                  ? CategoryLoadingWidget()
+                  ? const CategoryLoadingWidget()
                   : categorySubgroupState is CategorySubgroupLoadedState
                       ? SizedBox(
                           height: context.screenHeight * .07,
@@ -64,7 +68,7 @@ class CategoryDetailsScreen extends ConsumerWidget {
                               itemCount: categorySubgroupState
                                   .categorysSubgroupList!.length,
                               scrollDirection: Axis.horizontal,
-                              padding: EdgeInsets.symmetric(vertical: 5),
+                              padding: const EdgeInsets.symmetric(vertical: 5),
                               itemBuilder: (BuildContext context, int index) {
                                 return ActionChip(
                                   backgroundColor: context
@@ -121,7 +125,7 @@ class CategoryDetailsScreen extends ConsumerWidget {
 
               /// Category under Subgroup
               subgroupCategoryState is SubgroupCategoryLoadingState
-                  ? CategoryLoadingWidget()
+                  ? const CategoryLoadingWidget()
                   : subgroupCategoryState is SubgroupCategoryLoadedState
                       ? SizedBox(
                           height: context.screenHeight * .07,
@@ -129,7 +133,7 @@ class CategoryDetailsScreen extends ConsumerWidget {
                               itemCount: subgroupCategoryState
                                   .subgroupCategoryList!.length,
                               scrollDirection: Axis.horizontal,
-                              padding: EdgeInsets.symmetric(vertical: 5),
+                              padding: const EdgeInsets.symmetric(vertical: 5),
                               itemBuilder: (BuildContext context, int index) {
                                 return ActionChip(
                                   backgroundColor: context
@@ -207,13 +211,13 @@ class CategoryDetailsScreen extends ConsumerWidget {
 
               /// Product List
               productListState is ProductListLoadedState
-                  ? productListState.productList.length == 0
+                  ? productListState.productList.isEmpty
                       ? Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             const SizedBox(height: 50),
-                            Icon(Icons.info_outline),
+                            const Icon(Icons.info_outline),
                             Text(LocaleKeys.no_item_found.tr()),
                           ],
                         )

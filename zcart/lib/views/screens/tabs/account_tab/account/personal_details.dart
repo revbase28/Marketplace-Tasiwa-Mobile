@@ -21,6 +21,8 @@ class PersonalDetails extends StatelessWidget {
 
   DateTime? _dateOfBirth;
 
+  PersonalDetails({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Consumer(builder: (context, watch, _) {
@@ -97,8 +99,9 @@ class PersonalDetails extends StatelessWidget {
                   validator: (value) {
                     if (!value!.contains("@") || !value.contains(".")) {
                       return LocaleKeys.invalid_email.tr();
-                    } else
+                    } else {
                       return null;
+                    }
                   },
                   widthMultiplier: 1,
                 ),

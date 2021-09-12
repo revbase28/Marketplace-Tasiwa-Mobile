@@ -9,11 +9,11 @@ class RecentlyViewdNotifier extends StateNotifier<RecentlyViewedState> {
   final IRecentlyViewedRepository _iRecentlyViewdRepository;
 
   RecentlyViewdNotifier(this._iRecentlyViewdRepository)
-      : super(RecentlyViewedInitialState());
+      : super(const RecentlyViewedInitialState());
 
   Future<void> getRecentlyViwedItems(List<String> productList) async {
     try {
-      state = RecentlyViewedLoadingState();
+      state = const RecentlyViewedLoadingState();
       final recentItems =
           await _iRecentlyViewdRepository.fetchRecentlyViewedItems(productList);
       state = RecentlyViewedLoadedState(recentItems);

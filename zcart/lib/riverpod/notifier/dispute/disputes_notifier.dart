@@ -8,11 +8,12 @@ import 'package:zcart/translations/locale_keys.g.dart';
 class DisputesNotifier extends StateNotifier<DisputesState> {
   final IDisputeRepository _iDisputeRepository;
 
-  DisputesNotifier(this._iDisputeRepository) : super(DisputesInitialState());
+  DisputesNotifier(this._iDisputeRepository)
+      : super(const DisputesInitialState());
 
   Future getDisputes() async {
     try {
-      state = DisputesLoadingState();
+      state = const DisputesLoadingState();
       final disputes = await _iDisputeRepository.fetchDisputes();
       state = DisputesLoadedState(disputes);
     } on NetworkException {

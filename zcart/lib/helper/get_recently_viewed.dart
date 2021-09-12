@@ -5,8 +5,8 @@ import 'package:zcart/riverpod/providers/recently_viewed_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void getRecentlyViewedItems(BuildContext context) async {
-  var _box = Hive.box(HIVE_BOX);
-  List<String>? _recentlyViewed = _box.get(RECENTLY_VIEWED_IDS);
+  var _box = Hive.box(hiveBox);
+  List<String>? _recentlyViewed = _box.get(recentlyReviewedIds);
 
   print("Recently Reviewd :  $_recentlyViewed");
 

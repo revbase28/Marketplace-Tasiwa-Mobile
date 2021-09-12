@@ -93,7 +93,7 @@ class WIshListItem {
         stuffPick: json["stuff_pick"],
         freeShipping: json["free_shipping"],
         hotItem: json["hot_item"],
-        rating: json["rating"] == null ? null : json["rating"].toString(),
+        rating: json["rating"]?.toString(),
         image: json["image"],
         labels: List<String>.from(json["labels"].map((x) => x)),
       );
@@ -117,7 +117,7 @@ class WIshListItem {
         "stuff_pick": stuffPick,
         "free_shipping": freeShipping,
         "hot_item": hotItem,
-        "rating": rating == null ? null : rating,
+        "rating": rating,
         "image": image,
         "labels": List<dynamic>.from(labels!.map((x) => x)),
       };

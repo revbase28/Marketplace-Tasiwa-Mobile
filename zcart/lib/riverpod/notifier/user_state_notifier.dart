@@ -8,11 +8,11 @@ import 'package:easy_localization/easy_localization.dart';
 class UserNotifier extends StateNotifier<UserState> {
   final IUserRepository _iUserRepository;
 
-  UserNotifier(this._iUserRepository) : super(UserInitialState());
+  UserNotifier(this._iUserRepository) : super(const UserInitialState());
 
   Future<void> login(String username, String password) async {
     try {
-      state = UserLoadingState();
+      state = const UserLoadingState();
       final user = await _iUserRepository.logIn(username, password);
       state = UserLoadedState(user);
     } on NetworkException {
@@ -22,7 +22,7 @@ class UserNotifier extends StateNotifier<UserState> {
 
   Future<void> loginUsingGoogle(String accessToken) async {
     try {
-      state = UserLoadingState();
+      state = const UserLoadingState();
       final user = await _iUserRepository.logInUsingGoogle(accessToken);
       state = UserLoadedState(user);
     } on NetworkException {
@@ -32,7 +32,7 @@ class UserNotifier extends StateNotifier<UserState> {
 
   Future<void> loginUsingFacebook(String accessToken) async {
     try {
-      state = UserLoadingState();
+      state = const UserLoadingState();
       final user = await _iUserRepository.logInUsingFacebook(accessToken);
       state = UserLoadedState(user);
     } on NetworkException {
@@ -43,7 +43,7 @@ class UserNotifier extends StateNotifier<UserState> {
   Future<void> register(String name, email, password,
       bool agreeToTermsAndCondition, acceptMarkeing) async {
     try {
-      state = UserLoadingState();
+      state = const UserLoadingState();
       final user = await _iUserRepository.register(
           name, email, password, agreeToTermsAndCondition, acceptMarkeing);
       state = UserLoadedState(user);
@@ -62,7 +62,7 @@ class UserNotifier extends StateNotifier<UserState> {
 
   Future<void> getUserInfo() async {
     try {
-      state = UserLoadingState();
+      state = const UserLoadingState();
       final user = await _iUserRepository.fetchUserInfo();
       state = UserLoadedState(user);
     } on NetworkException {

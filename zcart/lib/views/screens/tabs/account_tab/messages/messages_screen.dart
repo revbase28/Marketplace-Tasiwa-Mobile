@@ -10,6 +10,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 class MessagesScreen extends StatelessWidget {
+  const MessagesScreen({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Consumer(
@@ -22,12 +24,12 @@ class MessagesScreen extends StatelessWidget {
               elevation: 0,
             ),
             body: conversationState is ConversationLoadedState
-                ? conversationState.conversationModel.data!.length == 0
+                ? conversationState.conversationModel.data!.isEmpty
                     ? Center(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(Icons.info_outline),
+                            const Icon(Icons.info_outline),
                             const SizedBox(height: 10),
                             Text(LocaleKeys.empty_inbox.tr())
                           ],
@@ -41,7 +43,7 @@ class MessagesScreen extends StatelessWidget {
                             child: ListTile(
                               tileColor: Colors.transparent,
                               contentPadding:
-                                  EdgeInsets.symmetric(vertical: 16),
+                                  const EdgeInsets.symmetric(vertical: 16),
                               leading: Image.network(
                                 conversationState.conversationModel.data![index]
                                     .shop!.image!,
@@ -56,8 +58,8 @@ class MessagesScreen extends StatelessWidget {
                                   conversationState.conversationModel
                                       .data![index].shop!.name!,
                                   style: context.textTheme.bodyText2!),
-                              trailing: Padding(
-                                padding: const EdgeInsets.all(8.0),
+                              trailing: const Padding(
+                                padding: EdgeInsets.all(8.0),
                                 child: Icon(CupertinoIcons.chevron_forward),
                               ),
                             ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:zcart/Theme/styles/colors.dart';
 
@@ -57,10 +58,10 @@ TextTheme darkTextTheme(BuildContext context) {
   );
 }
 
-final AppBarTheme darkAppBarTheme = AppBarTheme(
+const AppBarTheme darkAppBarTheme = AppBarTheme(
   color: kPrimaryColor,
   iconTheme: IconThemeData(color: kLightColor),
-  brightness: Brightness.dark,
+  systemOverlayStyle: SystemUiOverlayStyle.dark,
   elevation: 0,
   centerTitle: true,
   foregroundColor: kLightColor,
@@ -72,15 +73,15 @@ ThemeData darkTheme = ThemeData(
     floatingActionButtonTheme: FloatingActionButtonThemeData(
       backgroundColor: _lightPrimaryColor,
     ),
-    cardTheme: CardTheme(color: kDarkCardBgColor, elevation: 0),
+    cardTheme: const CardTheme(color: kDarkCardBgColor, elevation: 0),
     colorScheme: ColorScheme.dark(
       primary: _lightPrimaryColor,
       secondary: _lightPrimaryColor,
       primaryVariant: kLightColor,
     ),
-    snackBarTheme: SnackBarThemeData(
+    snackBarTheme: const SnackBarThemeData(
         backgroundColor: kDarkColor, actionTextColor: kPrimaryLightTextColor),
-    iconTheme: IconThemeData(
+    iconTheme: const IconThemeData(
       color: kLightColor,
     ),
     switchTheme: SwitchThemeData(
@@ -107,6 +108,6 @@ ThemeData darkTheme = ThemeData(
         buttonColor: _lightPrimaryColor,
         textTheme: ButtonTextTheme.primary),
     unselectedWidgetColor: _lightPrimaryColor,
-    timePickerTheme: TimePickerThemeData(
+    timePickerTheme: const TimePickerThemeData(
       backgroundColor: kPrimaryColor,
     ));

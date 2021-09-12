@@ -9,6 +9,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 class AboutUsScreen extends StatelessWidget {
+  const AboutUsScreen({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,7 +22,7 @@ class AboutUsScreen extends StatelessWidget {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
             child: Consumer(
               builder: (context, watch, _) {
                 final aboutUsState = watch(aboutUsProvider);
@@ -37,7 +39,7 @@ class AboutUsScreen extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
-                                Icon(Icons.info_outline),
+                                const Icon(Icons.info_outline),
                                 const SizedBox(height: 10),
                                 Text(LocaleKeys.no_data_yet.tr())
                               ],

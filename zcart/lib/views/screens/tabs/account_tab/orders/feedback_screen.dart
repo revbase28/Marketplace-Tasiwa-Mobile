@@ -1,21 +1,24 @@
 import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:velocity_x/velocity_x.dart';
+import 'package:zcart/Theme/styles/colors.dart';
 import 'package:zcart/data/controller/feedback/feedback_controller.dart';
 import 'package:zcart/data/models/orders/order_details_model.dart';
 import 'package:zcart/riverpod/providers/order_provider.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:zcart/views/shared_widgets/custom_textfield.dart';
-import 'package:zcart/Theme/styles/colors.dart';
-import 'package:easy_localization/easy_localization.dart';
-import 'package:velocity_x/velocity_x.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class FeedbackScreen extends StatefulWidget {
   final Order? order;
 
-  FeedbackScreen({this.order});
+  const FeedbackScreen({
+    Key? key,
+    this.order,
+  }) : super(key: key);
 
   @override
   _FeedbackScreenState createState() => _FeedbackScreenState();
@@ -128,8 +131,8 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                           ? kDarkCardBgColor
                           : kLightColor,
                   borderRadius: BorderRadius.circular(10)),
-              margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              padding: EdgeInsets.all(10),
+              margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              padding: const EdgeInsets.all(10),
               child: Form(
                 key: _formKey,
                 child: Column(
@@ -152,7 +155,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                     ),
                     Container(
                       color: kPrimaryColor.withOpacity(0.2),
-                      padding: EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(10),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -163,9 +166,11 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                             allowHalfRating: true,
                             itemCount: 5,
                             itemSize: 25,
-                            itemPadding: EdgeInsets.symmetric(horizontal: 5),
-                            itemBuilder: (context, _) =>
-                                Icon(Icons.star_border, color: kPrimaryColor),
+                            itemPadding:
+                                const EdgeInsets.symmetric(horizontal: 5),
+                            itemBuilder: (context, _) => const Icon(
+                                Icons.star_border,
+                                color: kPrimaryColor),
                             onRatingUpdate: (rating) {
                               shopRatingController.text = '$rating';
                             },
@@ -201,8 +206,8 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                           ? kDarkCardBgColor
                           : kLightColor,
                   borderRadius: BorderRadius.circular(10)),
-              margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              padding: EdgeInsets.all(10),
+              margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              padding: const EdgeInsets.all(10),
               child: Form(
                 key: _productFormKey,
                 child: Column(
@@ -214,7 +219,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                     ListView.builder(
                         shrinkWrap: true,
                         itemCount: widget.order!.items!.length,
-                        physics: BouncingScrollPhysics(),
+                        physics: const BouncingScrollPhysics(),
                         itemBuilder: (BuildContext context, index) {
                           return ProductRatingCard(
                             order: widget.order,
@@ -237,11 +242,12 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
 // ignore: must_be_immutable
 class ProductRatingCard extends StatelessWidget {
   ProductRatingCard({
+    Key? key,
     required this.order,
     required this.index,
     required this.updateRatingList,
     required this.updateFeedbackList,
-  });
+  }) : super(key: key);
 
   final Order? order;
   final int index;
@@ -271,7 +277,7 @@ class ProductRatingCard extends StatelessWidget {
         ),
         Container(
           color: kPrimaryColor.withOpacity(0.2),
-          padding: EdgeInsets.all(10),
+          padding: const EdgeInsets.all(10),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -282,9 +288,9 @@ class ProductRatingCard extends StatelessWidget {
                 allowHalfRating: true,
                 itemCount: 5,
                 itemSize: 25,
-                itemPadding: EdgeInsets.symmetric(horizontal: 5),
+                itemPadding: const EdgeInsets.symmetric(horizontal: 5),
                 itemBuilder: (context, _) =>
-                    Icon(Icons.star_border, color: kPrimaryColor),
+                    const Icon(Icons.star_border, color: kPrimaryColor),
                 onRatingUpdate: (rating) =>
                     updateRatingList(index: index, rating: rating),
               ),

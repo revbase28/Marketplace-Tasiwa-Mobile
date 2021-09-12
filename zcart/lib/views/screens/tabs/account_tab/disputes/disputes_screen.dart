@@ -16,6 +16,8 @@ import 'package:velocity_x/velocity_x.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 class DisputeScreen extends ConsumerWidget {
+  const DisputeScreen({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final disputesState = watch(disputesProvider);
@@ -38,27 +40,23 @@ class DisputeScreen extends ConsumerWidget {
                     onPressed: () {
                       context.read(disputesProvider.notifier).getDisputes();
                     },
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.refresh,
                       color: kPrimaryColor,
                     )))
           ],
         ),
         body: disputesState is DisputesLoadingState
-            ? Container(
-                child: LoadingWidget(),
-              ).center()
+            ? LoadingWidget().center()
             : disputesState is DisputesErrorState
-                ? Container(
-                    child: Center(
-                        child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.dangerous).paddingRight(5),
-                        Text(disputesState.message),
-                      ],
-                    )),
-                  )
+                ? Center(
+                    child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(Icons.dangerous).paddingRight(5),
+                      Text(disputesState.message),
+                    ],
+                  ))
                 // ? ListTile(
                 //     title: Text(disputesState.message,
                 //         style: TextStyle(color: kPrimaryLightTextColor)),
@@ -68,20 +66,18 @@ class DisputeScreen extends ConsumerWidget {
                 //   ).px(10)
                 : disputesState is DisputesLoadedState
                     ? disputesState.disputes.isEmpty
-                        ? Container(
-                            child: Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(Icons.info_outline),
-                                  Text(LocaleKeys.no_item_found.tr()),
-                                ],
-                              ),
+                        ? Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Icon(Icons.info_outline),
+                                Text(LocaleKeys.no_item_found.tr()),
+                              ],
                             ),
                           )
                         : ListView.builder(
                             controller: scrollControllerProvider.controller,
-                            padding: EdgeInsets.symmetric(vertical: 10),
+                            padding: const EdgeInsets.symmetric(vertical: 10),
                             itemCount: disputesState.disputes.length,
                             itemBuilder: (context, index) {
                               return Container(
@@ -92,9 +88,9 @@ class DisputeScreen extends ConsumerWidget {
                                         ? kDarkCardBgColor
                                         : kLightColor,
                                     borderRadius: BorderRadius.circular(10)),
-                                margin: EdgeInsets.symmetric(
+                                margin: const EdgeInsets.symmetric(
                                     horizontal: 10, vertical: 5),
-                                padding: EdgeInsets.all(16),
+                                padding: const EdgeInsets.all(16),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
@@ -130,7 +126,7 @@ class DisputeScreen extends ConsumerWidget {
                                                   : kPrimaryColor,
                                               borderRadius:
                                                   BorderRadius.circular(10)),
-                                          padding: EdgeInsets.all(5),
+                                          padding: const EdgeInsets.all(5),
                                           child: Text(
                                               disputesState
                                                   .disputes[index].status!,
@@ -143,7 +139,7 @@ class DisputeScreen extends ConsumerWidget {
                                     ),
                                     ListView.builder(
                                       shrinkWrap: true,
-                                      physics: BouncingScrollPhysics(),
+                                      physics: const BouncingScrollPhysics(),
                                       itemCount: disputesState.disputes[index]
                                           .orderDetails!.items!.length,
                                       itemBuilder: (context, itemsIndex) {
@@ -261,9 +257,11 @@ class DisputeScreen extends ConsumerWidget {
                                                     borderRadius:
                                                         BorderRadius.circular(
                                                             10)),
-                                                padding: EdgeInsets.all(10),
-                                                margin: EdgeInsets.symmetric(
-                                                    vertical: 5),
+                                                padding:
+                                                    const EdgeInsets.all(10),
+                                                margin:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 5),
                                                 child: Text(
                                                     LocaleKeys.contact_seller
                                                         .tr(),
@@ -308,9 +306,11 @@ class DisputeScreen extends ConsumerWidget {
                                                     borderRadius:
                                                         BorderRadius.circular(
                                                             10)),
-                                                padding: EdgeInsets.all(10),
-                                                margin: EdgeInsets.symmetric(
-                                                    vertical: 5),
+                                                padding:
+                                                    const EdgeInsets.all(10),
+                                                margin:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 5),
                                                 child: Text(
                                                     LocaleKeys.dispute_details
                                                         .tr(),
@@ -328,7 +328,7 @@ class DisputeScreen extends ConsumerWidget {
                                                             .disputes[index]
                                                             .id);
                                                 context.nextPage(
-                                                    DisputeDetailsScreen());
+                                                    const DisputeDetailsScreen());
                                               }),
                                               Visibility(
                                                 visible: !disputesState
@@ -339,9 +339,10 @@ class DisputeScreen extends ConsumerWidget {
                                                       borderRadius:
                                                           BorderRadius.circular(
                                                               10)),
-                                                  padding: EdgeInsets.all(10),
-                                                  margin: EdgeInsets.symmetric(
-                                                      vertical: 5),
+                                                  padding:
+                                                      const EdgeInsets.all(10),
+                                                  margin: const EdgeInsets
+                                                      .symmetric(vertical: 5),
                                                   child: Text(
                                                       LocaleKeys.mark_as_solved
                                                           .tr(),
@@ -394,9 +395,7 @@ class DisputeScreen extends ConsumerWidget {
                                 ),
                               );
                             })
-                    : Container(
-                        child: LoadingWidget(),
-                      ).center(),
+                    : LoadingWidget().center(),
       ),
     );
   }

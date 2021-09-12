@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zcart/riverpod/state/scroll_state.dart';
 
 class RandomItemScrollNotifier extends StateNotifier<ScrollState> {
-  RandomItemScrollNotifier() : super(ScrollInitialState());
+  RandomItemScrollNotifier() : super(const ScrollInitialState());
 
   final _scrollController = ScrollController();
 
@@ -18,13 +18,13 @@ class RandomItemScrollNotifier extends StateNotifier<ScrollState> {
     if (_scrollController.offset >=
             _scrollController.position.maxScrollExtent &&
         !_scrollController.position.outOfRange) {
-      state = ScrollReachedBottomState();
+      state = const ScrollReachedBottomState();
     }
   }
 }
 
 class VendorItemScrollNotifier extends StateNotifier<ScrollState> {
-  VendorItemScrollNotifier() : super(ScrollInitialState());
+  VendorItemScrollNotifier() : super(const ScrollInitialState());
 
   final _scrollController = ScrollController();
 
@@ -39,13 +39,13 @@ class VendorItemScrollNotifier extends StateNotifier<ScrollState> {
     if (_scrollController.offset >=
             _scrollController.position.maxScrollExtent &&
         !_scrollController.position.outOfRange) {
-      state = ScrollReachedBottomState();
+      state = const ScrollReachedBottomState();
     }
   }
 }
 
 class CategoryDetailsScrollNotifier extends StateNotifier<ScrollState> {
-  CategoryDetailsScrollNotifier() : super(ScrollInitialState());
+  CategoryDetailsScrollNotifier() : super(const ScrollInitialState());
 
   final _scrollController = ScrollController();
 
@@ -60,13 +60,13 @@ class CategoryDetailsScrollNotifier extends StateNotifier<ScrollState> {
     if (_scrollController.offset >=
             _scrollController.position.maxScrollExtent &&
         !_scrollController.position.outOfRange) {
-      state = ScrollReachedBottomState();
+      state = const ScrollReachedBottomState();
     }
   }
 }
 
 class DisputesScrollNotifier extends StateNotifier<ScrollState> {
-  DisputesScrollNotifier() : super(ScrollInitialState());
+  DisputesScrollNotifier() : super(const ScrollInitialState());
 
   final _scrollController = ScrollController();
 
@@ -81,13 +81,13 @@ class DisputesScrollNotifier extends StateNotifier<ScrollState> {
     if (_scrollController.offset >=
             _scrollController.position.maxScrollExtent &&
         !_scrollController.position.outOfRange) {
-      state = ScrollReachedBottomState();
+      state = const ScrollReachedBottomState();
     }
   }
 }
 
 class WishListScrollNotifier extends StateNotifier<ScrollState> {
-  WishListScrollNotifier() : super(ScrollInitialState());
+  WishListScrollNotifier() : super(const ScrollInitialState());
 
   final _scrollController = ScrollController();
 
@@ -102,13 +102,13 @@ class WishListScrollNotifier extends StateNotifier<ScrollState> {
     if (_scrollController.offset >=
             _scrollController.position.maxScrollExtent &&
         !_scrollController.position.outOfRange) {
-      state = ScrollReachedBottomState();
+      state = const ScrollReachedBottomState();
     }
   }
 }
 
 class OrderScrollNotifier extends StateNotifier<ScrollState> {
-  OrderScrollNotifier() : super(ScrollInitialState());
+  OrderScrollNotifier() : super(const ScrollInitialState());
 
   final _scrollController = ScrollController();
 
@@ -123,7 +123,7 @@ class OrderScrollNotifier extends StateNotifier<ScrollState> {
     if (_scrollController.offset >=
             _scrollController.position.maxScrollExtent &&
         !_scrollController.position.outOfRange) {
-      state = ScrollReachedBottomState();
+      state = const ScrollReachedBottomState();
     }
   }
 }

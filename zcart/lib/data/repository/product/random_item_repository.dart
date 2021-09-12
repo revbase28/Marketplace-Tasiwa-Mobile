@@ -16,8 +16,9 @@ class RandomItemRepository implements IRandomItemRepository {
     randomItemList.clear();
 
     var responseBody = await handleResponse(await getRequest(API.random));
-    if (responseBody.runtimeType == int) if (responseBody > 206)
+    if (responseBody.runtimeType == int && responseBody > 206) {
       throw NetworkException();
+    }
 
     randomItemModel = ProductModel.fromJson(responseBody);
     randomItemList.addAll(randomItemModel.data!);
@@ -26,7 +27,7 @@ class RandomItemRepository implements IRandomItemRepository {
 
   @override
   Future<List<ProductList>> fetchMoreRandomItems() async {
-    var responseBody;
+    dynamic responseBody;
     print("fetchMoreRandomItems (before): ${randomItemList.length}");
 
     if (randomItemModel.links!.next != null) {

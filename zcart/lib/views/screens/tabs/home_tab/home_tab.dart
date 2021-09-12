@@ -1,5 +1,6 @@
 import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:zcart/Theme/styles/colors.dart';
@@ -20,6 +21,8 @@ import 'components/banners_widget.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 class HomeTab extends ConsumerWidget {
+  const HomeTab({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final sliderState = watch(sliderNotifierProvider);
@@ -48,8 +51,8 @@ class HomeTab extends ConsumerWidget {
                 EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
                     ? kDarkBgColor
                     : kLightBgColor,
-            brightness: Brightness.light,
-            flexibleSpace: SafeArea(child: CustomSearchBar()),
+            systemOverlayStyle: SystemUiOverlayStyle.light,
+            flexibleSpace: const SafeArea(child: CustomSearchBar()),
           ),
           body: SingleChildScrollView(
             controller: scrollControllerProvider.controller,
@@ -112,7 +115,7 @@ class HomeTab extends ConsumerWidget {
                         : ProductLoadingWidget(),
 
                 ///Featured Brands
-                FeaturedBrands(),
+                const FeaturedBrands(),
 
                 /// Recently Added (Latest Item)
                 latestItemState is LatestItemLoadedState

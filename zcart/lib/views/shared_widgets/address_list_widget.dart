@@ -16,6 +16,7 @@ class AddressListBuilder extends StatefulWidget {
   final CartItemDetails? cartItem;
   final Function(int)? onPressedCheckBox;
 
+  // ignore: use_key_in_widget_constructors
   const AddressListBuilder(
       {this.addressesList, this.cartItem, this.onPressedCheckBox});
 
@@ -30,8 +31,8 @@ class _AddressListBuilderState extends State<AddressListBuilder> {
   Widget build(BuildContext context) {
     return ListView.builder(
         shrinkWrap: true,
-        physics: NeverScrollableScrollPhysics(),
-        padding: EdgeInsets.only(top: 5),
+        physics: const NeverScrollableScrollPhysics(),
+        padding: const EdgeInsets.only(top: 5),
         itemCount: widget.addressesList!.length,
         itemBuilder: (context, index) {
           return Container(
@@ -80,7 +81,6 @@ class _AddressListBuilderState extends State<AddressListBuilder> {
                               widget.addressesList![index].city! +
                               ',' +
                               widget.addressesList![index].zipCode!;
-                      ;
                     }
                     setState(() {
                       selectedIndex = index;
@@ -113,7 +113,7 @@ class _AddressListBuilderState extends State<AddressListBuilder> {
                 ),
                 trailing: widget.cartItem != null
                     ? index == selectedIndex
-                        ? Icon(Icons.check_circle, color: kPrimaryColor)
+                        ? const Icon(Icons.check_circle, color: kPrimaryColor)
                         : Icon(
                             Icons.radio_button_unchecked,
                             color: EasyDynamicTheme.of(context).themeMode ==
@@ -131,7 +131,7 @@ class _AddressListBuilderState extends State<AddressListBuilder> {
                                 address: widget.addressesList![index]),
                           );
                         },
-                        icon: Icon(Icons.edit),
+                        icon: const Icon(Icons.edit),
                       ),
               )).py(5).cornerRadius(10);
         });

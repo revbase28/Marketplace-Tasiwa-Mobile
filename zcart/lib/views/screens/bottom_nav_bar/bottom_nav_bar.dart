@@ -2,18 +2,21 @@ import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nb_utils/nb_utils.dart';
-import 'package:zcart/helper/constants.dart';
+import 'package:zcart/Theme/styles/colors.dart';
 import 'package:zcart/data/network/network_utils.dart';
+import 'package:zcart/helper/constants.dart';
 import 'package:zcart/riverpod/providers/cart_provider.dart';
 import 'package:zcart/riverpod/state/cart_state.dart';
-import 'package:zcart/Theme/styles/colors.dart';
 
 import 'tab_navigation_item.dart';
 
 class BottomNavBar extends StatefulWidget {
   final int? selectedIndex;
 
-  BottomNavBar({this.selectedIndex});
+  const BottomNavBar({
+    Key? key,
+    this.selectedIndex,
+  }) : super(key: key);
 
   @override
   _BottomNavBarState createState() => _BottomNavBarState();
@@ -26,11 +29,11 @@ class _BottomNavBarState extends State<BottomNavBar> {
   void initState() {
     super.initState();
     getLoginState();
-    _currentIndex = widget.selectedIndex == null ? 0 : widget.selectedIndex;
+    _currentIndex = widget.selectedIndex ?? 0;
   }
 
   getLoginState() async {
-    accessAllowed = getBoolAsync(LOGGED_IN, defaultValue: false);
+    accessAllowed = getBoolAsync(loggedIn, defaultValue: false);
   }
 
   @override
@@ -47,7 +50,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
 
       return Scaffold(
         body: PageTransitionSwitcher(
-          duration: Duration(milliseconds: 500),
+          duration: const Duration(milliseconds: 500),
           transitionBuilder: (child, primaryAnimation, secondaryAnimation) =>
               FadeThroughTransition(
             fillColor: Colors.transparent,

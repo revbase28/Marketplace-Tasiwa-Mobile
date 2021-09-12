@@ -34,7 +34,7 @@ class AddressRepository implements IAddressRepository {
       'zip_code': zipCode,
       'phone': contactNumber,
     };
-    var responseBody;
+    dynamic responseBody;
 
     try {
       responseBody = await handleResponse(
@@ -43,8 +43,11 @@ class AddressRepository implements IAddressRepository {
       throw NetworkException();
     }
 
-    if (responseBody.runtimeType == int) if (responseBody > 206)
-      throw NetworkException();
+    if (responseBody.runtimeType == int) {
+      if (responseBody > 206) {
+        throw NetworkException();
+      }
+    }
   }
 
   @override
@@ -71,7 +74,7 @@ class AddressRepository implements IAddressRepository {
       'zip_code': zipCode,
       'phone': contactNumber,
     };
-    var responseBody;
+    dynamic responseBody;
 
     try {
       responseBody = await handleResponse(await putRequest(
@@ -81,13 +84,14 @@ class AddressRepository implements IAddressRepository {
       throw NetworkException();
     }
 
-    if (responseBody.runtimeType == int) if (responseBody > 206)
+    if (responseBody.runtimeType == int && responseBody > 206) {
       throw NetworkException();
+    }
   }
 
   @override
   Future deleteAddress(int? addressId) async {
-    var responseBody;
+    dynamic responseBody;
 
     try {
       responseBody = await handleResponse(
@@ -96,13 +100,14 @@ class AddressRepository implements IAddressRepository {
       throw NetworkException();
     }
 
-    if (responseBody.runtimeType == int) if (responseBody > 206)
+    if (responseBody.runtimeType == int && responseBody > 206) {
       throw NetworkException();
+    }
   }
 
   @override
   Future<List<Addresses>?> fetchAddresses() async {
-    var responseBody;
+    dynamic responseBody;
     AddressModel addressModel;
     try {
       responseBody = await handleResponse(
@@ -111,14 +116,15 @@ class AddressRepository implements IAddressRepository {
     } catch (e) {
       throw NetworkException();
     }
-    if (responseBody.runtimeType == int) if (responseBody > 206)
+    if (responseBody.runtimeType == int && responseBody > 206) {
       throw NetworkException();
+    }
     return addressModel.data;
   }
 
   @override
   Future<List<Countries>?> fetchCountries() async {
-    var responseBody;
+    dynamic responseBody;
     CountryModel countryModel;
     try {
       responseBody = await handleResponse(
@@ -127,14 +133,15 @@ class AddressRepository implements IAddressRepository {
     } catch (e) {
       throw NetworkException();
     }
-    if (responseBody.runtimeType == int) if (responseBody > 206)
+    if (responseBody.runtimeType == int && responseBody > 206) {
       throw NetworkException();
+    }
     return countryModel.data;
   }
 
   @override
   Future<List<States>?> fetchStates(int? countryId) async {
-    var responseBody;
+    dynamic responseBody;
     StatesModel statesModel;
     try {
       responseBody = await handleResponse(
@@ -143,14 +150,15 @@ class AddressRepository implements IAddressRepository {
     } catch (e) {
       throw NetworkException();
     }
-    if (responseBody.runtimeType == int) if (responseBody > 206)
+    if (responseBody.runtimeType == int && responseBody > 206) {
       throw NetworkException();
+    }
     return statesModel.data;
   }
 
   @override
   Future<List<PackagingModel>> fetchPackagingInfo(String? shopSlug) async {
-    var responseBody;
+    dynamic responseBody;
     List<PackagingModel> packagingModelList;
     try {
       responseBody =
@@ -169,7 +177,7 @@ class AddressRepository implements IAddressRepository {
 
   @override
   Future<List<PaymentOptions>?> fetchPaymentMethods(String? shopSlug) async {
-    var responseBody;
+    dynamic responseBody;
     PaymentOptionsModel paymentOptionsModel;
     try {
       responseBody = await handleResponse(await getRequest(
@@ -179,15 +187,18 @@ class AddressRepository implements IAddressRepository {
     } catch (e) {
       throw NetworkException();
     }
-    if (responseBody.runtimeType == int) if (responseBody > 206)
-      throw NetworkException();
+    if (responseBody.runtimeType == int) {
+      if (responseBody > 206) {
+        throw NetworkException();
+      }
+    }
     return paymentOptionsModel.data;
   }
 
   @override
   Future<List<ShippingOptions>?> fetchShippingInfo(
       int? shopId, int? zoneId) async {
-    var responseBody;
+    dynamic responseBody;
     ShippingModel shippingModel;
     try {
       responseBody = await handleResponse(await postRequest(
@@ -198,15 +209,16 @@ class AddressRepository implements IAddressRepository {
     } catch (e) {
       throw NetworkException();
     }
-    if (responseBody.runtimeType == int) if (responseBody > 206)
+    if (responseBody.runtimeType == int && responseBody > 206) {
       throw NetworkException();
+    }
     return shippingModel.data;
   }
 
   @override
   Future<List<ShippingOption>?> fetchShippingOptions(
       id, countryId, stateId) async {
-    var responseBody;
+    dynamic responseBody;
     var requestBody = {
       'ship_to': countryId.toString(),
       if (stateId != null) 'state_id': stateId
@@ -220,8 +232,11 @@ class AddressRepository implements IAddressRepository {
     } catch (e) {
       throw NetworkException();
     }
-    if (responseBody.runtimeType == int) if (responseBody > 206)
-      throw NetworkException();
+    if (responseBody.runtimeType == int) {
+      if (responseBody > 206) {
+        throw NetworkException();
+      }
+    }
     return shippingOptionsModel.shippingOptions;
   }
 }

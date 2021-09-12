@@ -9,11 +9,11 @@ class PopularItemNotifier extends StateNotifier<PopularItemState> {
   final IPopularItemRepository _iPopularItemRepository;
 
   PopularItemNotifier(this._iPopularItemRepository)
-      : super(PopularItemInitialState());
+      : super(const PopularItemInitialState());
 
   Future<void> getLatestItem() async {
     try {
-      state = PopularItemLoadingState();
+      state = const PopularItemLoadingState();
       final popularItems = await _iPopularItemRepository.fetchPopularItems();
       state = PopularItemLoadedState(popularItems);
     } on NetworkException {

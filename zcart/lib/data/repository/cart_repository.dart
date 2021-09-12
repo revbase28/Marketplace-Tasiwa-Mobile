@@ -15,8 +15,9 @@ class CartRepository implements ICartRepository {
     var responseBody = await handleResponse(await getRequest(
       API.carts, /*bearerToken: true*/
     ));
-    if (responseBody.runtimeType == int) if (responseBody > 206)
+    if (responseBody.runtimeType == int && responseBody > 206) {
       throw NetworkException();
+    }
     CartModel cartModel = CartModel.fromJson(responseBody);
     return cartModel.data;
   }
@@ -37,19 +38,21 @@ class CartRepository implements ICartRepository {
         'shipping_option_id': shippingOptionId.toString(),
       if (shippingZoneId != null) 'shipping_zone_id': shippingZoneId.toString()
     };
-    var responseBody;
+    dynamic responseBody;
     try {
       responseBody = await handleResponse(await postRequest(
           API.addToCart(slug), requestBody,
           bearerToken: false));
 
-      if (responseBody.runtimeType != int)
+      if (responseBody.runtimeType != int) {
         addToCartBottomSheet(context, responseBody);
+      }
     } catch (e) {
       throw NetworkException();
     }
-    if (responseBody.runtimeType == int) if (responseBody > 206)
+    if (responseBody.runtimeType == int && responseBody > 206) {
       throw NetworkException();
+    }
   }
 
   @override
@@ -71,52 +74,57 @@ class CartRepository implements ICartRepository {
         'shipping_option_id': shippingOptionId.toString(),
       if (packagingId != null) 'packaging_id': packagingId.toString()
     };
-    var responseBody;
+    dynamic responseBody;
     try {
       responseBody = await handleResponse(await putRequest(
           API.updateCart(item), requestBody,
           bearerToken: true));
-      if (responseBody.runtimeType != int)
+      if (responseBody.runtimeType != int) {
         toast(
           responseBody['message'],
           bgColor: kPrimaryColor,
           textColor: kLightColor,
           gravity: ToastGravity.CENTER,
         );
+      }
     } catch (e) {
       throw NetworkException();
     }
-    if (responseBody.runtimeType == int) if (responseBody > 206)
+    if (responseBody.runtimeType == int && responseBody > 206) {
       throw NetworkException();
+    }
   }
 
   @override
   Future removeCart({int? cartID, int? listingID}) async {
-    var responseBody;
+    dynamic responseBody;
     try {
       responseBody = await handleResponse(await deleteRequest(
           API.removeCart(cartID, listingID),
           bearerToken: true));
-      if (responseBody.runtimeType != int)
+      if (responseBody.runtimeType != int) {
         toast(
           responseBody['message'],
           bgColor: kPrimaryColor,
           textColor: kLightColor,
           gravity: ToastGravity.CENTER,
         );
+      }
     } catch (e) {
       throw NetworkException();
     }
-    if (responseBody.runtimeType == int) if (responseBody > 206)
+    if (responseBody.runtimeType == int && responseBody > 206) {
       throw NetworkException();
+    }
   }
 
   @override
   Future<CartItemDetails?> fetchCartItemDetails(cartId) async {
     var responseBody = await handleResponse(
         await getRequest(API.cartItemDetails(cartId), bearerToken: true));
-    if (responseBody.runtimeType == int) if (responseBody > 206)
+    if (responseBody.runtimeType == int && responseBody > 206) {
       throw NetworkException();
+    }
     CartItemDetailsModel cartItemDetailsModel =
         CartItemDetailsModel.fromJson(responseBody);
     return cartItemDetailsModel.data;

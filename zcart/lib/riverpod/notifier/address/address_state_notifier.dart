@@ -10,11 +10,12 @@ import 'package:easy_localization/easy_localization.dart';
 class AddressNotifier extends StateNotifier<AddressState> {
   final IAddressRepository _iAddressRepository;
 
-  AddressNotifier(this._iAddressRepository) : super(AddressInitialState());
+  AddressNotifier(this._iAddressRepository)
+      : super(const AddressInitialState());
 
   Future fetchAddress() async {
     try {
-      state = AddressLoadingState();
+      state = const AddressLoadingState();
       final addresses = await _iAddressRepository.fetchAddresses();
       state = AddressLoadedState(addresses);
     } on NetworkException {
@@ -152,11 +153,12 @@ class AddressNotifier extends StateNotifier<AddressState> {
 class PackagingNotifier extends StateNotifier<PackagingState> {
   final IAddressRepository _iAddressRepository;
 
-  PackagingNotifier(this._iAddressRepository) : super(PackagingInitialState());
+  PackagingNotifier(this._iAddressRepository)
+      : super(const PackagingInitialState());
 
   Future fetchPackagingInfo(shopSlug) async {
     try {
-      state = PackagingLoadingState();
+      state = const PackagingLoadingState();
       final packagingList =
           await _iAddressRepository.fetchPackagingInfo(shopSlug);
       state = PackagingLoadedState(packagingList);
@@ -169,11 +171,12 @@ class PackagingNotifier extends StateNotifier<PackagingState> {
 class ShippingNotifier extends StateNotifier<ShippingState> {
   final IAddressRepository _iAddressRepository;
 
-  ShippingNotifier(this._iAddressRepository) : super(ShippingInitialState());
+  ShippingNotifier(this._iAddressRepository)
+      : super(const ShippingInitialState());
 
   Future fetchShippingInfo(shopId, zoneId) async {
     try {
-      state = ShippingLoadingState();
+      state = const ShippingLoadingState();
       final shippingInfo =
           await _iAddressRepository.fetchShippingInfo(shopId, zoneId);
       state = ShippingLoadedState(shippingInfo);
@@ -184,7 +187,7 @@ class ShippingNotifier extends StateNotifier<ShippingState> {
 
   Future fetchShippingOptions(id, countryId, stateId) async {
     try {
-      state = ShippingLoadingState();
+      state = const ShippingLoadingState();
       final shippingOptions = await _iAddressRepository.fetchShippingOptions(
           id, countryId, stateId);
       state = ShippingOptionsLoadedState(shippingOptions);
@@ -198,11 +201,11 @@ class PaymentOptionsNotifier extends StateNotifier<PaymentOptionsState> {
   final IAddressRepository _iAddressRepository;
 
   PaymentOptionsNotifier(this._iAddressRepository)
-      : super(PaymentOptionsInitialState());
+      : super(const PaymentOptionsInitialState());
 
   Future fetchPaymentMethod(shopSlug) async {
     try {
-      state = PaymentOptionsLoadingState();
+      state = const PaymentOptionsLoadingState();
       final paymentOptions =
           await _iAddressRepository.fetchPaymentMethods(shopSlug);
       state = PaymentOptionsLoadedState(paymentOptions);

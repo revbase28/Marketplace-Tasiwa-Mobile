@@ -9,7 +9,8 @@ class HeaderWidget extends StatelessWidget {
   final String title;
   final IconData iconData;
 
-  HeaderWidget(
+  // ignore: use_key_in_widget_constructors
+  const HeaderWidget(
       {this.function,
       this.privacy,
       this.onTap,
@@ -18,36 +19,30 @@ class HeaderWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Container(
-            child: Row(
-              children: [
-                Text(title),
-                SizedBox(width: 10),
-                //getPrivacyIcon(privacy).visible(!privacy.isEmptyOrNull)
-              ],
-            ),
-          ),
-          Container(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                GestureDetector(
-                    onTap: () => function!(),
-                    child: Icon(Icons.refresh, color: kPrimaryColor)),
-                SizedBox(width: 16),
-                GestureDetector(
-                  onTap: onTap as void Function()?,
-                  child: Icon(iconData, color: kPrimaryColor, size: 20),
-                )
-              ],
-            ),
-          )
-        ],
-      ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Row(
+          children: [
+            Text(title),
+            const SizedBox(width: 10),
+            //getPrivacyIcon(privacy).visible(!privacy.isEmptyOrNull)
+          ],
+        ),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            GestureDetector(
+                onTap: () => function!(),
+                child: const Icon(Icons.refresh, color: kPrimaryColor)),
+            const SizedBox(width: 16),
+            GestureDetector(
+              onTap: onTap as void Function()?,
+              child: Icon(iconData, color: kPrimaryColor, size: 20),
+            )
+          ],
+        )
+      ],
     );
   }
 }

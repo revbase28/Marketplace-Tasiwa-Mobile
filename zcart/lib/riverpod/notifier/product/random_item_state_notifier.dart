@@ -9,11 +9,11 @@ class RandomItemNotifier extends StateNotifier<RandomItemState> {
   final IRandomItemRepository _iRandomItemRepository;
 
   RandomItemNotifier(this._iRandomItemRepository)
-      : super(RandomItemInitialState());
+      : super(const RandomItemInitialState());
 
   Future<void> getRandomItems() async {
     try {
-      state = RandomItemLoadingState();
+      state = const RandomItemLoadingState();
       final randomItemList = await _iRandomItemRepository.fetchRandomItems();
       state = RandomItemLoadedState(randomItemList);
     } on NetworkException {

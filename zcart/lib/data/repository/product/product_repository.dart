@@ -12,12 +12,13 @@ import 'package:easy_localization/easy_localization.dart';
 class ProductRepository implements IProductRepository {
   @override
   Future<ProductDetailsModel> fetchProductDetails(String? slug) async {
-    var responseBody;
+    dynamic responseBody;
     responseBody =
         await handleResponse(await getRequest(API.productDetails(slug)));
     // responseBody = await handleResponse(await getRequest('https://test.incevio.cloud/api/listing/new-product-for-sale-sku1', noBaseUrl: true));
-    if (responseBody.runtimeType == int) if (responseBody > 206)
+    if (responseBody.runtimeType == int && responseBody > 206) {
       throw NetworkException();
+    }
 
     ProductDetailsModel productModel =
         ProductDetailsModel.fromJson(responseBody);
@@ -28,13 +29,14 @@ class ProductRepository implements IProductRepository {
   @override
   Future<ProductVariantDetails?> fetchProductVariantDetails(
       String? slug, requestBody) async {
-    var responseBody;
+    dynamic responseBody;
     responseBody = await handleResponse(
         await postRequest(API.productVariantDetails(slug), requestBody));
     /*responseBody =
         await handleResponse(await postRequest('https://test.incevio.cloud/api/variant/new-product-for-sale-sku1', requestBody, noBaseUrl: true));*/
-    if (responseBody.runtimeType == int) if (responseBody > 206)
+    if (responseBody.runtimeType == int && responseBody > 206) {
       throw NetworkException();
+    }
     ProductVariantDetailsModel productVariantDetailsModel =
         ProductVariantDetailsModel.fromJson(responseBody);
     return productVariantDetailsModel.data;
@@ -47,11 +49,12 @@ class ProductRepository implements IProductRepository {
   @override
   Future<List<ProductList>> fetchProductList(String slug) async {
     productList.clear();
-    var responseBody;
+    dynamic responseBody;
     responseBody =
         await handleResponse(await getRequest(API.productList(slug)));
-    if (responseBody.runtimeType == int) if (responseBody > 206)
+    if (responseBody.runtimeType == int && responseBody > 206) {
       throw NetworkException();
+    }
     productListModel = ProductModel.fromJson(responseBody);
     productList.addAll(productListModel.data!);
     return productList;
@@ -59,7 +62,7 @@ class ProductRepository implements IProductRepository {
 
   @override
   Future<List<ProductList>> fetchMoreProductList() async {
-    var responseBody;
+    dynamic responseBody;
     if (productListModel.links!.next != null) {
       toast(LocaleKeys.loading.tr());
       responseBody = await handleResponse(

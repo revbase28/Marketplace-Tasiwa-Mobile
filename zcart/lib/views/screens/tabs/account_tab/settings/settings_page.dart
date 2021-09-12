@@ -27,14 +27,13 @@ class SettingsPage extends StatelessWidget {
       appBar: AppBar(
         title: Text(LocaleKeys.settings.tr()),
       ),
-      body: Container(
-          child: Column(
+      body: Column(
         children: [
           Card(
             child: ListTile(
               title: Text(LocaleKeys.language.tr(),
                   style: context.textTheme.subtitle2!),
-              trailing: Icon(
+              trailing: const Icon(
                 Icons.translate,
               ),
               onTap: () {
@@ -50,7 +49,7 @@ class SettingsPage extends StatelessWidget {
                 trailing: EasyDynamicThemeSwitch(),
               ),
             ),
-          Divider(
+          const Divider(
             height: 30,
             thickness: 1,
           ),
@@ -58,10 +57,10 @@ class SettingsPage extends StatelessWidget {
             child: ListTile(
               title: Text(LocaleKeys.about_us.tr(),
                   style: context.textTheme.subtitle2!),
-              trailing: Icon(Icons.arrow_forward_ios),
+              trailing: const Icon(Icons.arrow_forward_ios),
               onTap: () {
                 context.read(aboutUsProvider.notifier).fetchAboutUs();
-                context.nextPage(AboutUsScreen());
+                context.nextPage(const AboutUsScreen());
               },
             ),
           ),
@@ -69,12 +68,12 @@ class SettingsPage extends StatelessWidget {
             child: ListTile(
               title: Text(LocaleKeys.privacy_policy.tr(),
                   style: context.textTheme.subtitle2!),
-              trailing: Icon(Icons.arrow_forward_ios),
+              trailing: const Icon(Icons.arrow_forward_ios),
               onTap: () {
                 context
                     .read(privacyPolicyProvider.notifier)
                     .fetchPrivacyPolicy();
-                context.nextPage(PrivacyPolicyScreen());
+                context.nextPage(const PrivacyPolicyScreen());
               },
             ),
           ),
@@ -82,22 +81,22 @@ class SettingsPage extends StatelessWidget {
             child: ListTile(
               title: Text(LocaleKeys.terms_condition.tr(),
                   style: context.textTheme.subtitle2!),
-              trailing: Icon(Icons.arrow_forward_ios),
+              trailing: const Icon(Icons.arrow_forward_ios),
               onTap: () {
                 context
                     .read(termsAndConditionProvider.notifier)
                     .fetchTermsAndCondition();
-                context.nextPage(TermsAndConditionScreen());
+                context.nextPage(const TermsAndConditionScreen());
               },
             ),
           ),
-          Divider(
+          const Divider(
             height: 30,
             thickness: 1,
           ),
           Card(
             child: ListTile(
-              trailing: Icon(Icons.logout_outlined),
+              trailing: const Icon(Icons.logout_outlined),
               title: Text(LocaleKeys.sign_out.tr(),
                   style: context.textTheme.subtitle2!),
               onTap: () async {
@@ -122,8 +121,9 @@ class SettingsPage extends StatelessWidget {
                                   .read(userNotifierProvider.notifier)
                                   .logout();
 
-                              await setValue(LOGGED_IN, false);
-                              context.nextAndRemoveUntilPage(BottomNavBar());
+                              await setValue(loggedIn, false);
+                              context
+                                  .nextAndRemoveUntilPage(const BottomNavBar());
                             },
                           ),
                         ],
@@ -133,7 +133,7 @@ class SettingsPage extends StatelessWidget {
             ),
           ),
         ],
-      )).cornerRadius(10).p(10),
+      ).cornerRadius(10).p(10),
     );
   }
 }

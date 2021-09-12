@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:zcart/Theme/styles/colors.dart';
 
+// ignore: use_key_in_widget_constructors
 class ProductLoadingWidget extends StatefulWidget {
   @override
   _ProductLoadingWidgetState createState() => _ProductLoadingWidgetState();
@@ -35,7 +36,7 @@ class _ProductLoadingWidgetState extends State<ProductLoadingWidget> {
                       borderRadius: BorderRadius.circular(10)),
                 )),
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
           Flexible(
@@ -50,14 +51,14 @@ class _ProductLoadingWidgetState extends State<ProductLoadingWidget> {
                       : Colors.grey[100]!,
               enabled: true,
               child: GridView.builder(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 4,
                       childAspectRatio: .85,
                       crossAxisSpacing: 10,
                       mainAxisSpacing: 10),
                   itemCount: 8,
                   shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
+                  physics: const NeverScrollableScrollPhysics(),
                   itemBuilder: (BuildContext ctx, index) {
                     return Container(
                       alignment: Alignment.center,

@@ -1,8 +1,10 @@
 import 'dart:convert';
 
-CategoryItemModel categoryItemListModelFromJson(String str) => CategoryItemModel.fromJson(json.decode(str));
+CategoryItemModel categoryItemListModelFromJson(String str) =>
+    CategoryItemModel.fromJson(json.decode(str));
 
-String categoryItemListModelToJson(CategoryItemModel data) => json.encode(data.toJson());
+String categoryItemListModelToJson(CategoryItemModel data) =>
+    json.encode(data.toJson());
 
 class CategoryItemModel {
   CategoryItemModel({
@@ -15,8 +17,10 @@ class CategoryItemModel {
   Links? links;
   Meta? meta;
 
-  factory CategoryItemModel.fromJson(Map<String, dynamic> json) => CategoryItemModel(
-        data: List<CategoryItem>.from(json["data"].map((x) => CategoryItem.fromJson(x))),
+  factory CategoryItemModel.fromJson(Map<String, dynamic> json) =>
+      CategoryItemModel(
+        data: List<CategoryItem>.from(
+            json["data"].map((x) => CategoryItem.fromJson(x))),
         links: Links.fromJson(json["links"]),
         meta: Meta.fromJson(json["meta"]),
       );
@@ -84,12 +88,16 @@ class CategoryItem {
         currency: json["currency"],
         currencySymbol: json["currency_symbol"],
         price: json["price"],
-        offerPrice: json["offer_price"] == null ? null : json["offer_price"],
-        discount: json["discount"] == null ? null : json["discount"],
-        offerStart: json["offer_start"] == null ? null : DateTime.parse(json["offer_start"]),
-        offerEnd: json["offer_end"] == null ? null : DateTime.parse(json["offer_end"]),
+        offerPrice: json["offer_price"],
+        discount: json["discount"],
+        offerStart: json["offer_start"] == null
+            ? null
+            : DateTime.parse(json["offer_start"]),
+        offerEnd: json["offer_end"] == null
+            ? null
+            : DateTime.parse(json["offer_end"]),
         image: json["image"],
-        rating: json["rating"] == null ? null : json["rating"].toString(),
+        rating: json["rating"]?.toString(),
         stuffPick: json["stuff_pick"],
         freeShipping: json["free_shipping"],
         hotItem: json["hot_item"],
@@ -107,12 +115,13 @@ class CategoryItem {
         "currency": currency,
         "currency_symbol": currencySymbol,
         "price": price,
-        "offer_price": offerPrice == null ? null : offerPrice,
-        "discount": discount == null ? null : discount,
-        "offer_start": offerStart == null ? null : offerStart!.toIso8601String(),
+        "offer_price": offerPrice,
+        "discount": discount,
+        "offer_start":
+            offerStart == null ? null : offerStart!.toIso8601String(),
         "offer_end": offerEnd == null ? null : offerEnd!.toIso8601String(),
         "image": image,
-        "rating": rating == null ? null : rating,
+        "rating": rating,
         "stuff_pick": stuffPick,
         "free_shipping": freeShipping,
         "hot_item": hotItem,

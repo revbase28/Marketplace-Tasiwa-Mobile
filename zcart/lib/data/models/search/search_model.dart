@@ -86,8 +86,8 @@ class SearchedItem {
         currency: json["currency"],
         currencySymbol: json["currency_symbol"],
         price: json["price"],
-        offerPrice: json["offer_price"] == null ? null : json["offer_price"],
-        discount: json["discount"] == null ? null : json["discount"],
+        offerPrice: json["offer_price"],
+        discount: json["discount"],
         offerStart: json["offer_start"] == null
             ? null
             : DateTime.parse(json["offer_start"]),
@@ -95,7 +95,7 @@ class SearchedItem {
             ? null
             : DateTime.parse(json["offer_end"]),
         image: json["image"],
-        rating: json["rating"] == null ? null : json["rating"],
+        rating: json["rating"],
         stuffPick: json["stuff_pick"],
         freeShipping: json["free_shipping"],
         hotItem: json["hot_item"],
@@ -113,12 +113,13 @@ class SearchedItem {
         "currency": currency,
         "currency_symbol": currencySymbol,
         "price": price,
-        "offer_price": offerPrice == null ? null : offerPrice,
-        "discount": discount == null ? null : discount,
-        "offer_start": offerStart == null ? null : offerStart!.toIso8601String(),
+        "offer_price": offerPrice,
+        "discount": discount,
+        "offer_start":
+            offerStart == null ? null : offerStart!.toIso8601String(),
         "offer_end": offerEnd == null ? null : offerEnd!.toIso8601String(),
         "image": image,
-        "rating": rating == null ? null : rating,
+        "rating": rating,
         "stuff_pick": stuffPick,
         "free_shipping": freeShipping,
         "hot_item": hotItem,

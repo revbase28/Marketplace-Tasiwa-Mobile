@@ -2,15 +2,16 @@ import 'package:intl/intl.dart';
 
 DateTime? getDateFormatedFromString(String? date) {
   if (date != null) {
-    DateFormat format = new DateFormat("yyyy-MM-dd");
+    DateFormat format = DateFormat("yyyy-MM-dd");
     DateTime formattedDate = format.parse(date);
     return formattedDate;
-  } else
+  } else {
     return null;
+  }
 }
 
 String getDateFormatedToString(DateTime date) {
-  DateFormat format = new DateFormat("yyyy-MM-dd");
+  DateFormat format = DateFormat("yyyy-MM-dd");
   String formattedDate = format.format(date);
   return formattedDate;
 }

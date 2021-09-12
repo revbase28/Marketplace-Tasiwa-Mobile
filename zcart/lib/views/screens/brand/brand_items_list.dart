@@ -10,6 +10,8 @@ import 'package:zcart/views/shared_widgets/product_loading_widget.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 class BrandItemsListView extends ConsumerWidget {
+  const BrandItemsListView({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final brandItemsListState = watch(brandItemsListNotifierProvider);
@@ -18,24 +20,20 @@ class BrandItemsListView extends ConsumerWidget {
       children: [
         brandItemsListState is BrandItemsLoadedState
             ? Container(
-                padding: EdgeInsets.symmetric(horizontal: 10),
+                padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: ProductDetailsCard(
                   productList: brandItemsListState.brandItemsList.data,
                 ))
             : brandItemsListState is BrandItemsLoadingState ||
                     brandItemsListState is BrandItemsInitialState
-                ? Container(
-                    child: ProductLoadingWidget(),
-                  ).px(10)
+                ? ProductLoadingWidget().px(10)
                 : brandItemsListState is BrandItemsErrorState
-                    ? Container(
-                        child: Center(
-                          child: Column(
-                            children: [
-                              Icon(Icons.info_outline),
-                              Text(LocaleKeys.something_went_wrong.tr()),
-                            ],
-                          ),
+                    ? Center(
+                        child: Column(
+                          children: [
+                            const Icon(Icons.info_outline),
+                            Text(LocaleKeys.something_went_wrong.tr()),
+                          ],
                         ),
                       ).px(10).py(20)
                     : Container(),

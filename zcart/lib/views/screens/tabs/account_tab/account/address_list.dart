@@ -13,6 +13,8 @@ import 'package:zcart/views/shared_widgets/loading_widget.dart';
 import 'add_address_screen.dart';
 
 class AddressList extends StatelessWidget {
+  const AddressList({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,7 +37,7 @@ class AddressList extends StatelessWidget {
                 return addressState is AddressLoadedState
                     ? addressState.addresses == null
                         ? Container()
-                        : addressState.addresses!.length == 0
+                        : addressState.addresses!.isEmpty
                             ? Container()
                             : cartItemDetailsState is CartItemDetailsLoadedState
                                 ? AddressListBuilder(
@@ -43,16 +45,15 @@ class AddressList extends StatelessWidget {
                                 : AddressListBuilder(
                                     addressesList: addressState.addresses)
                     : addressState is AddressLoadingState
-                        ? Container(
-                            child: LoadingWidget(),
-                          ).py(100)
+                        ? LoadingWidget().py(100)
                         : Container();
               },
             ),
             Align(
               alignment: Alignment.bottomRight,
               child: ElevatedButton(
-                      onPressed: () => context.nextPage(AddNewAddressScreen()),
+                      onPressed: () =>
+                          context.nextPage(const AddNewAddressScreen()),
                       child: Text(LocaleKeys.new_address.tr()))
                   .p(10),
             ),

@@ -9,6 +9,8 @@ import 'package:zcart/views/shared_widgets/product_details_card.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 class ProductListScreen extends ConsumerWidget {
+  const ProductListScreen({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final categoryItemState = watch(categoryItemNotifierProvider);
@@ -17,17 +19,17 @@ class ProductListScreen extends ConsumerWidget {
           title: Text(LocaleKeys.product_list.tr()),
         ),
         body: categoryItemState is CategoryItemLoadingState
-            ? Container(
+            ? SizedBox(
                 height: context.screenHeight - 100,
                 child: Center(child: LoadingWidget()))
             : categoryItemState is CategoryItemLoadedState
                 ? categoryItemState.categoryItemList!.isEmpty
-                    ? Container(
+                    ? SizedBox(
                         height: context.screenHeight,
                         child: Center(
                             child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
+                          children: const [
                             Icon(Icons.info_outline),
                             Text("No Items available")
                           ],

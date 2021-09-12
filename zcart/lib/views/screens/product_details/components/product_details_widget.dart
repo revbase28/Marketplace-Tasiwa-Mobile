@@ -1,14 +1,17 @@
 import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:velocity_x/velocity_x.dart';
-import 'package:zcart/riverpod/state/product/product_state.dart';
 import 'package:zcart/Theme/styles/colors.dart';
+import 'package:zcart/riverpod/state/product/product_state.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
-import 'package:easy_localization/easy_localization.dart';
 
 class ProductDetailsWidget extends StatelessWidget {
-  const ProductDetailsWidget({required this.productDetailsState});
+  const ProductDetailsWidget({
+    Key? key,
+    required this.productDetailsState,
+  }) : super(key: key);
 
   final ProductLoadedState productDetailsState;
 
@@ -30,14 +33,14 @@ class ProductDetailsWidget extends StatelessWidget {
                       style: context.textTheme.subtitle2),
               ListView.builder(
                   shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
+                  physics: const NeverScrollableScrollPhysics(),
                   itemCount: productDetailsState
                       .productModel.data!.keyFeatures!.length,
                   itemBuilder: (context, index) {
                     return Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Icon(
+                        const Icon(
                           Icons.circle_rounded,
                           size: 10,
                         ).p(8).pOnly(right: 5),

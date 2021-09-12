@@ -21,8 +21,9 @@ class WishListRepository implements IWishListRepository {
 
     var responseBody =
         await handleResponse(await getRequest(API.wishList, bearerToken: true));
-    if (responseBody.runtimeType == int) if (responseBody > 206)
+    if (responseBody.runtimeType == int && responseBody > 206) {
       throw NetworkException();
+    }
     wishListModel = WishListModel.fromJson(responseBody);
     items.addAll(wishListModel.data!);
     return items;
@@ -30,7 +31,7 @@ class WishListRepository implements IWishListRepository {
 
   @override
   Future<List<WIshListItem>> fetchMoreWishList() async {
-    var responseBody;
+    dynamic responseBody;
     print("Fetch More Wishlist (before): ${items.length}");
 
     if (wishListModel.links!.next != null) {
@@ -51,7 +52,7 @@ class WishListRepository implements IWishListRepository {
 
   @override
   Future<void> addToWishList(String? slug, BuildContext context) async {
-    var responseBody;
+    dynamic responseBody;
     try {
       responseBody = await handleResponse(
           await getRequest(API.addToWishList(slug), bearerToken: true));
@@ -67,34 +68,37 @@ class WishListRepository implements IWishListRepository {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => LoginScreen(
+                builder: (context) => const LoginScreen(
                       needBackButton: true,
                     )));
       }
     } catch (e) {
       throw NetworkException();
     }
-    if (responseBody.runtimeType == int) if (responseBody > 206)
+    if (responseBody.runtimeType == int && responseBody > 206) {
       throw NetworkException();
+    }
   }
 
   @override
   Future<void> removeFromWishList(int? id) async {
-    var responseBody;
+    dynamic responseBody;
     try {
       responseBody = await handleResponse(
           await deleteRequest(API.removeFromWishList(id), bearerToken: true));
-      if (responseBody.runtimeType != int)
+      if (responseBody.runtimeType != int) {
         toast(
           responseBody['message'],
           bgColor: kPrimaryColor,
           textColor: kLightColor,
           gravity: ToastGravity.CENTER,
         );
+      }
     } catch (e) {
       throw NetworkException();
     }
-    if (responseBody.runtimeType == int) if (responseBody > 206)
+    if (responseBody.runtimeType == int && responseBody > 206) {
       throw NetworkException();
+    }
   }
 }

@@ -1,21 +1,24 @@
 import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:velocity_x/velocity_x.dart';
+import 'package:zcart/Theme/styles/colors.dart';
 import 'package:zcart/data/models/vendors/vendor_details_model.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:zcart/views/shared_widgets/shared_widgets.dart';
-import 'package:zcart/Theme/styles/colors.dart';
-import 'package:easy_localization/easy_localization.dart';
+
 import 'components/vendors_activity_card.dart';
 import 'components/vendors_card.dart';
 
 class VendorsAboutUsScreen extends StatelessWidget {
   final VendorDetails? vendorDetails;
   final VoidCallback onPressedContact;
-
-  VendorsAboutUsScreen(
-      {required this.vendorDetails, required this.onPressedContact});
+  const VendorsAboutUsScreen({
+    Key? key,
+    this.vendorDetails,
+    required this.onPressedContact,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +29,7 @@ class VendorsAboutUsScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Container(
+            SizedBox(
               height: context.screenHeight * .30,
               width: context.screenWidth,
               child: Image.network(vendorDetails!.bannerImage!, errorBuilder:
@@ -52,7 +55,7 @@ class VendorsAboutUsScreen extends StatelessWidget {
                     child: IconButton(
                       tooltip: "Contact Shop",
                       onPressed: onPressedContact,
-                      icon: Icon(CupertinoIcons.bubble_left),
+                      icon: const Icon(CupertinoIcons.bubble_left),
                     ),
                   ),
                 )
@@ -67,7 +70,7 @@ class VendorsAboutUsScreen extends StatelessWidget {
               color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
                   ? kDarkCardBgColor
                   : kLightColor,
-              padding: EdgeInsets.all(10),
+              padding: const EdgeInsets.all(10),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,

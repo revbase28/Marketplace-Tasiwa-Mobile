@@ -1,19 +1,20 @@
 import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
-import 'package:flutter/material.dart';
-import 'package:zcart/Theme/styles/colors.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
 import 'package:velocity_x/velocity_x.dart';
+import 'package:zcart/Theme/styles/colors.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 
 class VendorsActivityCard extends StatelessWidget {
   final int activeListCount;
   final String rating;
   final int itemsSold;
-
-  VendorsActivityCard(
-      {required this.activeListCount,
-      required this.rating,
-      required this.itemsSold});
+  const VendorsActivityCard({
+    Key? key,
+    required this.activeListCount,
+    required this.rating,
+    required this.itemsSold,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

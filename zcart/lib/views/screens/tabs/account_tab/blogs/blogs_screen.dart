@@ -12,6 +12,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 class BlogsScreen extends ConsumerWidget {
+  const BlogsScreen({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final blogsState = watch(blogsProvider);
@@ -24,14 +26,14 @@ class BlogsScreen extends ConsumerWidget {
         body: RefreshIndicator(
           onRefresh: () => context.read(blogsProvider.notifier).blogs(),
           child: blogsState is BlogsLoadedState
-              ? blogsState.blogList!.length != 0
+              ? blogsState.blogList!.isNotEmpty
                   ? ListView.builder(
                       itemCount: blogsState.blogList!.length,
                       itemBuilder: (context, index) {
                         return Card(
                           elevation: 0,
                           child: ListTile(
-                            leading: Container(
+                            leading: SizedBox(
                               width: 50,
                               child: Image.network(
                                 blogsState.blogList![index].featuredImage!,
@@ -82,18 +84,18 @@ class BlogsScreen extends ConsumerWidget {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.center,
                                       children: [
-                                        Icon(
+                                        const Icon(
                                           CupertinoIcons.hand_thumbsup,
                                           size: 14,
                                         ),
-                                        SizedBox(
+                                        const SizedBox(
                                           width: 3,
                                         ),
                                         Text(blogsState.blogList![index].likes
                                             .toString()),
                                       ],
                                     ),
-                                    VerticalDivider(
+                                    const VerticalDivider(
                                       width: 5,
                                       thickness: 2,
                                     ),
@@ -101,11 +103,11 @@ class BlogsScreen extends ConsumerWidget {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.center,
                                       children: [
-                                        Icon(
+                                        const Icon(
                                           CupertinoIcons.text_bubble,
                                           size: 14,
                                         ),
-                                        SizedBox(
+                                        const SizedBox(
                                           width: 3,
                                         ),
                                         Text(blogsState
@@ -117,7 +119,7 @@ class BlogsScreen extends ConsumerWidget {
                                       child: Text(
                                         blogsState.blogList![index].updatedAt!,
                                         textAlign: TextAlign.end,
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           fontSize: 12,
                                         ),
                                       ).pSymmetric(v: 5),
@@ -130,18 +132,18 @@ class BlogsScreen extends ConsumerWidget {
                             context
                                 .read(blogProvider.notifier)
                                 .blog(blogsState.blogList![index].slug);
-                            context.nextPage(BlogDetailsScreen());
+                            context.nextPage(const BlogDetailsScreen());
                           }),
                         ).p(10);
                       })
                   : SingleChildScrollView(
-                      child: Container(
+                      child: SizedBox(
                         height: context.screenHeight,
                         width: context.screenWidth,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(Icons.info_outline).pOnly(bottom: 10),
+                            const Icon(Icons.info_outline).pOnly(bottom: 10),
                             Text(LocaleKeys.blogs_not_available.tr()),
                           ],
                         ),

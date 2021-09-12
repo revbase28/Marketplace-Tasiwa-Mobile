@@ -12,6 +12,8 @@ import 'password_update.dart';
 import 'personal_details.dart';
 
 class AccountDetailsScreen extends StatelessWidget {
+  const AccountDetailsScreen({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

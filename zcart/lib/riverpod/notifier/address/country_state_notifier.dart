@@ -8,11 +8,12 @@ import 'package:zcart/translations/locale_keys.g.dart';
 class CountryNotifier extends StateNotifier<CountryState> {
   final IAddressRepository _iAddressRepository;
 
-  CountryNotifier(this._iAddressRepository) : super(CountryInitialState());
+  CountryNotifier(this._iAddressRepository)
+      : super(const CountryInitialState());
 
   Future getCountries() async {
     try {
-      state = CountryLoadingState();
+      state = const CountryLoadingState();
       final countries = await _iAddressRepository.fetchCountries();
       state = CountryLoadedState(countries);
     } on NetworkException {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:zcart/Theme/styles/colors.dart';
 
@@ -57,10 +58,10 @@ TextTheme lightTextTheme(BuildContext context) {
   );
 }
 
-final AppBarTheme appBarTheme = AppBarTheme(
+const AppBarTheme appBarTheme = AppBarTheme(
   color: kPrimaryColor,
   iconTheme: IconThemeData(color: kLightColor),
-  brightness: Brightness.dark,
+  systemOverlayStyle: SystemUiOverlayStyle.dark,
   elevation: 0,
   centerTitle: true,
   foregroundColor: kLightColor,
@@ -82,9 +83,9 @@ ThemeData lightTheme = ThemeData(
     switchTheme: SwitchThemeData(
       overlayColor: MaterialStateProperty.all(kPrimaryColor),
     ),
-    snackBarTheme: SnackBarThemeData(
+    snackBarTheme: const SnackBarThemeData(
         backgroundColor: kDarkColor, actionTextColor: kPrimaryLightTextColor),
-    iconTheme: IconThemeData(
+    iconTheme: const IconThemeData(
       color: kDarkColor,
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
@@ -105,6 +106,6 @@ ThemeData lightTheme = ThemeData(
         buttonColor: _lightPrimaryColor,
         textTheme: ButtonTextTheme.primary),
     unselectedWidgetColor: _lightPrimaryColor,
-    timePickerTheme: TimePickerThemeData(
+    timePickerTheme: const TimePickerThemeData(
       backgroundColor: kPrimaryColor,
     ));

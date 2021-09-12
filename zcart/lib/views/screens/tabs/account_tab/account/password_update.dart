@@ -16,6 +16,8 @@ class PasswordUpdate extends StatelessWidget {
   TextEditingController newPasswordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
 
+  PasswordUpdate({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Container(

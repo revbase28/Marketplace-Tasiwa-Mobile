@@ -6,7 +6,8 @@ class CustomFilePickerField extends StatefulWidget {
   final String? hintText;
   final Function? onTap;
 
-  CustomFilePickerField({this.hintText, this.onTap, this.title});
+  // ignore: use_key_in_widget_constructors
+  const CustomFilePickerField({this.hintText, this.onTap, this.title});
 
   @override
   _CustomFilePickerFieldState createState() => _CustomFilePickerFieldState();
@@ -18,11 +19,11 @@ class _CustomFilePickerFieldState extends State<CustomFilePickerField> {
     return Column(
       children: [
         Container(
-          margin: EdgeInsets.only(top: 0.0, left: 16.0, bottom: 8.0),
+          margin: const EdgeInsets.only(top: 0.0, left: 16.0, bottom: 8.0),
           alignment: Alignment.topLeft,
           child: Text(
             '${widget.title}',
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 12.0,
               color: kPrimaryDarkTextColor,
               fontWeight: FontWeight.bold,
@@ -38,15 +39,16 @@ class _CustomFilePickerFieldState extends State<CustomFilePickerField> {
             height: 50,
             decoration: BoxDecoration(
               border: Border.all(color: kPrimaryColor),
-              borderRadius: BorderRadius.all(Radius.circular(6.0)),
+              borderRadius: const BorderRadius.all(Radius.circular(6.0)),
             ),
-            margin: EdgeInsets.only(left: 16.0, right: 16.0, bottom: 15.0),
-            padding: EdgeInsets.only(left: 16.0, right: 16.0, top: 0.0),
+            margin:
+                const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 15.0),
+            padding: const EdgeInsets.only(left: 16.0, right: 16.0, top: 0.0),
             child: Align(
               alignment: Alignment.centerLeft,
               child: Text(
                 '${widget.hintText}',
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 16.0,
                   color: kPrimaryDarkTextColor,
                   fontWeight: FontWeight.normal,

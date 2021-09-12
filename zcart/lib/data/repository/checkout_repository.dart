@@ -6,15 +6,16 @@ import 'package:zcart/data/network/network_utils.dart';
 class CheckoutRepository implements ICheckoutRepository {
   @override
   Future checkout(cartId, requestBody) async {
-    var responseBody;
+    dynamic responseBody;
     try {
       responseBody = await handleResponse(await postRequest(
         API.checkout(cartId),
         requestBody,
         bearerToken: true,
       ));
-      if (responseBody.runtimeType == int) if (responseBody > 206)
+      if (responseBody.runtimeType == int && responseBody > 206) {
         throw NetworkException();
+      }
     } catch (e) {
       throw NetworkException();
     }
@@ -22,15 +23,16 @@ class CheckoutRepository implements ICheckoutRepository {
 
   @override
   Future guestCheckout(cartId, requestBody) async {
-    var responseBody;
+    dynamic responseBody;
     try {
       responseBody = await handleResponse(await postRequest(
         API.checkout(cartId),
         requestBody,
         bearerToken: false,
       ));
-      if (responseBody.runtimeType == int) if (responseBody > 206)
+      if (responseBody.runtimeType == int && responseBody > 206) {
         throw NetworkException();
+      }
     } catch (e) {
       throw NetworkException();
     }

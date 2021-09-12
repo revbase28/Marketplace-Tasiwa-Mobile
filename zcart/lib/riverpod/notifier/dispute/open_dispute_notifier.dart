@@ -9,7 +9,7 @@ class OpenDisputeNotifier extends StateNotifier<OpenDisputeState> {
   final IDisputeRepository _iDisputeRepository;
 
   OpenDisputeNotifier(this._iDisputeRepository)
-      : super(OpenDisputeInitialState());
+      : super(const OpenDisputeInitialState());
 
   String? disputeType;
   String? orderReceived;
@@ -28,9 +28,9 @@ class OpenDisputeNotifier extends StateNotifier<OpenDisputeState> {
       if (returnGoods != null) "return_goods": returnGoods,
     };
     try {
-      state = OpenDisputeLoadingState();
+      state = const OpenDisputeLoadingState();
       await _iDisputeRepository.openDispute(orderId, requestBody);
-      state = OpenDisputeLoadedState();
+      state = const OpenDisputeLoadedState();
       disputeType = null;
       orderReceived = null;
       productId = null;

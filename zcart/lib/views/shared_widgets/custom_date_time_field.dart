@@ -14,7 +14,7 @@ class CustomDateTimeField extends StatefulWidget {
   final Color color;
   final double widthMultiplier;
   final String? hintText;
-  CustomDateTimeField({
+  const CustomDateTimeField({
     Key? key,
     this.title,
     this.onTextChanged,
@@ -34,7 +34,7 @@ class _CustomDateTimeFieldState extends State<CustomDateTimeField> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 5),
+      margin: const EdgeInsets.symmetric(vertical: 5),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -44,7 +44,7 @@ class _CustomDateTimeFieldState extends State<CustomDateTimeField> {
                   maxLines: 1)
               .paddingBottom(10),
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
             width: MediaQuery.of(context).size.width * widget.widthMultiplier,
             decoration: BoxDecoration(
               color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
@@ -54,14 +54,14 @@ class _CustomDateTimeFieldState extends State<CustomDateTimeField> {
             ),
             child: Theme(
               data: lightTheme.copyWith(
-                colorScheme: ColorScheme.light().copyWith(
+                colorScheme: const ColorScheme.light().copyWith(
                   primary: kPrimaryColor,
                 ),
               ),
               child: DateTimeField(
-                initialValue: widget.initialDate ?? null,
+                initialValue: widget.initialDate,
                 style: context.theme.textTheme.subtitle2,
-                resetIcon: Icon(Icons.clear),
+                resetIcon: const Icon(Icons.clear),
                 decoration: InputDecoration(
                   border: InputBorder.none,
                   hintText: widget.hintText,

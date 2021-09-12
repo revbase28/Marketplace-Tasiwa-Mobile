@@ -12,12 +12,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 class FeaturedBrands extends ConsumerWidget {
+  const FeaturedBrands({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final featuredBrandsState = watch(featuredBrandsNotifierProvider);
 
     return featuredBrandsState is FeaturedBrandsLoadedState
-        ? Container(
+        ? SizedBox(
             height: 150,
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -35,7 +37,7 @@ class FeaturedBrands extends ConsumerWidget {
                     GestureDetector(
                       onTap: () {
                         context.nextReplacementPage(
-                            BottomNavBar(selectedIndex: 2));
+                            const BottomNavBar(selectedIndex: 2));
                       },
                       child: Text(
                         LocaleKeys.view_all.tr(),
@@ -52,18 +54,19 @@ class FeaturedBrands extends ConsumerWidget {
                             ? kDarkCardBgColor
                             : kLightColor,
                     child: GridView.builder(
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 4,
-                            childAspectRatio: 1,
-                            crossAxisSpacing: 10,
-                            mainAxisSpacing: 10),
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 4,
+                                childAspectRatio: 1,
+                                crossAxisSpacing: 10,
+                                mainAxisSpacing: 10),
                         itemCount:
                             featuredBrandsState.featuredBrands!.data.length > 8
                                 ? 8
                                 : featuredBrandsState
                                     .featuredBrands!.data.length,
                         shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
+                        physics: const NeverScrollableScrollPhysics(),
                         itemBuilder: (BuildContext ctx, index) {
                           return Container(
                             alignment: Alignment.center,
@@ -87,11 +90,9 @@ class FeaturedBrands extends ConsumerWidget {
                                       errorBuilder: (BuildContext context,
                                           Object exception,
                                           StackTrace? stackTrace) {
-                                        return Container(
-                                          child: Center(
-                                            child: Icon(
-                                              Icons.image_not_supported,
-                                            ),
+                                        return const Center(
+                                          child: Icon(
+                                            Icons.image_not_supported,
                                           ),
                                         );
                                       },
@@ -99,7 +100,8 @@ class FeaturedBrands extends ConsumerWidget {
                                   ).pOnly(bottom: 10),
                                 ),
                                 Text(
-                                  "${featuredBrandsState.featuredBrands!.data[index].name!}",
+                                  featuredBrandsState
+                                      .featuredBrands!.data[index].name!,
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   textAlign: TextAlign.center,
@@ -116,7 +118,7 @@ class FeaturedBrands extends ConsumerWidget {
                               ],
                             ),
                           ).onInkTap(() async {
-                            context.nextPage(BrandProfileScreen());
+                            context.nextPage(const BrandProfileScreen());
                             await context
                                 .read(brandProfileNotifierProvider.notifier)
                                 .getBrandProfile(featuredBrandsState

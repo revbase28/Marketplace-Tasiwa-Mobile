@@ -8,11 +8,11 @@ import 'package:easy_localization/easy_localization.dart';
 class AllBrandsNotifier extends StateNotifier<BrandsState> {
   final IBrandRepository _iBrandRepository;
 
-  AllBrandsNotifier(this._iBrandRepository) : super(BrandsInitialState());
+  AllBrandsNotifier(this._iBrandRepository) : super(const BrandsInitialState());
 
   Future<void> getAllBrands() async {
     try {
-      state = BrandsLoadingState();
+      state = const BrandsLoadingState();
       final brands = await _iBrandRepository.fetchAllBrands();
       state = BrandsLoadedState(brands);
     } on NetworkException {
@@ -25,11 +25,11 @@ class FeaturedBrandsNotifier extends StateNotifier<FeaturedBrandsState> {
   final IBrandRepository _iBrandRepository;
 
   FeaturedBrandsNotifier(this._iBrandRepository)
-      : super(FeaturedBrandsInitialState());
+      : super(const FeaturedBrandsInitialState());
 
   Future<void> getFeaturedBrands() async {
     try {
-      state = FeaturedBrandsLoadingState();
+      state = const FeaturedBrandsLoadingState();
       final brands = await _iBrandRepository.fetchFeaturedBrands();
       state = FeaturedBrandsLoadedState(brands);
     } on NetworkException {
@@ -42,11 +42,11 @@ class BrandProfileNotifier extends StateNotifier<BrandProfileState> {
   final IBrandRepository _iBrandRepository;
 
   BrandProfileNotifier(this._iBrandRepository)
-      : super(BrandProfileInitialState());
+      : super(const BrandProfileInitialState());
 
   Future<void> getBrandProfile(String? slug) async {
     try {
-      state = BrandProfileLoadingState();
+      state = const BrandProfileLoadingState();
       final brandProfile = await _iBrandRepository.fetchBrandProfile(slug);
       state = BrandProfileLoadedState(brandProfile);
     } on NetworkException {
@@ -59,16 +59,15 @@ class BrandItemsListNotifier extends StateNotifier<BrandItemsState> {
   final IBrandRepository _iBrandRepository;
 
   BrandItemsListNotifier(this._iBrandRepository)
-      : super(BrandItemsInitialState());
+      : super(const BrandItemsInitialState());
 
   Future<void> getBrandItemsList(String? slug) async {
     try {
-      state = BrandItemsInitialState();
+      state = const BrandItemsInitialState();
       final brandItemsList = await _iBrandRepository.fetchBrandItems(slug);
       state = BrandItemsLoadedState(brandItemsList);
     } on NetworkException {
-      state = BrandItemsErrorState(
-          "Couldn't fetch brand items list. Something went wrong!");
+      state = BrandItemsErrorState(LocaleKeys.something_went_wrong.tr());
     }
   }
 }

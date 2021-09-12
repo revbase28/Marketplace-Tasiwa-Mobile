@@ -8,7 +8,8 @@ class CustomButton extends StatelessWidget {
   final Color buttonBGColor;
   final double widthMultiplier;
 
-  CustomButton({
+  // ignore: use_key_in_widget_constructors
+  const CustomButton({
     this.onTap,
     this.buttonText,
     this.buttonBGColor = kPrimaryColor,
@@ -20,17 +21,17 @@ class CustomButton extends StatelessWidget {
     return GestureDetector(
       onTap: onTap as void Function()?,
       child: Container(
-        margin: EdgeInsets.symmetric(vertical: 10),
-        padding: EdgeInsets.symmetric(horizontal: 20),
+        margin: const EdgeInsets.symmetric(vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 20),
         width: MediaQuery.of(context).size.width * widthMultiplier,
         decoration: BoxDecoration(
           color: buttonBGColor,
-          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+          borderRadius: const BorderRadius.all(Radius.circular(10.0)),
         ),
         height: 50.0,
         child: Center(
           child: Text(buttonText ?? "",
-              style: TextStyle(color: kPrimaryLightTextColor)),
+              style: const TextStyle(color: kPrimaryLightTextColor)),
         ),
       ),
     );

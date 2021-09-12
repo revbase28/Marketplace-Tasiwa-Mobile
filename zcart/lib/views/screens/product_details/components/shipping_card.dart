@@ -1,15 +1,17 @@
 import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:velocity_x/velocity_x.dart';
+import 'package:zcart/Theme/styles/colors.dart';
 import 'package:zcart/riverpod/providers/address_provider.dart';
 import 'package:zcart/riverpod/state/product/product_state.dart';
 import 'package:zcart/views/screens/product_details/shipping_address_screen.dart';
-import 'package:zcart/Theme/styles/colors.dart';
-
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ShippingCard extends StatelessWidget {
-  const ShippingCard({required this.productDetailsState});
+  const ShippingCard({
+    Key? key,
+    required this.productDetailsState,
+  }) : super(key: key);
 
   final ProductLoadedState productDetailsState;
 
@@ -24,7 +26,7 @@ class ShippingCard extends StatelessWidget {
         children: [
           ListTile(
             contentPadding: EdgeInsets.zero,
-            leading: Icon(Icons.location_pin, size: 25).pOnly(left: 10),
+            leading: const Icon(Icons.location_pin, size: 25).pOnly(left: 10),
             title: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -44,7 +46,8 @@ class ShippingCard extends StatelessWidget {
                   .productModel.shippingOptions!.first.deliveryTakes!,
               style: context.textTheme.caption,
             ).pOnly(top: 5),
-            trailing: Icon(Icons.arrow_forward_ios, size: 15).pOnly(right: 10),
+            trailing:
+                const Icon(Icons.arrow_forward_ios, size: 15).pOnly(right: 10),
             onTap: () {
               context
                   .read(shippingNotifierProvider.notifier)

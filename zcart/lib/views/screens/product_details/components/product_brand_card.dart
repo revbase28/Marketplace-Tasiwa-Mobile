@@ -1,19 +1,21 @@
 import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:velocity_x/velocity_x.dart';
 import 'package:zcart/Theme/styles/colors.dart';
 import 'package:zcart/riverpod/providers/brand_provider.dart';
 import 'package:zcart/riverpod/state/product/product_state.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:zcart/views/screens/brand/brand_profile.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:velocity_x/velocity_x.dart';
-import 'package:easy_localization/easy_localization.dart';
 
 class ProductBrandCard extends StatelessWidget {
   final ProductLoadedState productDetailsState;
-
-  ProductBrandCard(this.productDetailsState);
+  const ProductBrandCard({
+    Key? key,
+    required this.productDetailsState,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -33,9 +35,9 @@ class ProductBrandCard extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   style: context.textTheme.subtitle2!,
                 ),
-                trailing: Icon(Icons.arrow_forward_ios, size: 15),
+                trailing: const Icon(Icons.arrow_forward_ios, size: 15),
                 onTap: () async {
-                  context.nextPage(BrandProfileScreen());
+                  context.nextPage(const BrandProfileScreen());
                   await context
                       .read(brandProfileNotifierProvider.notifier)
                       .getBrandProfile(productDetailsState

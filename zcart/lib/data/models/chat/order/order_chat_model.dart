@@ -105,7 +105,7 @@ class Customer {
         email: json["email"],
         active: json["active"],
         avatar: json["avatar"],
-        memberSince: json["member_since"] == null ? null : json["member_since"],
+        memberSince: json["member_since"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -114,7 +114,7 @@ class Customer {
         "email": email,
         "active": active,
         "avatar": avatar,
-        "member_since": memberSince == null ? null : memberSince,
+        "member_since": memberSince,
       };
 }
 

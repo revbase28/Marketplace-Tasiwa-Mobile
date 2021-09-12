@@ -8,11 +8,11 @@ import 'package:easy_localization/easy_localization.dart';
 class OffersNotifier extends StateNotifier<OffersState> {
   final IOffersRepository _iOffersRepository;
 
-  OffersNotifier(this._iOffersRepository) : super(OffersInitialState());
+  OffersNotifier(this._iOffersRepository) : super(const OffersInitialState());
 
   Future<void> getOffersFromOtherSellers(String? slug) async {
     try {
-      state = OffersLoadingState();
+      state = const OffersLoadingState();
       final offers = await _iOffersRepository.fetchOffersFromOtherSellers(slug);
       state = OffersLoadedState(offers);
     } on NetworkException {

@@ -10,7 +10,8 @@ class ProductModel {
   Meta? meta;
 
   factory ProductModel.fromJson(Map<String, dynamic> json) => ProductModel(
-        data: List<ProductList>.from(json["data"].map((x) => ProductList.fromJson(x))),
+        data: List<ProductList>.from(
+            json["data"].map((x) => ProductList.fromJson(x))),
         links: json["links"] == null ? null : Links.fromJson(json["links"]),
         meta: json['meta'] == null ? null : Meta.fromJson(json["meta"]),
       );
@@ -78,10 +79,14 @@ class ProductList {
         currency: json["currency"],
         currencySymbol: json["currency_symbol"],
         price: json["price"],
-        offerPrice: json["offer_price"] == null ? null : json["offer_price"],
-        discount: json["discount"] == null ? null : json["discount"],
-        offerStart: json["offer_start"] == null ? null : DateTime.parse(json["offer_start"]),
-        offerEnd: json["offer_end"] == null ? null : DateTime.parse(json["offer_end"]),
+        offerPrice: json["offer_price"],
+        discount: json["discount"],
+        offerStart: json["offer_start"] == null
+            ? null
+            : DateTime.parse(json["offer_start"]),
+        offerEnd: json["offer_end"] == null
+            ? null
+            : DateTime.parse(json["offer_end"]),
         image: json["image"],
         rating: json["rating"],
         stuffPick: json["stuff_pick"],
@@ -101,9 +106,10 @@ class ProductList {
         "currency": currency,
         "currency_symbol": currencySymbol,
         "price": price,
-        "offer_price": offerPrice == null ? null : offerPrice,
-        "discount": discount == null ? null : discount,
-        "offer_start": offerStart == null ? null : offerStart!.toIso8601String(),
+        "offer_price": offerPrice,
+        "discount": discount,
+        "offer_start":
+            offerStart == null ? null : offerStart!.toIso8601String(),
         "offer_end": offerEnd == null ? null : offerEnd!.toIso8601String(),
         "image": image,
         "rating": rating,

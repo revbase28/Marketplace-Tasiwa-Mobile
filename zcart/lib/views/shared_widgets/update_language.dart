@@ -23,8 +23,8 @@ void updateLanguage(BuildContext context) {
                 },
                 leading: Localizations.localeOf(context).languageCode ==
                         locale.languageCode
-                    ? Icon(Icons.radio_button_checked)
-                    : Icon(Icons.radio_button_off),
+                    ? const Icon(Icons.radio_button_checked)
+                    : const Icon(Icons.radio_button_off),
                 title: Text(isoLangs[locale.languageCode]!["nativeName"]!
                     .split(",")
                     .first),

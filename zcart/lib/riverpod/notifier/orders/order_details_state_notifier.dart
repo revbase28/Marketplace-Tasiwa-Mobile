@@ -8,11 +8,11 @@ import 'package:zcart/translations/locale_keys.g.dart';
 class OrderNotifier extends StateNotifier<OrderState> {
   final IOrderRepository _iOrderRepository;
 
-  OrderNotifier(this._iOrderRepository) : super(OrderInitialState());
+  OrderNotifier(this._iOrderRepository) : super(const OrderInitialState());
 
   Future getOrderDetails(orderId) async {
     try {
-      state = OrderLoadingState();
+      state = const OrderLoadingState();
       final orderDetails = await _iOrderRepository.order(orderId);
       state = OrderLoadedState(orderDetails);
     } on NetworkException {

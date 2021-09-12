@@ -31,6 +31,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:zcart/views/screens/tabs/account_tab/settings/settings_page.dart';
 
 class AccountTab extends StatelessWidget {
+  const AccountTab({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,9 +41,9 @@ class AccountTab extends StatelessWidget {
           actions: [
             IconButton(
               onPressed: () {
-                context.nextPage(SettingsPage());
+                context.nextPage(const SettingsPage());
               },
-              icon: Icon(Icons.settings),
+              icon: const Icon(Icons.settings),
               tooltip: "Settings",
             )
           ],
@@ -51,11 +53,11 @@ class AccountTab extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                AccountDashboard(),
-                UserActivityCard(),
-                ActionCard(),
-                RecentlyViewed().p(10),
-                FeaturedBrands().p(10),
+                const AccountDashboard(),
+                const UserActivityCard(),
+                const ActionCard(),
+                const RecentlyViewed().p(10),
+                const FeaturedBrands().p(10),
 
                 /// Recently viewed
               ],
@@ -66,6 +68,8 @@ class AccountTab extends StatelessWidget {
 }
 
 class AccountDashboard extends StatelessWidget {
+  const AccountDashboard({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Consumer(builder: (context, watch, _) {
@@ -73,7 +77,7 @@ class AccountDashboard extends StatelessWidget {
 
       return userState is UserLoadedState
           ? Container(
-              padding: EdgeInsets.all(16),
+              padding: const EdgeInsets.all(16),
               color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
                   ? kDarkCardBgColor
                   : kLightColor,
@@ -87,7 +91,7 @@ class AccountDashboard extends StatelessWidget {
                         backgroundColor: kPrimaryColor,
                         backgroundImage: NetworkImage(userState.user!.avatar!),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 16,
                       ),
                       Expanded(
@@ -110,7 +114,7 @@ class AccountDashboard extends StatelessWidget {
                       )
                     ],
                   ).pOnly(bottom: 10).px(10),
-                  Divider(
+                  const Divider(
                     height: 16,
                     thickness: 1,
                   ),
@@ -131,7 +135,7 @@ class AccountDashboard extends StatelessWidget {
                     ],
                   ).p(10),
                   userState.user!.dob != null || userState.user!.sex != null
-                      ? Divider(
+                      ? const Divider(
                           height: 16,
                           thickness: 1,
                         )
@@ -190,6 +194,8 @@ class AccountDashboard extends StatelessWidget {
 }
 
 class UserActivityCard extends StatelessWidget {
+  const UserActivityCard({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -197,8 +203,8 @@ class UserActivityCard extends StatelessWidget {
         Expanded(
           flex: 1,
           child: Container(
-            margin: EdgeInsets.all(4),
-            padding: EdgeInsets.all(8),
+            margin: const EdgeInsets.all(4),
+            padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               color: kLightCardBgColor,
@@ -224,15 +230,15 @@ class UserActivityCard extends StatelessWidget {
                 )
               ],
             ).onInkTap(() {
-              context.nextPage(MyOrderScreen());
+              context.nextPage(const MyOrderScreen());
             }),
           ),
         ),
         Expanded(
           flex: 1,
           child: Container(
-            margin: EdgeInsets.all(4),
-            padding: EdgeInsets.all(8),
+            margin: const EdgeInsets.all(4),
+            padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               color: kLightCardBgColor,
@@ -259,15 +265,15 @@ class UserActivityCard extends StatelessWidget {
                 ),
               ],
             ).onInkTap(() {
-              context.nextPage(MyCouponsScreen());
+              context.nextPage(const MyCouponsScreen());
             }),
           ),
         ),
         Expanded(
           flex: 1,
           child: Container(
-            margin: EdgeInsets.all(4),
-            padding: EdgeInsets.all(8),
+            margin: const EdgeInsets.all(4),
+            padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               color: kLightCardBgColor,
@@ -294,15 +300,15 @@ class UserActivityCard extends StatelessWidget {
                 )
               ],
             ).onInkTap(() {
-              context.nextPage(DisputeScreen());
+              context.nextPage(const DisputeScreen());
             }),
           ),
         ),
         Expanded(
           flex: 1,
           child: Container(
-            margin: EdgeInsets.all(4),
-            padding: EdgeInsets.all(8),
+            margin: const EdgeInsets.all(4),
+            padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               color: kLightCardBgColor,
@@ -329,7 +335,7 @@ class UserActivityCard extends StatelessWidget {
                 )
               ],
             ).onInkTap(() {
-              context.nextReplacementPage(BottomNavBar(selectedIndex: 3));
+              context.nextReplacementPage(const BottomNavBar(selectedIndex: 3));
             }),
           ),
         ),
@@ -339,13 +345,15 @@ class UserActivityCard extends StatelessWidget {
 }
 
 class ActionCard extends StatelessWidget {
+  const ActionCard({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Container(
         color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
             ? kDarkCardBgColor
             : kLightColor,
-        padding: EdgeInsets.symmetric(vertical: 20),
+        padding: const EdgeInsets.symmetric(vertical: 20),
         child: Row(
           children: [
             Expanded(
@@ -353,7 +361,7 @@ class ActionCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Icon(
+                  const Icon(
                     CupertinoIcons.bubble_left_bubble_right,
                   ).pOnly(bottom: 10),
                   Text(
@@ -364,7 +372,7 @@ class ActionCard extends StatelessWidget {
                 ],
               ).onInkTap(() {
                 context.read(conversationProvider.notifier).conversation();
-                context.nextPage(MessagesScreen());
+                context.nextPage(const MessagesScreen());
               }),
             ),
             Expanded(
@@ -372,7 +380,7 @@ class ActionCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Icon(CupertinoIcons.location).pOnly(bottom: 10),
+                  const Icon(CupertinoIcons.location).pOnly(bottom: 10),
                   Text(
                     LocaleKeys.addresses.tr(),
                     style: context.textTheme.caption!
@@ -382,7 +390,7 @@ class ActionCard extends StatelessWidget {
               ).onInkTap(() {
                 context.read(countryNotifierProvider.notifier).getCountries();
                 context.read(addressNotifierProvider.notifier).fetchAddress();
-                context.nextPage(AddressList());
+                context.nextPage(const AddressList());
               }),
             ),
             Expanded(
@@ -390,7 +398,7 @@ class ActionCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Icon(
+                  const Icon(
                     CupertinoIcons.person,
                   ).pOnly(bottom: 10),
                   Text(
@@ -401,7 +409,7 @@ class ActionCard extends StatelessWidget {
                 ],
               ).onInkTap(() {
                 context.read(userNotifierProvider.notifier).getUserInfo();
-                context.nextPage(AccountDetailsScreen());
+                context.nextPage(const AccountDetailsScreen());
               }),
             ),
             Expanded(
@@ -409,7 +417,7 @@ class ActionCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Icon(
+                  const Icon(
                     CupertinoIcons.doc_append,
                   ).pOnly(bottom: 10),
                   Text(
@@ -420,7 +428,7 @@ class ActionCard extends StatelessWidget {
                 ],
               ).onInkTap(() {
                 context.read(blogsProvider.notifier).blogs();
-                context.nextPage(BlogsScreen());
+                context.nextPage(const BlogsScreen());
               }),
             ),
           ],

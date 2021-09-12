@@ -17,39 +17,39 @@ final blogProvider =
 
 /// Blog list
 class BlogsRepository extends StateNotifier<BlogsState> {
-  BlogsRepository() : super(BlogsInitialState());
+  BlogsRepository() : super(const BlogsInitialState());
 
   Future blogs() async {
-    state = BlogsLoadingState();
-    print(state);
-    var responseBody;
+    state = const BlogsLoadingState();
+
+    dynamic responseBody;
     try {
       responseBody = await handleResponse(await getRequest(API.blogs));
       if (responseBody is int) if (responseBody > 206) throw NetworkException();
       BlogsModel blogsModel = BlogsModel.fromJson(responseBody);
-      print(state);
+
       state = BlogsLoadedState(blogsModel.data);
     } on NetworkException {
-      state = BlogsErrorState("Failed to fetch coupon data!");
+      state = const BlogsErrorState("Failed to fetch coupon data!");
     }
   }
 }
 
 /// Blog details
 class BlogRepository extends StateNotifier<BlogState> {
-  BlogRepository() : super(BlogInitialState());
+  BlogRepository() : super(const BlogInitialState());
 
   Future blog(slug) async {
-    state = BlogLoadingState();
-    var responseBody;
+    state = const BlogLoadingState();
+    dynamic responseBody;
     try {
       responseBody = await handleResponse(await getRequest(API.blog(slug)));
       if (responseBody is int) if (responseBody > 206) throw NetworkException();
       BlogModel blogModel = BlogModel.fromJson(responseBody);
-      print(state);
+
       state = BlogLoadedState(blogModel.data);
     } on NetworkException {
-      state = BlogErrorState("Failed to fetch coupon data!");
+      state = const BlogErrorState("Failed to fetch coupon data!");
     }
   }
 }
