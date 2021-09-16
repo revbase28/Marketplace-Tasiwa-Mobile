@@ -47,36 +47,40 @@ class BrandsTab extends ConsumerWidget {
                         .getBrandItemsList(brand.slug);
                   },
                   child: Card(
-                    elevation: 0,
+                    elevation: 5,
+                    shadowColor: kDarkColor.withOpacity(0.38),
                     color:
                         EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
                             ? kDarkCardBgColor
                             : kLightColor,
                     child: GridTile(
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           Expanded(
-                              child: Image.network(
-                            brand.image!,
-                            fit: BoxFit.fitWidth,
-                            loadingBuilder: (BuildContext context, Widget child,
-                                ImageChunkEvent? loadingProgress) {
-                              if (loadingProgress == null) {
-                                return child;
-                              } else {
-                                return const Center(child: Icon(Icons.image));
-                              }
-                            },
-                            errorBuilder: (BuildContext context,
-                                Object exception, StackTrace? stackTrace) {
-                              return const Center(
-                                child: Icon(
-                                  Icons.image_not_supported,
-                                  color: kDarkColor,
-                                ),
-                              );
-                            },
+                              child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Image.network(
+                              brand.image!,
+                              loadingBuilder: (BuildContext context,
+                                  Widget child,
+                                  ImageChunkEvent? loadingProgress) {
+                                if (loadingProgress == null) {
+                                  return child;
+                                } else {
+                                  return const Center(child: Icon(Icons.image));
+                                }
+                              },
+                              errorBuilder: (BuildContext context,
+                                  Object exception, StackTrace? stackTrace) {
+                                return const Center(
+                                  child: Icon(
+                                    Icons.image_not_supported,
+                                    color: kDarkColor,
+                                  ),
+                                );
+                              },
+                            ),
                           )),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,

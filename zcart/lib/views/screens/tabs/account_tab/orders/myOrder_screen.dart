@@ -36,45 +36,40 @@ class MyOrderScreen extends ConsumerWidget {
       ),
       body: SafeArea(
         child: ordersState is OrdersLoadedState
-            ? RefreshIndicator(
-                onRefresh: () => context
-                    .read(ordersProvider.notifier)
-                    .orders(ignoreLoadingState: true),
-                child: ordersState.orders!.isEmpty
-                    ? Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Icon(Icons.info_outline),
-                            Text(LocaleKeys.no_item_found.tr()),
-                            TextButton(
-                                onPressed: () {
-                                  context.nextReplacementPage(
-                                      const BottomNavBar(selectedIndex: 0));
-                                },
-                                child: Text(LocaleKeys.go_shopping.tr())),
-                          ],
-                        ),
-                      )
-                    : ProviderListener<ScrollState>(
-                        onChange: (context, state) {
-                          if (state is ScrollReachedBottomState) {
-                            context
-                                .read(ordersProvider.notifier)
-                                .moreOrders(ignoreLoadingState: true);
-                          }
-                        },
-                        provider: orderScrollNotifierProvider,
-                        child: ListView.builder(
-                            controller: scrollControllerProvider.controller,
-                            itemCount: ordersState.orders!.length,
-                            itemBuilder: (context, orderIndex) {
-                              return OrderCard(
-                                  orderListState: ordersState,
-                                  orderIndex: orderIndex);
-                            }),
-                      ),
-              )
+            ? ordersState.orders!.isEmpty
+                ? Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(Icons.info_outline),
+                        Text(LocaleKeys.no_item_found.tr()),
+                        TextButton(
+                            onPressed: () {
+                              context.nextReplacementPage(
+                                  const BottomNavBar(selectedIndex: 0));
+                            },
+                            child: Text(LocaleKeys.go_shopping.tr())),
+                      ],
+                    ),
+                  )
+                : ProviderListener<ScrollState>(
+                    onChange: (context, state) {
+                      if (state is ScrollReachedBottomState) {
+                        context
+                            .read(ordersProvider.notifier)
+                            .moreOrders(ignoreLoadingState: true);
+                      }
+                    },
+                    provider: orderScrollNotifierProvider,
+                    child: ListView.builder(
+                        controller: scrollControllerProvider.controller,
+                        itemCount: ordersState.orders!.length,
+                        itemBuilder: (context, orderIndex) {
+                          return OrderCard(
+                              orderListState: ordersState,
+                              orderIndex: orderIndex);
+                        }),
+                  )
             : ordersState is OrdersErrorState
                 ? ErrorMessageWidget(ordersState.message)
                 : Container(),

@@ -18,9 +18,9 @@ class OrdersNotifier extends StateNotifier<OrdersState> {
       } else {
         toast(LocaleKeys.please_wait.tr());
       }
-      final orderList = await _iOrderRepository.orders();
-      final orderCount = _iOrderRepository.orderCount();
-      state = OrdersLoadedState(orderList, totalOrder: orderCount);
+      final _orderList = await _iOrderRepository.orders();
+      final _orderCount = _iOrderRepository.orderCount();
+      state = OrdersLoadedState(_orderList, totalOrder: _orderCount);
     } on NetworkException {
       state = OrdersErrorState(LocaleKeys.something_went_wrong.tr());
     }
@@ -33,8 +33,11 @@ class OrdersNotifier extends StateNotifier<OrdersState> {
       } else {
         toast(LocaleKeys.please_wait.tr());
       }
-      final orderList = await _iOrderRepository.moreOrders();
-      state = OrdersLoadedState(orderList);
+      final _orderList = await _iOrderRepository.moreOrders();
+
+      final _orderCount = _iOrderRepository.orderCount();
+
+      state = OrdersLoadedState(_orderList, totalOrder: _orderCount);
     } on NetworkException {
       state = OrdersErrorState(LocaleKeys.something_went_wrong.tr());
     }

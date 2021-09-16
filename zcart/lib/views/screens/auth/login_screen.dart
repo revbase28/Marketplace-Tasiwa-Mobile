@@ -56,7 +56,9 @@ class _LoginScreenState extends State<LoginScreen> {
           context.read(wishListNotifierProvider.notifier).getWishList();
           context.read(disputesProvider.notifier).getDisputes();
           context.read(couponsProvider.notifier).coupons();
-          context.nextAndRemoveUntilPage(const BottomNavBar(selectedIndex: 0));
+          //  setState(() {});
+          // context.nextAndRemoveUntilPage(const BottomNavBar(selectedIndex: 0));
+          // context.pop();
         }
         if (state is UserErrorState) {
           toast(state.message, bgColor: kPrimaryColor);

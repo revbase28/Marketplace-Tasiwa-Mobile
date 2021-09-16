@@ -3,127 +3,139 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zcart/riverpod/state/scroll_state.dart';
 
 class RandomItemScrollNotifier extends StateNotifier<ScrollState> {
-  RandomItemScrollNotifier() : super(const ScrollInitialState());
+  // ignore: prefer_const_constructors
+  RandomItemScrollNotifier() : super(ScrollInitialState());
 
   final _scrollController = ScrollController();
 
-  get controller {
-    _scrollController.addListener(scrollListener);
+  ScrollController get controller {
+    _scrollController.addListener(_scrollListener);
     return _scrollController;
   }
 
   get scrollNotifierState => state;
 
-  scrollListener() {
+  _scrollListener() {
     if (_scrollController.offset >=
             _scrollController.position.maxScrollExtent &&
         !_scrollController.position.outOfRange) {
-      state = const ScrollReachedBottomState();
+      // ignore: prefer_const_constructors
+      state = ScrollReachedBottomState();
     }
   }
 }
 
 class VendorItemScrollNotifier extends StateNotifier<ScrollState> {
-  VendorItemScrollNotifier() : super(const ScrollInitialState());
+  // ignore: prefer_const_constructors
+  VendorItemScrollNotifier() : super(ScrollInitialState());
 
   final _scrollController = ScrollController();
 
-  get controller {
-    _scrollController.addListener(scrollListener);
+  ScrollController get controller {
+    _scrollController.addListener(_scrollListener);
     return _scrollController;
   }
 
   get scrollNotifierState => state;
 
-  scrollListener() {
+  _scrollListener() {
     if (_scrollController.offset >=
             _scrollController.position.maxScrollExtent &&
         !_scrollController.position.outOfRange) {
-      state = const ScrollReachedBottomState();
+      // ignore: prefer_const_constructors
+      state = ScrollReachedBottomState();
     }
   }
 }
 
 class CategoryDetailsScrollNotifier extends StateNotifier<ScrollState> {
-  CategoryDetailsScrollNotifier() : super(const ScrollInitialState());
+  // ignore: prefer_const_constructors
+  CategoryDetailsScrollNotifier() : super(ScrollInitialState());
 
   final _scrollController = ScrollController();
 
-  get controller {
-    _scrollController.addListener(scrollListener);
+  ScrollController get controller {
+    _scrollController.addListener(_scrollListener);
     return _scrollController;
   }
 
   get scrollNotifierState => state;
 
-  scrollListener() {
+  _scrollListener() {
     if (_scrollController.offset >=
             _scrollController.position.maxScrollExtent &&
         !_scrollController.position.outOfRange) {
-      state = const ScrollReachedBottomState();
+      // ignore: prefer_const_constructors
+      state = ScrollReachedBottomState();
     }
   }
 }
 
 class DisputesScrollNotifier extends StateNotifier<ScrollState> {
-  DisputesScrollNotifier() : super(const ScrollInitialState());
+  // ignore: prefer_const_constructors
+  DisputesScrollNotifier() : super(ScrollInitialState());
 
   final _scrollController = ScrollController();
 
-  get controller {
-    _scrollController.addListener(scrollListener);
+  ScrollController get controller {
+    _scrollController.addListener(_scrollListener);
     return _scrollController;
   }
 
   get scrollNotifierState => state;
 
-  scrollListener() {
+  _scrollListener() {
     if (_scrollController.offset >=
             _scrollController.position.maxScrollExtent &&
         !_scrollController.position.outOfRange) {
-      state = const ScrollReachedBottomState();
+      // ignore: prefer_const_constructors
+      state = ScrollReachedBottomState();
     }
   }
 }
 
 class WishListScrollNotifier extends StateNotifier<ScrollState> {
-  WishListScrollNotifier() : super(const ScrollInitialState());
+  // ignore: prefer_const_constructors
+  WishListScrollNotifier() : super(ScrollInitialState());
 
   final _scrollController = ScrollController();
 
-  get controller {
-    _scrollController.addListener(scrollListener);
+  ScrollController get controller {
+    _scrollController.addListener(_scrollListener);
     return _scrollController;
   }
 
   get scrollNotifierState => state;
 
-  scrollListener() {
+  _scrollListener() {
     if (_scrollController.offset >=
             _scrollController.position.maxScrollExtent &&
         !_scrollController.position.outOfRange) {
-      state = const ScrollReachedBottomState();
+      // ignore: prefer_const_constructors
+      state = ScrollReachedBottomState();
     }
   }
 }
 
 class OrderScrollNotifier extends StateNotifier<ScrollState> {
-  OrderScrollNotifier() : super(const ScrollInitialState());
+  // ignore: prefer_const_constructors
+  OrderScrollNotifier() : super(ScrollInitialState());
 
   final _scrollController = ScrollController();
 
-  get controller {
-    _scrollController.addListener(scrollListener);
+  ScrollController get controller {
+    _scrollController.addListener(_scrollListener);
     return _scrollController;
   }
 
   get scrollNotifierState => state;
 
-  scrollListener() {
+  _scrollListener() {
     if (_scrollController.offset >=
             _scrollController.position.maxScrollExtent &&
         !_scrollController.position.outOfRange) {
-      state = const ScrollReachedBottomState();
+      // ignore: prefer_const_constructors
+      state = ScrollReachedBottomState();
     }
   }
 }

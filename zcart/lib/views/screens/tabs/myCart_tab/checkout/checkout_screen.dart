@@ -33,7 +33,7 @@ class CheckoutScreen extends StatefulWidget {
 
 class _CheckoutScreenState extends State<CheckoutScreen> {
   int _currentStep = 0;
-  StepperType stepperType = StepperType.vertical;
+  final StepperType _stepperType = StepperType.vertical;
 
   //Conditions
   int? _selectedAddressIndex;
@@ -42,8 +42,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   int? _selectedPaymentIndex;
 
   /// Coupon
-  bool showApplyButton = false;
-  TextEditingController couponController = TextEditingController();
+  bool _showApplyButton = false;
+  final TextEditingController _couponController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -85,8 +85,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                             primary: kPrimaryColor, secondary: kAccentColor),
                       ),
                       child: Stepper(
-                        type: StepperType.vertical,
-                        physics: const ScrollPhysics(),
+                        type: _stepperType,
+                        physics: const BouncingScrollPhysics(),
                         currentStep: _currentStep,
                         onStepTapped: (step) => tapped(step),
                         onStepContinue: continued,
@@ -271,17 +271,17 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     color: kLightCardBgColor,
                     title: LocaleKeys.apply_coupon.tr(),
                     hintText: LocaleKeys.enter_coupon_code.tr(),
-                    controller: couponController,
+                    controller: _couponController,
                     onChanged: (value) {
-                      if (!showApplyButton) {
+                      if (!_showApplyButton) {
                         setState(() {
-                          showApplyButton = true;
+                          _showApplyButton = true;
                         });
                       }
                     },
                   ),
                   Visibility(
-                    visible: showApplyButton,
+                    visible: _showApplyButton,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
@@ -291,7 +291,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                 .read(applyCouponProvider.notifier)
                                 .applyCoupon(
                                     cartItemDetailsState.cartItemDetails!.id,
-                                    couponController.text)
+                                    _couponController.text)
                                 .then((value) => context
                                     .read(cartItemDetailsNotifierProvider
                                         .notifier)

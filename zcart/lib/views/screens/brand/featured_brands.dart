@@ -71,6 +71,7 @@ class FeaturedBrands extends ConsumerWidget {
                           return Container(
                             alignment: Alignment.center,
                             child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
                                 Expanded(
                                   child: Container(
@@ -86,7 +87,16 @@ class FeaturedBrands extends ConsumerWidget {
                                     child: Image.network(
                                       featuredBrandsState
                                           .featuredBrands!.data[index].image!,
-                                      fit: BoxFit.fitWidth,
+                                      fit: BoxFit.contain,
+                                      loadingBuilder:
+                                          (context, child, loadingProgress) {
+                                        if (loadingProgress == null) {
+                                          return child;
+                                        } else {
+                                          return const Center(
+                                              child: Icon(Icons.image));
+                                        }
+                                      },
                                       errorBuilder: (BuildContext context,
                                           Object exception,
                                           StackTrace? stackTrace) {
@@ -96,7 +106,7 @@ class FeaturedBrands extends ConsumerWidget {
                                           ),
                                         );
                                       },
-                                    ).p(8),
+                                    ),
                                   ).pOnly(bottom: 10),
                                 ),
                                 Text(
