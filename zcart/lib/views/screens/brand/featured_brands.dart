@@ -75,6 +75,7 @@ class FeaturedBrands extends ConsumerWidget {
                               children: [
                                 Expanded(
                                   child: Container(
+                                    padding: const EdgeInsets.all(8),
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(5),
                                       border: Border.all(

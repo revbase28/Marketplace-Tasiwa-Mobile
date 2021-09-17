@@ -56,9 +56,8 @@ class _LoginScreenState extends State<LoginScreen> {
           context.read(wishListNotifierProvider.notifier).getWishList();
           context.read(disputesProvider.notifier).getDisputes();
           context.read(couponsProvider.notifier).coupons();
-          //  setState(() {});
-          // context.nextAndRemoveUntilPage(const BottomNavBar(selectedIndex: 0));
-          // context.pop();
+
+          context.nextAndRemoveUntilPage(const BottomNavBar(selectedIndex: 0));
         }
         if (state is UserErrorState) {
           toast(state.message, bgColor: kPrimaryColor);
@@ -153,6 +152,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     onPressed: () async {
                                       final GoogleSignInAccount? _googleUser =
                                           await GoogleSignIn().signIn();
+
                                       if (_googleUser != null) {
                                         final GoogleSignInAuthentication
                                             _googleAuth =
