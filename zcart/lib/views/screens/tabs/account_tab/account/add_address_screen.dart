@@ -259,10 +259,8 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
                                             contactPersonController.text,
                                         contactNumber:
                                             contactNumberController.text,
-                                        countryId: selectedCountryID == null
-                                            ? 4.toString()
-                                            : selectedCountryID.toString(),
-                                        stateId: selectedStateID.toString(),
+                                        countryId: selectedCountryID ?? 4,
+                                        stateId: selectedStateID,
                                         cityId: cityController.text,
                                         addressLine1:
                                             addressLine1Controller.text,

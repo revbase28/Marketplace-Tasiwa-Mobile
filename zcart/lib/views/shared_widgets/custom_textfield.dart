@@ -71,6 +71,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
               borderRadius: BorderRadius.circular(10),
             ),
             child: TextFormField(
+              autovalidateMode: AutovalidateMode.onUserInteraction,
               controller: widget.controller,
               minLines: widget.minLines,
               maxLines: widget.maxLines,

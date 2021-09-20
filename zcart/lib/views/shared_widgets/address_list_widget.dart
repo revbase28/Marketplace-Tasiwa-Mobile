@@ -43,45 +43,53 @@ class _AddressListBuilderState extends State<AddressListBuilder> {
                 onTap: () {
                   if (widget.cartItem != null) {
                     if (accessAllowed) {
-                      //TODO: Add Address For Guest TO Order - Country is not working
-                      //TODO: Create Addresses for guests
                       widget.onPressedCheckBox!(index);
                       context
                           .read(cartItemDetailsNotifierProvider.notifier)
                           .updateCart(widget.cartItem!.id,
                               countryId:
                                   widget.addressesList![index].country!.id);
-                      context
-                          .read(checkoutNotifierProvider.notifier)
-                          .addressId = widget.addressesList![index].id;
-                      context
-                              .read(checkoutNotifierProvider.notifier)
-                              .shippingAddress =
-                          widget.addressesList![index].addressLine1! +
-                              ',' +
-                              widget.addressesList![index].addressLine2! +
-                              ',' +
-                              widget.addressesList![index].city!;
+
+                      context.read(checkoutNotifierProvider.notifier).shipTo =
+                          widget.addressesList![index].id;
                     } else {
-                      //TODO: Need to Solve Guest Address problem
                       widget.onPressedCheckBox!(index);
                       context
                           .read(cartItemDetailsNotifierProvider.notifier)
                           .updateCart(
                             widget.cartItem!.id,
+                            countryId: widget.addressesList![index].countryId,
                           );
 
                       context
                               .read(checkoutNotifierProvider.notifier)
-                              .shippingAddress =
-                          widget.addressesList![index].addressLine1! +
-                              ',' +
-                              widget.addressesList![index].addressLine2! +
-                              ',' +
-                              widget.addressesList![index].city! +
-                              ',' +
-                              widget.addressesList![index].zipCode!;
+                              .addressTitle =
+                          widget.addressesList![index].addressTitle;
+                      context
+                              .read(checkoutNotifierProvider.notifier)
+                              .addressLine1 =
+                          widget.addressesList![index].addressLine1;
+
+                      context
+                              .read(checkoutNotifierProvider.notifier)
+                              .addressLine2 =
+                          widget.addressesList![index].addressLine2;
+
+                      context
+                          .read(checkoutNotifierProvider.notifier)
+                          .countryId = widget.addressesList![index].countryId;
+
+                      context.read(checkoutNotifierProvider.notifier).stateId =
+                          widget.addressesList![index].stateId;
+
+                      context.read(checkoutNotifierProvider.notifier).zipCode =
+                          widget.addressesList![index].zipCode;
+                      context.read(checkoutNotifierProvider.notifier).phone =
+                          widget.addressesList![index].phone;
                     }
+
+                    print(selectedIndex);
+                    print(index);
                     setState(() {
                       selectedIndex = index;
                     });

@@ -9,7 +9,7 @@ class API {
   static const live = 'https://zcart.incevio.com/api/';
 
   //Point the API to the base URL
-  static const base = live;
+  static const base = test;
 
   // Stripe Publishable Key
   static const String stripePublishableKey =

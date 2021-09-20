@@ -13,7 +13,7 @@ const noInternetMsg = 'You are not connected to Internet';
 const errorMsg = 'Please try again later.';
 
 /// Variables
-var accessAllowed = false;
+bool accessAllowed = false;
 
 bool isSuccessful(int code) {
   return code >= 200 && code <= 206;

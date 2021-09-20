@@ -1,9 +1,3 @@
-import 'dart:convert';
-
-Checkout checkoutFromJson(String str) => Checkout.fromJson(json.decode(str));
-
-String checkoutToJson(Checkout data) => json.encode(data.toJson());
-
 class Checkout {
   Checkout({
     this.addressId,

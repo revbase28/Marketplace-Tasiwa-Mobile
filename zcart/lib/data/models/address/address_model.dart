@@ -24,6 +24,8 @@ class Addresses {
     this.addressLine2,
     this.city,
     this.zipCode,
+    this.countryId,
+    this.stateId,
     this.country,
     this.state,
     this.phone,
@@ -36,6 +38,8 @@ class Addresses {
   String? addressLine2;
   String? city;
   String? zipCode;
+  int? countryId;
+  int? stateId;
   Country? country;
   CountryState? state;
   String? phone;
@@ -48,6 +52,8 @@ class Addresses {
         addressLine2: json["address_line_2"],
         city: json["city"],
         zipCode: json["zip_code"],
+        countryId: json["country_id"],
+        stateId: json["state_id"],
         country:
             json["country"] != null ? Country.fromJson(json["country"]) : null,
         state:
@@ -63,6 +69,8 @@ class Addresses {
         "address_line_2": addressLine2,
         "city": city,
         "zip_code": zipCode,
+        "country_id": countryId,
+        "state_id": stateId,
         "country": country!.toJson(),
         "state": state!.toJson(),
         "phone": phone,

@@ -44,6 +44,15 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   /// Coupon
   bool _showApplyButton = false;
   final TextEditingController _couponController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passWordController = TextEditingController();
+  final TextEditingController _confirmPassWordController =
+      TextEditingController();
+
+  final _formKey = GlobalKey<FormState>();
+
+  bool _createNewAccount = false;
+  bool _agreedToTerms = false;
 
   @override
   Widget build(BuildContext context) {
@@ -51,8 +60,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       provider: checkoutNotifierProvider,
       onChange: (context, state) {
         if (state is CheckoutLoadedState) {
-          toast(LocaleKeys.order_place_confirmation.tr(),
-              bgColor: kPrimaryColor, gravity: ToastGravity.CENTER);
+          toast(LocaleKeys.order_place_confirmation.tr());
           context.pop();
         }
       },
@@ -267,6 +275,121 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       ),
                     ],
                   ).pOnly(bottom: 10),
+                  accessAllowed
+                      ? const SizedBox()
+                      : Column(children: [
+                          CustomTextField(
+                            color: kLightCardBgColor,
+                            title: LocaleKeys.your_email.tr(),
+                            hintText: LocaleKeys.your_email.tr(),
+                            controller: _emailController,
+                            validator: (value) {
+                              if (value != null) {
+                                if (!value.contains('@') ||
+                                    !value.contains('.')) {
+                                  return LocaleKeys.invalid_email.tr();
+                                }
+                              }
+                            },
+                            onChanged: (value) {
+                              context
+                                  .read(checkoutNotifierProvider.notifier)
+                                  .email = value;
+                            },
+                          ),
+                          CheckboxListTile(
+                            value: _createNewAccount,
+                            onChanged: (value) {
+                              setState(() {
+                                _createNewAccount = value!;
+                              });
+                              context
+                                  .read(checkoutNotifierProvider.notifier)
+                                  .createAccount = value;
+                            },
+                            title: const Text("Create account"),
+                          ),
+                          Visibility(
+                            visible: _createNewAccount,
+                            child: Form(
+                              key: _formKey,
+                              child: Column(
+                                children: [
+                                  CustomTextField(
+                                    isPassword: true,
+                                    color: kLightCardBgColor,
+                                    title: LocaleKeys.your_password.tr(),
+                                    hintText: LocaleKeys.your_password.tr(),
+                                    controller: _passWordController,
+                                    validator: (value) {
+                                      if (value != null) {
+                                        if (value.length < 6) {
+                                          return LocaleKeys.password_validation
+                                              .tr();
+                                        }
+                                      }
+                                    },
+                                    onChanged: (value) {
+                                      context
+                                          .read(
+                                              checkoutNotifierProvider.notifier)
+                                          .password = value;
+                                    },
+                                  ),
+                                  CustomTextField(
+                                    isPassword: true,
+                                    color: kLightCardBgColor,
+                                    title:
+                                        LocaleKeys.your_confirm_password.tr(),
+                                    hintText:
+                                        LocaleKeys.your_confirm_password.tr(),
+                                    controller: _confirmPassWordController,
+                                    validator: (value) {
+                                      if (value != null) {
+                                        if (value.length < 6) {
+                                          return LocaleKeys.password_validation
+                                              .tr();
+                                        }
+                                        {
+                                          if (value !=
+                                              _passWordController.text) {
+                                            return LocaleKeys
+                                                .dont_match_password
+                                                .tr();
+                                          }
+                                        }
+                                      }
+                                    },
+                                    onChanged: (value) {
+                                      context
+                                          .read(
+                                              checkoutNotifierProvider.notifier)
+                                          .passwordConfirm = value;
+                                    },
+                                  ),
+                                  CheckboxListTile(
+                                    value: _agreedToTerms,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _agreedToTerms = value!;
+                                      });
+                                      context
+                                          .read(
+                                              checkoutNotifierProvider.notifier)
+                                          .agreeToTerms = value;
+                                    },
+                                    title: const Text(
+                                        "Agree to terms and conditions"),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ]),
+                  const Divider(
+                    height: 16,
+                    thickness: 2,
+                  ),
                   CustomTextField(
                     color: kLightCardBgColor,
                     title: LocaleKeys.apply_coupon.tr(),
@@ -444,8 +567,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           ).onInkTap(() {
             context.read(countryNotifierProvider.notifier).getCountries();
             context.read(statesNotifierProvider.notifier).resetState();
-            context.nextPage(const AddNewAddressScreen(
-              isAccessed: false,
+            context.nextPage(AddNewAddressScreen(
+              isAccessed: accessAllowed,
             ));
           }).cornerRadius(10),
           Consumer(
@@ -511,12 +634,27 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           bgColor: kPrimaryColor, gravity: ToastGravity.CENTER);
     } else if (_currentStep == 2) {
       if (!accessAllowed) {
-        toast(LocaleKeys.please_wait_guest.tr(),
-            bgColor: kPrimaryColor, gravity: ToastGravity.CENTER);
-        context.read(checkoutNotifierProvider.notifier).guestCheckout();
+        if (_createNewAccount) {
+          if (_agreedToTerms) {
+            if (_formKey.currentState!.validate()) {
+              toast(
+                LocaleKeys.please_wait_guest.tr(),
+              );
+              context.read(checkoutNotifierProvider.notifier).guestCheckout();
+            }
+          } else {
+            toast("Please agree to terms and conditions");
+          }
+        } else {
+          toast(
+            LocaleKeys.please_wait_guest.tr(),
+          );
+          context.read(checkoutNotifierProvider.notifier).guestCheckout();
+        }
       } else {
-        toast(LocaleKeys.please_wait.tr(),
-            bgColor: kPrimaryColor, gravity: ToastGravity.CENTER);
+        toast(
+          LocaleKeys.please_wait.tr(),
+        );
         context.read(checkoutNotifierProvider.notifier).checkout();
       }
     } else if (_currentStep < 2) {
@@ -564,8 +702,8 @@ class _PaymentOptionsListBuilderState extends State<PaymentOptionsListBuilder> {
                         widget.onPressedCheckBox!(index);
                         context
                                 .read(checkoutNotifierProvider.notifier)
-                                .paymentMethodId =
-                            paymentOptionsState.paymentOptions![index].id;
+                                .paymentMethod =
+                            paymentOptionsState.paymentOptions![index].code;
                         setState(() {
                           selectedIndex = index;
                         });

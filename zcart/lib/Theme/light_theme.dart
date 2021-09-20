@@ -61,7 +61,6 @@ TextTheme lightTextTheme(BuildContext context) {
 const AppBarTheme appBarTheme = AppBarTheme(
   color: kPrimaryColor,
   iconTheme: IconThemeData(color: kLightColor),
-  systemOverlayStyle: SystemUiOverlayStyle.dark,
   elevation: 0,
   centerTitle: true,
   foregroundColor: kLightColor,
