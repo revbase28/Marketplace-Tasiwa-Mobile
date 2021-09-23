@@ -7,7 +7,17 @@ import 'package:flutter_credit_card/flutter_credit_card.dart';
 import 'package:zcart/Theme/styles/colors.dart';
 
 class StripePaymentCardScreen extends StatefulWidget {
-  const StripePaymentCardScreen({Key? key}) : super(key: key);
+  final String cardNumber;
+  final String expiryDate;
+  final String cardHolderName;
+  final String cvvCode;
+  const StripePaymentCardScreen({
+    Key? key,
+    required this.cardNumber,
+    required this.expiryDate,
+    required this.cardHolderName,
+    required this.cvvCode,
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -33,6 +43,11 @@ class StripePaymentCardScreenState extends State<StripePaymentCardScreen> {
         width: 2.0,
       ),
     );
+    cardNumber = widget.cardNumber;
+    expiryDate = widget.expiryDate;
+    cardHolderName = widget.cardHolderName;
+    cvvCode = widget.cvvCode;
+
     super.initState();
   }
 
@@ -122,7 +137,7 @@ class StripePaymentCardScreenState extends State<StripePaymentCardScreen> {
                       child: Container(
                         margin: const EdgeInsets.all(12),
                         child: const Text(
-                          'Validate',
+                          'Save',
                           style: TextStyle(
                             color: Colors.white,
                           ),
@@ -130,17 +145,15 @@ class StripePaymentCardScreenState extends State<StripePaymentCardScreen> {
                       ),
                       onPressed: () {
                         if (formKey.currentState!.validate()) {
-                          print('valid!');
                           Navigator.of(context).pop(
                             CreditCardResult(
                               cardNumber: cardNumber,
                               expMonth: expiryDate.split('/')[0],
                               expYear: expiryDate.split('/')[1],
                               cvc: cvvCode,
+                              cardHolderName: cardHolderName,
                             ),
                           );
-                        } else {
-                          print('invalid!');
                         }
                       },
                     ),
@@ -167,11 +180,14 @@ class StripePaymentCardScreenState extends State<StripePaymentCardScreen> {
 
 class CreditCardResult {
   String cardNumber;
+  String cardHolderName;
   String expMonth;
   String expYear;
   String cvc;
+
   CreditCardResult({
     required this.cardNumber,
+    required this.cardHolderName,
     required this.expMonth,
     required this.expYear,
     required this.cvc,

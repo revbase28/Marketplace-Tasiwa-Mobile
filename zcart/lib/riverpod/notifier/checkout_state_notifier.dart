@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:device_info/device_info.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nb_utils/nb_utils.dart';
 import 'package:zcart/data/interface/iCheckout_repository.dart';
 import 'package:zcart/riverpod/state/checkout_state.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
@@ -36,6 +37,13 @@ class CheckoutNotifier extends StateNotifier<CheckoutState> {
   String? zipCode;
   String? phone;
 
+  //For Credit Cards
+  String? cardNumber;
+  String? expMonth;
+  String? expYear;
+  String? cvc;
+  String? cardHolderName;
+
   Future<String> _getDeviceId() async {
     if (Platform.isAndroid) {
       AndroidDeviceInfo _androidInfo = await _deviceInfo.androidInfo;
@@ -56,11 +64,16 @@ class CheckoutNotifier extends StateNotifier<CheckoutState> {
       "agree": "1",
       "device_id": deviceId.toString(),
       if (prescription != null) "prescription": prescription.toString(),
-      if (buyerNote != null) "buyer_note": buyerNote
+      if (buyerNote != null) "buyer_note": buyerNote,
+      if (cardNumber != null) "card_number": cardNumber,
+      if (expMonth != null) "exp_month": expMonth,
+      if (expYear != null) "exp_year": expYear,
+      if (cvc != null) "cvc": cvc,
     };
     try {
       // ignore: prefer_const_constructors
       state = CheckoutLoadingState();
+      toast(LocaleKeys.please_wait.tr());
       await _iCheckoutRepository.checkout(cartId!, requestBody);
 
       state = CheckoutLoadedState();
@@ -92,11 +105,16 @@ class CheckoutNotifier extends StateNotifier<CheckoutState> {
       "state": stateId.toString(),
       "city": city.toString(),
       "zip_code": zipCode.toString(),
-      "phone": phone.toString()
+      "phone": phone.toString(),
+      if (cardNumber != null) "card_number": cardNumber,
+      if (expMonth != null) "exp_month": expMonth,
+      if (expYear != null) "exp_year": expYear,
+      if (cvc != null) "cvc": cvc,
     };
     try {
       // ignore: prefer_const_constructors
       state = CheckoutLoadingState();
+      toast(LocaleKeys.please_wait.tr());
       String? _accessToken =
           await _iCheckoutRepository.guestCheckout(cartId!, requestBody);
       state = CheckoutLoadedState(accessToken: _accessToken);

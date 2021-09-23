@@ -5,6 +5,7 @@ import 'package:zcart/Theme/dark_theme.dart';
 import 'package:zcart/Theme/light_theme.dart';
 import 'package:zcart/Theme/styles/colors.dart';
 import 'package:zcart/data/controller/cart/coupon_controller.dart';
+import 'package:zcart/data/models/address/payment_options_model.dart';
 import 'package:zcart/data/models/address/shipping_model.dart';
 import 'package:zcart/data/models/cart/cart_item_details_model.dart';
 import 'package:zcart/data/network/network_utils.dart';
@@ -19,6 +20,7 @@ import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:zcart/views/screens/startup/loading_screen.dart';
 import 'package:zcart/views/screens/tabs/account_tab/account/add_address_screen.dart';
 import 'package:zcart/views/screens/tabs/account_tab/others/termsAndConditions_screen.dart';
+import 'package:zcart/views/screens/tabs/myCart_tab/checkout/stripe_payment_card_screen.dart';
 import 'package:zcart/views/shared_widgets/address_list_widget.dart';
 import 'package:zcart/views/shared_widgets/custom_textfield.dart';
 import 'package:zcart/views/shared_widgets/dropdown_field_loading_widget.dart';
@@ -647,7 +649,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     setState(() => _currentStep = step);
   }
 
-  continued() {
+  continued() async {
     if (_currentStep == 0 && _selectedAddressIndex == null) {
       toast(LocaleKeys.select_shipping_address_continue.tr(),
           bgColor: kPrimaryColor, gravity: ToastGravity.CENTER);
@@ -680,6 +682,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             toast(
               LocaleKeys.please_wait_guest.tr(),
             );
+
             context.read(checkoutNotifierProvider.notifier).guestCheckout();
           }
         }
@@ -712,6 +715,7 @@ class PaymentOptionsListBuilder extends StatefulWidget {
 
 class _PaymentOptionsListBuilderState extends State<PaymentOptionsListBuilder> {
   int? selectedIndex;
+  bool _isStripePaymentSaved = false;
 
   @override
   Widget build(BuildContext context) {
@@ -723,38 +727,84 @@ class _PaymentOptionsListBuilderState extends State<PaymentOptionsListBuilder> {
       child: Consumer(
         builder: (context, watch, _) {
           final paymentOptionsState = watch(paymentOptionsNotifierProvider);
-          return paymentOptionsState is PaymentOptionsLoadedState
-              ? ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: paymentOptionsState.paymentOptions!.length,
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                      onTap: () {
-                        widget.onPressedCheckBox!(index);
-                        context
-                                .read(checkoutNotifierProvider.notifier)
-                                .paymentMethod =
-                            paymentOptionsState.paymentOptions![index].code;
-                        setState(() {
-                          selectedIndex = index;
+          if (paymentOptionsState is PaymentOptionsLoadedState) {
+            List<PaymentOptions>? _paymentOptions =
+                paymentOptionsState.paymentOptions;
+
+            List<PaymentOptions>? _implementedPaymentOptions =
+                _paymentOptions?.where((element) {
+              return paymentMethods.contains(element.code!);
+            }).toList();
+
+            return ListView(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                children: _implementedPaymentOptions!.map((e) {
+                  int _index = _implementedPaymentOptions.indexOf(e);
+                  return ListTile(
+                    onTap: () async {
+                      var _checkoutNotifier =
+                          context.read(checkoutNotifierProvider.notifier);
+
+                      widget.onPressedCheckBox!(_index);
+
+                      if (e.code == stripe) {
+                        await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => StripePaymentCardScreen(
+                                      cardHolderName:
+                                          _checkoutNotifier.cardHolderName ??
+                                              "",
+                                      cardNumber:
+                                          _checkoutNotifier.cardNumber ?? "",
+                                      expiryDate: _checkoutNotifier.expMonth ==
+                                              null
+                                          ? ""
+                                          : "${_checkoutNotifier.expMonth}/${_checkoutNotifier.expYear}",
+                                      cvvCode: _checkoutNotifier.cvc ?? "",
+                                    ))).then((value) {
+                          if (value != null && value is CreditCardResult) {
+                            _checkoutNotifier.cardHolderName =
+                                value.cardHolderName;
+                            _checkoutNotifier.cardNumber = value.cardNumber;
+                            _checkoutNotifier.expMonth = value.expMonth;
+                            _checkoutNotifier.expYear = value.expYear;
+                            _checkoutNotifier.cvc = value.cvc;
+
+                            setState(() {
+                              _isStripePaymentSaved = true;
+                            });
+                          }
                         });
-                      },
-                      title: Text(
-                          paymentOptionsState.paymentOptions![index].name!),
-                      //subtitle: Text(paymentOptionsState.paymentOptions[index].name),
-                      trailing: index == selectedIndex
-                          ? const Icon(Icons.check_circle, color: kPrimaryColor)
-                          : Icon(
-                              Icons.radio_button_unchecked,
-                              color: EasyDynamicTheme.of(context).themeMode ==
-                                      ThemeMode.dark
-                                  ? kLightColor
-                                  : kDarkColor,
-                            ),
-                    );
-                  })
-              : Container();
+                      }
+
+                      context
+                          .read(checkoutNotifierProvider.notifier)
+                          .paymentMethod = e.code;
+
+                      setState(() {
+                        selectedIndex = _index;
+                      });
+                    },
+                    title: Text(e.name!),
+                    subtitle: _isStripePaymentSaved && e.code == stripe
+                        ? const Text("Credit Card Saved")
+                        : null,
+                    trailing: _index == selectedIndex
+                        ? const Icon(Icons.check_circle, color: kPrimaryColor)
+                        : Icon(
+                            Icons.radio_button_unchecked,
+                            color: EasyDynamicTheme.of(context).themeMode ==
+                                    ThemeMode.dark
+                                ? kLightColor
+                                : kDarkColor,
+                          ),
+                  );
+                }).toList());
+          } else {
+            return Container();
+          }
         },
       ),
     );
