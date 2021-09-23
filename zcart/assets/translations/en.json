@@ -227,5 +227,8 @@
   "go_shopping": "Go Shopping",
   "featured_brands": "Featured Brands",
   "view_all": "View all",
-  "recently_viewed": "Recently Viewed"
+  "recently_viewed": "Recently Viewed",
+  "create_account": "Create Account",
+  "agree_terms": "I agree to the terms and conditions",
+  "please_agree_terms": "Please agree to the terms and conditions"
 }

@@ -1,19 +1,18 @@
 import 'dart:io';
-
-import 'package:flutter/material.dart';
+import 'package:device_info/device_info.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:nb_utils/nb_utils.dart';
 import 'package:zcart/data/interface/iCheckout_repository.dart';
 import 'package:zcart/riverpod/state/checkout_state.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:zcart/views/screens/startup/loading_screen.dart';
 
 class CheckoutNotifier extends StateNotifier<CheckoutState> {
   final ICheckoutRepository _iCheckoutRepository;
 
   CheckoutNotifier(this._iCheckoutRepository)
       : super(const CheckoutInitialState());
+
+  final DeviceInfoPlugin _deviceInfo = DeviceInfoPlugin();
 
   int? cartId;
   int? shipTo;
@@ -37,7 +36,18 @@ class CheckoutNotifier extends StateNotifier<CheckoutState> {
   String? zipCode;
   String? phone;
 
+  Future<String> _getDeviceId() async {
+    if (Platform.isAndroid) {
+      AndroidDeviceInfo _androidInfo = await _deviceInfo.androidInfo;
+      return _androidInfo.androidId;
+    } else {
+      IosDeviceInfo _iosInfo = await _deviceInfo.iosInfo;
+      return _iosInfo.identifierForVendor;
+    }
+  }
+
   Future checkout() async {
+    deviceId = await _getDeviceId();
     var requestBody = {
       "ship_to": shipTo.toString(),
       "payment_method": paymentMethod.toString(),
@@ -49,30 +59,32 @@ class CheckoutNotifier extends StateNotifier<CheckoutState> {
       if (buyerNote != null) "buyer_note": buyerNote
     };
     try {
-      state = const CheckoutLoadingState();
+      // ignore: prefer_const_constructors
+      state = CheckoutLoadingState();
       await _iCheckoutRepository.checkout(cartId!, requestBody);
 
-      state = const CheckoutLoadedState();
+      state = CheckoutLoadedState();
     } catch (e) {
       state = CheckoutErrorState(LocaleKeys.something_went_wrong.tr());
     }
   }
 
   Future<void> guestCheckout() async {
+    deviceId = await _getDeviceId();
     var requestBody = {
       "payment_method": paymentMethod.toString(),
       "shipping_option_id": shippingOptionId.toString(),
       "packaging_id": packagingId.toString(),
-      "device_id": "123456",
+      "device_id": deviceId.toString(),
       if (prescription != null) "prescription": prescription.toString(),
       if (buyerNote != null) "buyer_note": buyerNote,
-      "email": email,
+      "email": email!.toString().toLowerCase().trim(),
       "agree": agreeToTerms ?? false ? "1" : "1",
       if (createAccount != null)
-        "create_account": createAccount ?? false ? "1" : "0",
-      if (password != null) "password": password.toString(),
+        "create-account": createAccount ?? false ? "1" : "0",
+      if (password != null) "password": password.toString().trim(),
       if (passwordConfirm != null)
-        "password_confirmation": passwordConfirm.toString(),
+        "password_confirmation": passwordConfirm.toString().trim(),
       "address_title": addressTitle.toString(),
       "address_line_1": addressLine1.toString(),
       "address_line_2": addressLine2.toString(),
@@ -83,9 +95,11 @@ class CheckoutNotifier extends StateNotifier<CheckoutState> {
       "phone": phone.toString()
     };
     try {
-      state = const CheckoutLoadingState();
-      await _iCheckoutRepository.guestCheckout(cartId!, requestBody);
-      state = const CheckoutLoadedState();
+      // ignore: prefer_const_constructors
+      state = CheckoutLoadingState();
+      String? _accessToken =
+          await _iCheckoutRepository.guestCheckout(cartId!, requestBody);
+      state = CheckoutLoadedState(accessToken: _accessToken);
     } catch (e) {
       state = CheckoutErrorState(LocaleKeys.something_went_wrong.tr());
     }

@@ -82,8 +82,12 @@ class _AddressListBuilderState extends State<AddressListBuilder> {
                       context.read(checkoutNotifierProvider.notifier).stateId =
                           widget.addressesList![index].stateId;
 
+                      context.read(checkoutNotifierProvider.notifier).city =
+                          widget.addressesList![index].city;
+
                       context.read(checkoutNotifierProvider.notifier).zipCode =
                           widget.addressesList![index].zipCode;
+
                       context.read(checkoutNotifierProvider.notifier).phone =
                           widget.addressesList![index].phone;
                     }

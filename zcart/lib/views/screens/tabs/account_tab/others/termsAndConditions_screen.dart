@@ -15,8 +15,6 @@ class TermsAndConditionScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(LocaleKeys.terms_condition.tr()),
-        centerTitle: true,
-        elevation: 0,
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -36,7 +34,7 @@ class TermsAndConditionScreen extends StatelessWidget {
                         : Center(
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 const Icon(Icons.info_outline),
                                 const SizedBox(height: 10),

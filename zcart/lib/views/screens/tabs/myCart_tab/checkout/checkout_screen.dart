@@ -8,6 +8,7 @@ import 'package:zcart/data/controller/cart/coupon_controller.dart';
 import 'package:zcart/data/models/address/shipping_model.dart';
 import 'package:zcart/data/models/cart/cart_item_details_model.dart';
 import 'package:zcart/data/network/network_utils.dart';
+import 'package:zcart/helper/constants.dart';
 import 'package:zcart/riverpod/providers/address_provider.dart';
 import 'package:zcart/riverpod/providers/checkout_provider.dart';
 import 'package:zcart/riverpod/providers/provider.dart';
@@ -15,7 +16,9 @@ import 'package:zcart/riverpod/state/address/address_state.dart';
 import 'package:zcart/riverpod/state/cart_state.dart';
 import 'package:zcart/riverpod/state/checkout_state.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
+import 'package:zcart/views/screens/startup/loading_screen.dart';
 import 'package:zcart/views/screens/tabs/account_tab/account/add_address_screen.dart';
+import 'package:zcart/views/screens/tabs/account_tab/others/termsAndConditions_screen.dart';
 import 'package:zcart/views/shared_widgets/address_list_widget.dart';
 import 'package:zcart/views/shared_widgets/custom_textfield.dart';
 import 'package:zcart/views/shared_widgets/dropdown_field_loading_widget.dart';
@@ -50,6 +53,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
+  final _emailFormKey = GlobalKey<FormState>();
 
   bool _createNewAccount = false;
   bool _agreedToTerms = false;
@@ -58,10 +62,21 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   Widget build(BuildContext context) {
     return ProviderListener<CheckoutState>(
       provider: checkoutNotifierProvider,
-      onChange: (context, state) {
+      onChange: (context, state) async {
         if (state is CheckoutLoadedState) {
           toast(LocaleKeys.order_place_confirmation.tr());
-          context.pop();
+          if (state.accessToken != null) {
+            toast(LocaleKeys.register_successful.tr());
+            await setValue(loggedIn, true);
+            await setValue(access, state.accessToken).then((value) {
+              Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(
+                      builder: (context) => const LoadingScreen()),
+                  (Route<dynamic> route) => false);
+            });
+          } else {
+            context.pop();
+          }
         }
       },
       child: ProviderListener<CartItemDetailsState>(
@@ -278,24 +293,27 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   accessAllowed
                       ? const SizedBox()
                       : Column(children: [
-                          CustomTextField(
-                            color: kLightCardBgColor,
-                            title: LocaleKeys.your_email.tr(),
-                            hintText: LocaleKeys.your_email.tr(),
-                            controller: _emailController,
-                            validator: (value) {
-                              if (value != null) {
-                                if (!value.contains('@') ||
-                                    !value.contains('.')) {
-                                  return LocaleKeys.invalid_email.tr();
+                          Form(
+                            key: _emailFormKey,
+                            child: CustomTextField(
+                              color: kLightCardBgColor,
+                              title: LocaleKeys.your_email.tr(),
+                              hintText: LocaleKeys.your_email.tr(),
+                              controller: _emailController,
+                              validator: (value) {
+                                if (value != null) {
+                                  if (!value.contains('@') ||
+                                      !value.contains('.')) {
+                                    return LocaleKeys.invalid_email.tr();
+                                  }
                                 }
-                              }
-                            },
-                            onChanged: (value) {
-                              context
-                                  .read(checkoutNotifierProvider.notifier)
-                                  .email = value;
-                            },
+                              },
+                              onChanged: (value) {
+                                context
+                                    .read(checkoutNotifierProvider.notifier)
+                                    .email = value;
+                              },
+                            ),
                           ),
                           CheckboxListTile(
                             value: _createNewAccount,
@@ -307,7 +325,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                   .read(checkoutNotifierProvider.notifier)
                                   .createAccount = value;
                             },
-                            title: const Text("Create account"),
+                            title: Text(LocaleKeys.create_account.tr()),
                           ),
                           Visibility(
                             visible: _createNewAccount,
@@ -378,8 +396,16 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                               checkoutNotifierProvider.notifier)
                                           .agreeToTerms = value;
                                     },
-                                    title: const Text(
-                                        "Agree to terms and conditions"),
+                                    title: GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const TermsAndConditionScreen()));
+                                      },
+                                      child: Text(LocaleKeys.agree_terms.tr()),
+                                    ),
                                   ),
                                 ],
                               ),
@@ -469,6 +495,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               shippingOptions: shippingState.shippingOptions,
                               cartItem: cartItemDetailsState.cartItemDetails,
                               onPressedCheckBox: (value) {
+                                print("Indexxxxxx $value");
+
                                 setState(() {
                                   _selectedShippingOptionsIndex = value;
                                 });
@@ -635,21 +663,25 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     } else if (_currentStep == 2) {
       if (!accessAllowed) {
         if (_createNewAccount) {
-          if (_agreedToTerms) {
-            if (_formKey.currentState!.validate()) {
-              toast(
-                LocaleKeys.please_wait_guest.tr(),
-              );
-              context.read(checkoutNotifierProvider.notifier).guestCheckout();
+          if (_emailFormKey.currentState!.validate()) {
+            if (_agreedToTerms) {
+              if (_formKey.currentState!.validate()) {
+                toast(
+                  LocaleKeys.please_wait_guest.tr(),
+                );
+                context.read(checkoutNotifierProvider.notifier).guestCheckout();
+              }
+            } else {
+              toast(LocaleKeys.please_agree_terms.tr());
             }
-          } else {
-            toast("Please agree to terms and conditions");
           }
         } else {
-          toast(
-            LocaleKeys.please_wait_guest.tr(),
-          );
-          context.read(checkoutNotifierProvider.notifier).guestCheckout();
+          if (_emailFormKey.currentState!.validate()) {
+            toast(
+              LocaleKeys.please_wait_guest.tr(),
+            );
+            context.read(checkoutNotifierProvider.notifier).guestCheckout();
+          }
         }
       } else {
         toast(

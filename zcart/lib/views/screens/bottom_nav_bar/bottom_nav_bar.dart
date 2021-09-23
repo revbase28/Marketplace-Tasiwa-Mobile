@@ -61,26 +61,29 @@ class _BottomNavBarState extends State<BottomNavBar> {
           child: _selectPage(),
         ),
         bottomNavigationBar: Stack(children: [
-          BottomNavigationBar(
-            currentIndex: _currentIndex!,
-            onTap: (int index) {
-              setState(() => _currentIndex = index);
-            },
-            backgroundColor: kPrimaryColor,
-            type: BottomNavigationBarType.fixed,
-            unselectedItemColor: kBottomBarUnselectedColor,
-            selectedItemColor: kLightColor,
-            selectedFontSize: 11,
-            elevation: 0,
-            showUnselectedLabels: false,
-            items: [
-              for (final item in TabNavigationItem.items)
-                BottomNavigationBarItem(
-                  icon: item.icon,
-                  label: item.label,
-                  activeIcon: item.selectedIcon,
-                )
-            ],
+          Directionality(
+            textDirection: TextDirection.ltr,
+            child: BottomNavigationBar(
+              currentIndex: _currentIndex!,
+              onTap: (int index) {
+                setState(() => _currentIndex = index);
+              },
+              backgroundColor: kPrimaryColor,
+              type: BottomNavigationBarType.fixed,
+              unselectedItemColor: kBottomBarUnselectedColor,
+              selectedItemColor: kLightColor,
+              selectedFontSize: 11,
+              elevation: 0,
+              showUnselectedLabels: false,
+              items: [
+                for (final item in TabNavigationItem.items)
+                  BottomNavigationBarItem(
+                    icon: item.icon,
+                    label: item.label,
+                    activeIcon: item.selectedIcon,
+                  )
+              ],
+            ),
           ),
           Positioned(
             top: 5,

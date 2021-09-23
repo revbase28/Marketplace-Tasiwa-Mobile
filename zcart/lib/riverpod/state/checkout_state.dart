@@ -11,7 +11,10 @@ class CheckoutLoadingState extends CheckoutState {
 }
 
 class CheckoutLoadedState extends CheckoutState {
-  const CheckoutLoadedState();
+  String? accessToken;
+  CheckoutLoadedState({
+    this.accessToken,
+  });
 }
 
 class CheckoutErrorState extends CheckoutState {
