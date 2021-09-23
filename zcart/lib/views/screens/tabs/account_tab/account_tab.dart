@@ -29,6 +29,7 @@ import 'package:velocity_x/velocity_x.dart';
 import 'package:zcart/Theme/styles/colors.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:zcart/views/screens/tabs/account_tab/settings/settings_page.dart';
+import 'package:zcart/views/screens/tabs/myCart_tab/checkout/stripe_payment_card_screen.dart';
 
 class AccountTab extends StatelessWidget {
   const AccountTab({Key? key}) : super(key: key);
@@ -40,12 +41,23 @@ class AccountTab extends StatelessWidget {
           title: Text(LocaleKeys.account_text.tr()),
           actions: [
             IconButton(
+              onPressed: () async {
+                CreditCardResult? result = await Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (context) => const StripePaymentCardScreen()));
+
+                print(result?.expYear);
+              },
+              icon: const Icon(Icons.payment),
+              tooltip: "Settings",
+            ),
+            IconButton(
               onPressed: () {
                 context.nextPage(const SettingsPage());
               },
               icon: const Icon(Icons.settings),
               tooltip: "Settings",
-            )
+            ),
           ],
         ),
         body: SafeArea(

@@ -134,7 +134,7 @@ class Meta {
 
   factory Meta.fromMap(Map<String, dynamic> json) => Meta(
         dealTitle: json["deal_title"],
-        dealsUnderPrice: json["deals_under_price"],
+        dealsUnderPrice: json["deals_under_price"].toString(),
       );
 
   Map<String, dynamic> toMap() => {
