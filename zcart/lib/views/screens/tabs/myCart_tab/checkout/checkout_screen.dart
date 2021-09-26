@@ -1,5 +1,6 @@
 import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:zcart/Theme/dark_theme.dart';
 import 'package:zcart/Theme/light_theme.dart';
@@ -757,6 +758,52 @@ class PaymentOptionsListBuilder extends StatefulWidget {
 class _PaymentOptionsListBuilderState extends State<PaymentOptionsListBuilder> {
   int? selectedIndex;
   bool _isStripePaymentSaved = false;
+  //bool _isRazorPaymentSaved = false;
+
+  late Razorpay _razorpay;
+
+  @override
+  void initState() {
+    _razorpay = Razorpay();
+    _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _razorpay.clear(); // Removes all listeners
+    super.dispose();
+  }
+
+  void _handlePaymentSuccess(PaymentSuccessResponse response) {
+    print(response.paymentId);
+  }
+
+  void _handlePaymentError(PaymentFailureResponse response) {
+    print(response.message);
+  }
+
+  void _handleExternalWallet(ExternalWalletResponse response) {
+    print(response.walletName);
+  }
+
+  void _openRazorPay() {
+    var options = {
+      'key': 'rzp_test_Pq4V0mcist4gfu',
+      'amount': 100000,
+      'name': 'Shakib',
+      'description': 'Fine T-Shirt',
+      'prefill': {'contact': '8888888888', 'email': 'test@razorpay.com'}
+    };
+    try {
+      _razorpay.open(options);
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -777,10 +824,13 @@ class _PaymentOptionsListBuilderState extends State<PaymentOptionsListBuilder> {
               return paymentMethods.contains(element.code!);
             }).toList();
 
+            _implementedPaymentOptions!
+                .sort((a, b) => a.order!.compareTo(b.order!));
+
             return ListView(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                children: _implementedPaymentOptions!.map((e) {
+                children: _implementedPaymentOptions.map((e) {
                   int _index = _implementedPaymentOptions.indexOf(e);
                   return ListTile(
                     onTap: () async {
@@ -818,6 +868,10 @@ class _PaymentOptionsListBuilderState extends State<PaymentOptionsListBuilder> {
                             });
                           }
                         });
+                      }
+
+                      if (e.code == razorpay) {
+                        _openRazorPay();
                       }
 
                       context

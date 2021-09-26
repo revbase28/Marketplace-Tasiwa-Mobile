@@ -5,7 +5,6 @@ import 'package:http/http.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:zcart/helper/constants.dart';
-import 'package:zcart/Theme/styles/colors.dart';
 
 import 'api.dart';
 

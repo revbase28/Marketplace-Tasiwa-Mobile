@@ -5,7 +5,6 @@ import 'package:zcart/data/network/api.dart';
 import 'package:zcart/data/network/network_exception.dart';
 import 'package:zcart/data/network/network_utils.dart';
 import 'package:nb_utils/nb_utils.dart';
-import 'package:zcart/Theme/styles/colors.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
 

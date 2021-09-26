@@ -6,7 +6,6 @@ import 'package:zcart/data/models/cart/cart_model.dart';
 import 'package:zcart/data/network/api.dart';
 import 'package:zcart/data/network/network_exception.dart';
 import 'package:zcart/data/network/network_utils.dart';
-import 'package:zcart/Theme/styles/colors.dart';
 import 'package:zcart/views/shared_widgets/cart_bottom_sheet.dart';
 
 class CartRepository implements ICartRepository {
