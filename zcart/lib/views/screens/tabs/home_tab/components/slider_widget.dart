@@ -44,7 +44,9 @@ class SliderWidget extends StatelessWidget {
                         .getCategoryItem(item.link);
                     context.nextPage(const ProductListScreen());
                   } else {
-                    toast(LocaleKeys.no_offer.tr(), bgColor: kPrimaryColor);
+                    toast(
+                      LocaleKeys.no_offer.tr(),
+                    );
                   }
                 }))
             .toList());

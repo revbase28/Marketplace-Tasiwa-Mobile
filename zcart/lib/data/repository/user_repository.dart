@@ -194,9 +194,6 @@ class UserRepository implements IUserRepository {
 
     toast(
       LocaleKeys.profile_updated_successfully.tr(),
-      gravity: ToastGravity.CENTER,
-      bgColor: kPrimaryColor,
-      textColor: kLightColor,
     );
   }
 
@@ -222,9 +219,6 @@ class UserRepository implements IUserRepository {
 
     toast(
       LocaleKeys.password_updated_successfully.tr(),
-      gravity: ToastGravity.CENTER,
-      bgColor: kPrimaryColor,
-      textColor: kLightColor,
     );
   }
 
@@ -247,9 +241,6 @@ class UserRepository implements IUserRepository {
 
     toast(
       LocaleKeys.password_reset_link_sent.tr(),
-      gravity: ToastGravity.CENTER,
-      bgColor: kPrimaryColor,
-      textColor: kLightColor,
     );
   }
 }

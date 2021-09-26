@@ -82,9 +82,6 @@ class CartRepository implements ICartRepository {
       if (responseBody.runtimeType != int) {
         toast(
           responseBody['message'],
-          bgColor: kPrimaryColor,
-          textColor: kLightColor,
-          gravity: ToastGravity.CENTER,
         );
       }
     } catch (e) {
@@ -105,9 +102,6 @@ class CartRepository implements ICartRepository {
       if (responseBody.runtimeType != int) {
         toast(
           responseBody['message'],
-          bgColor: kPrimaryColor,
-          textColor: kLightColor,
-          gravity: ToastGravity.CENTER,
         );
       }
     } catch (e) {

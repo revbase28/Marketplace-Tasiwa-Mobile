@@ -268,9 +268,9 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
                           ElevatedButton(
                               onPressed: () {
                                 if (_formKey.currentState!.validate()) {
-                                  toast(LocaleKeys.please_wait.tr(),
-                                      gravity: ToastGravity.CENTER,
-                                      bgColor: kPrimaryColor);
+                                  toast(
+                                    LocaleKeys.please_wait.tr(),
+                                  );
                                   context
                                       .read(addressNotifierProvider.notifier)
                                       .editAddress(

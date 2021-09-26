@@ -62,7 +62,9 @@ class BannerWidget extends StatelessWidget {
                             '.${API.base.split(".").last.split("/").first}'));
                     context.nextPage(const ProductListScreen());
                   } else {
-                    toast(LocaleKeys.no_offer.tr(), bgColor: kPrimaryColor);
+                    toast(
+                      LocaleKeys.no_offer.tr(),
+                    );
                   }
                 }))
             .toList());

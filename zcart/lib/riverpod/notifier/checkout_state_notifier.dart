@@ -94,7 +94,8 @@ class CheckoutNotifier extends StateNotifier<CheckoutState> {
       "email": email!.toString().toLowerCase().trim(),
       "agree": agreeToTerms ?? false ? "1" : "1",
       if (createAccount != null)
-        "create-account": createAccount ?? false ? "1" : "0",
+        if (createAccount!)
+          "create-account": createAccount ?? false ? "1" : "0",
       if (password != null) "password": password.toString().trim(),
       if (passwordConfirm != null)
         "password_confirmation": passwordConfirm.toString().trim(),
@@ -114,7 +115,7 @@ class CheckoutNotifier extends StateNotifier<CheckoutState> {
     try {
       // ignore: prefer_const_constructors
       state = CheckoutLoadingState();
-      toast(LocaleKeys.please_wait.tr());
+
       String? _accessToken =
           await _iCheckoutRepository.guestCheckout(cartId!, requestBody);
       state = CheckoutLoadedState(accessToken: _accessToken);

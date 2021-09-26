@@ -244,9 +244,9 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
                           ElevatedButton(
                               onPressed: () {
                                 if (_formKey.currentState!.validate()) {
-                                  toast(LocaleKeys.please_wait.tr(),
-                                      gravity: ToastGravity.CENTER,
-                                      bgColor: kPrimaryColor);
+                                  toast(
+                                    LocaleKeys.please_wait.tr(),
+                                  );
                                   context
                                       .read(addressNotifierProvider.notifier)
                                       .createAddress(

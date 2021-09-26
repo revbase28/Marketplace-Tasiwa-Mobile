@@ -110,9 +110,9 @@ class _AttributeCardState extends State<AttributeCard> {
                       onPressed: widget.quantity ==
                               widget.productModel.data!.stockQuantity
                           ? () {
-                              toast(LocaleKeys.reached_maximum_quantity.tr(),
-                                  gravity: ToastGravity.CENTER,
-                                  bgColor: kPrimaryColor.withOpacity(0.70));
+                              toast(
+                                LocaleKeys.reached_maximum_quantity.tr(),
+                              );
                             }
                           : widget.increaseQuantity),
                 ],
@@ -268,7 +268,7 @@ class _AttributeDropdownFieldState extends State<AttributeDropdownField> {
                 .toList(),
             isCallback: true,
             callbackFunction: (index) {
-              toast(LocaleKeys.please_wait.tr(), gravity: ToastGravity.TOP);
+              toast(LocaleKeys.please_wait.tr());
               context
                   .read(productVariantNotifierProvider.notifier)
                   .getProductVariantDetails(

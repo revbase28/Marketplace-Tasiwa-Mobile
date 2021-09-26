@@ -226,17 +226,11 @@ Future handleResponse(Response response, {bool showToast = true}) async {
         toast(
           jsonDecode(response.body)['errors']
               [jsonDecode(response.body)['errors'].keys.first][0],
-          bgColor: kPrimaryColor,
-          textColor: kLightColor,
-          gravity: ToastGravity.CENTER,
         );
       } else if (showToast) {
         toast(
           jsonDecode(response.body)['message'] ??
               jsonDecode(response.body)['error'],
-          bgColor: kPrimaryColor,
-          textColor: kLightColor,
-          gravity: ToastGravity.CENTER,
         );
       }
 

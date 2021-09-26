@@ -60,9 +60,6 @@ class WishListRepository implements IWishListRepository {
       if (responseBody.runtimeType != int) {
         toast(
           responseBody['message'],
-          bgColor: kPrimaryColor,
-          textColor: kLightColor,
-          gravity: ToastGravity.CENTER,
         );
       } else if (responseBody == 401) {
         Navigator.push(
@@ -89,9 +86,6 @@ class WishListRepository implements IWishListRepository {
       if (responseBody.runtimeType != int) {
         toast(
           responseBody['message'],
-          bgColor: kPrimaryColor,
-          textColor: kLightColor,
-          gravity: ToastGravity.CENTER,
         );
       }
     } catch (e) {

@@ -275,7 +275,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                   style: context.textTheme.subtitle2)),
                         ],
                       ),
-                      const SizedBox(height: 9),
+                      Divider(
+                        endIndent: MediaQuery.of(context).size.width * 0.3,
+                      ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -292,128 +294,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       ),
                     ],
                   ).pOnly(bottom: 10),
-                  accessAllowed
-                      ? const SizedBox()
-                      : Column(children: [
-                          Form(
-                            key: _emailFormKey,
-                            child: CustomTextField(
-                              color: kLightCardBgColor,
-                              title: LocaleKeys.your_email.tr(),
-                              hintText: LocaleKeys.your_email.tr(),
-                              controller: _emailController,
-                              validator: (value) {
-                                if (value != null) {
-                                  if (!value.contains('@') ||
-                                      !value.contains('.')) {
-                                    return LocaleKeys.invalid_email.tr();
-                                  }
-                                }
-                              },
-                              onChanged: (value) {
-                                context
-                                    .read(checkoutNotifierProvider.notifier)
-                                    .email = value;
-                              },
-                            ),
-                          ),
-                          CheckboxListTile(
-                            value: _createNewAccount,
-                            onChanged: (value) {
-                              setState(() {
-                                _createNewAccount = value!;
-                              });
-                              context
-                                  .read(checkoutNotifierProvider.notifier)
-                                  .createAccount = value;
-                            },
-                            title: Text(LocaleKeys.create_account.tr()),
-                          ),
-                          Visibility(
-                            visible: _createNewAccount,
-                            child: Form(
-                              key: _formKey,
-                              child: Column(
-                                children: [
-                                  CustomTextField(
-                                    isPassword: true,
-                                    color: kLightCardBgColor,
-                                    title: LocaleKeys.your_password.tr(),
-                                    hintText: LocaleKeys.your_password.tr(),
-                                    controller: _passWordController,
-                                    validator: (value) {
-                                      if (value != null) {
-                                        if (value.length < 6) {
-                                          return LocaleKeys.password_validation
-                                              .tr();
-                                        }
-                                      }
-                                    },
-                                    onChanged: (value) {
-                                      context
-                                          .read(
-                                              checkoutNotifierProvider.notifier)
-                                          .password = value;
-                                    },
-                                  ),
-                                  CustomTextField(
-                                    isPassword: true,
-                                    color: kLightCardBgColor,
-                                    title:
-                                        LocaleKeys.your_confirm_password.tr(),
-                                    hintText:
-                                        LocaleKeys.your_confirm_password.tr(),
-                                    controller: _confirmPassWordController,
-                                    validator: (value) {
-                                      if (value != null) {
-                                        if (value.length < 6) {
-                                          return LocaleKeys.password_validation
-                                              .tr();
-                                        }
-                                        {
-                                          if (value !=
-                                              _passWordController.text) {
-                                            return LocaleKeys
-                                                .dont_match_password
-                                                .tr();
-                                          }
-                                        }
-                                      }
-                                    },
-                                    onChanged: (value) {
-                                      context
-                                          .read(
-                                              checkoutNotifierProvider.notifier)
-                                          .passwordConfirm = value;
-                                    },
-                                  ),
-                                  CheckboxListTile(
-                                    value: _agreedToTerms,
-                                    onChanged: (value) {
-                                      setState(() {
-                                        _agreedToTerms = value!;
-                                      });
-                                      context
-                                          .read(
-                                              checkoutNotifierProvider.notifier)
-                                          .agreeToTerms = value;
-                                    },
-                                    title: GestureDetector(
-                                      onTap: () {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    const TermsAndConditionScreen()));
-                                      },
-                                      child: Text(LocaleKeys.agree_terms.tr()),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ]),
                   const Divider(
                     height: 16,
                     thickness: 2,
@@ -463,6 +343,161 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       onChanged: (value) => context
                           .read(checkoutNotifierProvider.notifier)
                           .buyerNote = value).pOnly(bottom: 5),
+                  accessAllowed
+                      ? const SizedBox()
+                      : Container(
+                          margin: const EdgeInsets.only(bottom: 10),
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                              color: EasyDynamicTheme.of(context).themeMode ==
+                                      ThemeMode.dark
+                                  ? kDarkCardBgColor
+                                  : kLightBgColor,
+                              borderRadius: BorderRadius.circular(10),
+                              boxShadow: [
+                                BoxShadow(
+                                  blurRadius: 10,
+                                  color: Colors.black.withOpacity(0.1),
+                                  offset: const Offset(0, 10),
+                                ),
+                              ]),
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("Guest Checkout",
+                                        style: context.textTheme.headline6)
+                                    .pOnly(bottom: 10),
+                                Form(
+                                  key: _emailFormKey,
+                                  child: CustomTextField(
+                                    color: kLightCardBgColor,
+                                    hintText: LocaleKeys.your_email.tr(),
+                                    controller: _emailController,
+                                    validator: (value) {
+                                      if (value != null) {
+                                        if (!value.contains('@') ||
+                                            !value.contains('.')) {
+                                          return LocaleKeys.invalid_email.tr();
+                                        }
+                                      }
+                                    },
+                                    onChanged: (value) {
+                                      context
+                                          .read(
+                                              checkoutNotifierProvider.notifier)
+                                          .email = value;
+                                    },
+                                  ),
+                                ),
+                                CheckboxListTile(
+                                  checkColor: kLightColor,
+                                  activeColor: kPrimaryColor,
+                                  value: _createNewAccount,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      _createNewAccount = value!;
+                                    });
+                                    context
+                                        .read(checkoutNotifierProvider.notifier)
+                                        .createAccount = value;
+                                  },
+                                  title: Text(LocaleKeys.create_account.tr()),
+                                ),
+                                Visibility(
+                                  visible: _createNewAccount,
+                                  child: Form(
+                                    key: _formKey,
+                                    child: Column(
+                                      children: [
+                                        CustomTextField(
+                                          isPassword: true,
+                                          color: kLightCardBgColor,
+                                          title: LocaleKeys.your_password.tr(),
+                                          hintText:
+                                              LocaleKeys.your_password.tr(),
+                                          controller: _passWordController,
+                                          validator: (value) {
+                                            if (value != null) {
+                                              if (value.length < 6) {
+                                                return LocaleKeys
+                                                    .password_validation
+                                                    .tr();
+                                              }
+                                            }
+                                          },
+                                          onChanged: (value) {
+                                            context
+                                                .read(checkoutNotifierProvider
+                                                    .notifier)
+                                                .password = value;
+                                          },
+                                        ),
+                                        CustomTextField(
+                                          isPassword: true,
+                                          color: kLightCardBgColor,
+                                          title: LocaleKeys
+                                              .your_confirm_password
+                                              .tr(),
+                                          hintText: LocaleKeys
+                                              .your_confirm_password
+                                              .tr(),
+                                          controller:
+                                              _confirmPassWordController,
+                                          validator: (value) {
+                                            if (value != null) {
+                                              if (value.length < 6) {
+                                                return LocaleKeys
+                                                    .password_validation
+                                                    .tr();
+                                              }
+                                              {
+                                                if (value !=
+                                                    _passWordController.text) {
+                                                  return LocaleKeys
+                                                      .dont_match_password
+                                                      .tr();
+                                                }
+                                              }
+                                            }
+                                          },
+                                          onChanged: (value) {
+                                            context
+                                                .read(checkoutNotifierProvider
+                                                    .notifier)
+                                                .passwordConfirm = value;
+                                          },
+                                        ),
+                                        CheckboxListTile(
+                                          checkColor: kLightColor,
+                                          activeColor: kPrimaryColor,
+                                          value: _agreedToTerms,
+                                          onChanged: (value) {
+                                            setState(() {
+                                              _agreedToTerms = value!;
+                                            });
+                                            context
+                                                .read(checkoutNotifierProvider
+                                                    .notifier)
+                                                .agreeToTerms = value;
+                                          },
+                                          title: GestureDetector(
+                                            onTap: () {
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          const TermsAndConditionScreen()));
+                                            },
+                                            child: Text(
+                                                LocaleKeys.agree_terms.tr()),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ]),
+                        ),
                 ],
               )
             : Container(),
@@ -651,17 +686,21 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
   continued() async {
     if (_currentStep == 0 && _selectedAddressIndex == null) {
-      toast(LocaleKeys.select_shipping_address_continue.tr(),
-          bgColor: kPrimaryColor, gravity: ToastGravity.CENTER);
+      toast(
+        LocaleKeys.select_shipping_address_continue.tr(),
+      );
     } else if (_currentStep == 1 && _selectedShippingOptionsIndex == null) {
-      toast(LocaleKeys.select_shipping_option_continue.tr(),
-          bgColor: kPrimaryColor, gravity: ToastGravity.CENTER);
+      toast(
+        LocaleKeys.select_shipping_option_continue.tr(),
+      );
     } else if (_currentStep == 1 && _selectedPackagingIndex == null) {
-      toast(LocaleKeys.select_packaging_method_continue.tr(),
-          bgColor: kPrimaryColor, gravity: ToastGravity.CENTER);
+      toast(
+        LocaleKeys.select_packaging_method_continue.tr(),
+      );
     } else if (_currentStep == 1 && _selectedPaymentIndex == null) {
-      toast(LocaleKeys.select_payment_method_continue.tr(),
-          bgColor: kPrimaryColor, gravity: ToastGravity.CENTER);
+      toast(
+        LocaleKeys.select_payment_method_continue.tr(),
+      );
     } else if (_currentStep == 2) {
       if (!accessAllowed) {
         if (_createNewAccount) {
@@ -670,6 +709,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               if (_formKey.currentState!.validate()) {
                 toast(
                   LocaleKeys.please_wait_guest.tr(),
+                  length: Toast.LENGTH_LONG,
                 );
                 context.read(checkoutNotifierProvider.notifier).guestCheckout();
               }
@@ -681,6 +721,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           if (_emailFormKey.currentState!.validate()) {
             toast(
               LocaleKeys.please_wait_guest.tr(),
+              length: Toast.LENGTH_LONG,
             );
 
             context.read(checkoutNotifierProvider.notifier).guestCheckout();
