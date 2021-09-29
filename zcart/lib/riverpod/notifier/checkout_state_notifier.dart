@@ -44,6 +44,9 @@ class CheckoutNotifier extends StateNotifier<CheckoutState> {
   String? cvc;
   String? cardHolderName;
 
+  //For Razorpay
+  String? razorpayOrderId;
+
   Future<String> _getDeviceId() async {
     if (Platform.isAndroid) {
       AndroidDeviceInfo _androidInfo = await _deviceInfo.androidInfo;
@@ -69,6 +72,7 @@ class CheckoutNotifier extends StateNotifier<CheckoutState> {
       if (expMonth != null) "exp_month": expMonth,
       if (expYear != null) "exp_year": expYear,
       if (cvc != null) "cvc": cvc,
+      if (razorpayOrderId != null) "razorpay_order_id": razorpayOrderId,
     };
     try {
       // ignore: prefer_const_constructors
@@ -111,6 +115,7 @@ class CheckoutNotifier extends StateNotifier<CheckoutState> {
       if (expMonth != null) "exp_month": expMonth,
       if (expYear != null) "exp_year": expYear,
       if (cvc != null) "cvc": cvc,
+      if (razorpayOrderId != null) "razorpay_order_id": razorpayOrderId,
     };
     try {
       // ignore: prefer_const_constructors

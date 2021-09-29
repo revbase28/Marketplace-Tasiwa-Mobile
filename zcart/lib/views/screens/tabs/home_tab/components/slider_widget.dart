@@ -7,7 +7,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zcart/riverpod/providers/category_provider.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:zcart/views/screens/product_list/product_list_screen.dart';
-import 'package:zcart/Theme/styles/colors.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 class SliderWidget extends StatelessWidget {

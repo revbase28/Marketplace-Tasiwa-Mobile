@@ -758,7 +758,7 @@ class PaymentOptionsListBuilder extends StatefulWidget {
 class _PaymentOptionsListBuilderState extends State<PaymentOptionsListBuilder> {
   int? selectedIndex;
   bool _isStripePaymentSaved = false;
-  //bool _isRazorPaymentSaved = false;
+  bool _isRazorPaymentSaved = false;
 
   late Razorpay _razorpay;
 
@@ -779,7 +779,11 @@ class _PaymentOptionsListBuilderState extends State<PaymentOptionsListBuilder> {
   }
 
   void _handlePaymentSuccess(PaymentSuccessResponse response) {
-    print(response.paymentId);
+    context.read(checkoutNotifierProvider.notifier).razorpayOrderId =
+        response.paymentId;
+    setState(() {
+      _isRazorPaymentSaved = true;
+    });
   }
 
   void _handlePaymentError(PaymentFailureResponse response) {
@@ -885,7 +889,9 @@ class _PaymentOptionsListBuilderState extends State<PaymentOptionsListBuilder> {
                     title: Text(e.name!),
                     subtitle: _isStripePaymentSaved && e.code == stripe
                         ? const Text("Credit Card Saved")
-                        : null,
+                        : _isRazorPaymentSaved && e.code == razorpay
+                            ? const Text("Payment is successfull!")
+                            : null,
                     trailing: _index == selectedIndex
                         ? const Icon(Icons.check_circle, color: kPrimaryColor)
                         : Icon(
