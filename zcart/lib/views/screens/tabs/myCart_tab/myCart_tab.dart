@@ -197,32 +197,43 @@ class CartItemCard extends StatelessWidget {
                       style: context.textTheme.bodyText2),
                 ],
               ),
-              ElevatedButton(
-                  onPressed: () {
-                    if (accessAllowed) {
+              Consumer(builder: (context, watch, child) {
+                final userState = watch(userNotifierProvider);
+
+                return ElevatedButton(
+                    onPressed: () {
+                      String? customerEmail;
+
+                      if (accessAllowed) {
+                        context
+                            .read(addressNotifierProvider.notifier)
+                            .fetchAddress();
+                        if (userState is UserLoadedState) {
+                          customerEmail = userState.user!.email!;
+                        }
+                      }
                       context
-                          .read(addressNotifierProvider.notifier)
-                          .fetchAddress();
-                    }
-                    context
-                        .read(shippingNotifierProvider.notifier)
-                        .fetchShippingInfo(
-                            cartItem.shop!.id, cartItem.shippingZoneId);
-                    context
-                        .read(packagingNotifierProvider.notifier)
-                        .fetchPackagingInfo(cartItem.shop!.slug);
-                    context
-                        .read(paymentOptionsNotifierProvider.notifier)
-                        .fetchPaymentMethod(cartItem.shop!.slug);
-                    context
-                        .read(cartItemDetailsNotifierProvider.notifier)
-                        .getCartItemDetails(cartItem.id);
-                    context
-                        .read(countryNotifierProvider.notifier)
-                        .getCountries();
-                    context.nextPage(const CheckoutScreen());
-                  },
-                  child: Text(LocaleKeys.checkout.tr()))
+                          .read(shippingNotifierProvider.notifier)
+                          .fetchShippingInfo(
+                              cartItem.shop!.id, cartItem.shippingZoneId);
+                      context
+                          .read(packagingNotifierProvider.notifier)
+                          .fetchPackagingInfo(cartItem.shop!.slug);
+                      context
+                          .read(paymentOptionsNotifierProvider.notifier)
+                          .fetchPaymentMethod(cartItem.shop!.slug);
+                      context
+                          .read(cartItemDetailsNotifierProvider.notifier)
+                          .getCartItemDetails(cartItem.id);
+                      context
+                          .read(countryNotifierProvider.notifier)
+                          .getCountries();
+                      context.nextPage(CheckoutScreen(
+                        customerEmail: customerEmail,
+                      ));
+                    },
+                    child: Text(LocaleKeys.checkout.tr()));
+              })
             ],
           )
         ],

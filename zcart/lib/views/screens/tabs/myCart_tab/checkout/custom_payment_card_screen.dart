@@ -4,12 +4,12 @@ import 'package:flutter_credit_card/flutter_credit_card.dart';
 
 import 'package:zcart/Theme/styles/colors.dart';
 
-class StripePaymentCardScreen extends StatefulWidget {
+class CustomPaymentCardScreen extends StatefulWidget {
   final String cardNumber;
   final String expiryDate;
   final String cardHolderName;
   final String cvvCode;
-  const StripePaymentCardScreen({
+  const CustomPaymentCardScreen({
     Key? key,
     required this.cardNumber,
     required this.expiryDate,
@@ -19,11 +19,11 @@ class StripePaymentCardScreen extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return StripePaymentCardScreenState();
+    return CustomPaymentCardScreenState();
   }
 }
 
-class StripePaymentCardScreenState extends State<StripePaymentCardScreen> {
+class CustomPaymentCardScreenState extends State<CustomPaymentCardScreen> {
   String cardNumber = '';
   String expiryDate = '';
   String cardHolderName = '';
@@ -53,7 +53,7 @@ class StripePaymentCardScreenState extends State<StripePaymentCardScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Stripe Payment"),
+        title: const Text("Credit Card Payment"),
       ),
       resizeToAvoidBottomInset: false,
       body: SafeArea(
@@ -63,6 +63,8 @@ class StripePaymentCardScreenState extends State<StripePaymentCardScreen> {
               height: 30,
             ),
             CreditCardWidget(
+              onCreditCardWidgetChange: (p0) {},
+              glassmorphismConfig: null,
               cardNumber: cardNumber,
               expiryDate: expiryDate,
               cardHolderName: cardHolderName,

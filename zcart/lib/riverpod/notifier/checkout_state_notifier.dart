@@ -79,7 +79,6 @@ class CheckoutNotifier extends StateNotifier<CheckoutState> {
       state = CheckoutLoadingState();
       toast(LocaleKeys.please_wait.tr());
       await _iCheckoutRepository.checkout(cartId!, requestBody);
-
       state = CheckoutLoadedState();
     } catch (e) {
       state = CheckoutErrorState(LocaleKeys.something_went_wrong.tr());
@@ -120,7 +119,10 @@ class CheckoutNotifier extends StateNotifier<CheckoutState> {
     try {
       // ignore: prefer_const_constructors
       state = CheckoutLoadingState();
-
+      toast(
+        LocaleKeys.please_wait_guest.tr(),
+        length: Toast.LENGTH_LONG,
+      );
       String? _accessToken =
           await _iCheckoutRepository.guestCheckout(cartId!, requestBody);
       state = CheckoutLoadedState(accessToken: _accessToken);

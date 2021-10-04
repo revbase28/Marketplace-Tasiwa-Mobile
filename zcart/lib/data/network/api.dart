@@ -11,9 +11,12 @@ class API {
   //Point the API to the base URL
   static const base = test;
 
-  // Stripe Publishable Key
-  static const String stripePublishableKey =
-      "pk_test_51Gyxp2JewI4n8wVFDHRNMHmzOLaoc0fbcS9qzlWMDUAqrJ0yHgrXY5sWett0K6wskEWqauH8Sj4qL4A5zsBmPmxC00jHvnpCfL";
+  /// Payment Gateway Keys
+
+  //Change these values as your app requires
+  // Paystack Key
+  static const String paystackKey =
+      'pk_test_1f8cc00ee10d6a52be580e831b62564fdf0840f1';
 
   //
 

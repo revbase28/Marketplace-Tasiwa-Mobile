@@ -1,7 +1,11 @@
 import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nb_utils/nb_utils.dart';
-import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:velocity_x/velocity_x.dart';
+
 import 'package:zcart/Theme/dark_theme.dart';
 import 'package:zcart/Theme/light_theme.dart';
 import 'package:zcart/Theme/styles/colors.dart';
@@ -21,17 +25,17 @@ import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:zcart/views/screens/startup/loading_screen.dart';
 import 'package:zcart/views/screens/tabs/account_tab/account/add_address_screen.dart';
 import 'package:zcart/views/screens/tabs/account_tab/others/termsAndConditions_screen.dart';
-import 'package:zcart/views/screens/tabs/myCart_tab/checkout/stripe_payment_card_screen.dart';
+import 'package:zcart/views/screens/tabs/myCart_tab/checkout/payments/payment_methods.dart';
 import 'package:zcart/views/shared_widgets/address_list_widget.dart';
 import 'package:zcart/views/shared_widgets/custom_textfield.dart';
 import 'package:zcart/views/shared_widgets/dropdown_field_loading_widget.dart';
-import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class CheckoutScreen extends StatefulWidget {
-  const CheckoutScreen({Key? key}) : super(key: key);
+  final String? customerEmail;
+  const CheckoutScreen({
+    Key? key,
+    this.customerEmail,
+  }) : super(key: key);
 
   @override
   _CheckoutScreenState createState() => _CheckoutScreenState();
@@ -46,6 +50,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   int? _selectedShippingOptionsIndex;
   int? _selectedPackagingIndex;
   int? _selectedPaymentIndex;
+  String _paymentMethodCode = "";
 
   /// Coupon
   bool _showApplyButton = false;
@@ -115,7 +120,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         physics: const BouncingScrollPhysics(),
                         currentStep: _currentStep,
                         onStepTapped: (step) => tapped(step),
-                        onStepContinue: continued,
+                        onStepContinue: () {
+                          continued(cartItemDetailsState);
+                        },
                         onStepCancel: cancel,
                         steps: <Step>[
                           /// Shipping
@@ -556,6 +563,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               ),
                             ).cornerRadius(10)
                       : ShippingOptionsBuilder(
+                              onPressedCheckBox: (value) {},
                               shippingOptions: shippingState.shippingOptions)
                           .cornerRadius(10)
                   : Container();
@@ -589,9 +597,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             ],
           ).pOnly(top: 10, bottom: 10),
           PaymentOptionsListBuilder(
-            onPressedCheckBox: (value) {
+            onPressedCheckBox: (value, code) {
               setState(() {
                 _selectedPaymentIndex = value;
+                _paymentMethodCode = code;
               });
             },
           ).cornerRadius(10)
@@ -685,7 +694,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     setState(() => _currentStep = step);
   }
 
-  continued() async {
+  continued(CartItemDetailsState cartItemDetailsState) async {
     if (_currentStep == 0 && _selectedAddressIndex == null) {
       toast(
         LocaleKeys.select_shipping_address_continue.tr(),
@@ -708,11 +717,18 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           if (_emailFormKey.currentState!.validate()) {
             if (_agreedToTerms) {
               if (_formKey.currentState!.validate()) {
-                toast(
-                  LocaleKeys.please_wait_guest.tr(),
-                  length: Toast.LENGTH_LONG,
-                );
-                context.read(checkoutNotifierProvider.notifier).guestCheckout();
+                //TODO:Price Needs to be fixed
+                await PaymentMethods.pay(context, _paymentMethodCode,
+                        email: _emailController.text.trim(), price: 100)
+                    .then((value) {
+                  if (value) {
+                    context
+                        .read(checkoutNotifierProvider.notifier)
+                        .guestCheckout();
+                  } else {
+                    toast("Payment Failed");
+                  }
+                });
               }
             } else {
               toast(LocaleKeys.please_agree_terms.tr());
@@ -720,19 +736,27 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           }
         } else {
           if (_emailFormKey.currentState!.validate()) {
-            toast(
-              LocaleKeys.please_wait_guest.tr(),
-              length: Toast.LENGTH_LONG,
-            );
-
-            context.read(checkoutNotifierProvider.notifier).guestCheckout();
+            await PaymentMethods.pay(context, _paymentMethodCode,
+                    email: _emailController.text.trim(), price: 100)
+                .then((value) {
+              if (value) {
+                context.read(checkoutNotifierProvider.notifier).guestCheckout();
+              } else {
+                toast("Payment Failed");
+              }
+            });
           }
         }
       } else {
-        toast(
-          LocaleKeys.please_wait.tr(),
-        );
-        context.read(checkoutNotifierProvider.notifier).checkout();
+        await PaymentMethods.pay(context, _paymentMethodCode,
+                email: widget.customerEmail!, price: 100)
+            .then((value) {
+          if (value) {
+            context.read(checkoutNotifierProvider.notifier).checkout();
+          } else {
+            toast("Payment Failed");
+          }
+        });
       }
     } else if (_currentStep < 2) {
       setState(() => _currentStep += 1);
@@ -745,7 +769,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 }
 
 class PaymentOptionsListBuilder extends StatefulWidget {
-  final Function(int)? onPressedCheckBox;
+  final Function(int index, String code)? onPressedCheckBox;
   const PaymentOptionsListBuilder({
     Key? key,
     this.onPressedCheckBox,
@@ -758,56 +782,6 @@ class PaymentOptionsListBuilder extends StatefulWidget {
 class _PaymentOptionsListBuilderState extends State<PaymentOptionsListBuilder> {
   int? selectedIndex;
   bool _isStripePaymentSaved = false;
-  bool _isRazorPaymentSaved = false;
-
-  late Razorpay _razorpay;
-
-  @override
-  void initState() {
-    _razorpay = Razorpay();
-    _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
-    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
-    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
-
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _razorpay.clear(); // Removes all listeners
-    super.dispose();
-  }
-
-  void _handlePaymentSuccess(PaymentSuccessResponse response) {
-    context.read(checkoutNotifierProvider.notifier).razorpayOrderId =
-        response.paymentId;
-    setState(() {
-      _isRazorPaymentSaved = true;
-    });
-  }
-
-  void _handlePaymentError(PaymentFailureResponse response) {
-    print(response.message);
-  }
-
-  void _handleExternalWallet(ExternalWalletResponse response) {
-    print(response.walletName);
-  }
-
-  void _openRazorPay() {
-    var options = {
-      'key': 'rzp_test_Pq4V0mcist4gfu',
-      'amount': 100000,
-      'name': 'Shakib',
-      'description': 'Fine T-Shirt',
-      'prefill': {'contact': '8888888888', 'email': 'test@razorpay.com'}
-    };
-    try {
-      _razorpay.open(options);
-    } catch (e) {
-      debugPrint(e.toString());
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -838,45 +812,7 @@ class _PaymentOptionsListBuilderState extends State<PaymentOptionsListBuilder> {
                   int _index = _implementedPaymentOptions.indexOf(e);
                   return ListTile(
                     onTap: () async {
-                      var _checkoutNotifier =
-                          context.read(checkoutNotifierProvider.notifier);
-
-                      widget.onPressedCheckBox!(_index);
-
-                      if (e.code == stripe) {
-                        await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => StripePaymentCardScreen(
-                                      cardHolderName:
-                                          _checkoutNotifier.cardHolderName ??
-                                              "",
-                                      cardNumber:
-                                          _checkoutNotifier.cardNumber ?? "",
-                                      expiryDate: _checkoutNotifier.expMonth ==
-                                              null
-                                          ? ""
-                                          : "${_checkoutNotifier.expMonth}/${_checkoutNotifier.expYear}",
-                                      cvvCode: _checkoutNotifier.cvc ?? "",
-                                    ))).then((value) {
-                          if (value != null && value is CreditCardResult) {
-                            _checkoutNotifier.cardHolderName =
-                                value.cardHolderName;
-                            _checkoutNotifier.cardNumber = value.cardNumber;
-                            _checkoutNotifier.expMonth = value.expMonth;
-                            _checkoutNotifier.expYear = value.expYear;
-                            _checkoutNotifier.cvc = value.cvc;
-
-                            setState(() {
-                              _isStripePaymentSaved = true;
-                            });
-                          }
-                        });
-                      }
-
-                      if (e.code == razorpay) {
-                        _openRazorPay();
-                      }
+                      widget.onPressedCheckBox!(_index, e.code!);
 
                       context
                           .read(checkoutNotifierProvider.notifier)
@@ -887,11 +823,6 @@ class _PaymentOptionsListBuilderState extends State<PaymentOptionsListBuilder> {
                       });
                     },
                     title: Text(e.name!),
-                    subtitle: _isStripePaymentSaved && e.code == stripe
-                        ? const Text("Credit Card Saved")
-                        : _isRazorPaymentSaved && e.code == razorpay
-                            ? const Text("Payment is successfull!")
-                            : null,
                     trailing: _index == selectedIndex
                         ? const Icon(Icons.check_circle, color: kPrimaryColor)
                         : Icon(
@@ -981,12 +912,12 @@ class ShippingOptionsBuilder extends StatefulWidget {
     Key? key,
     required this.shippingOptions,
     this.cartItem,
-    this.onPressedCheckBox,
+    required this.onPressedCheckBox,
   }) : super(key: key);
 
   final List<ShippingOptions>? shippingOptions;
   final CartItemDetails? cartItem;
-  final Function(int)? onPressedCheckBox;
+  final Function(int) onPressedCheckBox;
 
   @override
   _ShippingOptionsBuilderState createState() => _ShippingOptionsBuilderState();
@@ -1009,7 +940,7 @@ class _ShippingOptionsBuilderState extends State<ShippingOptionsBuilder> {
           itemBuilder: (context, index) {
             return ListTile(
               onTap: () {
-                widget.onPressedCheckBox!(index);
+                widget.onPressedCheckBox(index);
                 context
                     .read(cartItemDetailsNotifierProvider.notifier)
                     .updateCart(widget.cartItem!.id,

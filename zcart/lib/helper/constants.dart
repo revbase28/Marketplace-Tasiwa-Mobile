@@ -12,6 +12,6 @@ const String recentlyReviewedIds = 'recently_reviewed_ids';
 const String cod = 'cod';
 const String wire = 'wire';
 const String stripe = 'stripe';
-const String razorpay = 'razorpay';
+const String paystack = 'paystack';
 
-final List<String> paymentMethods = [cod, wire, stripe, razorpay];
+final List<String> paymentMethods = [cod, wire, stripe, paystack];
