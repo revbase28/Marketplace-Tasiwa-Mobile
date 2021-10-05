@@ -155,6 +155,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.2.0"
+  convert:
+    dependency: transitive
+    description:
+      name: convert
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.0.1"
   crypto:
     dependency: transitive
     description:
@@ -319,6 +326,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.2.4"
+  flutter_paypal:
+    dependency: "direct main"
+    description:
+      name: flutter_paypal
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.8"
   flutter_paystack:
     dependency: "direct main"
     description:
@@ -504,6 +518,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.13.3"
+  http_auth:
+    dependency: transitive
+    description:
+      name: http_auth
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.1"
   http_parser:
     dependency: transitive
     description:
