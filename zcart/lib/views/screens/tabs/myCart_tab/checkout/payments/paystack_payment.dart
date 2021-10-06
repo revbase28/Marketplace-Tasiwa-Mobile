@@ -8,7 +8,7 @@ import 'package:zcart/helper/images.dart';
 class PayStackPayment {
   BuildContext context;
   String email;
-  double price;
+  int price;
   PayStackPayment({
     required this.context,
     required this.email,
@@ -49,7 +49,8 @@ class PayStackPayment {
     return _initialize().then((_) async {
       Charge _charge = Charge()
         ..email = email
-        ..amount = (price * 100).toInt()
+        ..currency = API.paystackCurrency
+        ..amount = price
         ..reference = _getReference()
         ..card = _getCardFromUI();
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_paypal/flutter_paypal.dart';
+import 'package:zcart/data/network/api.dart';
 
 class PayPalPayment extends StatelessWidget {
   const PayPalPayment({Key? key}) : super(key: key);
@@ -16,11 +17,9 @@ class PayPalPayment extends StatelessWidget {
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (BuildContext context) => UsePaypal(
-                            sandboxMode: true,
-                            clientId:
-                                "AW1TdvpSGbIM5iP4HJNI5TyTmwpY9Gv9dYw8_8yW5lYIbCqf326vrkrp0ce9TAqjEGMHiV3OqJM_aRT0",
-                            secretKey:
-                                "EHHtTDjnmTZATYBPiGzZC_AZUfMpMAzj2VZUeqlFUrRJA_C0pQNCxDccB5qoRQSEdcOnnKQhycuOWdP9",
+                            sandboxMode: API.paypalSandboxMode,
+                            clientId: API.paypalClientId,
+                            secretKey: API.paypalClientSecter,
                             returnURL: "https://samplesite.com/return",
                             cancelURL: "https://samplesite.com/cancel",
                             transactions: const [

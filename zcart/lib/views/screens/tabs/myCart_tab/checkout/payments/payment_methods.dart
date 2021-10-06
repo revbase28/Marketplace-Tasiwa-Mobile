@@ -9,7 +9,7 @@ class PaymentMethods {
   PaymentMethods._();
 
   static Future<bool> pay(BuildContext context, String code,
-      {required String email, required double price}) async {
+      {required String email, required int price}) async {
     var _checkoutNotifier = context.read(checkoutNotifierProvider.notifier);
 
     if (code == stripe) {

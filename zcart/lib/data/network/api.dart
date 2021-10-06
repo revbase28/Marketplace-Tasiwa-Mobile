@@ -14,9 +14,21 @@ class API {
   /// Payment Gateway Keys
 
   //Change these values as your app requires
-  // Paystack Key
+
+  // Paystack Configs
   static const String paystackKey =
-      'pk_test_1f8cc00ee10d6a52be580e831b62564fdf0840f1';
+      'pk_test_4b0bfd886ad641c03fc008017c0f127adb3eecb3';
+
+  static const String paystackCurrency = "ZAR";
+
+  //Paypal Configs
+
+  static const bool paypalSandboxMode = true;
+  static const String paypalClientId =
+      "AXRqb3n6Qf47LZ0AFX8r5VWTOzzG6Sa_-Bw0NDzRkiZkeaNiJktbWjh9d5nvQWD4TZIevjo48sKLKcbw";
+
+  static const String paypalClientSecter =
+      "EMBrxeiIPCUBS-McqQ088Tytw22SkxLzmMdJGu0SXzRL6KIrNH1C7yKvm3qEhuIrs9LuOGDIFck4sEMh";
 
   //
 

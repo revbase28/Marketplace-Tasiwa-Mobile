@@ -15,6 +15,7 @@ import 'package:zcart/data/models/address/shipping_model.dart';
 import 'package:zcart/data/models/cart/cart_item_details_model.dart';
 import 'package:zcart/data/network/network_utils.dart';
 import 'package:zcart/helper/constants.dart';
+import 'package:zcart/helper/get_amount_from_string.dart';
 import 'package:zcart/riverpod/providers/address_provider.dart';
 import 'package:zcart/riverpod/providers/checkout_provider.dart';
 import 'package:zcart/riverpod/providers/provider.dart';
@@ -695,6 +696,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   }
 
   continued(CartItemDetailsState cartItemDetailsState) async {
+    int _grandTotal = cartItemDetailsState is CartItemDetailsLoadedState
+        ? getAmountFromString(cartItemDetailsState.cartItemDetails!.grandTotal!)
+        : 0;
+
     if (_currentStep == 0 && _selectedAddressIndex == null) {
       toast(
         LocaleKeys.select_shipping_address_continue.tr(),
@@ -717,9 +722,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           if (_emailFormKey.currentState!.validate()) {
             if (_agreedToTerms) {
               if (_formKey.currentState!.validate()) {
-                //TODO:Price Needs to be fixed
                 await PaymentMethods.pay(context, _paymentMethodCode,
-                        email: _emailController.text.trim(), price: 100)
+                        email: _emailController.text.trim(), price: _grandTotal)
                     .then((value) {
                   if (value) {
                     context
@@ -737,7 +741,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         } else {
           if (_emailFormKey.currentState!.validate()) {
             await PaymentMethods.pay(context, _paymentMethodCode,
-                    email: _emailController.text.trim(), price: 100)
+                    email: _emailController.text.trim(), price: _grandTotal)
                 .then((value) {
               if (value) {
                 context.read(checkoutNotifierProvider.notifier).guestCheckout();
@@ -749,7 +753,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         }
       } else {
         await PaymentMethods.pay(context, _paymentMethodCode,
-                email: widget.customerEmail!, price: 100)
+                email: widget.customerEmail!, price: _grandTotal)
             .then((value) {
           if (value) {
             context.read(checkoutNotifierProvider.notifier).checkout();
