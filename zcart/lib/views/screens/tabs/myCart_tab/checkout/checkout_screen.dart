@@ -785,7 +785,6 @@ class PaymentOptionsListBuilder extends StatefulWidget {
 
 class _PaymentOptionsListBuilderState extends State<PaymentOptionsListBuilder> {
   int? selectedIndex;
-  bool _isStripePaymentSaved = false;
 
   @override
   Widget build(BuildContext context) {

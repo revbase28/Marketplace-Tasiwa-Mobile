@@ -1,6 +1,7 @@
 import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -25,6 +26,9 @@ void main() async {
   //Hive Initialization
   await Hive.initFlutter();
   await Hive.openBox(hiveBox);
+
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
 
   //Run the app
   runApp(

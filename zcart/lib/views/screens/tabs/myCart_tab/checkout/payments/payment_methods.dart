@@ -13,7 +13,7 @@ class PaymentMethods {
     var _checkoutNotifier = context.read(checkoutNotifierProvider.notifier);
 
     if (code == stripe) {
-      await Navigator.push(
+      return await Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => CustomPaymentCardScreen(
@@ -30,6 +30,8 @@ class PaymentMethods {
           _checkoutNotifier.expMonth = value.expMonth;
           _checkoutNotifier.expYear = value.expYear;
           _checkoutNotifier.cvc = value.cvc;
+
+          print("Card Details: ${value.cardNumber}");
 
           return true;
         } else {

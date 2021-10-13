@@ -1,9 +1,11 @@
 class MyConfig {
   MyConfig._();
 
-  // Change these to toggle some settings for the app
+  // Social Login Config
   static const bool isFacebookLoginActive = true;
   static const bool isGoogleLoginActive = true;
+  static const bool isAppleLoginActive = true;
 
+  //Theme Config
   static const bool isChangeAbleThemeActive = true;
 }

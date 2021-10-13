@@ -48,8 +48,6 @@
 		<string>es</string>
 		<string>fa</string>
 	</array>
-	<key>UIStatusBarHidden</key>
-	<true/>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>

@@ -65,7 +65,8 @@ class PayStackPayment {
 
       if (_response.status) {
         print("Payment Successful");
-        print(_response.message);
+        print(_response.reference);
+        print(_response);
         return true;
       } else {
         print("Payment Failed");

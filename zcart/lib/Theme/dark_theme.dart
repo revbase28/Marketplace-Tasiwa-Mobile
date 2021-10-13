@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:zcart/Theme/styles/colors.dart';
 
@@ -58,17 +57,7 @@ TextTheme darkTextTheme(BuildContext context) {
   );
 }
 
-const AppBarTheme darkAppBarTheme = AppBarTheme(
-  color: kPrimaryColor,
-  iconTheme: IconThemeData(color: kLightColor),
-  systemOverlayStyle: SystemUiOverlayStyle.dark,
-  elevation: 0,
-  centerTitle: true,
-  foregroundColor: kLightColor,
-);
-
-ThemeData darkTheme = ThemeData(
-    brightness: Brightness.dark,
+ThemeData darkTheme = ThemeData.dark().copyWith(
     scaffoldBackgroundColor: kDarkBgColor,
     floatingActionButtonTheme: FloatingActionButtonThemeData(
       backgroundColor: _lightPrimaryColor,

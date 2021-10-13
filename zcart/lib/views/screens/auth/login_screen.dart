@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
@@ -7,6 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:zcart/Theme/styles/colors.dart';
 import 'package:zcart/config/config.dart';
@@ -86,7 +89,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             SizedBox(
                               width: MediaQuery.of(context).size.width * 0.8,
@@ -137,88 +140,115 @@ class _LoginScreenState extends State<LoginScreen> {
                                   }
                                 }).pOnly(top: 10),
                             if (!(!MyConfig.isGoogleLoginActive &&
-                                !MyConfig.isFacebookLoginActive))
+                                !MyConfig.isFacebookLoginActive &&
+                                !MyConfig.isAppleLoginActive))
                               //TODO: Add social login
                               const Text("Or Continue With")
                                   .text
                                   .textStyle(context.textTheme.caption!)
+                                  .align(TextAlign.center)
                                   .make()
                                   .py(12),
-                            Wrap(
-                              alignment: WrapAlignment.center,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 if (MyConfig.isGoogleLoginActive)
-                                  ElevatedButton.icon(
-                                    onPressed: () async {
-                                      final GoogleSignInAccount? _googleUser =
-                                          await GoogleSignIn().signIn();
+                                  Expanded(
+                                    child: ElevatedButton.icon(
+                                      onPressed: () async {
+                                        final GoogleSignInAccount? _googleUser =
+                                            await GoogleSignIn().signIn();
 
-                                      if (_googleUser != null) {
-                                        final GoogleSignInAuthentication
-                                            _googleAuth =
-                                            await _googleUser.authentication;
-                                        context
-                                            .read(userNotifierProvider.notifier)
-                                            .loginUsingGoogle(
-                                                _googleAuth.accessToken!);
-                                      } else {
-                                        toast(LocaleKeys.something_went_wrong
-                                            .tr());
-                                      }
-                                    },
-                                    style: ButtonStyle(
-                                        padding: MaterialStateProperty.all(
-                                          const EdgeInsets.symmetric(
-                                              horizontal: 24, vertical: 12),
-                                        ),
-                                        backgroundColor:
-                                            MaterialStateProperty.all(
-                                                const Color(0xffCE3927))),
-                                    icon: const Icon(
-                                      FontAwesomeIcons.google,
-                                      size: 18,
-                                    ),
-                                    label: const Text("Google"),
-                                  ).px(5),
+                                        if (_googleUser != null) {
+                                          final GoogleSignInAuthentication
+                                              _googleAuth =
+                                              await _googleUser.authentication;
+                                          context
+                                              .read(
+                                                  userNotifierProvider.notifier)
+                                              .loginUsingGoogle(
+                                                  _googleAuth.accessToken!);
+                                        } else {
+                                          toast(LocaleKeys.something_went_wrong
+                                              .tr());
+                                        }
+                                      },
+                                      style: ButtonStyle(
+                                          padding: MaterialStateProperty.all(
+                                            const EdgeInsets.symmetric(
+                                                horizontal: 24, vertical: 12),
+                                          ),
+                                          shape: MaterialStateProperty.all(
+                                              const RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.all(
+                                              Radius.circular(10),
+                                            ),
+                                          )),
+                                          backgroundColor:
+                                              MaterialStateProperty.all(
+                                                  const Color(0xffCE3927))),
+                                      icon: const Icon(
+                                        FontAwesomeIcons.google,
+                                        size: 18,
+                                      ),
+                                      label: const Text("Google"),
+                                    ).px(5),
+                                  ),
                                 if (MyConfig.isFacebookLoginActive)
-                                  ElevatedButton.icon(
-                                    onPressed: () async {
-                                      final LoginResult result =
-                                          await FacebookAuth.instance.login();
-                                      if (result.status ==
-                                          LoginStatus.success) {
-                                        // you are logged
-                                        final AccessToken accessToken =
-                                            result.accessToken!;
+                                  Expanded(
+                                    child: ElevatedButton.icon(
+                                      onPressed: () async {
+                                        final LoginResult result =
+                                            await FacebookAuth.instance.login();
+                                        if (result.status ==
+                                            LoginStatus.success) {
+                                          // you are logged
+                                          final AccessToken accessToken =
+                                              result.accessToken!;
 
-                                        context
-                                            .read(userNotifierProvider.notifier)
-                                            .loginUsingFacebook(
-                                                accessToken.token);
-                                      } else {
-                                        toast(LocaleKeys.something_went_wrong
-                                            .tr());
-                                      }
-                                    },
-                                    style: ButtonStyle(
-                                        padding: MaterialStateProperty.all(
-                                          const EdgeInsets.symmetric(
-                                              horizontal: 24, vertical: 12),
-                                        ),
-                                        backgroundColor:
-                                            MaterialStateProperty.all(
-                                                const Color(0xff3b5998))),
-                                    icon: const Icon(
-                                      FontAwesomeIcons.facebook,
-                                      size: 18,
-                                    ),
-                                    label: const Text("Facebook"),
-                                  ).px(5),
+                                          context
+                                              .read(
+                                                  userNotifierProvider.notifier)
+                                              .loginUsingFacebook(
+                                                  accessToken.token);
+                                        } else {
+                                          toast(LocaleKeys.something_went_wrong
+                                              .tr());
+                                        }
+                                      },
+                                      style: ButtonStyle(
+                                          padding: MaterialStateProperty.all(
+                                            const EdgeInsets.symmetric(
+                                                horizontal: 24, vertical: 12),
+                                          ),
+                                          shape: MaterialStateProperty.all(
+                                              const RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.all(
+                                              Radius.circular(10),
+                                            ),
+                                          )),
+                                          backgroundColor:
+                                              MaterialStateProperty.all(
+                                                  const Color(0xff3b5998))),
+                                      icon: const Icon(
+                                        FontAwesomeIcons.facebook,
+                                        size: 18,
+                                      ),
+                                      label: const Text("Facebook"),
+                                    ).px(5),
+                                  ),
                               ],
                             ),
+                            if (Platform.isIOS)
+                              if (MyConfig.isAppleLoginActive)
+                                SignInWithAppleButton(
+                                  text: "Apple",
+                                  onPressed: () {},
+                                ).px(5).py(5),
                             Text(
                               LocaleKeys.dont_have_account.tr(),
                               style: context.textTheme.caption,
+                              textAlign: TextAlign.center,
                             )
                                 .onInkTap(
                                     () => context.nextPage(SignUpScreen()))
