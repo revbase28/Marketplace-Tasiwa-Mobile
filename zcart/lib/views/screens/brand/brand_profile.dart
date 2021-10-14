@@ -156,7 +156,7 @@ class _BrandDescriptionState extends State<BrandDescription> {
           });
         },
         subtitle: Text(
-          widget.brandProfile.data!.description!,
+          widget.brandProfile.data!.description ?? "",
           maxLines: _maxLines,
           overflow: TextOverflow.ellipsis,
           style: context.textTheme.subtitle2,

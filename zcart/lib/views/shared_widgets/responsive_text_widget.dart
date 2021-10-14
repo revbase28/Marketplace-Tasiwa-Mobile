@@ -15,7 +15,7 @@ class ResponsiveTextWidget extends StatelessWidget {
       children: [
         Flexible(
           child: Text(
-            title!,
+            title ?? '',
             style: textStyle,
             maxLines: null,
             softWrap: true,

@@ -549,7 +549,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               },
                             ).cornerRadius(10)
                           : Container(
-                              color: kLightColor,
+                              color: EasyDynamicTheme.of(context).themeMode ==
+                                      ThemeMode.dark
+                                  ? kDarkCardBgColor
+                                  : kLightColor,
                               padding: const EdgeInsets.all(10),
                               width: context.screenWidth,
                               child: Column(
@@ -960,7 +963,7 @@ class _ShippingOptionsBuilderState extends State<ShippingOptionsBuilder> {
               },
               title: Text(
                 widget.shippingOptions![index].name!,
-              ).pOnly(bottom: 5),
+              ),
               trailing: Text(
                 widget.shippingOptions![index].cost!,
                 style: const TextStyle(
@@ -973,9 +976,11 @@ class _ShippingOptionsBuilderState extends State<ShippingOptionsBuilder> {
                 children: [
                   Text(
                     widget.shippingOptions![index].carrierName!,
+                    style: Theme.of(context).textTheme.caption,
                   ),
                   Text(
                     widget.shippingOptions![index].deliveryTakes!.substring(25),
+                    style: Theme.of(context).textTheme.caption,
                   ),
                 ],
               ).pOnly(right: 10),
