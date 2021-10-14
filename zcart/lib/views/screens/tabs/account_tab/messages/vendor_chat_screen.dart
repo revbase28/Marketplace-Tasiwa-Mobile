@@ -5,6 +5,7 @@ import 'package:zcart/Theme/styles/colors.dart';
 import 'package:zcart/data/controller/chat/chat_controller.dart';
 import 'package:zcart/data/controller/chat/chat_state.dart';
 import 'package:zcart/data/models/chat/product/product_chat_model.dart';
+import 'package:zcart/helper/url_launcher_helper.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:zcart/views/shared_widgets/loading_widget.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -261,7 +262,13 @@ class VendorChatScreen extends StatelessWidget {
                               message.attachments!.isEmpty
                                   ? const SizedBox()
                                   : Text(message.attachments.toString()),
-                              HtmlWidget(message.reply!),
+                              HtmlWidget(
+                                message.reply!,
+                                onTapUrl: (url) {
+                                  launchURL(url);
+                                  return true;
+                                },
+                              ),
                               const SizedBox(height: 5),
                               message.customer != null
                                   ? Row(
@@ -339,6 +346,10 @@ class FirstMessageBox extends StatelessWidget {
           ),
           HtmlWidget(
             productChatModel.data!.message!,
+            onTapUrl: (url) {
+              launchURL(url);
+              return true;
+            },
             textStyle: const TextStyle(color: kPrimaryLightTextColor),
           ).paddingBottom(5),
 

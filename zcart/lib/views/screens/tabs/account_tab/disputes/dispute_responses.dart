@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:zcart/helper/url_launcher_helper.dart';
 import 'package:zcart/riverpod/providers/dispute_provider.dart';
 import 'package:zcart/riverpod/state/dispute/dispute_details_state.dart';
 import 'package:velocity_x/velocity_x.dart';
@@ -180,7 +181,13 @@ class DisputeResponseScreen extends StatelessWidget {
                               i < message["attachments"].length;
                               i++)
                             SelectableText("${message["attachments"].first}"),
-                        HtmlWidget(message['reply']),
+                        HtmlWidget(
+                          message['reply'],
+                          onTapUrl: (url) {
+                            launchURL(url);
+                            return true;
+                          },
+                        ),
                         const SizedBox(height: 5),
                         message['customer'] != null
                             ? Row(

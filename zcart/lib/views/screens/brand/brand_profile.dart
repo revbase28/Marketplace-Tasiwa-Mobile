@@ -3,9 +3,11 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:zcart/Theme/styles/colors.dart';
 import 'package:zcart/data/models/brand/brand_profile_model.dart';
+import 'package:zcart/helper/url_launcher_helper.dart';
 import 'package:zcart/riverpod/providers/brand_provider.dart';
 import 'package:zcart/riverpod/state/brand_state.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
@@ -126,20 +128,13 @@ class BrandProfileScreen extends ConsumerWidget {
   }
 }
 
-class BrandDescription extends StatefulWidget {
+class BrandDescription extends StatelessWidget {
   const BrandDescription({
     Key? key,
     required this.brandProfile,
   }) : super(key: key);
 
   final BrandProfile brandProfile;
-
-  @override
-  _BrandDescriptionState createState() => _BrandDescriptionState();
-}
-
-class _BrandDescriptionState extends State<BrandDescription> {
-  int _maxLines = 3;
 
   @override
   Widget build(BuildContext context) {
@@ -150,16 +145,16 @@ class _BrandDescriptionState extends State<BrandDescription> {
           : kLightColor,
       child: ListTile(
         title: Text(LocaleKeys.description.tr()).py(5),
-        onTap: () {
-          setState(() {
-            _maxLines = _maxLines > 3 ? 3 : 99999;
-          });
-        },
-        subtitle: Text(
-          widget.brandProfile.data!.description ?? "",
-          maxLines: _maxLines,
-          overflow: TextOverflow.ellipsis,
-          style: context.textTheme.subtitle2,
+        subtitle: HtmlWidget(
+          brandProfile.data!.description ?? "",
+          enableCaching: true,
+          webView: true,
+          webViewJs: true,
+          webViewMediaPlaybackAlwaysAllow: true,
+          onTapUrl: (url) {
+            launchURL(url);
+            return true;
+          },
         ),
       ),
     );

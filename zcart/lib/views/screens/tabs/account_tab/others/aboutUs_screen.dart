@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:zcart/data/controller/others/about_us_state.dart';
 import 'package:zcart/data/controller/others/others_controller.dart';
+import 'package:zcart/helper/url_launcher_helper.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:zcart/views/shared_widgets/shared_widgets.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -31,6 +32,10 @@ class AboutUsScreen extends StatelessWidget {
                         aboutUsState.aboutUsModel.data!.content!,
                         textStyle: context.textTheme.bodyText2!,
                         webView: true,
+                        onTapUrl: (url) {
+                          launchURL(url);
+                          return true;
+                        },
                       )
                     : aboutUsState is AboutUsLoadingState
                         ? LoadingWidget()

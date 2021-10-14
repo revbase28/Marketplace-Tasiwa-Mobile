@@ -6,6 +6,7 @@ import 'package:velocity_x/velocity_x.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:zcart/data/controller/blog/blog_controller.dart';
 import 'package:zcart/data/controller/blog/blog_state.dart';
+import 'package:zcart/helper/url_launcher_helper.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:zcart/views/shared_widgets/loading_widget.dart';
 import 'package:zcart/Theme/styles/colors.dart';
@@ -127,6 +128,10 @@ class BlogDetailsScreen extends ConsumerWidget {
                         fontSize: 15, letterSpacing: 0, wordSpacing: 1.4),
                     enableCaching: true,
                     webView: true,
+                    onTapUrl: (url) {
+                      launchURL(url);
+                      return true;
+                    },
                   ).pOnly(bottom: 10).px(16),
                   Text(
                     LocaleKeys.comments.tr(),

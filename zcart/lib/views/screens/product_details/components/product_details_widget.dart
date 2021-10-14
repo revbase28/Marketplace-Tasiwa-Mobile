@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:zcart/Theme/styles/colors.dart';
+import 'package:zcart/helper/url_launcher_helper.dart';
 import 'package:zcart/riverpod/state/product/product_state.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 
@@ -244,6 +245,10 @@ class ProductDetailsWidget extends StatelessWidget {
                       webView: true,
                       webViewJs: true,
                       webViewMediaPlaybackAlwaysAllow: true,
+                      onTapUrl: (url) {
+                        launchURL(url);
+                        return true;
+                      },
                     ).px(10).py(5),
                   ],
                 ),
@@ -268,6 +273,10 @@ class ProductDetailsWidget extends StatelessWidget {
                       enableCaching: true,
                       webView: true,
                       webViewMediaPlaybackAlwaysAllow: true,
+                      onTapUrl: (url) {
+                        launchURL(url);
+                        return true;
+                      },
                     ).px(10).py(5),
                   ],
                 ),

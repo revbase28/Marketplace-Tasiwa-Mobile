@@ -56,22 +56,21 @@ class PersonalDetails extends StatelessWidget {
                     ElevatedButton(
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
-                            if (_dateOfBirth != null) {
-                              hideKeyboard(context);
-                              await context
-                                  .read(userNotifierProvider.notifier)
-                                  .updateUserInfo(
-                                    fullNameController!.text.trim(),
-                                    nickNameController!.text.trim(),
-                                    bioController!.text.trim(),
-                                    emailController!.text.trim(),
-                                    getDateFormatedToString(_dateOfBirth!),
-                                  );
-                              await context
-                                  .read(userNotifierProvider.notifier)
-                                  .getUserInfo();
-                            }
-                            toast(LocaleKeys.something_went_wrong.tr());
+                            hideKeyboard(context);
+                            await context
+                                .read(userNotifierProvider.notifier)
+                                .updateUserInfo(
+                                  fullNameController!.text.trim(),
+                                  nickNameController!.text.trim(),
+                                  bioController!.text.trim(),
+                                  emailController!.text.trim(),
+                                  _dateOfBirth != null
+                                      ? getDateFormatedToString(_dateOfBirth!)
+                                      : "",
+                                );
+                            await context
+                                .read(userNotifierProvider.notifier)
+                                .getUserInfo();
                           }
                         },
                         child: Text(LocaleKeys.update.tr())),

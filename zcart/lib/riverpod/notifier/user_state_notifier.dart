@@ -80,7 +80,7 @@ class UserNotifier extends StateNotifier<UserState> {
           email: email,
           dob: dob);
     } on NetworkException {
-      state = UserErrorState(LocaleKeys.something_went_wrong.tr());
+      // state = UserErrorState(LocaleKeys.something_went_wrong.tr());
     }
   }
 
@@ -90,7 +90,7 @@ class UserNotifier extends StateNotifier<UserState> {
       await _iUserRepository.updatePassword(
           oldPassword, newPassword, confirmPassword);
     } on NetworkException {
-      state = UserErrorState(LocaleKeys.something_went_wrong.tr());
+      // state = UserErrorState(LocaleKeys.something_went_wrong.tr());
     }
   }
 

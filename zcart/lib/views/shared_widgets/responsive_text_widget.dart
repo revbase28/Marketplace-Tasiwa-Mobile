@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
+import 'package:zcart/helper/url_launcher_helper.dart';
 
 class ResponsiveTextWidget extends StatelessWidget {
   // ignore: use_key_in_widget_constructors
@@ -14,11 +16,16 @@ class ResponsiveTextWidget extends StatelessWidget {
     return Row(
       children: [
         Flexible(
-          child: Text(
+          child: HtmlWidget(
             title ?? '',
-            style: textStyle,
-            maxLines: null,
-            softWrap: true,
+            enableCaching: true,
+            webView: true,
+            webViewJs: true,
+            webViewMediaPlaybackAlwaysAllow: true,
+            onTapUrl: (url) {
+              launchURL(url);
+              return true;
+            },
           ),
         ),
       ],

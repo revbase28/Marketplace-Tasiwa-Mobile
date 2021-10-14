@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:zcart/data/controller/blog/blog_controller.dart';
 import 'package:zcart/data/controller/blog/blog_state.dart';
+import 'package:zcart/helper/url_launcher_helper.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:zcart/views/screens/tabs/account_tab/blogs/blogsDetails_screen.dart';
 import 'package:zcart/views/shared_widgets/loading_widget.dart';
@@ -72,6 +73,10 @@ class BlogsScreen extends ConsumerWidget {
                                           ? "..."
                                           : ""),
                                   textStyle: context.textTheme.subtitle2!,
+                                  onTapUrl: (url) {
+                                    launchURL(url);
+                                    return true;
+                                  },
                                 ).pOnly(bottom: 5),
                                 Text(
                                   "${LocaleKeys.author.tr()} : ${blogsState.blogList![index].author!.name}",

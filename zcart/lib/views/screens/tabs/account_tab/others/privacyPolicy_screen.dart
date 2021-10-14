@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:zcart/data/controller/others/others_controller.dart';
 import 'package:zcart/data/controller/others/privacy_policy_state.dart';
+import 'package:zcart/helper/url_launcher_helper.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:zcart/views/shared_widgets/shared_widgets.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -29,6 +30,10 @@ class PrivacyPolicyScreen extends StatelessWidget {
                     ? HtmlWidget(
                         privacyPolicyState.privacyPolicyModel.data!.content!,
                         webView: true,
+                        onTapUrl: (url) {
+                          launchURL(url);
+                          return true;
+                        },
                       )
                     : privacyPolicyState is PrivacyPolicyLoadingState
                         ? LoadingWidget()
