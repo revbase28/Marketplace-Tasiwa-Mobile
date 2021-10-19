@@ -23,3 +23,20 @@ class DealsUnderThePriceNotifier
     }
   }
 }
+
+class DealOfTheDayNotifier extends StateNotifier<DealOfTheDayState> {
+  final IDealsRepository _iDealsRepository;
+
+  DealOfTheDayNotifier(this._iDealsRepository)
+      : super(const DealOfTheDayStateInitialState());
+
+  Future<void> getDealOfTheDay() async {
+    try {
+      state = const DealOfTheDayStateLoadingState();
+      final deal = await _iDealsRepository.fetchDealOfTheDay();
+      state = DealOfTheDayStateLoadedState(deal);
+    } on NetworkException {
+      state = DealOfTheDayStateErrorState(LocaleKeys.something_went_wrong.tr());
+    }
+  }
+}

@@ -127,7 +127,7 @@ class WishListTab extends ConsumerWidget {
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: [
-                                        Row(
+                                        Wrap(
                                           children: [
                                             Container(
                                               decoration: BoxDecoration(

@@ -103,72 +103,77 @@ class OrderCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Card(
-                        elevation: 0,
-                        child: SizedBox(
-                          height: 50,
-                          width: 50,
-                          child: Image.network(
-                            orderListState.orders![orderIndex!].shop!.image!,
-                            errorBuilder: (BuildContext _, Object error,
-                                StackTrace? stack) {
-                              return Container();
-                            },
-                            fit: BoxFit.contain,
-                          ).pOnly(left: 10),
-                        ),
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          orderListState.orders![orderIndex!].shop!.name == null
-                              ? const Text("")
-                              : Text(
-                                  orderListState
-                                      .orders![orderIndex!].shop!.name!,
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                          RatingBar.builder(
-                            initialRating: double.parse(orderListState
-                                    .orders![orderIndex!].shop!.rating ??
-                                '0.0'),
-                            minRating: 0,
-                            direction: Axis.horizontal,
-                            allowHalfRating: true,
-                            itemCount: 5,
-                            ignoreGestures: true,
-                            itemSize: 12,
-                            itemPadding:
-                                const EdgeInsets.symmetric(horizontal: 0.0),
-                            itemBuilder: (context, _) =>
-                                const Icon(Icons.star, color: Colors.amber),
-                            onRatingUpdate: (rating) => print(rating),
-                          ).pOnly(top: 5)
-                        ],
+                  Card(
+                    elevation: 0,
+                    child: SizedBox(
+                      height: 50,
+                      width: 50,
+                      child: Image.network(
+                        orderListState.orders![orderIndex!].shop!.image!,
+                        errorBuilder:
+                            (BuildContext _, Object error, StackTrace? stack) {
+                          return Container();
+                        },
+                        fit: BoxFit.contain,
                       ).pOnly(left: 10),
-                    ],
+                    ),
                   ),
-                  Container(
-                    decoration: BoxDecoration(
-                        color:
-                            orderListState.orders![orderIndex!].orderStatus !=
-                                    "DELIVERED"
-                                ? kPrimaryColor
-                                : Colors.green,
-                        borderRadius: BorderRadius.circular(10)),
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                    child: Text(
-                        orderListState.orders![orderIndex!].orderStatus!,
-                        style: context.textTheme.overline!
-                            .copyWith(color: kPrimaryLightTextColor)),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        orderListState.orders![orderIndex!].shop!.name == null
+                            ? const Text("")
+                            : Text(
+                                orderListState.orders![orderIndex!].shop!.name!,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            RatingBar.builder(
+                              initialRating: double.parse(orderListState
+                                      .orders![orderIndex!].shop!.rating ??
+                                  '0.0'),
+                              minRating: 0,
+                              direction: Axis.horizontal,
+                              allowHalfRating: true,
+                              itemCount: 5,
+                              ignoreGestures: true,
+                              itemSize: 12,
+                              itemPadding:
+                                  const EdgeInsets.symmetric(horizontal: 0.0),
+                              itemBuilder: (context, _) =>
+                                  const Icon(Icons.star, color: Colors.amber),
+                              onRatingUpdate: (rating) => print(rating),
+                            ).pOnly(top: 5),
+                            Container(
+                              margin: const EdgeInsets.only(left: 10, top: 5),
+                              decoration: BoxDecoration(
+                                  color: orderListState.orders![orderIndex!]
+                                              .orderStatus !=
+                                          "DELIVERED"
+                                      ? kPrimaryColor
+                                      : Colors.green,
+                                  borderRadius: BorderRadius.circular(10)),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 5),
+                              child: Text(
+                                  orderListState
+                                      .orders![orderIndex!].orderStatus!,
+                                  style: context.textTheme.overline!
+                                      .copyWith(color: kPrimaryLightTextColor)),
+                            ),
+                          ],
+                        )
+                      ],
+                    ).pOnly(left: 10),
                   ),
                 ],
               ),

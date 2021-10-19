@@ -7,9 +7,10 @@ class API {
   //Change the base URL to point to your own API server.
   static const test = 'https://test.incevio.cloud/api/';
   static const live = 'https://zcart.incevio.com/api/';
+  static const staging = 'https://staging.incevio.cloud/api/';
 
   //Point the API to the base URL
-  static const base = test;
+  static const base = staging;
 
   /// Payment Gateway Keys
 
@@ -103,6 +104,7 @@ class API {
   ///DEALS
 
   static const dealsUnderThePrice = 'deals/under-the-price';
+  static const dealOfTheDay = 'deals/deal-of-the-day';
 
   /// Product Details
   static productDetails(String? slug) => 'listing/$slug';

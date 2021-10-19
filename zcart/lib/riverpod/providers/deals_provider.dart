@@ -11,3 +11,7 @@ final dealsUnderThePriceNotifierProvider =
     StateNotifierProvider<DealsUnderThePriceNotifier, DealsUnderThePriceState>(
         (ref) =>
             DealsUnderThePriceNotifier(ref.watch(dealsRepositoryProvider)));
+
+final dealOfThedayNotifierProvider =
+    StateNotifierProvider<DealOfTheDayNotifier, DealOfTheDayState>(
+        (ref) => DealOfTheDayNotifier(ref.watch(dealsRepositoryProvider)));
