@@ -29,7 +29,6 @@ import 'package:velocity_x/velocity_x.dart';
 import 'package:zcart/Theme/styles/colors.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:zcart/views/screens/tabs/account_tab/settings/settings_page.dart';
-import 'package:zcart/views/screens/tabs/myCart_tab/checkout/payments/paypal_payment.dart';
 
 class AccountTab extends StatelessWidget {
   const AccountTab({Key? key}) : super(key: key);
@@ -40,13 +39,6 @@ class AccountTab extends StatelessWidget {
         appBar: AppBar(
           title: Text(LocaleKeys.account_text.tr()),
           actions: [
-            IconButton(
-              onPressed: () {
-                context.nextPage(const PayPalPayment());
-              },
-              icon: const Icon(Icons.payment),
-              tooltip: "PayPal",
-            ),
             IconButton(
               onPressed: () {
                 context.nextPage(const SettingsPage());
@@ -64,10 +56,12 @@ class AccountTab extends StatelessWidget {
                 const AccountDashboard(),
                 const UserActivityCard(),
                 const ActionCard(),
-                const RecentlyViewed().p(10),
-                const FeaturedBrands().p(10),
 
                 /// Recently viewed
+                const RecentlyViewed()
+                    .pOnly(bottom: 0, top: 10, right: 10, left: 10),
+                const FeaturedBrands()
+                    .pOnly(bottom: 10, top: 0, right: 10, left: 10),
               ],
             ),
           ),

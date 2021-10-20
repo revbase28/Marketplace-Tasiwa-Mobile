@@ -10,7 +10,7 @@ class API {
   static const staging = 'https://staging.incevio.cloud/api/';
 
   //Point the API to the base URL
-  static const base = staging;
+  static const base = test;
 
   /// Payment Gateway Keys
 
@@ -25,11 +25,13 @@ class API {
   //Paypal Configs
 
   static const bool paypalSandboxMode = true;
+  static const String paypalTransactionDescription = "Payment for ZCart";
+  static const String payPalCurrency = "USD";
   static const String paypalClientId =
-      "AXRqb3n6Qf47LZ0AFX8r5VWTOzzG6Sa_-Bw0NDzRkiZkeaNiJktbWjh9d5nvQWD4TZIevjo48sKLKcbw";
+      "AT1_wwlwFHefidTjEF4DYzjOVoI7ZK66ib1zlVA0YZUPuNj4D4IG_0Sxmto5Q6leByaxgdbHi-KkkaHz";
 
-  static const String paypalClientSecter =
-      "EMBrxeiIPCUBS-McqQ088Tytw22SkxLzmMdJGu0SXzRL6KIrNH1C7yKvm3qEhuIrs9LuOGDIFck4sEMh";
+  static const String paypalClientSecret =
+      "EO4T0rY9u0gcKlegpW8nGKoXS1QjUNHLlfgcGPjW5Sv5r7o7gMPVMaPAfGgmqbQWo7UB8OSG2Fgb2Nkt";
 
   //
 
@@ -174,7 +176,7 @@ class API {
   static shippingOptions(id) => 'listing/$id/shipTo';
 
   /// Payment options
-  static paymentOptions(shopSlug) => 'paymentOptions/$shopSlug';
+  static paymentOptions(cartId) => 'cart/$cartId/paymentOptions';
 
   /// Dispute
   static const disputes = 'disputes';

@@ -24,3 +24,7 @@ int getAmountFromString(String amount) {
 
   return int.parse(value);
 }
+
+double getDoubleAmountFromString(String amount) {
+  return getAmountFromString(amount) / 100;
+}

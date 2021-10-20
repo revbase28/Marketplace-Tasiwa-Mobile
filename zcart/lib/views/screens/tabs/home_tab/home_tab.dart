@@ -219,7 +219,10 @@ class DealOfTheDayWidget extends StatelessWidget {
             child: Stack(
               children: [
                 Container(
-                  color: kDarkColor,
+                  decoration: BoxDecoration(
+                    color: kDarkColor,
+                    borderRadius: BorderRadius.circular(7),
+                  ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -392,6 +395,5 @@ class DealOfTheDayWidget extends StatelessWidget {
         ],
       ),
     );
-    ;
   }
 }

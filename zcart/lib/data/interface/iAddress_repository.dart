@@ -48,5 +48,5 @@ abstract class IAddressRepository {
 
   Future<List<PackagingModel>> fetchPackagingInfo(String? shopSlug);
 
-  Future<List<PaymentOptions>?> fetchPaymentMethods(String? shopSlug);
+  Future<List<PaymentOptions>?> fetchPaymentMethods({required String cartId});
 }

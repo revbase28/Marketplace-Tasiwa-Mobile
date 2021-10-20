@@ -95,7 +95,7 @@ class OrderChatScreen extends StatelessWidget {
           ),
         ),
       ),
-      body: _chatBody(context),
+      body: SafeArea(child: _chatBody(context)),
     );
   }
 
@@ -155,83 +155,55 @@ class OrderChatScreen extends StatelessWidget {
                     : LoadingWidget();
           }),
         ),
-        Padding(
-          padding: const EdgeInsets.all(4),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Expanded(
-                child: Container(
-                  padding: const EdgeInsets.only(right: 16),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(30),
-                    border: Border.all(width: 1, color: kAccentColor),
-                    color:
-                        EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-                            ? kDarkCardBgColor
-                            : kLightColor,
-                  ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      IconButton(
-                        onPressed: () {
-                          //TODO: Attach Images
-                        },
-                        icon: const Icon(Icons.image),
-                      ),
-                      Expanded(
-                        child: TextField(
-                          controller: messageController,
-                          keyboardType: TextInputType.multiline,
-                          maxLines: 3,
-                          minLines: 1,
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            hintText: LocaleKeys.type_a_message.tr(),
-                            hintStyle: context.textTheme.caption,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+        _chatTextBox(context),
+      ],
+    );
+  }
+
+  Padding _chatTextBox(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(4),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          IconButton(
+            onPressed: () {
+              //TODO: Attach Images
+            },
+            icon: const Icon(Icons.add),
+          ),
+          Expanded(
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(width: 1, color: kAccentColor),
+                color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+                    ? kDarkCardBgColor
+                    : kLightColor,
+              ),
+              child: TextField(
+                controller: messageController,
+                keyboardType: TextInputType.multiline,
+                maxLines: 3,
+                minLines: 1,
+                decoration: InputDecoration(
+                  contentPadding: const EdgeInsets.all(8),
+                  border: InputBorder.none,
+                  hintText: LocaleKeys.type_a_message.tr(),
+                  hintStyle: context.textTheme.caption,
                 ),
               ),
-              const SizedBox(
-                width: 4,
-              ),
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(50),
-                    color: kPrimaryColor),
-                child: const Icon(Icons.send, color: kLightColor),
-              ).onInkTap(() {
-                if (messageController.text.isNotEmpty) {
-                  String message = messageController.text.trim();
-                  messageController.clear();
-                  context
-                      .read(orderChatSendProvider.notifier)
-                      .sendMessage(
-                          //TODO: Send attachement
-                          orders.id,
-                          message)
-                      .then(
-                    (value) {
-                      messageController.clear();
-                      context
-                          .read(orderChatProvider.notifier)
-                          .orderConversation(orders.id, update: true);
-                    },
-                  );
-                } else {
-                  toast(LocaleKeys.empty_message.tr());
-                }
-              }),
-            ],
+            ),
           ),
-        ),
-      ],
+          const SizedBox(
+            width: 4,
+          ),
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.send, color: kPrimaryColor),
+          )
+        ],
+      ),
     );
   }
 

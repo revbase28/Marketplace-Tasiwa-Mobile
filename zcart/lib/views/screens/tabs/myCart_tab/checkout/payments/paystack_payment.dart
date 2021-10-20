@@ -1,9 +1,10 @@
 import 'dart:io';
-
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_paystack/flutter_paystack.dart';
 import 'package:zcart/data/network/api.dart';
 import 'package:zcart/helper/images.dart';
+import 'package:zcart/riverpod/providers/provider.dart';
 
 class PayStackPayment {
   BuildContext context;
@@ -67,6 +68,17 @@ class PayStackPayment {
         print("Payment Successful");
         print(_response.reference);
         print(_response);
+
+        Map<String, String> _paymentMeta = {
+          "reference": _response.reference!,
+        };
+
+        String _status = "paid";
+
+        var _checkoutNotifier = context.read(checkoutNotifierProvider.notifier);
+
+        _checkoutNotifier.paymentMeta = _paymentMeta;
+        _checkoutNotifier.paymentStatus = _status;
         return true;
       } else {
         print("Payment Failed");

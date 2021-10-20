@@ -203,11 +203,11 @@ class PaymentOptionsNotifier extends StateNotifier<PaymentOptionsState> {
   PaymentOptionsNotifier(this._iAddressRepository)
       : super(const PaymentOptionsInitialState());
 
-  Future fetchPaymentMethod(shopSlug) async {
+  Future fetchPaymentMethod({required String cartId}) async {
     try {
       state = const PaymentOptionsLoadingState();
       final paymentOptions =
-          await _iAddressRepository.fetchPaymentMethods(shopSlug);
+          await _iAddressRepository.fetchPaymentMethods(cartId: cartId);
       state = PaymentOptionsLoadedState(paymentOptions);
     } on NetworkException {
       state = PaymentOptionsErrorState(LocaleKeys.something_went_wrong.tr());

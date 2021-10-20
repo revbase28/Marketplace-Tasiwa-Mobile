@@ -67,6 +67,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   bool _createNewAccount = false;
   bool _agreedToTerms = false;
 
+  bool _isLoading = false;
+
   @override
   Widget build(BuildContext context) {
     return ProviderListener<CheckoutState>(
@@ -103,6 +105,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             body: Consumer(builder: (context, watch, _) {
               final cartItemDetailsState =
                   watch(cartItemDetailsNotifierProvider);
+              final addressState = watch(addressNotifierProvider);
 
               return Column(
                 children: [
@@ -121,9 +124,11 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         physics: const BouncingScrollPhysics(),
                         currentStep: _currentStep,
                         onStepTapped: (step) => tapped(step),
-                        onStepContinue: () {
-                          continued(cartItemDetailsState);
-                        },
+                        onStepContinue: _isLoading
+                            ? null
+                            : () {
+                                continued(cartItemDetailsState, addressState);
+                              },
                         onStepCancel: cancel,
                         steps: <Step>[
                           /// Shipping
@@ -541,8 +546,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               shippingOptions: shippingState.shippingOptions,
                               cartItem: cartItemDetailsState.cartItemDetails,
                               onPressedCheckBox: (value) {
-                                print("Indexxxxxx $value");
-
                                 setState(() {
                                   _selectedShippingOptionsIndex = value;
                                 });
@@ -698,7 +701,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     setState(() => _currentStep = step);
   }
 
-  continued(CartItemDetailsState cartItemDetailsState) async {
+  continued(CartItemDetailsState cartItemDetailsState,
+      AddressState addressState) async {
     int _grandTotal = cartItemDetailsState is CartItemDetailsLoadedState
         ? getAmountFromString(cartItemDetailsState.cartItemDetails!.grandTotal!)
         : 0;
@@ -725,13 +729,30 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           if (_emailFormKey.currentState!.validate()) {
             if (_agreedToTerms) {
               if (_formKey.currentState!.validate()) {
-                await PaymentMethods.pay(context, _paymentMethodCode,
-                        email: _emailController.text.trim(), price: _grandTotal)
-                    .then((value) {
+                await PaymentMethods.pay(
+                  context,
+                  _paymentMethodCode,
+                  email: _emailController.text.trim(),
+                  price: _grandTotal,
+                  shippingId: _selectedAddressIndex!,
+                  addresses: addressState is AddressLoadedState
+                      ? addressState.addresses!
+                      : null,
+                  cartItemDetails:
+                      cartItemDetailsState is CartItemDetailsLoadedState
+                          ? cartItemDetailsState.cartItemDetails
+                          : null,
+                ).then((value) async {
                   if (value) {
-                    context
+                    setState(() {
+                      _isLoading = true;
+                    });
+                    await context
                         .read(checkoutNotifierProvider.notifier)
                         .guestCheckout();
+                    setState(() {
+                      _isLoading = false;
+                    });
                   } else {
                     toast("Payment Failed");
                   }
@@ -743,11 +764,30 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           }
         } else {
           if (_emailFormKey.currentState!.validate()) {
-            await PaymentMethods.pay(context, _paymentMethodCode,
-                    email: _emailController.text.trim(), price: _grandTotal)
-                .then((value) {
+            await PaymentMethods.pay(
+              context,
+              _paymentMethodCode,
+              email: _emailController.text.trim(),
+              price: _grandTotal,
+              shippingId: _selectedShippingOptionsIndex!,
+              addresses: addressState is AddressLoadedState
+                  ? addressState.addresses!
+                  : null,
+              cartItemDetails:
+                  cartItemDetailsState is CartItemDetailsLoadedState
+                      ? cartItemDetailsState.cartItemDetails
+                      : null,
+            ).then((value) async {
               if (value) {
-                context.read(checkoutNotifierProvider.notifier).guestCheckout();
+                setState(() {
+                  _isLoading = true;
+                });
+                await context
+                    .read(checkoutNotifierProvider.notifier)
+                    .guestCheckout();
+                setState(() {
+                  _isLoading = false;
+                });
               } else {
                 toast("Payment Failed");
               }
@@ -755,11 +795,27 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           }
         }
       } else {
-        await PaymentMethods.pay(context, _paymentMethodCode,
-                email: widget.customerEmail!, price: _grandTotal)
-            .then((value) {
+        await PaymentMethods.pay(
+          context,
+          _paymentMethodCode,
+          shippingId: _selectedAddressIndex!,
+          email: widget.customerEmail!,
+          price: _grandTotal,
+          addresses: addressState is AddressLoadedState
+              ? addressState.addresses!
+              : null,
+          cartItemDetails: cartItemDetailsState is CartItemDetailsLoadedState
+              ? cartItemDetailsState.cartItemDetails
+              : null,
+        ).then((value) async {
           if (value) {
-            context.read(checkoutNotifierProvider.notifier).checkout();
+            setState(() {
+              _isLoading = true;
+            });
+            await context.read(checkoutNotifierProvider.notifier).checkout();
+            setState(() {
+              _isLoading = false;
+            });
           } else {
             toast("Payment Failed");
           }

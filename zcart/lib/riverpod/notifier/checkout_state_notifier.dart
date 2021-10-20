@@ -1,8 +1,10 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:device_info/device_info.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:zcart/data/interface/iCheckout_repository.dart';
+import 'package:zcart/helper/constants.dart';
 import 'package:zcart/riverpod/state/checkout_state.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -47,6 +49,10 @@ class CheckoutNotifier extends StateNotifier<CheckoutState> {
   //For Razorpay
   String? razorpayOrderId;
 
+  //For Payments
+  Map<String, String>? paymentMeta;
+  String? paymentStatus;
+
   Future<String> _getDeviceId() async {
     if (Platform.isAndroid) {
       AndroidDeviceInfo _androidInfo = await _deviceInfo.androidInfo;
@@ -66,12 +72,17 @@ class CheckoutNotifier extends StateNotifier<CheckoutState> {
       "packaging_id": packagingId.toString(),
       "agree": "1",
       "device_id": deviceId.toString(),
+      if (paymentMethod == paypal || paymentMethod == paystack)
+        "payment_meta": json.encode(paymentMeta),
+      if (paymentMethod == paypal || paymentMethod == paystack)
+        "payment_status": paymentStatus.toString(),
       if (prescription != null) "prescription": prescription.toString(),
       if (buyerNote != null) "buyer_note": buyerNote,
-      if (cardNumber != null) "card_number": cardNumber,
-      if (expMonth != null) "exp_month": expMonth,
-      if (expYear != null) "exp_year": expYear,
-      if (cvc != null) "cvc": cvc,
+      if (cardNumber != null && paymentMethod == stripe)
+        "card_number": cardNumber,
+      if (expMonth != null && paymentMethod == stripe) "exp_month": expMonth,
+      if (expYear != null && paymentMethod == stripe) "exp_year": expYear,
+      if (cvc != null && paymentMethod == stripe) "cvc": cvc,
       if (razorpayOrderId != null) "razorpay_order_id": razorpayOrderId,
     };
     try {
@@ -110,10 +121,13 @@ class CheckoutNotifier extends StateNotifier<CheckoutState> {
       "city": city.toString(),
       "zip_code": zipCode.toString(),
       "phone": phone.toString(),
-      if (cardNumber != null) "card_number": cardNumber,
-      if (expMonth != null) "exp_month": expMonth,
-      if (expYear != null) "exp_year": expYear,
-      if (cvc != null) "cvc": cvc,
+      "payment_meta": json.encode(paymentMeta),
+      "payment_status": paymentStatus.toString(),
+      if (cardNumber != null && paymentMethod == stripe)
+        "card_number": cardNumber,
+      if (expMonth != null && paymentMethod == stripe) "exp_month": expMonth,
+      if (expYear != null && paymentMethod == stripe) "exp_year": expYear,
+      if (cvc != null && paymentMethod == stripe) "cvc": cvc,
       if (razorpayOrderId != null) "razorpay_order_id": razorpayOrderId,
     };
     try {

@@ -176,12 +176,13 @@ class AddressRepository implements IAddressRepository {
   }
 
   @override
-  Future<List<PaymentOptions>?> fetchPaymentMethods(String? shopSlug) async {
+  Future<List<PaymentOptions>?> fetchPaymentMethods(
+      {required String cartId}) async {
     dynamic responseBody;
     PaymentOptionsModel paymentOptionsModel;
     try {
       responseBody = await handleResponse(await getRequest(
-        API.paymentOptions(shopSlug), /*bearerToken: true*/
+        API.paymentOptions(cartId), /*bearerToken: true*/
       ));
       paymentOptionsModel = PaymentOptionsModel.fromJson(responseBody);
     } catch (e) {

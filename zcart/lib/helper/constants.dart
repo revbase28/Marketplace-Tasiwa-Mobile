@@ -13,5 +13,6 @@ const String cod = 'cod';
 const String wire = 'wire';
 const String stripe = 'stripe';
 const String paystack = 'paystack';
+const String paypal = 'paypal-express';
 
-final List<String> paymentMethods = [cod, wire, stripe, paystack];
+final List<String> paymentMethods = [cod, wire, stripe, paystack, paypal];

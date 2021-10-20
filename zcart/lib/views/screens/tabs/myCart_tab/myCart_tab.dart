@@ -221,7 +221,7 @@ class CartItemCard extends StatelessWidget {
                           .fetchPackagingInfo(cartItem.shop!.slug);
                       context
                           .read(paymentOptionsNotifierProvider.notifier)
-                          .fetchPaymentMethod(cartItem.shop!.slug);
+                          .fetchPaymentMethod(cartId: cartItem.id!.toString());
                       context
                           .read(cartItemDetailsNotifierProvider.notifier)
                           .getCartItemDetails(cartItem.id);
