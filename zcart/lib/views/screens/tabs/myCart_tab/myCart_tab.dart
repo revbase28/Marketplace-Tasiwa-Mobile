@@ -201,7 +201,7 @@ class CartItemCard extends StatelessWidget {
                 final userState = watch(userNotifierProvider);
 
                 return ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       String? customerEmail;
 
                       if (accessAllowed) {
@@ -212,10 +212,7 @@ class CartItemCard extends StatelessWidget {
                           customerEmail = userState.user!.email!;
                         }
                       }
-                      context
-                          .read(shippingNotifierProvider.notifier)
-                          .fetchShippingInfo(
-                              cartItem.shop!.id, cartItem.shippingZoneId);
+
                       context
                           .read(packagingNotifierProvider.notifier)
                           .fetchPackagingInfo(cartItem.shop!.slug);
@@ -228,6 +225,12 @@ class CartItemCard extends StatelessWidget {
                       context
                           .read(countryNotifierProvider.notifier)
                           .getCountries();
+                      context
+                          .read(shippingNotifierProvider.notifier)
+                          .fetchShippingInfo(
+                              shopId: cartItem.shop!.id.toString(),
+                              zoneId: cartItem.shippingZoneId.toString());
+
                       context.nextPage(CheckoutScreen(
                         customerEmail: customerEmail,
                       ));

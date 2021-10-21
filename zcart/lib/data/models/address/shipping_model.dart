@@ -1,4 +1,3 @@
-
 class ShippingModel {
   ShippingModel({
     this.data,
@@ -7,12 +6,13 @@ class ShippingModel {
   List<ShippingOptions>? data;
 
   factory ShippingModel.fromJson(Map<String, dynamic> json) => ShippingModel(
-    data: List<ShippingOptions>.from(json["data"].map((x) => ShippingOptions.fromJson(x))),
-  );
+        data: List<ShippingOptions>.from(
+            json["data"].map((x) => ShippingOptions.fromJson(x))),
+      );
 
   Map<String, dynamic> toJson() => {
-    "data": List<dynamic>.from(data!.map((x) => x.toJson())),
-  };
+        "data": List<dynamic>.from(data!.map((x) => x.toJson())),
+      };
 }
 
 class ShippingOptions {
@@ -30,31 +30,32 @@ class ShippingOptions {
   int? id;
   String? name;
   int? shippingZoneId;
-  int? carrierId;
-  String? carrierName;
+  dynamic carrierId;
+  dynamic carrierName;
   String? cost;
-  String? costRaw;
+  dynamic costRaw;
   String? deliveryTakes;
 
-  factory ShippingOptions.fromJson(Map<String, dynamic> json) => ShippingOptions(
-    id: json["id"],
-    name: json["name"],
-    shippingZoneId: json["shipping_zone_id"],
-    carrierId: json["carrier_id"],
-    carrierName: json["carrier_name"],
-    cost: json["cost"],
-    costRaw: json["cost_raw"],
-    deliveryTakes: json["delivery_takes"],
-  );
+  factory ShippingOptions.fromJson(Map<String, dynamic> json) =>
+      ShippingOptions(
+        id: json["id"],
+        name: json["name"],
+        shippingZoneId: json["shipping_zone_id"],
+        carrierId: json["carrier_id"],
+        carrierName: json["carrier_name"],
+        cost: json["cost"],
+        costRaw: json["cost_raw"],
+        deliveryTakes: json["delivery_takes"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "name": name,
-    "shipping_zone_id": shippingZoneId,
-    "carrier_id": carrierId,
-    "carrier_name": carrierName,
-    "cost": cost,
-    "cost_raw": costRaw,
-    "delivery_takes": deliveryTakes,
-  };
+        "id": id,
+        "name": name,
+        "shipping_zone_id": shippingZoneId,
+        "carrier_id": carrierId,
+        "carrier_name": carrierName,
+        "cost": cost,
+        "cost_raw": costRaw,
+        "delivery_takes": deliveryTakes,
+      };
 }

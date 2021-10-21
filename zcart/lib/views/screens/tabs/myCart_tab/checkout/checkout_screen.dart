@@ -1005,10 +1005,12 @@ class _ShippingOptionsBuilderState extends State<ShippingOptionsBuilder> {
                 widget.onPressedCheckBox(index);
                 context
                     .read(cartItemDetailsNotifierProvider.notifier)
-                    .updateCart(widget.cartItem!.id,
-                        shippingZoneId:
-                            widget.shippingOptions![index].shippingZoneId,
-                        shippingOptionId: widget.shippingOptions![index].id);
+                    .updateCart(
+                      widget.cartItem!.id,
+                      shippingZoneId:
+                          widget.shippingOptions![index].shippingZoneId,
+                      shippingOptionId: widget.shippingOptions![index].id,
+                    );
                 context
                     .read(checkoutNotifierProvider.notifier)
                     .shippingOptionId = widget.shippingOptions![index].id;
@@ -1031,11 +1033,13 @@ class _ShippingOptionsBuilderState extends State<ShippingOptionsBuilder> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    widget.shippingOptions![index].carrierName!,
+                    widget.shippingOptions![index].carrierName ?? "Unknown",
                     style: Theme.of(context).textTheme.caption,
                   ),
                   Text(
-                    widget.shippingOptions![index].deliveryTakes!.substring(25),
+                    widget.shippingOptions![index].deliveryTakes!,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.caption,
                   ),
                 ],

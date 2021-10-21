@@ -1,16 +1,22 @@
 import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_credit_card/flutter_credit_card.dart';
-
 import 'package:zcart/Theme/styles/colors.dart';
+import 'package:zcart/helper/constants.dart';
+import 'package:zcart/helper/images.dart';
+import 'package:zcart/views/shared_widgets/shared_widgets.dart';
 
 class CustomPaymentCardScreen extends StatefulWidget {
+  final String payMentMethod;
+  final String amount;
   final String cardNumber;
   final String expiryDate;
   final String cardHolderName;
   final String cvvCode;
   const CustomPaymentCardScreen({
     Key? key,
+    required this.payMentMethod,
+    required this.amount,
     required this.cardNumber,
     required this.expiryDate,
     required this.cardHolderName,
@@ -53,31 +59,31 @@ class CustomPaymentCardScreenState extends State<CustomPaymentCardScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Credit Card Payment"),
+        title: Text(
+            widget.payMentMethod == stripe ? 'Stripe Checkout' : 'Checkout'),
       ),
       resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Column(
-          children: <Widget>[
-            const SizedBox(
-              height: 30,
-            ),
-            CreditCardWidget(
-              onCreditCardWidgetChange: (p0) {},
-              glassmorphismConfig: null,
-              cardNumber: cardNumber,
-              expiryDate: expiryDate,
-              cardHolderName: cardHolderName,
-              cvvCode: cvvCode,
-              showBackView: isCvvFocused,
-              obscureCardNumber: true,
-              obscureCardCvv: true,
-              cardBgColor: kPrimaryColor,
-            ),
+          children: [
             Expanded(
               child: SingleChildScrollView(
                 child: Column(
-                  children: <Widget>[
+                  children: [
+                    const SizedBox(height: 10),
+                    CreditCardWidget(
+                      onCreditCardWidgetChange: (p0) {},
+                      glassmorphismConfig: Glassmorphism.defaultConfig(),
+                      backgroundImage: AppImages.cardBg,
+                      cardNumber: cardNumber,
+                      expiryDate: expiryDate,
+                      cardHolderName: cardHolderName,
+                      cvvCode: cvvCode,
+                      showBackView: isCvvFocused,
+                      obscureCardNumber: true,
+                      obscureCardCvv: true,
+                      cardBgColor: kPrimaryColor,
+                    ),
                     CreditCardForm(
                       formKey: formKey,
                       obscureCvv: true,
@@ -124,42 +130,41 @@ class CustomPaymentCardScreenState extends State<CustomPaymentCardScreen> {
                       ),
                       onCreditCardModelChange: onCreditCardModelChange,
                     ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                        primary: kPrimaryColor,
-                      ),
-                      child: Container(
-                        margin: const EdgeInsets.all(12),
-                        child: const Text(
-                          'Save',
-                          style: TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                      onPressed: () {
-                        if (formKey.currentState!.validate()) {
-                          Navigator.of(context).pop(
-                            CreditCardResult(
-                              cardNumber: cardNumber,
-                              expMonth: expiryDate.split('/')[0],
-                              expYear: expiryDate.split('/')[1],
-                              cvc: cvvCode,
-                              cardHolderName: cardHolderName,
-                            ),
-                          );
-                        }
-                      },
-                    ),
                   ],
                 ),
               ),
+            ),
+            const SizedBox(
+              height: 4,
+            ),
+            Text(
+              'Total Amount: ${widget.amount}',
+              style: Theme.of(context).textTheme.headline6!.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Image.asset(
+              AppImages.stripe,
+              width: MediaQuery.of(context).size.width / 4,
+            ),
+            CustomButton(
+              buttonText: "Continue",
+              onTap: () {
+                if (formKey.currentState!.validate()) {
+                  Navigator.of(context).pop(
+                    CreditCardResult(
+                      cardNumber: cardNumber,
+                      expMonth: expiryDate.split('/')[0],
+                      expYear: expiryDate.split('/')[1],
+                      cvc: cvvCode,
+                      cardHolderName: cardHolderName,
+                    ),
+                  );
+                }
+              },
             ),
           ],
         ),

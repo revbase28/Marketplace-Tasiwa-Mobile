@@ -42,7 +42,7 @@ abstract class IAddressRepository {
 
   Future<List<States>?> fetchStates(int? countryId);
 
-  Future<List<ShippingOptions>?> fetchShippingInfo(int? shopId, int? zoneId);
+  Future<List<ShippingOptions>?> fetchShippingInfo(shopId, zoneId);
 
   Future<List<ShippingOption>?> fetchShippingOptions(id, countryId, stateId);
 

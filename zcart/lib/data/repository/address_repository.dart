@@ -163,12 +163,14 @@ class AddressRepository implements IAddressRepository {
     try {
       responseBody =
           await handleResponse(await getRequest(API.packaging(shopSlug)));
+
       packagingModelList = (responseBody as List<dynamic>)
           .map((e) => PackagingModel.fromJson(e))
           .toList();
     } catch (e) {
       throw NetworkException();
     }
+
     if (responseBody.runtimeType == int) {
       if ((responseBody as int) > 206) throw NetworkException();
     }
@@ -197,8 +199,7 @@ class AddressRepository implements IAddressRepository {
   }
 
   @override
-  Future<List<ShippingOptions>?> fetchShippingInfo(
-      int? shopId, int? zoneId) async {
+  Future<List<ShippingOptions>?> fetchShippingInfo(shopId, zoneId) async {
     dynamic responseBody;
     ShippingModel shippingModel;
     try {
@@ -206,11 +207,12 @@ class AddressRepository implements IAddressRepository {
         API.shipping(shopId, zoneId),
         null, /*bearerToken: true*/
       ));
+
       shippingModel = ShippingModel.fromJson(responseBody);
     } catch (e) {
       throw NetworkException();
     }
-    if (responseBody.runtimeType == int && responseBody > 206) {
+    if (responseBody.runtimeType == int && (responseBody as int) > 206) {
       throw NetworkException();
     }
     return shippingModel.data;

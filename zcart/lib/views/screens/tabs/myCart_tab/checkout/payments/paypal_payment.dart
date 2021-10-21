@@ -4,8 +4,7 @@ import 'package:zcart/data/models/address/address_model.dart';
 import 'package:zcart/data/models/cart/cart_item_details_model.dart';
 import 'package:zcart/data/network/api.dart';
 import 'package:zcart/helper/get_amount_from_string.dart';
-import 'package:zcart/riverpod/providers/provider.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:zcart/views/shared_widgets/shared_widgets.dart';
 
 class PayPalPayment extends StatefulWidget {
   final CartItemDetails cartItemDetails;
@@ -122,53 +121,83 @@ class _PayPalPaymentState extends State<PayPalPayment> {
           ),
         )
       };
+
   @override
   Widget build(BuildContext context) {
-    print(getDoubleAmountFromString(widget.cartItemDetails.total!));
     return Scaffold(
-        appBar: AppBar(
-          title: Text("Paypal Express Checkout"),
-          leading: BackButton(
-            onPressed: () {
-              if (_result!) {
-                Navigator.pop(context, true);
-              } else {
-                Navigator.pop(context, false);
-              }
-            },
-          ),
+      appBar: AppBar(
+        title: const Text("Paypal Express Checkout"),
+        leading: BackButton(
+          onPressed: () {
+            if (_result != null && _result!) {
+              Navigator.pop(context, {
+                "success": _result,
+                "paymentMeta": _paymentMeta,
+                "status": _status,
+              });
+            } else {
+              Navigator.pop(context, null);
+            }
+          },
         ),
-        body: Center(
+      ),
+      body: SafeArea(
+        child: Center(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                _result == null
-                    ? "Click here to pay!"
-                    : _result!
-                        ? "Payment Successful"
-                        : "Payment Failed",
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      _result == null
+                          ? "⌛ Pending Payment"
+                          : _result!
+                              ? "✅ Payment Successful "
+                              : "❌ Payment Failed",
+                      style: Theme.of(context).textTheme.headline5,
+                    ),
+                    const SizedBox(height: 20),
+                    Text(
+                      widget.cartItemDetails.grandTotal!.toString(),
+                      style: Theme.of(context).textTheme.headline4!.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                    ),
+                  ],
+                ),
               ),
-              _result == null
-                  ? ElevatedButton(
-                      onPressed: _result == null ? _pay : () {},
-                      child: const Text("Make payment"))
-                  : ElevatedButton(
-                      onPressed: () {
-                        if (_result!) {
-                          Navigator.pop(context, {
-                            "success": _result,
-                            "paymentMeta": _paymentMeta,
-                            "status": _status,
-                          });
-                        } else {
-                          _pay();
-                        }
-                      },
-                      child:
-                          Text(_result! ? "Continue to Order" : "Try Again")),
+              Image.network(
+                "https://www.paypalobjects.com/webstatic/en_US/i/buttons/PP_logo_h_200x51.png",
+                errorBuilder:
+                    (BuildContext _, Object error, StackTrace? stack) {
+                  return Container();
+                },
+                fit: BoxFit.cover,
+              ),
+              const SizedBox(height: 10),
+              CustomButton(
+                onTap: _result == null
+                    ? _pay
+                    : _result!
+                        ? () {
+                            Navigator.pop(context, {
+                              "success": _result,
+                              "paymentMeta": _paymentMeta,
+                              "status": _status,
+                            });
+                          }
+                        : _pay,
+                buttonText: _result == null
+                    ? "Make Payment"
+                    : _result!
+                        ? "Continue"
+                        : "Try Again",
+              ),
             ],
           ),
-        ));
+        ),
+      ),
+    );
   }
 }

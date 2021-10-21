@@ -161,6 +161,7 @@ class PackagingNotifier extends StateNotifier<PackagingState> {
       state = const PackagingLoadingState();
       final packagingList =
           await _iAddressRepository.fetchPackagingInfo(shopSlug);
+
       state = PackagingLoadedState(packagingList);
     } on NetworkException {
       state = PackagingErrorState(LocaleKeys.something_went_wrong.tr());
@@ -174,7 +175,8 @@ class ShippingNotifier extends StateNotifier<ShippingState> {
   ShippingNotifier(this._iAddressRepository)
       : super(const ShippingInitialState());
 
-  Future fetchShippingInfo(shopId, zoneId) async {
+  Future fetchShippingInfo(
+      {required String shopId, required String zoneId}) async {
     try {
       state = const ShippingLoadingState();
       final shippingInfo =
