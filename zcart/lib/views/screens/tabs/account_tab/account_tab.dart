@@ -39,6 +39,13 @@ class AccountTab extends StatelessWidget {
         appBar: AppBar(
           title: Text(LocaleKeys.account_text.tr()),
           actions: [
+            // IconButton(
+            //   onPressed: () {
+            //     context.nextPage(const RazorpayTest());
+            //   },
+            //   icon: const Icon(Icons.payment),
+            //   tooltip: "Settings",
+            // ),
             IconButton(
               onPressed: () {
                 context.nextPage(const SettingsPage());

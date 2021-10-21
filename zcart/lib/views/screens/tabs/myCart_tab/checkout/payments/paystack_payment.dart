@@ -8,6 +8,7 @@ import 'package:zcart/riverpod/providers/provider.dart';
 
 class PayStackPayment {
   BuildContext context;
+  //TODO: Get payment currency from server
   String email;
   int price;
   PayStackPayment({
@@ -70,7 +71,10 @@ class PayStackPayment {
         print(_response);
 
         Map<String, String> _paymentMeta = {
-          "reference": _response.reference!,
+          "reference": _response.reference!.toString(),
+          "status": _response.status.toString(),
+          "method": _response.method.toString(),
+          "verify": _response.verify.toString(),
         };
 
         String _status = "paid";

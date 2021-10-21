@@ -45,6 +45,10 @@ dependencies:
   flutter_paypal: ^0.0.8
   sign_in_with_apple: ^3.2.0
   url_launcher: ^6.0.12
+  razorpay_flutter:
+    git:
+      url: git://github.com/devShakib015/razorpay-flutter.git
+
 
 
 dev_dependencies:

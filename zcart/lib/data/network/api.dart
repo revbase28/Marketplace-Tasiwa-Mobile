@@ -16,14 +16,17 @@ class API {
 
   //Change these values as your app requires
 
+  // Razorpay Configs
+  static const String razorPayApiKey = 'rzp_test_Pq4V0mcist4gfu';
+  static const String razorPaySecretKey = "oot8NuMhyoz6sZkYbkdCvCar";
+  static const String razorPayCurrency = "INR";
+
   // Paystack Configs
   static const String paystackKey =
       'pk_test_4b0bfd886ad641c03fc008017c0f127adb3eecb3';
-
   static const String paystackCurrency = "ZAR";
 
   //Paypal Configs
-
   static const bool paypalSandboxMode = true;
   static const String paypalTransactionDescription = "Payment for ZCart";
   static const String payPalCurrency = "USD";

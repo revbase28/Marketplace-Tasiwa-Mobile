@@ -7,6 +7,7 @@ import 'package:zcart/views/screens/tabs/myCart_tab/checkout/custom_payment_card
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zcart/views/screens/tabs/myCart_tab/checkout/payments/paypal_payment.dart';
 import 'package:zcart/views/screens/tabs/myCart_tab/checkout/payments/paystack_payment.dart';
+import 'package:zcart/views/screens/tabs/myCart_tab/checkout/payments/razorpay_payment.dart';
 
 class PaymentMethods {
   PaymentMethods._();
@@ -69,6 +70,25 @@ class PaymentMethods {
 
         print("Payment Result: $_result");
 
+        return _result?["success"] ?? false;
+      } else {
+        return false;
+      }
+    } else if (code == razorpay) {
+      if (cartItemDetails != null && addresses != null) {
+        Map<String, dynamic>? _result = await Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (BuildContext context) => RazorpayPayment(
+                email: email,
+                cartItemDetails: cartItemDetails,
+                address: addresses[shippingId]),
+          ),
+        );
+
+        _checkoutNotifier.paymentStatus = _result?["status"];
+        _checkoutNotifier.paymentMeta = _result?["paymentMeta"];
+
+        print("Payment Result: $_result");
         return _result?["success"] ?? false;
       } else {
         return false;

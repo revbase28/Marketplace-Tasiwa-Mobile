@@ -79,13 +79,12 @@ class _PayPalPaymentState extends State<PayPalPayment> {
                       "shipping_address": {
                         "recipient_name":
                             widget.address.addressTitle!.toString(),
-                        "line1": "4thFloor",
-                        "line2": "unit#34",
-                        "city": "SAn Jose",
+                        "line1": widget.address.addressLine1!.toString(),
+                        "line2": widget.address.addressLine2!.toString(),
+                        "city": widget.address.city!.toString(),
                         "country_code": "US",
-                        "postal_code": "95131",
-                        "phone": "011862212345678",
-                        "state": "CA"
+                        "postal_code": widget.address.zipCode!.toString(),
+                        "phone": widget.address.phone!.toString(),
                       }
                     }
                   }
