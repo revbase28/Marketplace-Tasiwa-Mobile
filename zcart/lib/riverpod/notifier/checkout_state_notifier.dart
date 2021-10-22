@@ -72,9 +72,13 @@ class CheckoutNotifier extends StateNotifier<CheckoutState> {
       "packaging_id": packagingId.toString(),
       "agree": "1",
       "device_id": deviceId.toString(),
-      if (paymentMethod == paypal || paymentMethod == paystack)
+      if (paymentMethod == paypal ||
+          paymentMethod == paystack ||
+          paymentMethod == razorpay)
         "payment_meta": json.encode(paymentMeta),
-      if (paymentMethod == paypal || paymentMethod == paystack)
+      if (paymentMethod == paypal ||
+          paymentMethod == paystack ||
+          paymentMethod == razorpay)
         "payment_status": paymentStatus.toString(),
       if (prescription != null) "prescription": prescription.toString(),
       if (buyerNote != null) "buyer_note": buyerNote,
@@ -121,8 +125,14 @@ class CheckoutNotifier extends StateNotifier<CheckoutState> {
       "city": city.toString(),
       "zip_code": zipCode.toString(),
       "phone": phone.toString(),
-      "payment_meta": json.encode(paymentMeta),
-      "payment_status": paymentStatus.toString(),
+      if (paymentMethod == paypal ||
+          paymentMethod == paystack ||
+          paymentMethod == razorpay)
+        "payment_meta": json.encode(paymentMeta),
+      if (paymentMethod == paypal ||
+          paymentMethod == paystack ||
+          paymentMethod == razorpay)
+        "payment_status": paymentStatus.toString(),
       if (cardNumber != null && paymentMethod == stripe)
         "card_number": cardNumber,
       if (expMonth != null && paymentMethod == stripe) "exp_month": expMonth,

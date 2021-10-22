@@ -81,7 +81,7 @@ class _RazorpayPaymentState extends State<RazorpayPayment> {
               ),
               Image.asset(
                 AppImages.razorpay,
-                width: MediaQuery.of(context).size.width / 4,
+                width: MediaQuery.of(context).size.width / 2,
               ),
               const SizedBox(height: 10),
               CustomButton(
