@@ -40,7 +40,7 @@ class DisputeScreen extends ConsumerWidget {
                     onPressed: () {
                       context.read(disputesProvider.notifier).getDisputes();
                     },
-                    icon: const Icon(
+                    icon: Icon(
                       Icons.refresh,
                       color: kPrimaryColor,
                     )))

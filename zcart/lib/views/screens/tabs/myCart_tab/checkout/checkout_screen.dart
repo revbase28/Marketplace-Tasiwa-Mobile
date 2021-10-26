@@ -116,7 +116,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                 ThemeMode.dark
                             ? darkTextTheme(context)
                             : lightTextTheme(context),
-                        colorScheme: const ColorScheme.light(
+                        colorScheme: ColorScheme.light(
                             primary: kPrimaryColor, secondary: kAccentColor),
                       ),
                       child: Stepper(
@@ -344,7 +344,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                         .cartItemDetails!.id));
                           },
                           child: Text(LocaleKeys.apply.tr(),
-                              style: const TextStyle(color: kPrimaryColor)),
+                              style: TextStyle(color: kPrimaryColor)),
                         ),
                       ],
                     ),
@@ -640,7 +640,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             padding: const EdgeInsets.all(10),
             child: Row(
               children: [
-                const Icon(Icons.add_circle_outlined, color: kPrimaryColor)
+                Icon(Icons.add_circle_outlined, color: kPrimaryColor)
                     .pOnly(right: 10),
                 Text(LocaleKeys.add_address.tr(),
                     style: context.textTheme.subtitle2)
@@ -680,7 +680,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       : addressState is AddressErrorState
                           ? ListTile(
                               title: Text(addressState.message,
-                                  style: const TextStyle(color: kPrimaryColor)),
+                                  style: TextStyle(color: kPrimaryColor)),
                               leading: const Icon(Icons.dangerous),
                               contentPadding: EdgeInsets.zero,
                               horizontalTitleGap: 0,
@@ -886,7 +886,7 @@ class _PaymentOptionsListBuilderState extends State<PaymentOptionsListBuilder> {
                     },
                     title: Text(e.name!),
                     trailing: _index == selectedIndex
-                        ? const Icon(Icons.check_circle, color: kPrimaryColor)
+                        ? Icon(Icons.check_circle, color: kPrimaryColor)
                         : Icon(
                             Icons.radio_button_unchecked,
                             color: EasyDynamicTheme.of(context).themeMode ==
@@ -953,7 +953,7 @@ class _PackagingListBuilderState extends State<PackagingListBuilder> {
                                 3))),
                     subtitle: Text(packagingState.packagingList[index].name!),
                     trailing: index == selectedIndex
-                        ? const Icon(Icons.check_circle, color: kPrimaryColor)
+                        ? Icon(Icons.check_circle, color: kPrimaryColor)
                         : Icon(
                             Icons.radio_button_unchecked,
                             color: EasyDynamicTheme.of(context).themeMode ==
@@ -1045,7 +1045,7 @@ class _ShippingOptionsBuilderState extends State<ShippingOptionsBuilder> {
                 ],
               ).pOnly(right: 10),
               leading: index == selectedIndex
-                  ? const Icon(Icons.check_circle, color: kPrimaryColor)
+                  ? Icon(Icons.check_circle, color: kPrimaryColor)
                   : Icon(
                       Icons.radio_button_unchecked,
                       color: EasyDynamicTheme.of(context).themeMode ==

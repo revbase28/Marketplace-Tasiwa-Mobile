@@ -222,7 +222,7 @@ class DisputeDetailsScreen extends ConsumerWidget {
                                 ),
                                 disputeDetailsState
                                         .disputeDetails!.shop!.verified!
-                                    ? const Icon(Icons.check_circle,
+                                    ? Icon(Icons.check_circle,
                                             color: kPrimaryColor, size: 15)
                                         .px2()
                                         .pOnly(top: 3)

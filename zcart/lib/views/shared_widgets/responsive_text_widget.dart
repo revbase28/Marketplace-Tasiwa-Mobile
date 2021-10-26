@@ -19,9 +19,6 @@ class ResponsiveTextWidget extends StatelessWidget {
           child: HtmlWidget(
             title ?? '',
             enableCaching: true,
-            webView: true,
-            webViewJs: true,
-            webViewMediaPlaybackAlwaysAllow: true,
             onTapUrl: (url) {
               launchURL(url);
               return true;

@@ -64,8 +64,7 @@ class VendorCard extends StatelessWidget {
                     style: context.textTheme.headline6!,
                   ),
                   isVerified!
-                      ? const Icon(Icons.check_circle,
-                              color: kPrimaryColor, size: 15)
+                      ? Icon(Icons.check_circle, color: kPrimaryColor, size: 15)
                           .px2()
                           .pOnly(top: 3)
                           .onInkTap(() {

@@ -28,7 +28,6 @@ class TermsAndConditionScreen extends StatelessWidget {
                     ? HtmlWidget(
                         termsAndConditionState
                             .termsAndConditionModel.data!.content!,
-                        webView: true,
                         onTapUrl: (url) {
                           launchURL(url);
                           return true;

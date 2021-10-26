@@ -45,7 +45,7 @@ class ShopCard extends StatelessWidget {
                 style: context.textTheme.headline6,
               ),
             ),
-            const Icon(Icons.check_circle, color: kPrimaryColor, size: 15)
+            Icon(Icons.check_circle, color: kPrimaryColor, size: 15)
                 .px2()
                 .pOnly(top: 3)
                 .onInkTap(() {
@@ -68,7 +68,7 @@ class ShopCard extends StatelessWidget {
               itemSize: 12,
               itemPadding: const EdgeInsets.symmetric(horizontal: 0.0),
               itemBuilder: (context, _) =>
-                  const Icon(Icons.star, color: kPrimaryColor),
+                  Icon(Icons.star, color: kPrimaryColor),
               onRatingUpdate: (rating) => print(rating),
             ),
             Text(

@@ -148,9 +148,6 @@ class BrandDescription extends StatelessWidget {
         subtitle: HtmlWidget(
           brandProfile.data!.description ?? "",
           enableCaching: true,
-          webView: true,
-          webViewJs: true,
-          webViewMediaPlaybackAlwaysAllow: true,
           onTapUrl: (url) {
             launchURL(url);
             return true;

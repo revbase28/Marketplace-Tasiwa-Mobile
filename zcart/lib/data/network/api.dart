@@ -1,48 +1,37 @@
+import 'package:zcart/config/config.dart';
+
 class API {
-  //Change these values as your app requires
-  static const String appName = "zCart";
-  static const String appUrl = "https://zcart.incevio.com";
+  API._();
+  static const String appName = MyConfig.appName;
+  static const String appUrl = MyConfig.appUrl;
 
   /// Base URL
-  //Change the base URL to point to your own API server.
-  static const test = 'https://test.incevio.cloud/api/';
-  static const live = 'https://zcart.incevio.com/api/';
-  static const staging = 'https://staging.incevio.cloud/api/';
-
   //Point the API to the base URL
-  static const base = test;
+  static const base = MyConfig.appApiUrl;
 
   /// Payment Gateway Keys
 
-  //Change these values as your app requires
-
   // Razorpay Configs
-  static const String razorPayApiKey = 'rzp_test_Pq4V0mcist4gfu';
-  static const String razorPaySecretKey = "oot8NuMhyoz6sZkYbkdCvCar";
-  static const String razorPayCurrency = "INR";
+  static const String razorPayApiKey = MyConfig.razorPayApiKey;
+  static const String razorPaySecretKey = MyConfig.razorPaySecretKey;
+  static const String razorPayCurrency = MyConfig.razorPayCurrency;
 
   // Paystack Configs
-  static const String paystackKey =
-      'pk_test_4b0bfd886ad641c03fc008017c0f127adb3eecb3';
-  static const String paystackCurrency = "ZAR";
+  static const String paystackKey = MyConfig.paystackApiKey;
+  static const String paystackCurrency = MyConfig.paystackCurrency;
 
   //Paypal Configs
-  static const bool paypalSandboxMode = true;
-  static const String paypalTransactionDescription = "Payment for ZCart";
-  static const String payPalCurrency = "USD";
-  static const String paypalClientId =
-      "AT1_wwlwFHefidTjEF4DYzjOVoI7ZK66ib1zlVA0YZUPuNj4D4IG_0Sxmto5Q6leByaxgdbHi-KkkaHz";
-
-  static const String paypalClientSecret =
-      "EO4T0rY9u0gcKlegpW8nGKoXS1QjUNHLlfgcGPjW5Sv5r7o7gMPVMaPAfGgmqbQWo7UB8OSG2Fgb2Nkt";
-
+  static const bool paypalSandboxMode = MyConfig.paypalSandboxMode;
+  static const String paypalTransactionDescription =
+      MyConfig.paypalTransactionDescription;
+  static const String payPalCurrency = MyConfig.payPalCurrency;
+  static const String paypalClientId = MyConfig.paypalClientId;
+  static const String paypalClientSecret = MyConfig.paypalClientSecret;
   //
 
   //
 
   //
-
-  //Don't change anything below this line
 
   /// User
   static const register = 'auth/register';

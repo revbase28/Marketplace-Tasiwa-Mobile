@@ -34,7 +34,7 @@ class HeaderWidget extends StatelessWidget {
           children: [
             GestureDetector(
                 onTap: () => function!(),
-                child: const Icon(Icons.refresh, color: kPrimaryColor)),
+                child: Icon(Icons.refresh, color: kPrimaryColor)),
             const SizedBox(width: 16),
             GestureDetector(
               onTap: onTap as void Function()?,

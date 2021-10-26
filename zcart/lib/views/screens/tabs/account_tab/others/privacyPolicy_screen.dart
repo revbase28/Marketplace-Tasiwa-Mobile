@@ -29,7 +29,6 @@ class PrivacyPolicyScreen extends StatelessWidget {
                 return privacyPolicyState is PrivacyPolicyLoadedState
                     ? HtmlWidget(
                         privacyPolicyState.privacyPolicyModel.data!.content!,
-                        webView: true,
                         onTapUrl: (url) {
                           launchURL(url);
                           return true;

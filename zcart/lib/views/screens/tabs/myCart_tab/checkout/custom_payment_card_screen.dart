@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_credit_card/flutter_credit_card.dart';
 import 'package:zcart/Theme/styles/colors.dart';
 import 'package:zcart/helper/constants.dart';
-import 'package:zcart/helper/images.dart';
+import 'package:zcart/helper/app_images.dart';
 import 'package:zcart/views/shared_widgets/shared_widgets.dart';
 
 class CustomPaymentCardScreen extends StatefulWidget {

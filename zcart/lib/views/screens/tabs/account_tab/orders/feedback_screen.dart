@@ -168,9 +168,8 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                             itemSize: 25,
                             itemPadding:
                                 const EdgeInsets.symmetric(horizontal: 5),
-                            itemBuilder: (context, _) => const Icon(
-                                Icons.star_border,
-                                color: kPrimaryColor),
+                            itemBuilder: (context, _) =>
+                                Icon(Icons.star_border, color: kPrimaryColor),
                             onRatingUpdate: (rating) {
                               shopRatingController.text = '$rating';
                             },
@@ -290,7 +289,7 @@ class ProductRatingCard extends StatelessWidget {
                 itemSize: 25,
                 itemPadding: const EdgeInsets.symmetric(horizontal: 5),
                 itemBuilder: (context, _) =>
-                    const Icon(Icons.star_border, color: kPrimaryColor),
+                    Icon(Icons.star_border, color: kPrimaryColor),
                 onRatingUpdate: (rating) =>
                     updateRatingList(index: index, rating: rating),
               ),

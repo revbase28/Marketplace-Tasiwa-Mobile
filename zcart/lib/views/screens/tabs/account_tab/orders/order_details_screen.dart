@@ -274,7 +274,7 @@ class OrderDetailsScreen extends ConsumerWidget {
                                   style: context.textTheme.headline6!,
                                 ),
                                 orderDetailsState.orderDetails!.shop!.verified!
-                                    ? const Icon(Icons.check_circle,
+                                    ? Icon(Icons.check_circle,
                                             color: kPrimaryColor, size: 15)
                                         .px2()
                                         .pOnly(top: 3)
@@ -577,7 +577,7 @@ class OrderDetailsScreen extends ConsumerWidget {
                             TextButton(
                               child: Text(
                                 LocaleKeys.no.tr(),
-                                style: const TextStyle(color: kPrimaryColor),
+                                style: TextStyle(color: kPrimaryColor),
                               ),
                               onPressed: () {
                                 context.pop();

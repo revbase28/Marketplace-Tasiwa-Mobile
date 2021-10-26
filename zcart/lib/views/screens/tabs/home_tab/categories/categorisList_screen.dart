@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:velocity_x/velocity_x.dart';
-import 'package:zcart/Theme/styles/category_icons.dart';
+import 'package:zcart/config/config_category_icons.dart';
 import 'package:zcart/Theme/styles/colors.dart';
 import 'package:zcart/data/models/categories/category_model.dart';
 import 'package:zcart/riverpod/providers/provider.dart';

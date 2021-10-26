@@ -200,7 +200,7 @@ class OrderChatScreen extends StatelessWidget {
           ),
           IconButton(
             onPressed: () {},
-            icon: const Icon(Icons.send, color: kPrimaryColor),
+            icon: Icon(Icons.send, color: kPrimaryColor),
           )
         ],
       ),

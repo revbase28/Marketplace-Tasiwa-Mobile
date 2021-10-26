@@ -125,7 +125,7 @@ class _AddressListBuilderState extends State<AddressListBuilder> {
                 ),
                 trailing: widget.cartItem != null
                     ? index == selectedIndex
-                        ? const Icon(Icons.check_circle, color: kPrimaryColor)
+                        ? Icon(Icons.check_circle, color: kPrimaryColor)
                         : Icon(
                             Icons.radio_button_unchecked,
                             color: EasyDynamicTheme.of(context).themeMode ==

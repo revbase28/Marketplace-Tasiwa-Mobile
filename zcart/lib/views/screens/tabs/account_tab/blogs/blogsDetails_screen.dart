@@ -127,7 +127,6 @@ class BlogDetailsScreen extends ConsumerWidget {
                     textStyle: context.textTheme.bodyText2!.copyWith(
                         fontSize: 15, letterSpacing: 0, wordSpacing: 1.4),
                     enableCaching: true,
-                    webView: true,
                     onTapUrl: (url) {
                       launchURL(url);
                       return true;

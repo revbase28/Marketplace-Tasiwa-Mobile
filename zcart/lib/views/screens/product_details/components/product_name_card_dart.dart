@@ -39,7 +39,7 @@ class ProductNameCard extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   margin: const EdgeInsets.symmetric(vertical: 5),
                   decoration: BoxDecoration(
-                      gradient: const LinearGradient(
+                      gradient: LinearGradient(
                         colors: [kGradientColor1, kGradientColor2],
                       ),
                       borderRadius: BorderRadius.circular(5)),
@@ -147,7 +147,7 @@ class ProductNameCard extends StatelessWidget {
                       itemSize: 12,
                       unratedColor: kFadeColor,
                       itemBuilder: (context, _) =>
-                          const Icon(Icons.star, color: kPrimaryColor),
+                          Icon(Icons.star, color: kPrimaryColor),
                       onRatingUpdate: (rating) => print(rating),
                     ),
                     Text(

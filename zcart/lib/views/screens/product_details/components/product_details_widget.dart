@@ -242,9 +242,6 @@ class ProductDetailsWidget extends StatelessWidget {
                       productDetailsState
                           .productModel.data!.product!.description!,
                       enableCaching: true,
-                      webView: true,
-                      webViewJs: true,
-                      webViewMediaPlaybackAlwaysAllow: true,
                       onTapUrl: (url) {
                         launchURL(url);
                         return true;
@@ -271,8 +268,6 @@ class ProductDetailsWidget extends StatelessWidget {
                     HtmlWidget(
                       productDetailsState.productModel.data!.description!,
                       enableCaching: true,
-                      webView: true,
-                      webViewMediaPlaybackAlwaysAllow: true,
                       onTapUrl: (url) {
                         launchURL(url);
                         return true;

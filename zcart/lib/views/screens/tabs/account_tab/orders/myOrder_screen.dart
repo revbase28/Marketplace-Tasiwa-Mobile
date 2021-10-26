@@ -375,8 +375,8 @@ class OrderCard extends StatelessWidget {
           top: 5,
           left: 10,
           child: Container(
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.only(
+            decoration: BoxDecoration(
+              borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(10),
                 bottomRight: Radius.circular(50),
               ),

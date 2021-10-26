@@ -72,7 +72,7 @@ class CouponsCard extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          gradient: const LinearGradient(
+          gradient: LinearGradient(
             colors: [kGradientColor1, kGradientColor2],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,

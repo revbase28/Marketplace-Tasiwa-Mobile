@@ -238,7 +238,7 @@ class _OpenDisputeScreenState extends State<OpenDisputeScreen> {
                                         horizontalTitleGap: 5,
                                         contentPadding: EdgeInsets.zero,
                                         leading: selected
-                                            ? const Icon(
+                                            ? Icon(
                                                 Icons.check_circle,
                                                 color: kPrimaryColor,
                                               )

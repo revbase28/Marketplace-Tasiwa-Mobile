@@ -58,7 +58,7 @@ class MyApp extends StatelessWidget {
       locale: context.locale,
       debugShowCheckedModeBanner: false,
       title: API.appName,
-      themeMode: MyConfig.isChangeAbleThemeActive
+      themeMode: MyConfig.isDynamicThemeActive
           ? EasyDynamicTheme.of(context).themeMode == ThemeMode.system
               ? ThemeMode.light
               : EasyDynamicTheme.of(context).themeMode

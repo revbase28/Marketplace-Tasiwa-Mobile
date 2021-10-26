@@ -5,16 +5,16 @@ class CustomButton extends StatelessWidget {
   final Function? onTap;
   final String? buttonText;
 
-  final Color buttonBGColor;
+  final Color? buttonBGColor;
   final double widthMultiplier;
 
-  // ignore: use_key_in_widget_constructors
   const CustomButton({
+    Key? key,
     this.onTap,
     this.buttonText,
-    this.buttonBGColor = kPrimaryColor,
+    this.buttonBGColor,
     this.widthMultiplier = 0.8,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +25,7 @@ class CustomButton extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 20),
         width: MediaQuery.of(context).size.width * widthMultiplier,
         decoration: BoxDecoration(
-          color: buttonBGColor,
+          color: buttonBGColor ?? kPrimaryColor,
           borderRadius: const BorderRadius.all(Radius.circular(10.0)),
         ),
         height: 50.0,

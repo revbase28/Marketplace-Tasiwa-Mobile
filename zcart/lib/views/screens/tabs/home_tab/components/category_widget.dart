@@ -1,6 +1,6 @@
 import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:flutter/material.dart';
-import 'package:zcart/Theme/styles/category_icons.dart';
+import 'package:zcart/config/config_category_icons.dart';
 import 'package:zcart/data/models/categories/category_model.dart';
 import 'package:zcart/riverpod/providers/product_provider.dart';
 import 'package:zcart/riverpod/providers/provider.dart';

@@ -9,7 +9,7 @@ import 'package:zcart/data/models/address/address_model.dart';
 import 'package:zcart/data/models/cart/cart_item_details_model.dart';
 import 'package:zcart/data/network/api.dart';
 import 'package:zcart/helper/get_amount_from_string.dart';
-import 'package:zcart/helper/images.dart';
+import 'package:zcart/helper/app_images.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:zcart/views/shared_widgets/shared_widgets.dart';
 

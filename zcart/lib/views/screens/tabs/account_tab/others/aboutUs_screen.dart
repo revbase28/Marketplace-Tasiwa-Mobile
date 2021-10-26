@@ -31,7 +31,6 @@ class AboutUsScreen extends StatelessWidget {
                     ? HtmlWidget(
                         aboutUsState.aboutUsModel.data!.content!,
                         textStyle: context.textTheme.bodyText2!,
-                        webView: true,
                         onTapUrl: (url) {
                           launchURL(url);
                           return true;

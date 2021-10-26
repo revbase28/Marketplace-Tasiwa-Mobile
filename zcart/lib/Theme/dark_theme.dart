@@ -97,6 +97,6 @@ ThemeData darkTheme = ThemeData.dark().copyWith(
         buttonColor: _lightPrimaryColor,
         textTheme: ButtonTextTheme.primary),
     unselectedWidgetColor: _lightPrimaryColor,
-    timePickerTheme: const TimePickerThemeData(
+    timePickerTheme: TimePickerThemeData(
       backgroundColor: kPrimaryColor,
     ));

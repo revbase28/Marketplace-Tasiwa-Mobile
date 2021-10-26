@@ -77,7 +77,7 @@ class NotLoggedInScreen extends StatelessWidget {
                           },
                         ),
                       ),
-                      if (MyConfig.isChangeAbleThemeActive)
+                      if (MyConfig.isDynamicThemeActive)
                         Card(
                           elevation: 0,
                           child: ListTile(

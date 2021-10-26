@@ -41,7 +41,7 @@ class SettingsPage extends StatelessWidget {
               },
             ),
           ),
-          if (MyConfig.isChangeAbleThemeActive)
+          if (MyConfig.isDynamicThemeActive)
             Card(
               child: ListTile(
                 title: Text(LocaleKeys.change_theme.tr(),

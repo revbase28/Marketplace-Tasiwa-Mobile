@@ -140,7 +140,7 @@ class VendorChatScreen extends StatelessWidget {
             onPressed: () {
               //TODO: Attach Images
             },
-            icon: const Icon(Icons.add, color: kPrimaryColor),
+            icon: Icon(Icons.add, color: kPrimaryColor),
           ),
           Expanded(
             child: Container(
@@ -191,7 +191,7 @@ class VendorChatScreen extends StatelessWidget {
                 toast(LocaleKeys.empty_message.tr());
               }
             },
-            icon: const Icon(Icons.send, color: kPrimaryColor),
+            icon: Icon(Icons.send, color: kPrimaryColor),
           )
         ],
       ),
