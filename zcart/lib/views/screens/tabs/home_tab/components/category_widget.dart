@@ -2,6 +2,7 @@ import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:zcart/config/config_category_icons.dart';
 import 'package:zcart/data/models/categories/category_model.dart';
+import 'package:zcart/helper/font_awesome_helper.dart';
 import 'package:zcart/riverpod/providers/product_provider.dart';
 import 'package:zcart/riverpod/providers/provider.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
@@ -44,7 +45,8 @@ class CategoryWidget extends StatelessWidget {
                 children: [
                   // Category Icon
                   FaIcon(
-                    getCategoryIcon(categoryList[index].icon),
+                    FontAwesomeHelper.getIconDataSolid(
+                        categoryList[index].icon),
                     color:
                         EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
                             ? kLightColor

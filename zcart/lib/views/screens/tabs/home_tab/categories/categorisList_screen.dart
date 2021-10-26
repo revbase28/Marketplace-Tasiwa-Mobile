@@ -7,6 +7,7 @@ import 'package:velocity_x/velocity_x.dart';
 import 'package:zcart/config/config_category_icons.dart';
 import 'package:zcart/Theme/styles/colors.dart';
 import 'package:zcart/data/models/categories/category_model.dart';
+import 'package:zcart/helper/font_awesome_helper.dart';
 import 'package:zcart/riverpod/providers/provider.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:zcart/views/screens/tabs/home_tab/categories/category_details_screen.dart';
@@ -54,7 +55,8 @@ class CategoryListScreen extends StatelessWidget {
                   ).pOnly(top: 16, left: 112, right: 16),
                   child: Center(
                     child: FaIcon(
-                      getCategoryIcon(categoryList![index].icon),
+                      FontAwesomeHelper.getIconDataSolid(
+                          categoryList![index].icon),
                       size: 35,
                       color: EasyDynamicTheme.of(context).themeMode ==
                               ThemeMode.dark
