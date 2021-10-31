@@ -62,6 +62,28 @@ class MyConfig {
 
   ///
 
+  /// TURN ON/OFF SWITCHABLE THEME AND SOCIAL LOGINS
+  /// Currently all the values are set to [true]. You can change this to [false] if you want to turn off
+  /// any of the theme and social logins.
+  ///
+  /// [true] means that the theme and social logins are enabled.
+  /// [false] means that the theme and social logins are disabled.
+  ///
+  /// Social Logins
+  /// FACEBOOK LOGIN
+  static const bool isFacebookLoginActive = true;
+
+  /// GOOGLE LOGIN
+  static const bool isGoogleLoginActive = true;
+
+  /// APPLE LOGIN
+  static const bool isAppleLoginActive = true;
+
+  // Theme
+  static const bool isDynamicThemeActive = true;
+
+  ///
+
   /// PAYMENT GATEWAY CONFIGS
   /// These are your payment gateway configs. You must change this configs as your own payment gateway API configs. If you don't have any payment gateway API configs then you can leave these configs as it is.
   ///
@@ -100,28 +122,6 @@ class MyConfig {
 
   /// PAYSTACK CURRENCY CODE
   static const String paystackCurrency = "ZAR";
-
-  ///
-
-  /// TURN ON/OFF SWITCHABLE THEME AND SOCIAL LOGINS
-  /// Currently all the values are set to [true]. You can change this to [false] if you want to turn off
-  /// any of the theme and social logins.
-  ///
-  /// [true] means that the theme and social logins are enabled.
-  /// [false] means that the theme and social logins are disabled.
-  ///
-  /// Social Logins
-  /// FACEBOOK LOGIN
-  static const bool isFacebookLoginActive = true;
-
-  /// GOOGLE LOGIN
-  static const bool isGoogleLoginActive = true;
-
-  /// APPLE LOGIN
-  static const bool isAppleLoginActive = true;
-
-  // Theme
-  static const bool isDynamicThemeActive = true;
 
   ///
   ///
