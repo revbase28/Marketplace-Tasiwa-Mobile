@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:zcart/Theme/dark_theme.dart';
 import 'package:zcart/Theme/light_theme.dart';
 import 'package:zcart/Theme/styles/colors.dart';
@@ -18,6 +19,18 @@ class AppTheme {
         elevation: 0,
         centerTitle: true,
         foregroundColor: kLightColor,
+        toolbarHeight: 64,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(16),
+            bottomRight: Radius.circular(16),
+          ),
+        ),
+        titleTextStyle: GoogleFonts.poppins(
+          textStyle: Theme.of(context).textTheme.headline6,
+          color: Colors.white,
+          fontWeight: FontWeight.w600,
+        ),
       ),
     );
   }
@@ -32,6 +45,18 @@ class AppTheme {
         elevation: 0,
         centerTitle: true,
         foregroundColor: kLightColor,
+        toolbarHeight: 64,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(16),
+            bottomRight: Radius.circular(16),
+          ),
+        ),
+        titleTextStyle: GoogleFonts.poppins(
+          textStyle: Theme.of(context).textTheme.headline6,
+          color: Colors.white,
+          fontWeight: FontWeight.w600,
+        ),
       ),
     );
   }

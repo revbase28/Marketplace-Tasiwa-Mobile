@@ -19,7 +19,7 @@ TextStyle _textStyle(BuildContext context, double size, Color color) =>
     );
 
 TextTheme darkTextTheme(BuildContext context) {
-  return GoogleFonts.latoTextTheme(
+  return GoogleFonts.poppinsTextTheme(
     Theme.of(context).textTheme,
   ).copyWith(
     //bodyText1: TextStyle(fontSize: 18, color: kSecondaryDarkTextColor),
