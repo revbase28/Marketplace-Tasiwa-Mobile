@@ -47,8 +47,11 @@ class BrandsTab extends ConsumerWidget {
                         .getBrandItemsList(brand.slug);
                   },
                   child: Card(
-                    elevation: 5,
-                    shadowColor: kDarkColor.withOpacity(0.38),
+                    elevation: 3,
+                    shadowColor: kDarkColor.withOpacity(0.26),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
                     color:
                         EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
                             ? kDarkCardBgColor
