@@ -40,6 +40,16 @@ class UserNotifier extends StateNotifier<UserState> {
     }
   }
 
+  Future<void> loginUsingApple(String accessToken) async {
+    try {
+      state = const UserLoadingState();
+      final user = await _iUserRepository.logInUsingApple(accessToken);
+      state = UserLoadedState(user);
+    } on NetworkException {
+      state = UserErrorState(LocaleKeys.something_went_wrong.tr());
+    }
+  }
+
   Future<void> register(String name, email, password,
       bool agreeToTermsAndCondition, acceptMarkeing) async {
     try {

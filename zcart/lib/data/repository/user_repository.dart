@@ -91,6 +91,33 @@ class UserRepository implements IUserRepository {
     return userModel.data;
   }
 
+  @override
+  Future<User?> logInUsingApple(String accessToken) async {
+    await setValue(loggedIn, false);
+
+    var requestBody = {'access_token': accessToken};
+    dynamic responseBody;
+
+    try {
+      responseBody = await handleResponse(
+          await postRequest(API.loginUsingApple, requestBody));
+    } catch (e) {
+      throw NetworkException();
+    }
+
+    if (responseBody.runtimeType == int && responseBody > 206) {
+      throw NetworkException();
+    }
+
+    UserModel userModel = UserModel.fromJson(responseBody);
+
+    toast(LocaleKeys.sign_in_successfull.tr());
+    await setValue(loggedIn, true);
+    await setValue(access, userModel.data!.apiToken);
+
+    return userModel.data;
+  }
+
   /// Register User
   @override
   Future<User?> register(String name, email, password,

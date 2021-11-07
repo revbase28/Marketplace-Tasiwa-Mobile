@@ -243,7 +243,12 @@ class _LoginScreenState extends State<LoginScreen> {
                               if (MyConfig.isAppleLoginActive)
                                 SignInWithAppleButton(
                                   text: "Apple",
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    context
+                                        .read(userNotifierProvider.notifier)
+                                        .loginUsingApple(
+                                            "nbsnjbsjbjbndgbjngbndjgbnjdgnbjdngbjdjfgbjgbn");
+                                  },
                                 ).px(5).py(5),
                             Text(
                               LocaleKeys.dont_have_account.tr(),

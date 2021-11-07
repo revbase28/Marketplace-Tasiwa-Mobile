@@ -38,6 +38,7 @@ class API {
   static const login = 'auth/login';
   static const loginUsingGoogle = 'auth/social/google';
   static const loginUsingFacebook = 'auth/social/facebook';
+  static const loginUsingApple = 'auth/social/apple';
   static const logout = 'auth/logout';
   static const userInfo = 'account/update';
   static const updatePassword = 'password/update';

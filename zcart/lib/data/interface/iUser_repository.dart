@@ -7,6 +7,8 @@ abstract class IUserRepository {
 
   Future<User?> logInUsingFacebook(String accessToken);
 
+  Future<User?> logInUsingApple(String accessToken);
+
   Future<User?> register(String name, email, password,
       bool agreeToTermsAndCondition, acceptMarkeing);
 
