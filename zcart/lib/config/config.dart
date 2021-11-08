@@ -29,7 +29,7 @@ class MyConfig {
   ///This is your app api url. You must change this url as your own app api url. Currently the app api
   ///url is [https://test.incevio.com/api/]. This is the url that you will use to access the api. Don't ////forget the slash [/] at the end and [https://] at the front.
   ///
-  static const String appApiUrl = 'https://test.incevio.cloud/api/';
+  static const String appApiUrl = 'https://staging.incevio.cloud/api/';
 
   ///
 

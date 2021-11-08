@@ -280,7 +280,11 @@ class DealOfTheDayWidget extends StatelessWidget {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: dealOfTheDay.data!.keyFeatures!
-                            .sublist(0, 3)
+                            .sublist(
+                                0,
+                                dealOfTheDay.data!.keyFeatures!.length > 3
+                                    ? 3
+                                    : dealOfTheDay.data!.keyFeatures!.length)
                             .map((e) => Row(
                                   children: [
                                     const Icon(

@@ -243,11 +243,25 @@ class _LoginScreenState extends State<LoginScreen> {
                               if (MyConfig.isAppleLoginActive)
                                 SignInWithAppleButton(
                                   text: "Apple",
-                                  onPressed: () {
-                                    context
-                                        .read(userNotifierProvider.notifier)
-                                        .loginUsingApple(
-                                            "nbsnjbsjbjbndgbjngbndjgbnjdgnbjdngbjdjfgbjgbn");
+                                  onPressed: () async {
+                                    try {
+                                      await SignInWithApple
+                                          .getAppleIDCredential(
+                                        scopes: [
+                                          AppleIDAuthorizationScopes.email,
+                                          AppleIDAuthorizationScopes.fullName,
+                                        ],
+                                      ).then((value) {
+                                        print(value.authorizationCode);
+                                        context
+                                            .read(userNotifierProvider.notifier)
+                                            .loginUsingApple(
+                                                value.authorizationCode);
+                                      });
+                                    } catch (e) {
+                                      toast(
+                                          LocaleKeys.something_went_wrong.tr());
+                                    }
                                   },
                                 ).px(5).py(5),
                             Text(
