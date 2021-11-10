@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="app_name">zCart</string>
+  <string name="facebook_app_id">752023098709544</string>
+  <string name="fb_login_protocol_scheme">fb752023098709544</string>
+  <string name="facebook_client_token">9d8e100bdc0c5f914bb97dfd6cab1ce4</string>
+
+</resources>
