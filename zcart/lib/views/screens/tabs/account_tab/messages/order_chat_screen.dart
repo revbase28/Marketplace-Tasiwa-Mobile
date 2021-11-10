@@ -199,7 +199,28 @@ class OrderChatScreen extends StatelessWidget {
             width: 4,
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: () async {
+              if (messageController.text.isNotEmpty) {
+                String message = messageController.text.trim();
+                messageController.clear();
+                context
+                    .read(orderChatSendProvider.notifier)
+                    .sendMessage(
+                        //TODO: Send attachement
+                        orders.id,
+                        message)
+                    .then(
+                  (value) {
+                    messageController.clear();
+                    context
+                        .read(orderChatProvider.notifier)
+                        .orderConversation(orders.id, update: true);
+                  },
+                );
+              } else {
+                toast(LocaleKeys.empty_message.tr());
+              }
+            },
             icon: Icon(Icons.send, color: kPrimaryColor),
           )
         ],

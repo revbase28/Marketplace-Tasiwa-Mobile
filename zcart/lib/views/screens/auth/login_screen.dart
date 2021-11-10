@@ -244,24 +244,24 @@ class _LoginScreenState extends State<LoginScreen> {
                                 SignInWithAppleButton(
                                   text: "Apple",
                                   onPressed: () async {
-                                    try {
-                                      await SignInWithApple
-                                          .getAppleIDCredential(
-                                        scopes: [
-                                          AppleIDAuthorizationScopes.email,
-                                          AppleIDAuthorizationScopes.fullName,
-                                        ],
-                                      ).then((value) {
-                                        print(value.authorizationCode);
-                                        context
-                                            .read(userNotifierProvider.notifier)
-                                            .loginUsingApple(
-                                                value.authorizationCode);
-                                      });
-                                    } catch (e) {
-                                      toast(
-                                          LocaleKeys.something_went_wrong.tr());
-                                    }
+                                    // try {
+                                    //   await SignInWithApple
+                                    //       .getAppleIDCredential(
+                                    //     scopes: [
+                                    //       AppleIDAuthorizationScopes.email,
+                                    //       AppleIDAuthorizationScopes.fullName,
+                                    //     ],
+                                    //   ).then((value) {
+                                    //     print(value.authorizationCode);
+                                    //     context
+                                    //         .read(userNotifierProvider.notifier)
+                                    //         .loginUsingApple(
+                                    //             value.authorizationCode);
+                                    //   });
+                                    // } catch (e) {
+                                    //   toast(
+                                    //       LocaleKeys.something_went_wrong.tr());
+                                    // }
                                   },
                                 ).px(5).py(5),
                             Text(

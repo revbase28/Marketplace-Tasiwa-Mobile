@@ -29,7 +29,7 @@ class MyConfig {
   ///This is your app api url. You must change this url as your own app api url. Currently the app api
   ///url is [https://test.incevio.com/api/]. This is the url that you will use to access the api. Don't ////forget the slash [/] at the end and [https://] at the front.
   ///
-  static const String appApiUrl = 'https://staging.incevio.cloud/api/';
+  static const String appApiUrl = 'https://test.incevio.cloud/api/';
 
   ///
 
@@ -76,8 +76,8 @@ class MyConfig {
   /// GOOGLE LOGIN
   static const bool isGoogleLoginActive = true;
 
-  /// APPLE LOGIN
-  static const bool isAppleLoginActive = true;
+  /// APPLE LOGIN [Not Yet Implemented]
+  static const bool isAppleLoginActive = false;
 
   // Theme
   static const bool isDynamicThemeActive = true;
@@ -89,39 +89,36 @@ class MyConfig {
   ///
   /// [RAZOR PAY]
   /// API KEY
-  static const String razorPayApiKey = 'rzp_test_Pq4V0mcist4gfu';
+  static const String razorPayApiKey = '';
 
   /// SECRET KEY
-  static const String razorPaySecretKey = "oot8NuMhyoz6sZkYbkdCvCar";
+  static const String razorPaySecretKey = "";
 
   /// CURRENCY CODE
   static const String razorPayCurrency = "INR";
 
   /// [PAYSTACK]
   /// API KEY
-  static const String paystackApiKey =
-      'pk_test_4b0bfd886ad641c03fc008017c0f127adb3eecb3';
+  static const String paystackApiKey = '';
+
+  /// PAYSTACK CURRENCY CODE
+  static const String paystackCurrency = "ZAR";
 
   /// [PAYPAL]
-  /// SANDBOX MODE
+  /// SANDBOX MODE [Change this to false if you want to use live mode]
   static const bool paypalSandboxMode = true;
 
   /// CLIENT ID
-  static const String paypalClientId =
-      "AT1_wwlwFHefidTjEF4DYzjOVoI7ZK66ib1zlVA0YZUPuNj4D4IG_0Sxmto5Q6leByaxgdbHi-KkkaHz";
+  static const String paypalClientId = "";
 
   /// CLIENT SECRET
-  static const String paypalClientSecret =
-      "EO4T0rY9u0gcKlegpW8nGKoXS1QjUNHLlfgcGPjW5Sv5r7o7gMPVMaPAfGgmqbQWo7UB8OSG2Fgb2Nkt";
+  static const String paypalClientSecret = "";
 
-  /// PAYPAL TRANSACTION DESCRIPTION
+  /// PAYPAL TRANSACTION DESCRIPTION [Change this description as your own]
   static const String paypalTransactionDescription = "Payment for ZCart";
 
   /// PAYPAL CURRENCY CODE
   static const String payPalCurrency = "USD";
-
-  /// PAYSTACK CURRENCY CODE
-  static const String paystackCurrency = "ZAR";
 
   ///
   ///
