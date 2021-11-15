@@ -44,10 +44,14 @@ class ResetPassword extends StatelessWidget {
                   CustomTextField(
                     controller: _emailController,
                     color: kLightCardBgColor,
+                    keyboardType: TextInputType.emailAddress,
                     title: LocaleKeys.your_email.tr(),
                     hintText: LocaleKeys.your_email.tr(),
-                    validator: (value) =>
-                        value!.isEmpty ? LocaleKeys.field_required.tr() : null,
+                    validator: (value) => value!.isEmpty
+                        ? LocaleKeys.field_required.tr()
+                        : !value.contains('@') || !value.contains('.')
+                            ? LocaleKeys.invalid_email.tr()
+                            : null,
                     widthMultiplier: 1,
                   ).py(10),
                   CustomButton(

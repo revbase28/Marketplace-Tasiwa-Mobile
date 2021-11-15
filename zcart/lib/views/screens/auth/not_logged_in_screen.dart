@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:velocity_x/velocity_x.dart';
@@ -11,6 +13,7 @@ import 'package:zcart/views/screens/tabs/account_tab/blogs/blogs_screen.dart';
 import 'package:zcart/views/screens/tabs/account_tab/others/aboutUs_screen.dart';
 import 'package:zcart/views/screens/tabs/account_tab/others/privacyPolicy_screen.dart';
 import 'package:zcart/views/screens/tabs/account_tab/others/termsAndConditions_screen.dart';
+import 'package:zcart/views/screens/tabs/account_tab/settings/settings_page.dart';
 import 'package:zcart/views/shared_widgets/custom_button.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zcart/views/shared_widgets/update_language.dart';
@@ -84,6 +87,18 @@ class NotLoggedInScreen extends StatelessWidget {
                               title: Text(LocaleKeys.change_theme.tr(),
                                   style: context.textTheme.subtitle2!),
                               trailing: EasyDynamicThemeSwitch()),
+                        ),
+                      if (Platform.isAndroid)
+                        Card(
+                          elevation: 0,
+                          child: ListTile(
+                            title: Text("Clear Cache",
+                                style: context.textTheme.subtitle2!),
+                            trailing: const Icon(Icons.arrow_forward_ios),
+                            onTap: () async {
+                              await clearCache(context);
+                            },
+                          ),
                         ),
                       Card(
                         elevation: 0,

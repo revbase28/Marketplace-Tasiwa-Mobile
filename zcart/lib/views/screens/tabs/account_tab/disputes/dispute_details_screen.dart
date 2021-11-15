@@ -6,6 +6,7 @@ import 'package:zcart/riverpod/providers/dispute_provider.dart';
 import 'package:zcart/riverpod/state/dispute/dispute_details_state.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:zcart/views/screens/tabs/account_tab/disputes/dispute_responses.dart';
+import 'package:zcart/views/shared_widgets/customConfirmDialog.dart';
 import 'package:zcart/views/shared_widgets/custom_button.dart';
 import 'package:zcart/views/shared_widgets/custom_textfield.dart';
 import 'package:zcart/views/shared_widgets/loading_widget.dart';
@@ -319,29 +320,21 @@ class DisputeDetailsScreen extends ConsumerWidget {
                   style: const TextStyle(color: kLightColor),
                 ).onInkTap(() {
                   if (!disputeDetailsState.disputeDetails!.closed!) {
-                    showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            title: Text(LocaleKeys.close_dispute.tr()),
-                            content: Text(LocaleKeys.are_you_sure.tr()),
-                            actions: [
-                              TextButton(
-                                child: Text(LocaleKeys.yes.tr()),
-                                onPressed: () {
-                                  context
-                                      .read(disputesProvider.notifier)
-                                      .markAsSolved(disputeDetailsState
-                                          .disputeDetails!.id)
-                                      .then((value) {
-                                    context.pop();
-                                    context.pop();
-                                  });
-                                },
-                              )
-                            ],
-                          );
+                    showCustomConfirmDialog(
+                      context,
+                      dialogAnimation: DialogAnimation.SLIDE_BOTTOM_TOP,
+                      title: LocaleKeys.close_dispute.tr(),
+                      subTitle: LocaleKeys.are_you_sure.tr(),
+                      onAccept: (p0) {
+                        context
+                            .read(disputesProvider.notifier)
+                            .markAsSolved(
+                                disputeDetailsState.disputeDetails!.id)
+                            .then((value) {
+                          context.pop();
                         });
+                      },
+                    );
                   } else {
                     showModalBottomSheet(
                         context: context,

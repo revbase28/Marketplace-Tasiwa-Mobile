@@ -104,15 +104,19 @@ class _LoginScreenState extends State<LoginScreen> {
                             CustomTextField(
                               hintText: LocaleKeys.your_email.tr(),
                               title: LocaleKeys.your_email.tr(),
+                              keyboardType: TextInputType.emailAddress,
                               controller: _emailController,
                               validator: (value) => value!.isEmpty
                                   ? LocaleKeys.field_required.tr()
-                                  : null,
+                                  : !value.contains('@') || !value.contains('.')
+                                      ? LocaleKeys.invalid_email.tr()
+                                      : null,
                             ),
                             CustomTextField(
                               isPassword: true,
                               hintText: LocaleKeys.your_password.tr(),
                               title: LocaleKeys.your_password.tr(),
+                              keyboardType: TextInputType.visiblePassword,
                               controller: _passwordController,
                               validator: (value) => value!.length < 6
                                   ? LocaleKeys.password_validation.tr()

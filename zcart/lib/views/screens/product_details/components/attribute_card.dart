@@ -134,7 +134,6 @@ class _AttributeCardState extends State<AttributeCard> {
                       provider: productVariantNotifierProvider,
                       onChange: (context, state) {
                         if (state is ProductVariantLoadedState) {
-                          // TODO: Need to find a better solution (Looks ugly)
                           context
                               .read(productSlugListProvider.notifier)
                               .removeProductSlug();

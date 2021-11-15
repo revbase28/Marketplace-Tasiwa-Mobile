@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nb_utils/nb_utils.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:zcart/data/controller/chat/chat_controller.dart';
 import 'package:zcart/helper/get_recently_viewed.dart';
@@ -20,6 +21,7 @@ import 'package:zcart/views/screens/tabs/account_tab/orders/order_details_screen
 import 'package:zcart/Theme/styles/colors.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:zcart/views/screens/tabs/home_tab/components/error_widget.dart';
+import 'package:zcart/views/shared_widgets/customConfirmDialog.dart';
 
 class MyOrderScreen extends ConsumerWidget {
   const MyOrderScreen({Key? key}) : super(key: key);
@@ -309,35 +311,24 @@ class OrderCard extends StatelessWidget {
                             if (orderListState
                                     .orders![orderIndex!].orderStatus !=
                                 "DELIVERED") {
-                              showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return AlertDialog(
-                                      title: Text(
-                                          LocaleKeys.received_product.tr()),
-                                      content:
-                                          Text(LocaleKeys.are_you_sure.tr()),
-                                      actions: [
-                                        TextButton(
-                                          child: Text(LocaleKeys.yes.tr()),
-                                          onPressed: () {
-                                            context
-                                                .read(orderReceivedProvider
-                                                    .notifier)
-                                                .orderReceived(orderListState
-                                                    .orders![orderIndex!].id)
-                                                .then((value) => context
-                                                    .read(
-                                                        ordersProvider.notifier)
-                                                    .orders(
-                                                        ignoreLoadingState:
-                                                            true))
-                                                .then((value) => context.pop());
-                                          },
-                                        )
-                                      ],
-                                    );
-                                  });
+                              showCustomConfirmDialog(
+                                context,
+                                dialogAnimation:
+                                    DialogAnimation.SLIDE_BOTTOM_TOP,
+                                dialogType: DialogType.ACCEPT,
+                                title: LocaleKeys.received_product.tr(),
+                                subTitle: LocaleKeys.are_you_sure.tr(),
+                                positiveText: LocaleKeys.yes.tr(),
+                                onAccept: (p0) {
+                                  context
+                                      .read(orderReceivedProvider.notifier)
+                                      .orderReceived(orderListState
+                                          .orders![orderIndex!].id)
+                                      .then((value) => context
+                                          .read(ordersProvider.notifier)
+                                          .orders(ignoreLoadingState: true));
+                                },
+                              );
                             }
 
                             // if (orderListState.orders[orderIndex].orderStatus ==

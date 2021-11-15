@@ -13,6 +13,7 @@ import 'package:zcart/views/screens/product_details/product_details_screen.dart'
 import 'package:zcart/views/screens/tabs/account_tab/disputes/dispute_details_screen.dart';
 import 'package:zcart/views/screens/tabs/account_tab/disputes/open_dispute_screen.dart';
 import 'package:zcart/views/screens/tabs/account_tab/orders/feedback_screen.dart';
+import 'package:zcart/views/shared_widgets/customConfirmDialog.dart';
 import 'package:zcart/views/shared_widgets/custom_button.dart';
 import 'package:zcart/views/shared_widgets/loading_widget.dart';
 import 'package:zcart/Theme/styles/colors.dart';
@@ -567,38 +568,23 @@ class OrderDetailsScreen extends ConsumerWidget {
                   .onInkTap(() {
                 if (orderDetailsState.orderDetails!.orderStatus !=
                     "DELIVERED") {
-                  showDialog(
-                      context: context,
-                      builder: (context) {
-                        return AlertDialog(
-                          title: Text(LocaleKeys.received_product.tr()),
-                          content: Text(LocaleKeys.are_you_sure.tr()),
-                          actions: [
-                            TextButton(
-                              child: Text(
-                                LocaleKeys.no.tr(),
-                                style: TextStyle(color: kPrimaryColor),
-                              ),
-                              onPressed: () {
-                                context.pop();
-                              },
-                            ),
-                            TextButton(
-                              child: Text(LocaleKeys.yes.tr()),
-                              onPressed: () {
-                                context
-                                    .read(orderReceivedProvider.notifier)
-                                    .orderReceived(
-                                        orderDetailsState.orderDetails!.id)
-                                    .then((value) => context
-                                        .read(ordersProvider.notifier)
-                                        .orders(ignoreLoadingState: true))
-                                    .then((value) => context.pop());
-                              },
-                            ),
-                          ],
-                        );
-                      });
+                  showCustomConfirmDialog(
+                    context,
+                    dialogType: DialogType.ACCEPT,
+                    dialogAnimation: DialogAnimation.SLIDE_BOTTOM_TOP,
+                    title: LocaleKeys.received_product.tr(),
+                    subTitle: LocaleKeys.are_you_sure.tr(),
+                    positiveText: LocaleKeys.yes.tr(),
+                    onAccept: (p0) {
+                      context
+                          .read(orderReceivedProvider.notifier)
+                          .orderReceived(orderDetailsState.orderDetails!.id)
+                          .then((value) => context
+                              .read(ordersProvider.notifier)
+                              .orders(ignoreLoadingState: true))
+                          .then((value) => context.pop());
+                    },
+                  );
                 }
               }),
             ],

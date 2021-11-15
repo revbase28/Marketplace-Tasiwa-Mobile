@@ -1,5 +1,6 @@
 import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:zcart/Theme/styles/colors.dart';
 
 import 'package:nb_utils/nb_utils.dart';
@@ -19,6 +20,8 @@ class CustomTextField extends StatefulWidget {
   final int? maxLines;
   final Color color;
   final double widthMultiplier;
+  final List<TextInputFormatter>? inputFormatters;
+  final TextInputType keyboardType;
 
   const CustomTextField({
     Key? key,
@@ -34,6 +37,8 @@ class CustomTextField extends StatefulWidget {
     this.maxLines = 1,
     this.minLines = 1,
     this.color = kLightColor,
+    this.inputFormatters,
+    this.keyboardType = TextInputType.text,
   }) : super(key: key);
 
   @override
@@ -72,7 +77,9 @@ class _CustomTextFieldState extends State<CustomTextField> {
             ),
             child: TextFormField(
               autovalidateMode: AutovalidateMode.onUserInteraction,
+              inputFormatters: widget.inputFormatters,
               controller: widget.controller,
+              keyboardType: widget.keyboardType,
               minLines: widget.minLines,
               maxLines: widget.maxLines,
               obscureText: widget.isPassword ? _passwordVisible : false,

@@ -1,5 +1,6 @@
 import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zcart/riverpod/providers/dispute_provider.dart';
 import 'package:zcart/riverpod/providers/provider.dart';
@@ -278,9 +279,14 @@ class _OpenDisputeScreenState extends State<OpenDisputeScreen> {
                                     hintText: LocaleKeys.refund_amount.tr(),
                                     controller: refundAmountController,
                                     widthMultiplier: 1,
+                                    keyboardType: TextInputType.number,
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.allow(
+                                          RegExp(r'^(\d+)?\.?\d{0,2}')),
+                                    ],
                                     validator: (value) {
-                                      if (value.toString().isNotBlank) {
-                                        if (double.parse(value!) >
+                                      if (value!.isNotEmpty) {
+                                        if (double.parse(value) >
                                             double.parse(disputeInfoState
                                                 .disputeInfo!.totalRaw!
                                                 .split('\$')
@@ -288,15 +294,18 @@ class _OpenDisputeScreenState extends State<OpenDisputeScreen> {
                                           return LocaleKeys
                                               .refund_amount_validation
                                               .tr(args: [
-                                            "${disputeInfoState.disputeInfo!.totalRaw}"
+                                            "${disputeInfoState.disputeInfo!.totalRaw.toDouble().roundToDouble()}"
                                           ]);
                                         }
+                                      } else if (value.isEmpty) {
+                                        return LocaleKeys.field_required.tr();
                                       }
+                                    },
+                                    onChanged: (value) {
                                       context
                                           .read(
                                               openDisputeInfoProvider.notifier)
                                           .refundAmount = value;
-                                      return null;
                                     },
                                   ),
                                   CustomTextField(

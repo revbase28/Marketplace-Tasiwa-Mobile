@@ -94,6 +94,7 @@ class PersonalDetails extends StatelessWidget {
                   color: kLightCardBgColor,
                   title: LocaleKeys.your_email.tr(),
                   hintText: LocaleKeys.your_email.tr(),
+                  keyboardType: TextInputType.emailAddress,
                   controller: emailController,
                   validator: (value) {
                     if (!value!.contains("@") || !value.contains(".")) {

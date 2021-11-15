@@ -1,4 +1,5 @@
 import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
+import 'package:flutter/services.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:zcart/Theme/styles/colors.dart';
@@ -104,6 +105,7 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
                         color: kLightCardBgColor,
                         title: LocaleKeys.contact_number.tr(),
                         hintText: LocaleKeys.contact_number.tr(),
+                        keyboardType: TextInputType.number,
                         controller: contactNumberController,
                         widthMultiplier: 1,
                         validator: (text) {
@@ -187,7 +189,11 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
                         color: kLightCardBgColor,
                         title: LocaleKeys.zip_code.tr(),
                         hintText: LocaleKeys.zip_code.tr(),
+                        keyboardType: TextInputType.number,
                         controller: zipCodeController,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly
+                        ],
                         widthMultiplier: 1,
                         validator: (text) {
                           if (text == null || text.isEmpty) {

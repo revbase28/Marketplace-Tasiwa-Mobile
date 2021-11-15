@@ -83,15 +83,19 @@ class SignUpScreen extends StatelessWidget {
                             CustomTextField(
                               hintText: LocaleKeys.your_email.tr(),
                               title: LocaleKeys.your_email.tr(),
+                              keyboardType: TextInputType.emailAddress,
                               onChanged: (value) => _email = value,
                               validator: (value) => value!.isEmpty
                                   ? LocaleKeys.field_required.tr()
-                                  : null,
+                                  : !value.contains('@') || !value.contains('.')
+                                      ? LocaleKeys.invalid_email.tr()
+                                      : null,
                             ),
                             CustomTextField(
                               isPassword: true,
                               hintText: LocaleKeys.your_password.tr(),
                               title: LocaleKeys.your_password.tr(),
+                              keyboardType: TextInputType.visiblePassword,
                               onChanged: (value) => _password = value,
                               validator: (value) => value!.length < 6
                                   ? LocaleKeys.password_validation.tr()
@@ -100,6 +104,7 @@ class SignUpScreen extends StatelessWidget {
                             CustomTextField(
                               isPassword: true,
                               hintText: LocaleKeys.your_confirm_password.tr(),
+                              keyboardType: TextInputType.visiblePassword,
                               title: LocaleKeys.your_confirm_password.tr(),
                               validator: (value) => value != _password
                                   ? LocaleKeys.dont_match_password.tr()

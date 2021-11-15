@@ -1,10 +1,16 @@
+import 'dart:io';
+
 import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:hive/hive.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:zcart/config/config.dart';
 import 'package:zcart/data/controller/others/others_controller.dart';
 import 'package:zcart/helper/constants.dart';
@@ -16,7 +22,9 @@ import 'package:zcart/views/screens/tabs/account_tab/others/privacyPolicy_screen
 import 'package:zcart/views/screens/tabs/account_tab/others/termsAndConditions_screen.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:zcart/views/shared_widgets/customConfirmDialog.dart';
 import 'package:zcart/views/shared_widgets/update_language.dart';
+import 'package:restart_app/restart_app.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({Key? key}) : super(key: key);
@@ -47,6 +55,17 @@ class SettingsPage extends StatelessWidget {
                 title: Text(LocaleKeys.change_theme.tr(),
                     style: context.textTheme.subtitle2!),
                 trailing: EasyDynamicThemeSwitch(),
+              ),
+            ),
+          if (Platform.isAndroid)
+            Card(
+              elevation: 0,
+              child: ListTile(
+                title: Text("Clear Cache", style: context.textTheme.subtitle2!),
+                trailing: const Icon(Icons.arrow_forward_ios),
+                onTap: () async {
+                  await clearCache(context);
+                },
               ),
             ),
           const Divider(
@@ -100,35 +119,21 @@ class SettingsPage extends StatelessWidget {
               title: Text(LocaleKeys.sign_out.tr(),
                   style: context.textTheme.subtitle2!),
               onTap: () async {
-                showDialog(
-                    context: context,
-                    builder: (context) {
-                      return AlertDialog(
-                        title: Text(LocaleKeys.sign_out_confirmation.tr()),
-                        actions: [
-                          TextButton(
-                            child: Text(LocaleKeys.no.tr()),
-                            onPressed: () async {
-                              context.pop();
-                            },
-                          ),
-                          TextButton(
-                            child: Text(LocaleKeys.yes.tr()),
-                            onPressed: () async {
-                              await FacebookAuth.instance.logOut();
-                              await GoogleSignIn().signOut();
-                              await context
-                                  .read(userNotifierProvider.notifier)
-                                  .logout();
+                await showCustomConfirmDialog(
+                  context,
+                  title: "Are you sure to sign out?",
+                  dialogAnimation: DialogAnimation.SLIDE_BOTTOM_TOP,
+                  negativeText: LocaleKeys.no.tr(),
+                  positiveText: LocaleKeys.yes.tr(),
+                  onAccept: (context) async {
+                    await FacebookAuth.instance.logOut();
+                    await GoogleSignIn().signOut();
+                    await context.read(userNotifierProvider.notifier).logout();
 
-                              await setValue(loggedIn, false);
-                              context
-                                  .nextAndRemoveUntilPage(const BottomNavBar());
-                            },
-                          ),
-                        ],
-                      );
-                    });
+                    await setValue(loggedIn, false).then((value) =>
+                        context.nextAndRemoveUntilPage(const BottomNavBar()));
+                  },
+                );
               },
             ),
           ),
@@ -136,4 +141,41 @@ class SettingsPage extends StatelessWidget {
       ).cornerRadius(10).p(10),
     );
   }
+}
+
+Future<void> clearCache(BuildContext context) async {
+  await showCustomConfirmDialog(
+    context,
+    dialogAnimation: DialogAnimation.SLIDE_BOTTOM_TOP,
+    title: "Are you sure to clear cache?",
+    subTitle:
+        "This will delete all of your local data and signed you out if you are signed in.",
+    negativeText: LocaleKeys.no.tr(),
+    positiveText: LocaleKeys.yes.tr(),
+    onAccept: (context) async {
+      _clearAll().then((value) async {
+        await Restart.restartApp();
+      });
+    },
+  );
+}
+
+Future<void> _clearAll() async {
+  toast("Clearing Cache...");
+  await DefaultCacheManager().emptyCache();
+  await sharedPreferences.clear();
+  await Hive.deleteFromDisk();
+
+  /// this will delete cache
+  final cacheDir = await getTemporaryDirectory();
+  if (cacheDir.existsSync()) {
+    cacheDir.deleteSync(recursive: true);
+  }
+
+  /// this will delete app's storage
+  final appDir = await getApplicationSupportDirectory();
+  if (appDir.existsSync()) {
+    appDir.deleteSync(recursive: true);
+  }
+  toast("Cache Cleared");
 }

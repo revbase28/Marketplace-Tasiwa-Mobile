@@ -18,6 +18,7 @@ import 'package:zcart/views/screens/product_details/product_details_screen.dart'
 import 'package:zcart/views/screens/product_list/recently_viewed.dart';
 import 'package:zcart/views/screens/tabs/home_tab/components/error_widget.dart';
 import 'package:zcart/views/screens/tabs/myCart_tab/checkout/checkout_screen.dart';
+import 'package:zcart/views/shared_widgets/customConfirmDialog.dart';
 import 'package:zcart/views/shared_widgets/product_details_card.dart';
 import 'package:zcart/views/shared_widgets/product_loading_widget.dart';
 
@@ -329,16 +330,22 @@ class _ItemCardState extends State<ItemCard> {
                         ),
                         onPressed: widget.cartItem.quantity == 1
                             ? () {
-                                showConfirmDialog(context,
-                                    LocaleKeys.want_delete_item_from_cart.tr(),
-                                    buttonColor: kPrimaryColor, onAccept: () {
-                                  context
-                                      .read(cartNotifierProvider.notifier)
-                                      .removeFromCart(
-                                        widget.cartID,
-                                        widget.cartItem.id,
-                                      );
-                                });
+                                showCustomConfirmDialog(
+                                  context,
+                                  dialogAnimation:
+                                      DialogAnimation.SLIDE_RIGHT_LEFT,
+                                  dialogType: DialogType.DELETE,
+                                  title: LocaleKeys.want_delete_item_from_cart
+                                      .tr(),
+                                  onAccept: (_) {
+                                    context
+                                        .read(cartNotifierProvider.notifier)
+                                        .removeFromCart(
+                                          widget.cartID,
+                                          widget.cartItem.id,
+                                        );
+                                  },
+                                );
                               }
                             : () {
                                 toast(LocaleKeys.please_wait.tr());

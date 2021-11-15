@@ -1,5 +1,6 @@
 import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:zcart/data/models/address/address_model.dart';
@@ -128,6 +129,7 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
                         color: kLightCardBgColor,
                         title: LocaleKeys.contact_number.tr(),
                         hintText: LocaleKeys.contact_number.tr(),
+                        keyboardType: TextInputType.number,
                         controller: contactNumberController,
                         widthMultiplier: 1,
                         validator: (text) {
@@ -211,7 +213,11 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
                         color: kLightCardBgColor,
                         title: LocaleKeys.zip_code.tr(),
                         hintText: LocaleKeys.zip_code.tr(),
+                        keyboardType: TextInputType.number,
                         controller: zipCodeController,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly
+                        ],
                         widthMultiplier: 1,
                         validator: (text) {
                           if (text == null || text.isEmpty) {

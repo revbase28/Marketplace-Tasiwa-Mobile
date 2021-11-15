@@ -9,6 +9,7 @@ import 'package:zcart/riverpod/state/state.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:zcart/views/screens/tabs/account_tab/disputes/dispute_details_screen.dart';
 import 'package:zcart/views/screens/tabs/account_tab/messages/vendor_chat_screen.dart';
+import 'package:zcart/views/shared_widgets/customConfirmDialog.dart';
 import 'package:zcart/views/shared_widgets/loading_widget.dart';
 import 'package:zcart/Theme/styles/colors.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -352,38 +353,28 @@ class DisputeScreen extends ConsumerWidget {
                                                               color:
                                                                   kPrimaryLightTextColor)),
                                                 ).onInkTap(() {
-                                                  showDialog(
-                                                      context: context,
-                                                      builder: (context) {
-                                                        return AlertDialog(
-                                                          title: Text(LocaleKeys
-                                                              .close_dispute
-                                                              .tr()),
-                                                          content: Text(
-                                                              LocaleKeys
-                                                                  .are_you_sure
-                                                                  .tr()),
-                                                          actions: [
-                                                            TextButton(
-                                                              child: Text(
-                                                                  LocaleKeys.yes
-                                                                      .tr()),
-                                                              onPressed: () {
-                                                                context
-                                                                    .read(disputesProvider
-                                                                        .notifier)
-                                                                    .markAsSolved(disputesState
-                                                                        .disputes[
-                                                                            index]
-                                                                        .id)
-                                                                    .then((value) =>
-                                                                        context
-                                                                            .pop());
-                                                              },
-                                                            )
-                                                          ],
-                                                        );
-                                                      });
+                                                  showCustomConfirmDialog(
+                                                    context,
+                                                    dialogAnimation:
+                                                        DialogAnimation
+                                                            .SLIDE_BOTTOM_TOP,
+                                                    title: LocaleKeys
+                                                        .close_dispute
+                                                        .tr(),
+                                                    subTitle: LocaleKeys
+                                                        .are_you_sure
+                                                        .tr(),
+                                                    onAccept: (p0) {
+                                                      context
+                                                          .read(disputesProvider
+                                                              .notifier)
+                                                          .markAsSolved(
+                                                              disputesState
+                                                                  .disputes[
+                                                                      index]
+                                                                  .id);
+                                                    },
+                                                  );
                                                 }),
                                               ),
                                             ],

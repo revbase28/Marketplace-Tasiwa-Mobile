@@ -387,6 +387,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                     color: kLightCardBgColor,
                                     hintText: LocaleKeys.your_email.tr(),
                                     controller: _emailController,
+                                    keyboardType: TextInputType.emailAddress,
                                     validator: (value) {
                                       if (value != null) {
                                         if (!value.contains('@') ||
@@ -429,6 +430,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                           title: LocaleKeys.your_password.tr(),
                                           hintText:
                                               LocaleKeys.your_password.tr(),
+                                          keyboardType:
+                                              TextInputType.visiblePassword,
                                           controller: _passWordController,
                                           validator: (value) {
                                             if (value != null) {
@@ -455,6 +458,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                           hintText: LocaleKeys
                                               .your_confirm_password
                                               .tr(),
+                                          keyboardType:
+                                              TextInputType.visiblePassword,
                                           controller:
                                               _confirmPassWordController,
                                           validator: (value) {
