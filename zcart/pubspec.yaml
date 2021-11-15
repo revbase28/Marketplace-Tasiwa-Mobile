@@ -6,7 +6,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 #Only Chnage this value to update your version
 #1.0.0 is version number and 1 is build number
-version: 2.0.1+2
+version: 2.0.2+3
 
 
 #Don't Change Anything From here
@@ -25,7 +25,7 @@ dependencies:
   flutter_slidable: ^0.6.0
   nb_utils: ^4.2.3
   velocity_x: ^3.3.0
-  share: ^2.0.1
+  share_plus: ^3.0.4
   datetime_picker_formfield: ^2.0.0
   flutter_countdown_timer: ^4.1.0
   font_awesome_flutter: ^9.1.0
