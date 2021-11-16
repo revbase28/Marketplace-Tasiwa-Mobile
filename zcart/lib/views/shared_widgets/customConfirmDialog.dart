@@ -2,9 +2,9 @@ import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 
-Future<bool?> showCustomConfirmDialog(
+Future<void> showCustomConfirmDialog(
   BuildContext context, {
-  required Function(BuildContext) onAccept,
+  required VoidCallback onAccept,
   String? title,
   String? subTitle,
   String? positiveText,
@@ -28,7 +28,7 @@ Future<bool?> showCustomConfirmDialog(
 }) async {
   hideKeyboard(context);
 
-  return await showGeneralDialog(
+  await showGeneralDialog(
     context: context,
     barrierColor: barrierColor ?? Colors.black54,
     pageBuilder: (context, animation, secondaryAnimation) {
@@ -144,9 +144,8 @@ Future<bool?> showCustomConfirmDialog(
                         ],
                       ).fit(),
                       onTap: () {
-                        onAccept.call(_);
-
-                        if (cancelable) finish(_, true);
+                        Navigator.pop(context);
+                        onAccept();
                       },
                     ).expand(),
                   ],

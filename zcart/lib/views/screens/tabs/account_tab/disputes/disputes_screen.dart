@@ -364,7 +364,7 @@ class DisputeScreen extends ConsumerWidget {
                                                     subTitle: LocaleKeys
                                                         .are_you_sure
                                                         .tr(),
-                                                    onAccept: (p0) {
+                                                    onAccept: () {
                                                       context
                                                           .read(disputesProvider
                                                               .notifier)

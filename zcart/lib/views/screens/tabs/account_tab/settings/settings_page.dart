@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +10,7 @@ import 'package:hive/hive.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:restart_app/restart_app.dart';
 import 'package:zcart/config/config.dart';
 import 'package:zcart/data/controller/others/others_controller.dart';
 import 'package:zcart/helper/constants.dart';
@@ -24,7 +24,6 @@ import 'package:velocity_x/velocity_x.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:zcart/views/shared_widgets/customConfirmDialog.dart';
 import 'package:zcart/views/shared_widgets/update_language.dart';
-import 'package:restart_app/restart_app.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({Key? key}) : super(key: key);
@@ -125,11 +124,10 @@ class SettingsPage extends StatelessWidget {
                   dialogAnimation: DialogAnimation.SLIDE_BOTTOM_TOP,
                   negativeText: LocaleKeys.no.tr(),
                   positiveText: LocaleKeys.yes.tr(),
-                  onAccept: (context) async {
+                  onAccept: () async {
                     await FacebookAuth.instance.logOut();
                     await GoogleSignIn().signOut();
                     await context.read(userNotifierProvider.notifier).logout();
-
                     await setValue(loggedIn, false).then((value) =>
                         context.nextAndRemoveUntilPage(const BottomNavBar()));
                   },
@@ -152,7 +150,7 @@ Future<void> clearCache(BuildContext context) async {
         "This will delete all of your local data and signed you out if you are signed in.",
     negativeText: LocaleKeys.no.tr(),
     positiveText: LocaleKeys.yes.tr(),
-    onAccept: (context) async {
+    onAccept: () async {
       _clearAll().then((value) async {
         await Restart.restartApp();
       });

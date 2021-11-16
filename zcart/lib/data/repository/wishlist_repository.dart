@@ -18,8 +18,9 @@ class WishListRepository implements IWishListRepository {
   Future<List<WIshListItem>> fetchWishList() async {
     items.clear();
 
-    var responseBody =
-        await handleResponse(await getRequest(API.wishList, bearerToken: true));
+    var responseBody = await handleResponse(
+        await getRequest(API.wishList, bearerToken: true),
+        showToast: false);
     if (responseBody.runtimeType == int && responseBody > 206) {
       throw NetworkException();
     }
@@ -54,7 +55,8 @@ class WishListRepository implements IWishListRepository {
     dynamic responseBody;
     try {
       responseBody = await handleResponse(
-          await getRequest(API.addToWishList(slug), bearerToken: true));
+          await getRequest(API.addToWishList(slug), bearerToken: true),
+          showToast: false);
 
       if (responseBody.runtimeType != int) {
         toast(

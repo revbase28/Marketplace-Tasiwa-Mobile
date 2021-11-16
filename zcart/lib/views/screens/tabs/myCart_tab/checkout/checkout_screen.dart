@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:velocity_x/velocity_x.dart';
-
 import 'package:zcart/Theme/dark_theme.dart';
 import 'package:zcart/Theme/light_theme.dart';
 import 'package:zcart/Theme/styles/colors.dart';

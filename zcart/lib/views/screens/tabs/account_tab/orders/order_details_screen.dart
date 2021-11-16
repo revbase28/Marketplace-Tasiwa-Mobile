@@ -575,7 +575,7 @@ class OrderDetailsScreen extends ConsumerWidget {
                     title: LocaleKeys.received_product.tr(),
                     subTitle: LocaleKeys.are_you_sure.tr(),
                     positiveText: LocaleKeys.yes.tr(),
-                    onAccept: (p0) {
+                    onAccept: () {
                       context
                           .read(orderReceivedProvider.notifier)
                           .orderReceived(orderDetailsState.orderDetails!.id)

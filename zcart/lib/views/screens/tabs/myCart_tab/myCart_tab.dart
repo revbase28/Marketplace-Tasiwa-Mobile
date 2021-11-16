@@ -337,7 +337,7 @@ class _ItemCardState extends State<ItemCard> {
                                   dialogType: DialogType.DELETE,
                                   title: LocaleKeys.want_delete_item_from_cart
                                       .tr(),
-                                  onAccept: (_) {
+                                  onAccept: () {
                                     context
                                         .read(cartNotifierProvider.notifier)
                                         .removeFromCart(
