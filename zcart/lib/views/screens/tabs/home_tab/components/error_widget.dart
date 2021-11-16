@@ -5,8 +5,7 @@ import 'package:zcart/Theme/styles/colors.dart';
 class ErrorMessageWidget extends StatelessWidget {
   final String message;
 
-  // ignore: use_key_in_widget_constructors
-  const ErrorMessageWidget(this.message);
+  const ErrorMessageWidget(this.message, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

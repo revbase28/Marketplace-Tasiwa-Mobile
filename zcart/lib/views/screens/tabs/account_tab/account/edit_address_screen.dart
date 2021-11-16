@@ -104,7 +104,6 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
                         optionsList: const ["Primary", "Billing", "Shipping"],
                         value: widget.address.addressType,
                         controller: addressTypeController,
-                        widthMultiplier: 1,
                         validator: (text) {
                           if (text == null || text.isEmpty) {
                             return LocaleKeys.field_required.tr();
@@ -113,11 +112,9 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
                         },
                       ),
                       CustomTextField(
-                        color: kLightCardBgColor,
                         title: LocaleKeys.contact_person_name.tr(),
                         hintText: LocaleKeys.contact_person_name.tr(),
                         controller: contactPersonController,
-                        widthMultiplier: 1,
                         validator: (text) {
                           if (text == null || text.isEmpty) {
                             return LocaleKeys.field_required.tr();
@@ -126,12 +123,10 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
                         },
                       ),
                       CustomTextField(
-                        color: kLightCardBgColor,
                         title: LocaleKeys.contact_number.tr(),
                         hintText: LocaleKeys.contact_number.tr(),
                         keyboardType: TextInputType.number,
                         controller: contactNumberController,
-                        widthMultiplier: 1,
                         validator: (text) {
                           if (text == null || text.isEmpty) {
                             return LocaleKeys.field_required.tr();
@@ -149,7 +144,6 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
                                       .map((e) => e.name)
                                       .toList(),
                                   controller: countryController,
-                                  widthMultiplier: 1,
                                   isCallback: true,
                                   callbackFunction: (int countryId) {
                                     selectedCountryID =
@@ -191,7 +185,6 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
                                   //value: "Select",
                                   controller: statesController,
 
-                                  widthMultiplier: 1,
                                   isCallback: true,
                                   callbackFunction: (int stateId) {
                                     selectedStateID =
@@ -210,7 +203,6 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
                         },
                       ),
                       CustomTextField(
-                        color: kLightCardBgColor,
                         title: LocaleKeys.zip_code.tr(),
                         hintText: LocaleKeys.zip_code.tr(),
                         keyboardType: TextInputType.number,
@@ -218,7 +210,6 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
                         inputFormatters: [
                           FilteringTextInputFormatter.digitsOnly
                         ],
-                        widthMultiplier: 1,
                         validator: (text) {
                           if (text == null || text.isEmpty) {
                             return LocaleKeys.field_required.tr();
@@ -227,11 +218,9 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
                         },
                       ),
                       CustomTextField(
-                          color: kLightCardBgColor,
                           title: LocaleKeys.address_line_1.tr(),
                           hintText: LocaleKeys.address_line_1.tr(),
                           controller: addressLine1Controller,
-                          widthMultiplier: 1,
                           validator: (text) {
                             if (text == null || text.isEmpty) {
                               if (addressLine2Controller.text.isEmpty) {
@@ -241,11 +230,9 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
                             return null;
                           }),
                       CustomTextField(
-                        color: kLightCardBgColor,
                         title: LocaleKeys.address_line_2.tr(),
                         hintText: LocaleKeys.address_line_2.tr(),
                         controller: addressLine2Controller,
-                        widthMultiplier: 1,
                         validator: (text) {
                           if (addressLine1Controller.text.isEmpty) {
                             if (text == null || text.isEmpty) {
@@ -256,11 +243,9 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
                         },
                       ),
                       CustomTextField(
-                        color: kLightCardBgColor,
                         title: LocaleKeys.city.tr(),
                         hintText: LocaleKeys.city.tr(),
                         controller: cityController,
-                        widthMultiplier: 1,
                         validator: (text) {
                           if (text == null || text.isEmpty) {
                             return LocaleKeys.field_required.tr();

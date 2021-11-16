@@ -77,21 +77,16 @@ class PersonalDetails extends StatelessWidget {
                   ],
                 ),
                 CustomTextField(
-                  color: kLightCardBgColor,
                   title: LocaleKeys.your_full_name.tr(),
                   hintText: LocaleKeys.your_full_name.tr(),
                   controller: fullNameController,
-                  widthMultiplier: 1,
                 ),
                 CustomTextField(
-                  color: kLightCardBgColor,
                   title: LocaleKeys.your_nick_name.tr(),
                   hintText: LocaleKeys.your_nick_name.tr(),
                   controller: nickNameController,
-                  widthMultiplier: 1,
                 ),
                 CustomTextField(
-                  color: kLightCardBgColor,
                   title: LocaleKeys.your_email.tr(),
                   hintText: LocaleKeys.your_email.tr(),
                   keyboardType: TextInputType.emailAddress,
@@ -103,21 +98,17 @@ class PersonalDetails extends StatelessWidget {
                       return null;
                     }
                   },
-                  widthMultiplier: 1,
                 ),
                 CustomTextField(
-                  color: kLightCardBgColor,
                   title: LocaleKeys.your_bio.tr(),
                   hintText: LocaleKeys.your_bio.tr(),
                   controller: bioController,
-                  widthMultiplier: 1,
                   minLines: 1,
                   maxLines: null,
                 ),
                 CustomDateTimeField(
                   title: LocaleKeys.dob.tr(),
                   color: kLightCardBgColor,
-                  widthMultiplier: 1,
                   hintText: LocaleKeys.dob.tr(),
                   initialDate: _dateOfBirth,
                   onTextChanged: (date) {

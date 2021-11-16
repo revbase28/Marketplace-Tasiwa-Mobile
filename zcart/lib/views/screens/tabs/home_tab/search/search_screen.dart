@@ -113,7 +113,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       ],
                     )
               : searchState is SearchLoadingState
-                  ? LoadingWidget()
+                  ? const LoadingWidget()
                   : searchState is SearchInitialState
                       ? SingleChildScrollView(
                           child: Column(

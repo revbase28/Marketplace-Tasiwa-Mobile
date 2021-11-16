@@ -7,12 +7,13 @@ class DataList extends StatelessWidget {
   final Color backgroundColor;
   final Color textColor;
 
-  // ignore: use_key_in_widget_constructors
   const DataList(
       {this.title,
       this.valueText,
       this.backgroundColor = const Color(0xFFF6F6F6),
-      this.textColor = kDarkColor});
+      this.textColor = kDarkColor,
+      Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

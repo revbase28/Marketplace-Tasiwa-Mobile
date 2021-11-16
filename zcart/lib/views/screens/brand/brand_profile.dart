@@ -22,106 +22,130 @@ class BrandProfileScreen extends ConsumerWidget {
     final brandProfileState = watch(brandProfileNotifierProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(LocaleKeys.brand_details.tr()),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            brandProfileState is BrandProfileLoadedState
-                ? Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        height: context.screenHeight * .30,
-                        width: context.screenWidth,
-                        child: Image.network(
-                          brandProfileState.brandProfile.data!.coverImage!,
-                          errorBuilder: (BuildContext _, Object error,
-                              StackTrace? stack) {
-                            return Container();
-                          },
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-
-                      //Name
-                      ListTile(
-                        title: Text(
-                          brandProfileState.brandProfile.data!.name!,
-                          style: context.textTheme.headline6!,
-                        ),
-                        leading: Container(
-                          padding: const EdgeInsets.symmetric(vertical: 5),
-                          width: context.screenWidth * .10,
-                          child: Image.network(
-                            brandProfileState.brandProfile.data!.image!,
-                            errorBuilder: (BuildContext _, Object error,
-                                StackTrace? stack) {
-                              return Container();
-                            },
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ).p(10),
-
-                      Container(
-                        color: EasyDynamicTheme.of(context).themeMode ==
-                                ThemeMode.dark
-                            ? kDarkBgColor
-                            : kLightColor,
-                        child: Column(
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              brandProfileState is BrandProfileLoadedState
+                  ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Stack(
                           children: [
-                            BrandDetailsRowItem(
-                              title: LocaleKeys.origin.tr(),
-                              value:
-                                  brandProfileState.brandProfile.data!.origin ??
-                                      LocaleKeys.not_available.tr(),
-                            ).py(5),
-                            BrandDetailsRowItem(
-                              title: LocaleKeys.available_from.tr(),
-                              value: brandProfileState
-                                      .brandProfile.data!.availableFrom ??
-                                  LocaleKeys.not_available.tr(),
-                            ).py(5),
-                            BrandDetailsRowItem(
-                              title: LocaleKeys.url.tr(),
-                              value: brandProfileState.brandProfile.data!.url ??
-                                  LocaleKeys.not_available.tr(),
-                            ).py(5),
-                            BrandDetailsRowItem(
-                              title: LocaleKeys.product_count.tr(),
-                              value: brandProfileState
-                                      .brandProfile.data!.listingCount ??
-                                  LocaleKeys.not_available.tr(),
-                            ).py(5),
+                            Container(
+                              height: context.screenHeight * .25,
+                              width: context.screenWidth,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: NetworkImage(brandProfileState
+                                      .brandProfile.data!.coverImage!),
+                                  fit: BoxFit.cover,
+                                  colorFilter: ColorFilter.mode(
+                                    kDarkBgColor.withOpacity(0.5),
+                                    BlendMode.darken,
+                                  ),
+                                ),
+                                borderRadius: const BorderRadius.only(
+                                  bottomLeft: Radius.circular(16),
+                                  bottomRight: Radius.circular(16),
+                                ),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  brandProfileState.brandProfile.data!.name!,
+                                  style: context.textTheme.headline6!.copyWith(
+                                    color: kLightColor.withOpacity(0.9),
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ).pOnly(bottom: 5),
+                            const Positioned(
+                                child: BackButton(
+                              color: kLightColor,
+                            )),
                           ],
-                        ).px(16).py(10),
-                      ).cornerRadius(10).py(5).px(10),
+                        ),
 
-                      BrandDescription(
-                              brandProfile: brandProfileState.brandProfile)
-                          .cornerRadius(10)
-                          .py(5)
-                          .px(10),
-
-                      const BrandItemsListView(),
-                    ],
-                  )
-                : brandProfileState is BrandProfileLoadingState ||
-                        brandProfileState is BrandProfileInitialState
-                    ? ProductLoadingWidget().px(10)
-                    : brandProfileState is BrandProfileErrorState
-                        ? Center(
-                            child: Column(
-                              children: [
-                                const Icon(Icons.info_outline),
-                                Text(LocaleKeys.something_went_wrong.tr()),
-                              ],
+                        //Name
+                        ListTile(
+                          title: Text(
+                            brandProfileState.brandProfile.data!.name!,
+                            style: context.textTheme.headline6!,
+                          ),
+                          leading: Container(
+                            padding: const EdgeInsets.symmetric(vertical: 5),
+                            width: context.screenWidth * .10,
+                            child: Image.network(
+                              brandProfileState.brandProfile.data!.image!,
+                              errorBuilder: (BuildContext _, Object error,
+                                  StackTrace? stack) {
+                                return Container();
+                              },
+                              fit: BoxFit.cover,
                             ),
-                          ).px(10)
-                        : Container(),
-          ],
+                          ),
+                        ).p(10),
+
+                        Container(
+                          color: EasyDynamicTheme.of(context).themeMode ==
+                                  ThemeMode.dark
+                              ? kDarkBgColor
+                              : kLightColor,
+                          child: Column(
+                            children: [
+                              BrandDetailsRowItem(
+                                title: LocaleKeys.origin.tr(),
+                                value: brandProfileState
+                                        .brandProfile.data!.origin ??
+                                    LocaleKeys.not_available.tr(),
+                              ).py(5),
+                              BrandDetailsRowItem(
+                                title: LocaleKeys.available_from.tr(),
+                                value: brandProfileState
+                                        .brandProfile.data!.availableFrom ??
+                                    LocaleKeys.not_available.tr(),
+                              ).py(5),
+                              BrandDetailsRowItem(
+                                title: LocaleKeys.url.tr(),
+                                value:
+                                    brandProfileState.brandProfile.data!.url ??
+                                        LocaleKeys.not_available.tr(),
+                              ).py(5),
+                              BrandDetailsRowItem(
+                                title: LocaleKeys.product_count.tr(),
+                                value: brandProfileState
+                                        .brandProfile.data!.listingCount ??
+                                    LocaleKeys.not_available.tr(),
+                              ).py(5),
+                            ],
+                          ).px(16).py(10),
+                        ).cornerRadius(10).py(5).px(10),
+
+                        BrandDescription(
+                                brandProfile: brandProfileState.brandProfile)
+                            .cornerRadius(10)
+                            .py(5)
+                            .px(10),
+
+                        const BrandItemsListView(),
+                      ],
+                    )
+                  : brandProfileState is BrandProfileLoadingState ||
+                          brandProfileState is BrandProfileInitialState
+                      ? const ProductLoadingWidget().px(10)
+                      : brandProfileState is BrandProfileErrorState
+                          ? Center(
+                              child: Column(
+                                children: [
+                                  const Icon(Icons.info_outline),
+                                  Text(LocaleKeys.something_went_wrong.tr()),
+                                ],
+                              ),
+                            ).px(10)
+                          : Container(),
+            ],
+          ),
         ),
       ),
     );

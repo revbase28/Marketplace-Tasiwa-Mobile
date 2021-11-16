@@ -10,8 +10,7 @@ import 'package:zcart/views/screens/product_list/product_list_screen.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 class SliderWidget extends StatelessWidget {
-  // ignore: use_key_in_widget_constructors
-  const SliderWidget(this.sliderList);
+  const SliderWidget(this.sliderList, {Key? key}) : super(key: key);
 
   final List<SliderList>? sliderList;
 

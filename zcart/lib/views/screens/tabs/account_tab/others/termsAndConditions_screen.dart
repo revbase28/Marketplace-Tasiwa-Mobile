@@ -34,7 +34,7 @@ class TermsAndConditionScreen extends StatelessWidget {
                         },
                       )
                     : termsAndConditionState is TermsAndConditionLoadingState
-                        ? LoadingWidget()
+                        ? const LoadingWidget()
                         : Center(
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,

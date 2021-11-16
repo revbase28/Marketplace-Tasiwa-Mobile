@@ -58,43 +58,55 @@ TextTheme lightTextTheme(BuildContext context) {
 }
 
 ThemeData lightTheme = ThemeData.light().copyWith(
-    scaffoldBackgroundColor: kLightBgColor,
-    floatingActionButtonTheme: FloatingActionButtonThemeData(
-      backgroundColor: _lightPrimaryColor,
+  scaffoldBackgroundColor: kLightBgColor,
+  floatingActionButtonTheme: FloatingActionButtonThemeData(
+    backgroundColor: _lightPrimaryColor,
+  ),
+  cardTheme: CardTheme(color: kLightCardBgColor, elevation: 0),
+  colorScheme: ColorScheme.light(
+    primary: _lightPrimaryColor,
+    secondary: _lightPrimaryColor,
+    primaryVariant: kDarkColor,
+    // secondary: _lightSecondaryColor,
+  ),
+  switchTheme: SwitchThemeData(
+    overlayColor: MaterialStateProperty.all(kPrimaryColor),
+  ),
+  snackBarTheme: const SnackBarThemeData(
+      backgroundColor: kDarkColor, actionTextColor: kPrimaryLightTextColor),
+  iconTheme: const IconThemeData(
+    color: kDarkColor,
+  ),
+  elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+    primary: kPrimaryColor,
+    onPrimary: kLightColor,
+    textStyle: const TextStyle(
+      fontWeight: FontWeight.bold,
     ),
-    cardTheme: CardTheme(color: kLightCardBgColor, elevation: 0),
-    colorScheme: ColorScheme.light(
-      primary: _lightPrimaryColor,
-      secondary: _lightPrimaryColor,
-      primaryVariant: kDarkColor,
-      // secondary: _lightSecondaryColor,
+    elevation: 0,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(8),
     ),
-    switchTheme: SwitchThemeData(
-      overlayColor: MaterialStateProperty.all(kPrimaryColor),
+  )),
+  textButtonTheme: TextButtonThemeData(
+    style: TextButton.styleFrom(
+      primary: kPrimaryColor,
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+      ),
     ),
-    snackBarTheme: const SnackBarThemeData(
-        backgroundColor: kDarkColor, actionTextColor: kPrimaryLightTextColor),
-    iconTheme: const IconThemeData(
-      color: kDarkColor,
-    ),
-    elevatedButtonTheme: ElevatedButtonThemeData(
-        style: ButtonStyle(
-      backgroundColor: MaterialStateProperty.all(kPrimaryColor),
-      elevation: MaterialStateProperty.all(0),
-    )),
-    textButtonTheme: TextButtonThemeData(
-        style: ButtonStyle(
-      foregroundColor: MaterialStateProperty.all(kPrimaryColor),
-      elevation: MaterialStateProperty.all(0),
-    )),
-    popupMenuTheme: PopupMenuThemeData(color: _lightBackgroundAppBarColor),
-    buttonTheme: ButtonThemeData(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
-        buttonColor: _lightPrimaryColor,
-        textTheme: ButtonTextTheme.primary),
-    unselectedWidgetColor: _lightPrimaryColor,
-    timePickerTheme: TimePickerThemeData(
-      backgroundColor: kPrimaryColor,
-    ));
+  ),
+  popupMenuTheme: PopupMenuThemeData(color: _lightBackgroundAppBarColor),
+  buttonTheme: ButtonThemeData(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+      ),
+      buttonColor: _lightPrimaryColor,
+      textTheme: ButtonTextTheme.primary),
+  unselectedWidgetColor: _lightPrimaryColor,
+  timePickerTheme: TimePickerThemeData(
+    backgroundColor: kPrimaryColor,
+  ),
+);

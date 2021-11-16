@@ -15,8 +15,8 @@ class BannerWidget extends StatelessWidget {
   final List<BannerList> bannerList;
   final bool isReverse;
 
-  // ignore: use_key_in_widget_constructors
-  const BannerWidget(this.bannerList, {this.isReverse = true});
+  const BannerWidget(this.bannerList, {this.isReverse = true, Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -75,8 +75,7 @@ class BannerTextWidget extends StatelessWidget {
   final String? text;
   final String type;
 
-  // ignore: use_key_in_widget_constructors
-  const BannerTextWidget(this.text, this.type);
+  const BannerTextWidget(this.text, this.type, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

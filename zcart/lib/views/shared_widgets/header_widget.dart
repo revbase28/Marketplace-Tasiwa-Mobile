@@ -9,13 +9,14 @@ class HeaderWidget extends StatelessWidget {
   final String title;
   final IconData iconData;
 
-  // ignore: use_key_in_widget_constructors
   const HeaderWidget(
       {this.function,
       this.privacy,
       this.onTap,
       this.title = "Status",
-      this.iconData = Icons.edit});
+      this.iconData = Icons.edit,
+      Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

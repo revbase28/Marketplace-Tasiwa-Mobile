@@ -15,9 +15,9 @@ class ProductDetailsCard extends StatelessWidget {
   final String? title;
   final bool isTitleCentered;
 
-  // ignore: use_key_in_widget_constructors
   const ProductDetailsCard(
-      {this.productList, this.title, this.isTitleCentered = false});
+      {this.productList, this.title, this.isTitleCentered = false, Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

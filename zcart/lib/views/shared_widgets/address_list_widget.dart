@@ -16,9 +16,9 @@ class AddressListBuilder extends StatefulWidget {
   final CartItemDetails? cartItem;
   final Function(int)? onPressedCheckBox;
 
-  // ignore: use_key_in_widget_constructors
   const AddressListBuilder(
-      {this.addressesList, this.cartItem, this.onPressedCheckBox});
+      {this.addressesList, this.cartItem, this.onPressedCheckBox, Key? key})
+      : super(key: key);
 
   @override
   _AddressListBuilderState createState() => _AddressListBuilderState();

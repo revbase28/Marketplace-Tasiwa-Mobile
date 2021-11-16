@@ -292,7 +292,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
                             ? kDarkBgColor
                             : kLightColor,
-                    child: LoadingWidget(),
+                    child: const LoadingWidget(),
                   ),
                 );
               })

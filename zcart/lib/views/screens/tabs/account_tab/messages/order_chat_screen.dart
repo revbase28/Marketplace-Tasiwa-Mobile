@@ -152,7 +152,7 @@ class OrderChatScreen extends StatelessWidget {
                   )
                 : _orderChatProvider is OrderChatLoadedState
                     ? _chatLoadedBody(context, _orderChatProvider)
-                    : LoadingWidget();
+                    : const LoadingWidget();
           }),
         ),
         _chatTextBox(context),

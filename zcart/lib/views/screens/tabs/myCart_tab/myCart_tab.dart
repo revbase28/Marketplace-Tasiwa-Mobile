@@ -104,7 +104,7 @@ class _MyCartTabState extends State<MyCartTab> {
                                       : randomItemState is RandomItemErrorState
                                           ? ErrorMessageWidget(
                                               randomItemState.message)
-                                          : ProductLoadingWidget(),
+                                          : const ProductLoadingWidget(),
                                 )
                               ],
                             ),
@@ -117,7 +117,7 @@ class _MyCartTabState extends State<MyCartTab> {
                             return CartItemCard(
                                 cartItem: cartState.cartList![index]);
                           })
-                  : ProductLoadingWidget().px(10));
+                  : const ProductLoadingWidget().px(10));
         }));
   }
 }

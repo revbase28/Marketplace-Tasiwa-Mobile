@@ -169,7 +169,7 @@ class BlogDetailsScreen extends ConsumerWidget {
                 ],
               ),
             )
-          : LoadingWidget().p(17),
+          : const LoadingWidget().p(17),
     );
   }
 }

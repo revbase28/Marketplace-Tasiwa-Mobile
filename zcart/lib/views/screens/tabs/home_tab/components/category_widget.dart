@@ -17,8 +17,7 @@ import 'package:zcart/views/screens/tabs/home_tab/components/search_bar.dart';
 class CategoryWidget extends StatelessWidget {
   final List<CategoryList> categoryList;
 
-  // ignore: use_key_in_widget_constructors
-  const CategoryWidget(this.categoryList);
+  const CategoryWidget(this.categoryList, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

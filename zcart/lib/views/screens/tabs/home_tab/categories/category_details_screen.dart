@@ -17,10 +17,9 @@ import 'package:zcart/views/shared_widgets/product_loading_widget.dart';
 
 class CategoryDetailsScreen extends ConsumerWidget {
   final CategoryList categoryListItem;
-  // ignore: use_key_in_widget_constructors
-  const CategoryDetailsScreen({
-    required this.categoryListItem,
-  });
+
+  const CategoryDetailsScreen({Key? key, required this.categoryListItem})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
@@ -40,192 +39,222 @@ class CategoryDetailsScreen extends ConsumerWidget {
         }
       },
       child: Scaffold(
-        appBar: AppBar(
-          title: Text(categoryListItem.name!),
-        ),
-        body: SingleChildScrollView(
-          controller: scrollControllerProvider.controller,
-          child: Column(
-            children: [
-              /// Cover image
-              SizedBox(
-                height: context.screenHeight * .15,
-                width: context.screenWidth,
-                child: Image.network(categoryListItem.coverImage!, errorBuilder:
-                    (BuildContext _, Object error, StackTrace? stack) {
-                  return Container();
-                }, fit: BoxFit.cover),
-              ).pOnly(bottom: 5),
+        // appBar: AppBar(
+        //   title: Text(categoryListItem.name!),
+        // ),
+        body: SafeArea(
+          child: SingleChildScrollView(
+            controller: scrollControllerProvider.controller,
+            child: Column(
+              children: [
+                /// Cover image
+                Stack(
+                  children: [
+                    Container(
+                      height: context.screenHeight * .15,
+                      width: context.screenWidth,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: NetworkImage(categoryListItem.coverImage!),
+                          fit: BoxFit.cover,
+                          colorFilter: ColorFilter.mode(
+                            kDarkBgColor.withOpacity(0.5),
+                            BlendMode.darken,
+                          ),
+                        ),
+                        borderRadius: const BorderRadius.only(
+                          bottomLeft: Radius.circular(16),
+                          bottomRight: Radius.circular(16),
+                        ),
+                      ),
+                      child: Center(
+                        child: Text(
+                          categoryListItem.name!,
+                          style: context.textTheme.headline6!.copyWith(
+                            color: kLightColor.withOpacity(0.9),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ).pOnly(bottom: 5),
+                    const Positioned(
+                        child: BackButton(
+                      color: kLightColor,
+                    )),
+                  ],
+                ),
 
-              /// Category subgroup list
-              (categorySubgroupState is CategorySubgroupInitialState ||
-                      categorySubgroupState is CategorySubgroupLoadingState)
-                  ? const CategoryLoadingWidget()
-                  : categorySubgroupState is CategorySubgroupLoadedState
-                      ? SizedBox(
-                          height: context.screenHeight * .07,
-                          child: ListView.builder(
-                              itemCount: categorySubgroupState
-                                  .categorysSubgroupList!.length,
-                              scrollDirection: Axis.horizontal,
-                              padding: const EdgeInsets.symmetric(vertical: 5),
-                              itemBuilder: (BuildContext context, int index) {
-                                return ActionChip(
-                                  backgroundColor: context
-                                              .read(
-                                                  categorySubgroupNotifierProvider
-                                                      .notifier)
-                                              .getSelectedSubgroup ==
-                                          index
-                                      ? kPrimaryColor
-                                      : kLightCardBgColor,
-                                  label: Text(
-                                    categorySubgroupState
-                                        .categorysSubgroupList![index].name!,
-                                    style: TextStyle(
-                                      color: context
-                                                  .read(
-                                                      categorySubgroupNotifierProvider
-                                                          .notifier)
-                                                  .getSelectedSubgroup ==
-                                              index
-                                          ? kPrimaryLightTextColor
-                                          : EasyDynamicTheme.of(context)
-                                                      .themeMode ==
-                                                  ThemeMode.dark
-                                              ? kLightColor
-                                              : kDarkColor,
-                                    ),
-                                  ).pSymmetric(h: 12, v: 8),
-                                  onPressed: () {
-                                    context
-                                        .read(categorySubgroupNotifierProvider
-                                            .notifier)
-                                        .setSelectedSubgroup = index;
-                                    context
-                                        .read(subgroupCategoryNotifierProvider
-                                            .notifier)
-                                        .getSubgroupCategory(
-                                            categorySubgroupState
-                                                .categorysSubgroupList![index]
-                                                .id
-                                                .toString());
-                                    context
-                                        .read(productListNotifierProvider
-                                            .notifier)
-                                        .getProductList(
-                                            'category-subgrp/${categorySubgroupState.categorysSubgroupList![index].slug}');
-                                  },
-                                ).px(4);
-                              }),
-                        ).px(10)
-                      : categorySubgroupState is CategorySubgroupErrorState
-                          ? ErrorMessageWidget(categorySubgroupState.message)
-                          : Container(),
+                (categorySubgroupState is CategorySubgroupInitialState ||
+                        categorySubgroupState is CategorySubgroupLoadingState)
+                    ? const CategoryLoadingWidget()
+                    : categorySubgroupState is CategorySubgroupLoadedState
+                        ? SizedBox(
+                            height: context.screenHeight * .07,
+                            child: ListView.builder(
+                                itemCount: categorySubgroupState
+                                    .categorysSubgroupList!.length,
+                                scrollDirection: Axis.horizontal,
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 5),
+                                itemBuilder: (BuildContext context, int index) {
+                                  return ActionChip(
+                                    backgroundColor: context
+                                                .read(
+                                                    categorySubgroupNotifierProvider
+                                                        .notifier)
+                                                .getSelectedSubgroup ==
+                                            index
+                                        ? kPrimaryColor
+                                        : kLightCardBgColor,
+                                    label: Text(
+                                      categorySubgroupState
+                                          .categorysSubgroupList![index].name!,
+                                      style: TextStyle(
+                                        color: context
+                                                    .read(
+                                                        categorySubgroupNotifierProvider
+                                                            .notifier)
+                                                    .getSelectedSubgroup ==
+                                                index
+                                            ? kPrimaryLightTextColor
+                                            : EasyDynamicTheme.of(context)
+                                                        .themeMode ==
+                                                    ThemeMode.dark
+                                                ? kLightColor
+                                                : kDarkColor,
+                                      ),
+                                    ).pSymmetric(h: 12, v: 8),
+                                    onPressed: () {
+                                      context
+                                          .read(categorySubgroupNotifierProvider
+                                              .notifier)
+                                          .setSelectedSubgroup = index;
+                                      context
+                                          .read(subgroupCategoryNotifierProvider
+                                              .notifier)
+                                          .getSubgroupCategory(
+                                              categorySubgroupState
+                                                  .categorysSubgroupList![index]
+                                                  .id
+                                                  .toString());
+                                      context
+                                          .read(productListNotifierProvider
+                                              .notifier)
+                                          .getProductList(
+                                              'category-subgrp/${categorySubgroupState.categorysSubgroupList![index].slug}');
+                                    },
+                                  ).px(4);
+                                }),
+                          ).px(10)
+                        : categorySubgroupState is CategorySubgroupErrorState
+                            ? ErrorMessageWidget(categorySubgroupState.message)
+                            : Container(),
 
-              /// Category under Subgroup
-              subgroupCategoryState is SubgroupCategoryLoadingState
-                  ? const CategoryLoadingWidget()
-                  : subgroupCategoryState is SubgroupCategoryLoadedState
-                      ? SizedBox(
-                          height: context.screenHeight * .07,
-                          child: ListView.builder(
-                              itemCount: subgroupCategoryState
-                                  .subgroupCategoryList!.length,
-                              scrollDirection: Axis.horizontal,
-                              padding: const EdgeInsets.symmetric(vertical: 5),
-                              itemBuilder: (BuildContext context, int index) {
-                                return ActionChip(
-                                  backgroundColor: context
-                                              .read(
-                                                  subgroupCategoryNotifierProvider
-                                                      .notifier)
-                                              .getSelectedSubgroupCategory ==
-                                          index
-                                      ? kPrimaryColor
-                                      : kLightCardBgColor,
-                                  label: Text(
-                                    subgroupCategoryState
-                                        .subgroupCategoryList![index].name!,
-                                    style: TextStyle(
-                                      color: context
-                                                  .read(
-                                                      subgroupCategoryNotifierProvider
-                                                          .notifier)
-                                                  .getSelectedSubgroupCategory ==
-                                              index
-                                          ? kPrimaryLightTextColor
-                                          : EasyDynamicTheme.of(context)
-                                                      .themeMode ==
-                                                  ThemeMode.dark
-                                              ? kLightColor
-                                              : kDarkColor,
-                                    ),
-                                  ).pSymmetric(h: 12, v: 8),
-                                  onPressed: () {
-                                    context
-                                        .read(subgroupCategoryNotifierProvider
-                                            .notifier)
-                                        .setSelectedSubgroupCategory = index;
-                                    context
-                                        .read(productListNotifierProvider
-                                            .notifier)
-                                        .getProductList(
-                                            'category/${subgroupCategoryState.subgroupCategoryList![index].slug}');
-                                  },
-                                ).px(4);
-                                // return Container(
-                                //         padding: EdgeInsets.symmetric(
-                                //             horizontal: 10, vertical: 4),
-                                //         color: context
-                                //                     .read(
-                                //                         subgroupCategoryNotifierProvider)
-                                //                     .getSelectedSubgroupCategory ==
-                                //                 index
-                                //             ? kPrimaryColor.withOpacity(0.5)
-                                //             : kCardBgColor,
-                                //         child: Column(
-                                //           mainAxisAlignment:
-                                //               MainAxisAlignment.center,
-                                //           children: [
-                                //             Text(subgroupCategoryState
-                                //                 .subgroupCategoryList[index]
-                                //                 .name),
-                                //           ],
-                                //         ))
-                                //     .onInkTap(() {
-                                //       context
-                                //           .read(
-                                //               subgroupCategoryNotifierProvider)
-                                //           .setSelectedSubgroupCategory = index;
-                                //       context
-                                //           .read(productListNotifierProvider)
-                                //           .getProductList(
-                                //               'category/${subgroupCategoryState.subgroupCategoryList[index].slug}');
-                                //     })
-                                //     .cornerRadius(10)
-                                //     .pOnly(right: 10);
-                              }),
-                        ).px(10)
-                      : Container(),
+                /// Category under Subgroup
+                subgroupCategoryState is SubgroupCategoryLoadingState
+                    ? const CategoryLoadingWidget()
+                    : subgroupCategoryState is SubgroupCategoryLoadedState
+                        ? SizedBox(
+                            height: context.screenHeight * .07,
+                            child: ListView.builder(
+                                itemCount: subgroupCategoryState
+                                    .subgroupCategoryList!.length,
+                                scrollDirection: Axis.horizontal,
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 5),
+                                itemBuilder: (BuildContext context, int index) {
+                                  return ActionChip(
+                                    backgroundColor: context
+                                                .read(
+                                                    subgroupCategoryNotifierProvider
+                                                        .notifier)
+                                                .getSelectedSubgroupCategory ==
+                                            index
+                                        ? kPrimaryColor
+                                        : kLightCardBgColor,
+                                    label: Text(
+                                      subgroupCategoryState
+                                          .subgroupCategoryList![index].name!,
+                                      style: TextStyle(
+                                        color: context
+                                                    .read(
+                                                        subgroupCategoryNotifierProvider
+                                                            .notifier)
+                                                    .getSelectedSubgroupCategory ==
+                                                index
+                                            ? kPrimaryLightTextColor
+                                            : EasyDynamicTheme.of(context)
+                                                        .themeMode ==
+                                                    ThemeMode.dark
+                                                ? kLightColor
+                                                : kDarkColor,
+                                      ),
+                                    ).pSymmetric(h: 12, v: 8),
+                                    onPressed: () {
+                                      context
+                                          .read(subgroupCategoryNotifierProvider
+                                              .notifier)
+                                          .setSelectedSubgroupCategory = index;
+                                      context
+                                          .read(productListNotifierProvider
+                                              .notifier)
+                                          .getProductList(
+                                              'category/${subgroupCategoryState.subgroupCategoryList![index].slug}');
+                                    },
+                                  ).px(4);
+                                  // return Container(
+                                  //         padding: EdgeInsets.symmetric(
+                                  //             horizontal: 10, vertical: 4),
+                                  //         color: context
+                                  //                     .read(
+                                  //                         subgroupCategoryNotifierProvider)
+                                  //                     .getSelectedSubgroupCategory ==
+                                  //                 index
+                                  //             ? kPrimaryColor.withOpacity(0.5)
+                                  //             : kCardBgColor,
+                                  //         child: Column(
+                                  //           mainAxisAlignment:
+                                  //               MainAxisAlignment.center,
+                                  //           children: [
+                                  //             Text(subgroupCategoryState
+                                  //                 .subgroupCategoryList[index]
+                                  //                 .name),
+                                  //           ],
+                                  //         ))
+                                  //     .onInkTap(() {
+                                  //       context
+                                  //           .read(
+                                  //               subgroupCategoryNotifierProvider)
+                                  //           .setSelectedSubgroupCategory = index;
+                                  //       context
+                                  //           .read(productListNotifierProvider)
+                                  //           .getProductList(
+                                  //               'category/${subgroupCategoryState.subgroupCategoryList[index].slug}');
+                                  //     })
+                                  //     .cornerRadius(10)
+                                  //     .pOnly(right: 10);
+                                }),
+                          ).px(10)
+                        : Container(),
 
-              /// Product List
-              productListState is ProductListLoadedState
-                  ? productListState.productList.isEmpty
-                      ? Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            const SizedBox(height: 50),
-                            const Icon(Icons.info_outline),
-                            Text(LocaleKeys.no_item_found.tr()),
-                          ],
-                        )
-                      : ProductDetailsCard(
-                              productList: productListState.productList)
-                          .px(10)
-                  : ProductLoadingWidget().px(10),
-            ],
+                /// Product List
+                productListState is ProductListLoadedState
+                    ? productListState.productList.isEmpty
+                        ? Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              const SizedBox(height: 50),
+                              const Icon(Icons.info_outline),
+                              Text(LocaleKeys.no_item_found.tr()),
+                            ],
+                          )
+                        : ProductDetailsCard(
+                                productList: productListState.productList)
+                            .px(10)
+                    : const ProductLoadingWidget().px(10),
+              ],
+            ),
           ),
         ),
       ),

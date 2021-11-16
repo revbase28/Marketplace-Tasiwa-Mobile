@@ -155,7 +155,7 @@ class BlogsScreen extends ConsumerWidget {
                       ),
                     )
               : blogsState is BlogsLoadingState
-                  ? LoadingWidget()
+                  ? const LoadingWidget()
                   : Container(),
         ));
   }

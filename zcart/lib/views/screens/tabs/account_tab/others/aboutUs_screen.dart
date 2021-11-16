@@ -37,7 +37,7 @@ class AboutUsScreen extends StatelessWidget {
                         },
                       )
                     : aboutUsState is AboutUsLoadingState
-                        ? LoadingWidget()
+                        ? const LoadingWidget()
                         : Center(
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,

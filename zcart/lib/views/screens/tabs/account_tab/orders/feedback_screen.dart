@@ -180,7 +180,6 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                     CustomTextField(
                       title: LocaleKeys.write_a_feedback.tr(),
                       hintText: LocaleKeys.write_about_experience.tr(),
-                      widthMultiplier: 1,
                       validator: (value) {
                         if (value!.length < 10) {
                           return LocaleKeys.comment_minimum_requirement.tr();
@@ -299,7 +298,6 @@ class ProductRatingCard extends StatelessWidget {
         CustomTextField(
           title: LocaleKeys.write_a_feedback.tr(),
           hintText: LocaleKeys.write_about_experience.tr(),
-          widthMultiplier: 1,
           maxLines: null,
           controller: productFeedbackController,
           validator: (value) {

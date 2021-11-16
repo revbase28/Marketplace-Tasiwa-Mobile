@@ -84,7 +84,7 @@ class MessagesScreen extends StatelessWidget {
                                 );
                           });
                         }).pOnly(top: 5)
-                : Center(child: LoadingWidget()));
+                : const Center(child: LoadingWidget()));
       },
     );
   }

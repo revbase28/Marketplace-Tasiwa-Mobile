@@ -152,7 +152,6 @@ class _OpenDisputeScreenState extends State<OpenDisputeScreen> {
                                     value: "Select",
                                     isCallback: true,
                                     controller: disputeReasonController,
-                                    widthMultiplier: 1,
                                     callbackFunction: (int disputeValueIndex) {
                                       context
                                               .read(openDisputeInfoProvider
@@ -180,7 +179,6 @@ class _OpenDisputeScreenState extends State<OpenDisputeScreen> {
                                     controller:
                                         goodsReceivedConfirmationController,
                                     isCallback: true,
-                                    widthMultiplier: 1,
                                     callbackFunction: (id) {
                                       /* NO - 0, YES - 1*/
                                       setState(() {
@@ -211,7 +209,6 @@ class _OpenDisputeScreenState extends State<OpenDisputeScreen> {
                                           .toList(),
                                       value: "Select",
                                       controller: productController,
-                                      widthMultiplier: 1,
                                       isCallback: true,
                                       callbackFunction:
                                           (int productValueIndex) {
@@ -274,11 +271,9 @@ class _OpenDisputeScreenState extends State<OpenDisputeScreen> {
                                         ),
                                       )),
                                   CustomTextField(
-                                    color: kLightCardBgColor,
                                     title: LocaleKeys.refund_amount.tr(),
                                     hintText: LocaleKeys.refund_amount.tr(),
                                     controller: refundAmountController,
-                                    widthMultiplier: 1,
                                     keyboardType: TextInputType.number,
                                     inputFormatters: [
                                       FilteringTextInputFormatter.allow(
@@ -309,11 +304,10 @@ class _OpenDisputeScreenState extends State<OpenDisputeScreen> {
                                     },
                                   ),
                                   CustomTextField(
-                                    color: kLightCardBgColor,
                                     title: LocaleKeys.description.tr(),
                                     hintText: LocaleKeys.description.tr(),
                                     controller: descriptionController,
-                                    widthMultiplier: 1,
+                                    maxLines: 5,
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
                                         return LocaleKeys.field_required.tr();
@@ -407,7 +401,7 @@ class _OpenDisputeScreenState extends State<OpenDisputeScreen> {
                     ),
                   ),
                 )
-              : Container(child: LoadingWidget().center()).center();
+              : Container(child: const LoadingWidget().center()).center();
         },
       ),
     );

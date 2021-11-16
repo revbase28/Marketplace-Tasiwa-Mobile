@@ -312,7 +312,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     thickness: 2,
                   ),
                   CustomTextField(
-                    color: kLightCardBgColor,
                     title: LocaleKeys.apply_coupon.tr(),
                     hintText: LocaleKeys.enter_coupon_code.tr(),
                     controller: _couponController,
@@ -349,7 +348,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     ),
                   ),
                   CustomTextField(
-                      color: kLightCardBgColor,
                       title: LocaleKeys.buyers_note.tr(),
                       hintText: LocaleKeys.note_for_seller.tr(),
                       maxLines: null,
@@ -383,7 +381,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                 Form(
                                   key: _emailFormKey,
                                   child: CustomTextField(
-                                    color: kLightCardBgColor,
                                     hintText: LocaleKeys.your_email.tr(),
                                     controller: _emailController,
                                     keyboardType: TextInputType.emailAddress,
@@ -425,7 +422,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                       children: [
                                         CustomTextField(
                                           isPassword: true,
-                                          color: kLightCardBgColor,
                                           title: LocaleKeys.your_password.tr(),
                                           hintText:
                                               LocaleKeys.your_password.tr(),
@@ -450,7 +446,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                         ),
                                         CustomTextField(
                                           isPassword: true,
-                                          color: kLightCardBgColor,
                                           title: LocaleKeys
                                               .your_confirm_password
                                               .tr(),

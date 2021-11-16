@@ -6,8 +6,8 @@ class CustomFilePickerField extends StatefulWidget {
   final String? hintText;
   final Function? onTap;
 
-  // ignore: use_key_in_widget_constructors
-  const CustomFilePickerField({this.hintText, this.onTap, this.title});
+  const CustomFilePickerField({this.hintText, this.onTap, this.title, Key? key})
+      : super(key: key);
 
   @override
   _CustomFilePickerFieldState createState() => _CustomFilePickerFieldState();

@@ -46,7 +46,7 @@ class MyCouponsScreen extends ConsumerWidget {
                       ),
                     )
               : couponState is CouponLoadingState
-                  ? LoadingWidget()
+                  ? const LoadingWidget()
                   : Container()),
     );
   }

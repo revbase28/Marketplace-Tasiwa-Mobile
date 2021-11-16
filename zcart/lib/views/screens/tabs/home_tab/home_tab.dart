@@ -94,7 +94,7 @@ class HomeTab extends ConsumerWidget {
                         .py(15)
                     : trendingNowState is TrendingNowErrorState
                         ? ErrorMessageWidget(trendingNowState.message)
-                        : ProductLoadingWidget(),
+                        : const ProductLoadingWidget(),
 
                 /// Banner
                 bannerState is BannerLoadedState
@@ -116,7 +116,7 @@ class HomeTab extends ConsumerWidget {
                         .py(15)
                     : dealsUnderThePrice is DealsUnderThePriceStateErrorState
                         ? Container()
-                        : ProductLoadingWidget(),
+                        : const ProductLoadingWidget(),
 
                 ///Featured Brands
                 const FeaturedBrands(),
@@ -128,7 +128,7 @@ class HomeTab extends ConsumerWidget {
                         .pOnly(bottom: 15)
                     : dealOfTheDay is DealOfTheDayStateErrorState
                         ? Container()
-                        : ProductLoadingWidget(),
+                        : const ProductLoadingWidget(),
 
                 /// Recently Added (Latest Item)
                 latestItemState is LatestItemLoadedState
@@ -138,7 +138,7 @@ class HomeTab extends ConsumerWidget {
                         .pOnly(bottom: 15)
                     : latestItemState is LatestItemErrorState
                         ? ErrorMessageWidget(latestItemState.message)
-                        : ProductLoadingWidget(),
+                        : const ProductLoadingWidget(),
 
                 /// Banner
                 bannerState is BannerLoadedState
@@ -155,7 +155,7 @@ class HomeTab extends ConsumerWidget {
                         .py(15)
                     : popularItemState is PopularItemErrorState
                         ? ErrorMessageWidget(popularItemState.message)
-                        : ProductLoadingWidget(),
+                        : const ProductLoadingWidget(),
 
                 /// Banner
                 bannerState is BannerLoadedState
@@ -176,7 +176,7 @@ class HomeTab extends ConsumerWidget {
                         .py(20)
                     : randomItemState is RandomItemErrorState
                         ? ErrorMessageWidget(randomItemState.message)
-                        : ProductLoadingWidget(),
+                        : const ProductLoadingWidget(),
               ],
             ).px(10),
           ),

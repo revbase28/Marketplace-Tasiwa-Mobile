@@ -75,7 +75,7 @@ class WishListTab extends ConsumerWidget {
                                 : randomItemState is RandomItemErrorState
                                     ? ErrorMessageWidget(
                                         randomItemState.message)
-                                    : ProductLoadingWidget(),
+                                    : const ProductLoadingWidget(),
                           )
                         ],
                       ),
@@ -346,6 +346,6 @@ class WishListTab extends ConsumerWidget {
                           });
                         }),
                   )
-            : ProductLoadingWidget().px(10));
+            : const ProductLoadingWidget().px(10));
   }
 }

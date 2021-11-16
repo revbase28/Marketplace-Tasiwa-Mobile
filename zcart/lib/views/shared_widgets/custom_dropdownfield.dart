@@ -2,8 +2,6 @@ import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:zcart/Theme/styles/colors.dart';
 
-import 'package:nb_utils/nb_utils.dart';
-
 // ignore: must_be_immutable
 class CustomDropDownField extends StatefulWidget {
   final String? title;
@@ -41,97 +39,62 @@ class _CustomDropDownFieldState extends State<CustomDropDownField> {
   Widget build(BuildContext context) {
     return Container(
       margin: !widget.isProductDetailsView
-          ? const EdgeInsets.symmetric(vertical: 5)
+          ? const EdgeInsets.symmetric(vertical: 6)
           : null,
-      child: Column(
-        children: [
-          widget.title != null
-              ? Align(
-                  alignment: Alignment.topLeft,
-                  child: Text(widget.title!,
-                          style: context.theme.textTheme.subtitle2)
-                      .paddingBottom(5),
-                )
-              : Container(),
-          Container(
-            padding: EdgeInsets.symmetric(
-                horizontal: 10, vertical: !widget.isProductDetailsView ? 5 : 0),
-            width: MediaQuery.of(context).size.width * widget.widthMultiplier,
-            decoration: BoxDecoration(
-              color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-                  ? kDarkBgColor
-                  : kLightCardBgColor,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: DropdownButtonFormField(
-              decoration: const InputDecoration(
-                border: InputBorder.none,
+      child: DropdownButtonFormField(
+        isExpanded: true,
+        onTap: () {
+          FocusScope.of(context).requestFocus(FocusNode());
+        },
+        decoration: InputDecoration(
+          labelText: widget.title,
+          labelStyle: Theme.of(context).textTheme.subtitle2!.copyWith(
+                fontWeight: FontWeight.bold,
+                color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+                    ? kLightColor.withOpacity(0.6)
+                    : kDarkColor.withOpacity(0.6),
               ),
-              value: widget.optionsList!.first,
-              items: widget.optionsList!.map((String? value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(
-                    value!,
-                    style: const TextStyle(fontSize: 12),
-                  ),
-                  // child: Text(
-                  //   value,
-                  //   overflow: TextOverflow.ellipsis,
-                  //   softWrap: true,
-                  //   maxLines: 1,
-
-                  // ),
-                );
-              }).toList(),
-              onChanged: (String? newValue) {
-                setState(() {
-                  widget.controller!.text = newValue!;
-                });
-                if (widget.isCallback) {
-                  widget
-                      .callbackFunction!(widget.optionsList!.indexOf(newValue));
-                }
-              },
+          contentPadding:
+              const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16),
+            borderSide: const BorderSide(
+              width: 2,
             ),
-            // child: Row(
-            //   children: <Widget>[
-            //     Expanded(
-            //       child: TextFormField(
-            //         controller: widget.controller,
-            //         validator: widget.validator,
-            //         readOnly: true,
-            //         decoration: InputDecoration(
-            //           hintText: 'Select',
-            //           border: InputBorder.none,
-            //         ),
-            //       ),
-            //     ),
-            //     PopupMenuButton<String>(
-            //       color: kDarkColor,
-            //       icon: Icon(Icons.arrow_drop_down),
-            //       onSelected: (value) {
-            //         setState(() {
-            //           widget.controller.text = value;
-            //         });
-            //         if (widget.isCallback)
-            //           widget
-            //               .callbackFunction(widget.optionsList.indexOf(value));
-            //       },
-            //       itemBuilder: (BuildContext context) {
-            //         return widget.optionsList
-            //             .map<PopupMenuItem<String>>((String value) {
-            //           return PopupMenuItem(
-            //             child: Text(value),
-            //             value: value,
-            //           );
-            //         }).toList();
-            //       },
-            //     ),
-            //   ],
-            // ),
           ),
-        ],
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16),
+            borderSide: BorderSide(
+                color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+                    ? kLightColor.withOpacity(0.8)
+                    : kDarkColor.withOpacity(0.8),
+                width: 2),
+          ),
+        ),
+        value: widget.optionsList!.first,
+        items: widget.optionsList!.map((String? value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: Text(
+              value!,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: Theme.of(context).textTheme.bodyText2!.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+            ),
+
+            // ),
+          );
+        }).toList(),
+        onChanged: (String? newValue) {
+          setState(() {
+            widget.controller!.text = newValue!;
+          });
+          if (widget.isCallback) {
+            widget.callbackFunction!(widget.optionsList!.indexOf(newValue));
+          }
+        },
       ),
     );
   }

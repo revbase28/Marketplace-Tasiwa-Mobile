@@ -135,7 +135,7 @@ class DisputeResponseScreen extends StatelessWidget {
                     ),
                   ],
                 )
-              : LoadingWidget(),
+              : const LoadingWidget(),
         );
       },
     );

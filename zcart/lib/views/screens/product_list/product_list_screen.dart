@@ -21,7 +21,7 @@ class ProductListScreen extends ConsumerWidget {
         body: categoryItemState is CategoryItemLoadingState
             ? SizedBox(
                 height: context.screenHeight - 100,
-                child: Center(child: LoadingWidget()))
+                child: const Center(child: LoadingWidget()))
             : categoryItemState is CategoryItemLoadedState
                 ? categoryItemState.categoryItemList!.isEmpty
                     ? SizedBox(

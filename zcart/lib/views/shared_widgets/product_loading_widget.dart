@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:zcart/Theme/styles/colors.dart';
 
-// ignore: use_key_in_widget_constructors
 class ProductLoadingWidget extends StatefulWidget {
+  const ProductLoadingWidget({Key? key}) : super(key: key);
+
   @override
   _ProductLoadingWidgetState createState() => _ProductLoadingWidgetState();
 }

@@ -45,7 +45,7 @@ class AddressList extends StatelessWidget {
                                 : AddressListBuilder(
                                     addressesList: addressState.addresses)
                     : addressState is AddressLoadingState
-                        ? LoadingWidget().py(100)
+                        ? const LoadingWidget().py(100)
                         : Container();
               },
             ),

@@ -51,7 +51,6 @@ class DisputeDetailsScreen extends ConsumerWidget {
                                         "SOLVED"
                                     ? kGreenColor
                                     : kPrimaryColor,
-                                widthMultiplier: 1,
                               ),
                               Column(
                                 children: [
@@ -275,7 +274,7 @@ class DisputeDetailsScreen extends ConsumerWidget {
                     ],
                   )),
             )
-          : LoadingWidget(),
+          : const LoadingWidget(),
     );
   }
 
@@ -374,11 +373,6 @@ class DisputeDetailsScreen extends ConsumerWidget {
                                   title: LocaleKeys.appeal.tr(),
                                   controller: _appealTextController,
                                   hintText: LocaleKeys.appeal_message.tr(),
-                                  color:
-                                      EasyDynamicTheme.of(context).themeMode ==
-                                              ThemeMode.dark
-                                          ? kDarkBgColor
-                                          : kLightCardBgColor,
                                 ),
                                 const SizedBox(height: 10),
                                 Row(

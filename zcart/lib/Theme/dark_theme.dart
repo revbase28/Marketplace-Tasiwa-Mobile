@@ -79,16 +79,26 @@ ThemeData darkTheme = ThemeData.dark().copyWith(
       thumbColor: MaterialStateProperty.all(kPrimaryColor),
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
-        style: ButtonStyle(
-      foregroundColor: MaterialStateProperty.all(kPrimaryLightTextColor),
-      backgroundColor: MaterialStateProperty.all(kPrimaryColor),
-      elevation: MaterialStateProperty.all(0),
+        style: ElevatedButton.styleFrom(
+      primary: kPrimaryColor,
+      onPrimary: kLightColor,
+      textStyle: const TextStyle(
+        fontWeight: FontWeight.bold,
+      ),
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+      ),
     )),
     textButtonTheme: TextButtonThemeData(
-        style: ButtonStyle(
-      foregroundColor: MaterialStateProperty.all(kPrimaryColor),
-      elevation: MaterialStateProperty.all(0),
-    )),
+      style: TextButton.styleFrom(
+        primary: kPrimaryColor,
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+      ),
+    ),
     popupMenuTheme: PopupMenuThemeData(color: _lightBackgroundAppBarColor),
     buttonTheme: ButtonThemeData(
         shape: RoundedRectangleBorder(

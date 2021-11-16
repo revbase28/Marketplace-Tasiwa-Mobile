@@ -55,7 +55,6 @@ class OrderDetailsScreen extends ConsumerWidget {
                                         "DELIVERED"
                                     ? kGreenColor
                                     : kPrimaryColor,
-                                widthMultiplier: 1,
                               ),
                               Column(
                                 children: [
@@ -482,7 +481,7 @@ class OrderDetailsScreen extends ConsumerWidget {
                     ],
                   )),
             )
-          : LoadingWidget(),
+          : const LoadingWidget(),
     );
   }
 

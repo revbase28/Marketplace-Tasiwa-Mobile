@@ -11,9 +11,12 @@ import 'package:nb_utils/nb_utils.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ProductCard extends StatelessWidget {
-  // ignore: use_key_in_widget_constructors
   const ProductCard(
-      {required this.productList, this.title, this.willShuffle = true});
+      {required this.productList,
+      this.title,
+      this.willShuffle = true,
+      Key? key})
+      : super(key: key);
 
   final List<dynamic>? productList;
   final String? title;

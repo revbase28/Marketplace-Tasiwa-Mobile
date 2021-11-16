@@ -43,7 +43,7 @@ class AccountDetailsScreen extends StatelessWidget {
                               ThemeMode.dark
                           ? kDarkBgColor
                           : kLightColor,
-                      child: LoadingWidget()));
+                      child: const LoadingWidget()));
             })
           ],
         ),

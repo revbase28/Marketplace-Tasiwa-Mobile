@@ -162,7 +162,7 @@ class SignUpScreen extends StatelessWidget {
                               ThemeMode.dark
                           ? kDarkBgColor
                           : kLightColor,
-                      child: LoadingWidget(),
+                      child: const LoadingWidget(),
                     ),
                   );
                 },

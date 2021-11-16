@@ -35,7 +35,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
                         },
                       )
                     : privacyPolicyState is PrivacyPolicyLoadingState
-                        ? LoadingWidget()
+                        ? const LoadingWidget()
                         : Center(
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,

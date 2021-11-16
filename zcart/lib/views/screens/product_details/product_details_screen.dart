@@ -162,7 +162,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                         .pOnly(bottom: 50)
                                   ],
                                 )
-                              : ProductLoadingWidget().p(10),
+                              : const ProductLoadingWidget().p(10),
                         ),
                       ),
                       Visibility(

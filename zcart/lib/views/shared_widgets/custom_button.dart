@@ -26,12 +26,17 @@ class CustomButton extends StatelessWidget {
         width: MediaQuery.of(context).size.width * widthMultiplier,
         decoration: BoxDecoration(
           color: buttonBGColor ?? kPrimaryColor,
-          borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+          borderRadius: const BorderRadius.all(Radius.circular(16)),
         ),
         height: 50.0,
         child: Center(
-          child: Text(buttonText ?? "",
-              style: const TextStyle(color: kPrimaryLightTextColor)),
+          child: Text(
+            buttonText ?? "",
+            style: Theme.of(context).textTheme.button!.copyWith(
+                  color: kPrimaryLightTextColor,
+                  fontWeight: FontWeight.bold,
+                ),
+          ),
         ),
       ),
     );

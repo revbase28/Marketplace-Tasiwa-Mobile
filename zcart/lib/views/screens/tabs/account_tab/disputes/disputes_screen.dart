@@ -48,7 +48,7 @@ class DisputeScreen extends ConsumerWidget {
           ],
         ),
         body: disputesState is DisputesLoadingState
-            ? LoadingWidget().center()
+            ? const LoadingWidget().center()
             : disputesState is DisputesErrorState
                 ? Center(
                     child: Row(
@@ -386,7 +386,7 @@ class DisputeScreen extends ConsumerWidget {
                                 ),
                               );
                             })
-                    : LoadingWidget().center(),
+                    : const LoadingWidget().center(),
       ),
     );
   }

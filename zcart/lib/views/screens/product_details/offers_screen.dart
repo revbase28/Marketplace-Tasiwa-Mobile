@@ -24,7 +24,7 @@ class OffersScreen extends ConsumerWidget {
           child: offersState is OffersLoadingState
               ? SizedBox(
                   height: context.screenHeight - 100,
-                  child: Center(child: LoadingWidget()))
+                  child: const Center(child: LoadingWidget()))
               : offersState is OffersLoadedState
                   ? Column(
                       children: [

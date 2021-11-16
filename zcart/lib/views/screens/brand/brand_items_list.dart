@@ -26,7 +26,7 @@ class BrandItemsListView extends ConsumerWidget {
                 ))
             : brandItemsListState is BrandItemsLoadingState ||
                     brandItemsListState is BrandItemsInitialState
-                ? ProductLoadingWidget().px(10)
+                ? const ProductLoadingWidget().px(10)
                 : brandItemsListState is BrandItemsErrorState
                     ? Center(
                         child: Column(

@@ -121,7 +121,7 @@ class VendorChatScreen extends StatelessWidget {
                     )
                   : _productChatState is ProductChatLoadedState
                       ? _chatLoadedBody(context, _productChatState)
-                      : LoadingWidget();
+                      : const LoadingWidget();
             }),
           ),
           _chatTextBox(context),
