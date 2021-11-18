@@ -1,5 +1,6 @@
 import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:zcart/helper/get_color_based_on_theme.dart';
 import 'package:zcart/helper/get_recently_viewed.dart';
 import 'package:zcart/riverpod/providers/product_slug_list_provider.dart';
 import 'package:zcart/riverpod/providers/product_provider.dart';
@@ -37,9 +38,7 @@ class ProductCard extends StatelessWidget {
             .pOnly(bottom: 10),
         Flexible(
           child: Container(
-            color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-                ? kDarkCardBgColor
-                : kLightColor,
+            color: getColorBasedOnTheme(context, kLightColor, kDarkCardBgColor),
             child: GridView.builder(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 4,
@@ -70,13 +69,10 @@ class ProductCard extends StatelessWidget {
                         Text(
                           "${productList![index].offerPrice ?? ''}",
                           style: context.textTheme.subtitle2!.copyWith(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 12,
-                            color: EasyDynamicTheme.of(context).themeMode ==
-                                    ThemeMode.dark
-                                ? kDarkPriceColor
-                                : kPriceColor,
-                          ),
+                              fontWeight: FontWeight.bold,
+                              fontSize: 12,
+                              color: getColorBasedOnTheme(
+                                  context, kPriceColor, kDarkPriceColor)),
                         )
                             .pOnly(bottom: 3)
                             .visible(productList![index].hasOffer),
@@ -84,11 +80,8 @@ class ProductCard extends StatelessWidget {
                                 style: context.textTheme.subtitle2!.copyWith(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 12,
-                                  color:
-                                      EasyDynamicTheme.of(context).themeMode ==
-                                              ThemeMode.dark
-                                          ? kDarkPriceColor
-                                          : kPriceColor,
+                                  color: getColorBasedOnTheme(
+                                      context, kPriceColor, kDarkPriceColor),
                                 ))
                             .pOnly(bottom: 3)
                             .visible(!productList![index].hasOffer),

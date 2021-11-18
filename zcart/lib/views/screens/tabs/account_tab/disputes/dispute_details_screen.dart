@@ -2,6 +2,7 @@ import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:zcart/helper/get_color_based_on_theme.dart';
 import 'package:zcart/riverpod/providers/dispute_provider.dart';
 import 'package:zcart/riverpod/state/dispute/dispute_details_state.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
@@ -34,23 +35,23 @@ class DisputeDetailsScreen extends ConsumerWidget {
                   child: Column(
                     children: [
                       Container(
-                        color: EasyDynamicTheme.of(context).themeMode ==
-                                ThemeMode.dark
-                            ? kDarkCardBgColor
-                            : kLightColor,
+                        color: getColorBasedOnTheme(
+                            context, kLightColor, kDarkCardBgColor),
                         child: Padding(
                           padding: const EdgeInsets.all(10.0),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              CustomButton(
-                                buttonText:
-                                    disputeDetailsState.disputeDetails!.status,
-                                buttonBGColor: disputeDetailsState
-                                            .disputeDetails!.status ==
-                                        "SOLVED"
-                                    ? kGreenColor
-                                    : kPrimaryColor,
+                              Center(
+                                child: CustomButton(
+                                  buttonText: disputeDetailsState
+                                      .disputeDetails!.status,
+                                  buttonBGColor: disputeDetailsState
+                                              .disputeDetails!.status ==
+                                          "SOLVED"
+                                      ? kGreenColor
+                                      : kPrimaryColor,
+                                ),
                               ),
                               Column(
                                 children: [
@@ -195,10 +196,8 @@ class DisputeDetailsScreen extends ConsumerWidget {
                         ),
                       ).cornerRadius(10),
                       Container(
-                        color: EasyDynamicTheme.of(context).themeMode ==
-                                ThemeMode.dark
-                            ? kDarkCardBgColor
-                            : kLightColor,
+                        color: getColorBasedOnTheme(
+                            context, kLightColor, kDarkCardBgColor),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -257,7 +256,11 @@ class DisputeDetailsScreen extends ConsumerWidget {
                                           .items![index]
                                           .unitPrice!,
                                       style: context.textTheme.subtitle2!
-                                          .copyWith(color: kPrimaryColor),
+                                          .copyWith(
+                                              color: getColorBasedOnTheme(
+                                                  context,
+                                                  kPriceColor,
+                                                  kDarkPriceColor)),
                                     ),
                                     trailing: Text('x ' +
                                         disputeDetailsState

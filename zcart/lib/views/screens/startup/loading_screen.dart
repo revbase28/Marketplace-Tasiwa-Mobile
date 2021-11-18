@@ -1,4 +1,6 @@
+import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:zcart/data/controller/cart/coupon_controller.dart';
@@ -27,6 +29,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
   void initState() {
     SystemChannels.textInput.invokeMethod('TextInput.hide');
     super.initState();
+
     goToNextScreen();
   }
 

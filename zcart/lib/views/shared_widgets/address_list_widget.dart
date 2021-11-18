@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zcart/data/models/address/address_model.dart';
 import 'package:zcart/data/models/cart/cart_item_details_model.dart';
 import 'package:zcart/data/network/network_utils.dart';
+import 'package:zcart/helper/get_color_based_on_theme.dart';
 import 'package:zcart/riverpod/providers/provider.dart';
 import 'package:zcart/views/screens/tabs/account_tab/account/edit_address_screen.dart';
 import 'package:zcart/Theme/styles/colors.dart';
@@ -36,9 +37,11 @@ class _AddressListBuilderState extends State<AddressListBuilder> {
         itemCount: widget.addressesList!.length,
         itemBuilder: (context, index) {
           return Container(
-              color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-                  ? kDarkCardBgColor
-                  : kLightColor,
+              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+              decoration: BoxDecoration(
+                color: getColorBasedOnTheme(context, kLightColor, kDarkBgColor),
+                borderRadius: BorderRadius.circular(8),
+              ),
               child: ListTile(
                 onTap: () {
                   if (widget.cartItem != null) {
@@ -128,10 +131,8 @@ class _AddressListBuilderState extends State<AddressListBuilder> {
                         ? Icon(Icons.check_circle, color: kPrimaryColor)
                         : Icon(
                             Icons.radio_button_unchecked,
-                            color: EasyDynamicTheme.of(context).themeMode ==
-                                    ThemeMode.dark
-                                ? kLightColor
-                                : kDarkBgColor,
+                            color: getColorBasedOnTheme(
+                                context, kDarkColor, kLightColor),
                           )
                     : IconButton(
                         onPressed: () {

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:zcart/Theme/styles/colors.dart';
+import 'package:zcart/helper/get_color_based_on_theme.dart';
 import 'package:zcart/riverpod/providers/address_provider.dart';
 import 'package:zcart/riverpod/state/product/product_state.dart';
 import 'package:zcart/views/screens/product_details/shipping_address_screen.dart';
@@ -18,9 +19,7 @@ class ShippingCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-          ? kDarkCardBgColor
-          : kLightColor,
+      color: getColorBasedOnTheme(context, kLightColor, kDarkCardBgColor),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

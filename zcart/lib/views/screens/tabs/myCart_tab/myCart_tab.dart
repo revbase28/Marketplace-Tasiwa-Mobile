@@ -9,6 +9,7 @@ import 'package:velocity_x/velocity_x.dart';
 import 'package:zcart/Theme/styles/colors.dart';
 import 'package:zcart/data/models/cart/cart_model.dart';
 import 'package:zcart/data/network/network_utils.dart';
+import 'package:zcart/helper/get_color_based_on_theme.dart';
 import 'package:zcart/helper/get_recently_viewed.dart';
 import 'package:zcart/riverpod/providers/provider.dart';
 import 'package:zcart/riverpod/state/state.dart';
@@ -134,9 +135,7 @@ class CartItemCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-          color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-              ? kDarkCardBgColor
-              : kLightColor,
+          color: getColorBasedOnTheme(context, kLightColor, kDarkCardBgColor),
           borderRadius: BorderRadius.circular(10)),
       margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       padding: const EdgeInsets.all(10),
@@ -189,10 +188,8 @@ class CartItemCard extends StatelessWidget {
                 children: [
                   Text(cartItem.grandTotal!,
                       style: context.textTheme.bodyText2!.copyWith(
-                          color: EasyDynamicTheme.of(context).themeMode ==
-                                  ThemeMode.dark
-                              ? kDarkPriceColor
-                              : kPriceColor,
+                          color: getColorBasedOnTheme(
+                              context, kPriceColor, kDarkPriceColor),
                           fontWeight: FontWeight.bold)),
                   Text(LocaleKeys.grand_total.tr(),
                       style: context.textTheme.bodyText2),
@@ -297,10 +294,8 @@ class _ItemCardState extends State<ItemCard> {
                     Text(
                       widget.cartItem.unitPrice!,
                       style: context.textTheme.bodyText2!.copyWith(
-                          color: EasyDynamicTheme.of(context).themeMode ==
-                                  ThemeMode.dark
-                              ? kDarkPriceColor
-                              : kPriceColor,
+                          color: getColorBasedOnTheme(
+                              context, kPriceColor, kDarkPriceColor),
                           fontWeight: FontWeight.bold),
                     ).pOnly(right: 5),
                   ],
@@ -315,15 +310,14 @@ class _ItemCardState extends State<ItemCard> {
                         child: const Icon(Icons.remove),
                         style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.all(
-                              EasyDynamicTheme.of(context).themeMode ==
-                                      ThemeMode.dark
-                                  ? kDarkBgColor
-                                  : kLightBgColor),
+                            getColorBasedOnTheme(
+                                context, kLightBgColor, kDarkBgColor),
+                          ),
                           foregroundColor: MaterialStateProperty.all(
-                              EasyDynamicTheme.of(context).themeMode ==
-                                      ThemeMode.dark
-                                  ? kPrimaryLightTextColor
-                                  : kPrimaryDarkTextColor),
+                              getColorBasedOnTheme(
+                                  context,
+                                  kPrimaryDarkTextColor,
+                                  kPrimaryLightTextColor)),
                           shape: MaterialStateProperty.all(
                               RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10))),
@@ -370,15 +364,14 @@ class _ItemCardState extends State<ItemCard> {
                         child: const Icon(Icons.add),
                         style: ButtonStyle(
                             backgroundColor: MaterialStateProperty.all(
-                                EasyDynamicTheme.of(context).themeMode ==
-                                        ThemeMode.dark
-                                    ? kDarkBgColor
-                                    : kLightBgColor),
+                              getColorBasedOnTheme(
+                                  context, kLightBgColor, kDarkBgColor),
+                            ),
                             foregroundColor: MaterialStateProperty.all(
-                                EasyDynamicTheme.of(context).themeMode ==
-                                        ThemeMode.dark
-                                    ? kPrimaryLightTextColor
-                                    : kPrimaryDarkTextColor),
+                                getColorBasedOnTheme(
+                                    context,
+                                    kPrimaryDarkTextColor,
+                                    kPrimaryLightTextColor)),
                             shape: MaterialStateProperty.all(
                                 RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10)))),

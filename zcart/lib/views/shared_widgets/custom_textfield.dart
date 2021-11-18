@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:zcart/Theme/styles/colors.dart';
 
 import 'package:nb_utils/nb_utils.dart';
+import 'package:zcart/helper/get_color_based_on_theme.dart';
 
 class CustomTextField extends StatefulWidget {
   final String? hintText;
@@ -71,10 +72,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
               ? IconButton(
                   icon: Icon(
                     _passwordVisible ? Icons.visibility : Icons.visibility_off,
-                    color:
-                        EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-                            ? kAccentColor
-                            : kPrimaryColor,
+                    color: getColorBasedOnTheme(
+                        context, kPrimaryColor, kAccentColor),
                   ),
                   onPressed: () => setState(() {
                         _passwordVisible = !_passwordVisible;
@@ -83,9 +82,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
           labelText: widget.hintText,
           labelStyle: context.theme.textTheme.subtitle2!.copyWith(
             fontWeight: FontWeight.bold,
-            color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-                ? kLightColor.withOpacity(0.6)
-                : kDarkColor.withOpacity(0.6),
+            color: getColorBasedOnTheme(context, kDarkColor.withOpacity(0.8),
+                kLightColor.withOpacity(0.8)),
           ),
           contentPadding:
               const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
@@ -98,9 +96,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
             borderSide: BorderSide(
-                color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-                    ? kLightColor.withOpacity(0.8)
-                    : kDarkColor.withOpacity(0.8),
+                color: getColorBasedOnTheme(context,
+                    kDarkColor.withOpacity(0.8), kLightColor.withOpacity(0.8)),
                 width: 2),
           ),
         ),

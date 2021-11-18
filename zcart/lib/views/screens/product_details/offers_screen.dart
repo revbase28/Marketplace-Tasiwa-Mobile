@@ -1,6 +1,7 @@
 import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:zcart/helper/get_color_based_on_theme.dart';
 import 'package:zcart/riverpod/providers/offers_provider.dart';
 import 'package:zcart/riverpod/state/offers_state.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
@@ -30,10 +31,8 @@ class OffersScreen extends ConsumerWidget {
                       children: [
                         const SizedBox(height: 10),
                         Container(
-                          color: EasyDynamicTheme.of(context).themeMode ==
-                                  ThemeMode.dark
-                              ? kDarkBgColor
-                              : kLightColor,
+                          color: getColorBasedOnTheme(
+                              context, kLightColor, kDarkBgColor),
                           padding: const EdgeInsets.all(10),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,

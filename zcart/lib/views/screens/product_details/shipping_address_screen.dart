@@ -5,10 +5,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:zcart/Theme/styles/colors.dart';
 import 'package:zcart/data/models/product/product_details_model.dart';
+import 'package:zcart/helper/get_color_based_on_theme.dart';
 import 'package:zcart/riverpod/providers/address_provider.dart';
 import 'package:zcart/riverpod/providers/product_provider.dart';
 import 'package:zcart/riverpod/state/address/address_state.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
+import 'package:zcart/views/shared_widgets/custom_dropdownfield.dart';
 
 class ShippingAddressScreen extends StatefulWidget {
   const ShippingAddressScreen({
@@ -44,9 +46,8 @@ class _ShippingAddressScreenState extends State<ShippingAddressScreen> {
           body: SafeArea(
             child: SingleChildScrollView(
                 child: Container(
-              color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-                  ? kDarkCardBgColor
-                  : kLightColor,
+              color:
+                  getColorBasedOnTheme(context, kLightColor, kDarkCardBgColor),
               padding: const EdgeInsets.all(10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -55,14 +56,13 @@ class _ShippingAddressScreenState extends State<ShippingAddressScreen> {
                           style: context.textTheme.bodyText2)
                       .pOnly(bottom: 10),
                   Container(
-                    color:
-                        EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-                            ? kDarkBgColor
-                            : kPrimaryColor.withOpacity(0.10),
-                    padding: const EdgeInsets.only(left: 10),
+                    color: getColorBasedOnTheme(
+                        context, kPrimaryColor.withOpacity(0.10), kDarkBgColor),
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
                     width: context.screenWidth,
                     child: DropdownButtonHideUnderline(
                       child: DropdownButton<String>(
+                        isExpanded: true,
                         focusColor: kLightColor,
                         value: selectedCountry ??
                             widget.productModel.countries!.values.elementAt(
@@ -72,11 +72,8 @@ class _ShippingAddressScreenState extends State<ShippingAddressScreen> {
                                         .productModel.shippingCountryId
                                         .toString())),
                         style: context.textTheme.subtitle2,
-                        iconEnabledColor:
-                            EasyDynamicTheme.of(context).themeMode ==
-                                    ThemeMode.dark
-                                ? kLightColor
-                                : kDarkColor,
+                        iconEnabledColor: getColorBasedOnTheme(
+                            context, kDarkColor, kLightColor),
                         items: widget.productModel.countries!.entries
                             .map((e) => e.value)
                             .map<DropdownMenuItem<String>>((String value) {
@@ -118,11 +115,9 @@ class _ShippingAddressScreenState extends State<ShippingAddressScreen> {
                           style: context.textTheme.bodyText2)
                       .pOnly(bottom: 10),
                   Container(
-                    color:
-                        EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-                            ? kDarkBgColor
-                            : kPrimaryColor.withOpacity(0.10),
-                    padding: const EdgeInsets.only(left: 10),
+                    color: getColorBasedOnTheme(
+                        context, kPrimaryColor.withOpacity(0.10), kDarkBgColor),
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
                     width: context.screenWidth,
                     child: DropdownButtonHideUnderline(
                       child: DropdownButton<String>(
@@ -130,11 +125,8 @@ class _ShippingAddressScreenState extends State<ShippingAddressScreen> {
                         value: selectedShippingMethod ??
                             widget.productModel.shippingOptions!.first.name,
                         style: context.textTheme.subtitle2,
-                        iconEnabledColor:
-                            EasyDynamicTheme.of(context).themeMode ==
-                                    ThemeMode.dark
-                                ? kLightColor
-                                : kDarkColor,
+                        iconEnabledColor: getColorBasedOnTheme(
+                            context, kDarkColor, kLightColor),
                         items: widget.productModel.shippingOptions!
                             .map((e) => e.name)
                             .map<DropdownMenuItem<String>>((String? value) {

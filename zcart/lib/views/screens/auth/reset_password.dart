@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:zcart/Theme/styles/colors.dart';
+import 'package:zcart/helper/get_color_based_on_theme.dart';
 import 'package:zcart/riverpod/providers/provider.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:zcart/views/shared_widgets/custom_button.dart';
@@ -23,9 +24,8 @@ class ResetPassword extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: Container(
             decoration: BoxDecoration(
-                color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-                    ? kDarkCardBgColor
-                    : kLightColor,
+                color: getColorBasedOnTheme(
+                    context, kLightColor, kDarkCardBgColor),
                 borderRadius: BorderRadius.circular(10)),
             padding: const EdgeInsets.all(20),
             child: Form(

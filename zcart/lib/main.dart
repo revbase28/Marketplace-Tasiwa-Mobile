@@ -1,6 +1,7 @@
 import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -52,6 +53,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(ThemeMode.system);
+    final _brightness = SchedulerBinding.instance!.window.platformBrightness;
+    print(_brightness);
+
     return MaterialApp(
       supportedLocales: context.supportedLocales,
       localizationsDelegates: context.localizationDelegates,
@@ -60,7 +65,9 @@ class MyApp extends StatelessWidget {
       title: API.appName,
       themeMode: MyConfig.isDynamicThemeActive
           ? EasyDynamicTheme.of(context).themeMode == ThemeMode.system
-              ? ThemeMode.light
+              ? _brightness == Brightness.dark
+                  ? ThemeMode.dark
+                  : ThemeMode.light
               : EasyDynamicTheme.of(context).themeMode
           : ThemeMode.light,
       theme: AppTheme.light(context),
@@ -69,4 +76,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-

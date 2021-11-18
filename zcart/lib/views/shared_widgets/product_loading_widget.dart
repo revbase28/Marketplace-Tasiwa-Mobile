@@ -2,6 +2,7 @@ import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:zcart/Theme/styles/colors.dart';
+import 'package:zcart/helper/get_color_based_on_theme.dart';
 
 class ProductLoadingWidget extends StatefulWidget {
   const ProductLoadingWidget({Key? key}) : super(key: key);
@@ -20,14 +21,10 @@ class _ProductLoadingWidgetState extends State<ProductLoadingWidget> {
         children: [
           Flexible(
             child: Shimmer.fromColors(
-                baseColor:
-                    EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-                        ? kDarkColor
-                        : Colors.grey[200]!,
-                highlightColor:
-                    EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-                        ? kDarkCardBgColor
-                        : Colors.grey[100]!,
+                baseColor: getColorBasedOnTheme(
+                    context, Colors.grey[200]!, kDarkColor),
+                highlightColor: getColorBasedOnTheme(
+                    context, Colors.grey[100]!, kDarkCardBgColor),
                 enabled: true,
                 child: Container(
                   width: double.infinity,
@@ -43,13 +40,9 @@ class _ProductLoadingWidgetState extends State<ProductLoadingWidget> {
           Flexible(
             child: Shimmer.fromColors(
               baseColor:
-                  EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-                      ? kDarkColor
-                      : Colors.grey[200]!,
-              highlightColor:
-                  EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-                      ? kDarkCardBgColor
-                      : Colors.grey[100]!,
+                  getColorBasedOnTheme(context, Colors.grey[200]!, kDarkColor),
+              highlightColor: getColorBasedOnTheme(
+                  context, Colors.grey[100]!, kDarkCardBgColor),
               enabled: true,
               child: GridView.builder(
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -101,23 +94,17 @@ class _ProductLoadingWidgetState extends State<ProductLoadingWidget> {
           ),
           Flexible(
             child: Shimmer.fromColors(
-                baseColor:
-                    EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-                        ? kDarkColor
-                        : Colors.grey[200]!,
-                highlightColor:
-                    EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-                        ? kDarkCardBgColor
-                        : Colors.grey[100]!,
+                baseColor: getColorBasedOnTheme(
+                    context, Colors.grey[200]!, kDarkColor),
+                highlightColor: getColorBasedOnTheme(
+                    context, Colors.grey[100]!, kDarkCardBgColor),
                 enabled: true,
                 child: Container(
                   width: double.infinity,
                   height: 200,
                   decoration: BoxDecoration(
-                      color: EasyDynamicTheme.of(context).themeMode ==
-                              ThemeMode.dark
-                          ? kDarkCardBgColor
-                          : kLightColor,
+                      color: getColorBasedOnTheme(
+                          context, kLightColor, kDarkCardBgColor),
                       borderRadius: BorderRadius.circular(10)),
                 )),
           ),

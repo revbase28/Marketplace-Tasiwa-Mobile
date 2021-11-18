@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:zcart/Theme/styles/colors.dart';
+import 'package:zcart/helper/get_color_based_on_theme.dart';
 import 'package:zcart/riverpod/providers/offers_provider.dart';
 import 'package:zcart/riverpod/state/product/product_state.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
@@ -23,9 +24,7 @@ class MoreOffersFromSellerCard extends StatelessWidget {
             productDetailsState.productModel.data!.product!.listingCount == null
         ? Container()
         : Container(
-            color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-                ? kDarkCardBgColor
-                : kLightColor,
+            color: getColorBasedOnTheme(context, kLightColor, kDarkCardBgColor),
             child: ListTile(
               title: Text(
                 LocaleKeys.more_offers_from_others.tr(args: [

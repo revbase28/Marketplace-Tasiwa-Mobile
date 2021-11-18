@@ -2,6 +2,7 @@ import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zcart/data/controller/chat/chat_controller.dart';
+import 'package:zcart/helper/get_color_based_on_theme.dart';
 import 'package:zcart/riverpod/providers/dispute_provider.dart';
 import 'package:zcart/riverpod/providers/provider.dart';
 import 'package:zcart/riverpod/state/dispute/disputes_state.dart';
@@ -36,15 +37,17 @@ class DisputeScreen extends ConsumerWidget {
           title: Text(LocaleKeys.disputes.tr()),
           actions: [
             Visibility(
-                visible: disputesState is DisputesErrorState,
-                child: IconButton(
-                    onPressed: () {
-                      context.read(disputesProvider.notifier).getDisputes();
-                    },
-                    icon: Icon(
-                      Icons.refresh,
-                      color: kPrimaryColor,
-                    )))
+              visible: disputesState is DisputesErrorState,
+              child: IconButton(
+                onPressed: () {
+                  context.read(disputesProvider.notifier).getDisputes();
+                },
+                icon: const Icon(
+                  Icons.refresh,
+                  color: kLightColor,
+                ),
+              ),
+            )
           ],
         ),
         body: disputesState is DisputesLoadingState
@@ -83,11 +86,8 @@ class DisputeScreen extends ConsumerWidget {
                             itemBuilder: (context, index) {
                               return Container(
                                 decoration: BoxDecoration(
-                                    color: EasyDynamicTheme.of(context)
-                                                .themeMode ==
-                                            ThemeMode.dark
-                                        ? kDarkCardBgColor
-                                        : kLightColor,
+                                    color: getColorBasedOnTheme(
+                                        context, kLightColor, kDarkCardBgColor),
                                     borderRadius: BorderRadius.circular(10)),
                                 margin: const EdgeInsets.symmetric(
                                     horizontal: 10, vertical: 5),
@@ -237,12 +237,10 @@ class DisputeScreen extends ConsumerWidget {
                                       textAlign: TextAlign.end,
                                       style: context.textTheme.bodyText2!
                                           .copyWith(
-                                              color:
-                                                  EasyDynamicTheme.of(context)
-                                                              .themeMode ==
-                                                          ThemeMode.dark
-                                                      ? kDarkPriceColor
-                                                      : kPriceColor,
+                                              color: getColorBasedOnTheme(
+                                                  context,
+                                                  kPriceColor,
+                                                  kDarkPriceColor),
                                               fontWeight: FontWeight.bold),
                                     ).pOnly(bottom: 10),
                                     Row(

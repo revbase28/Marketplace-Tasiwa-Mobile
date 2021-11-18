@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zcart/Theme/styles/colors.dart';
+import 'package:zcart/helper/get_color_based_on_theme.dart';
 import 'package:zcart/riverpod/providers/brand_provider.dart';
 import 'package:zcart/riverpod/state/brand_state.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
@@ -49,10 +50,8 @@ class FeaturedBrands extends ConsumerWidget {
                 ),
                 Flexible(
                   child: Container(
-                    color:
-                        EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-                            ? kDarkCardBgColor
-                            : kLightColor,
+                    color: getColorBasedOnTheme(
+                        context, kLightColor, kDarkCardBgColor),
                     child: GridView.builder(
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
@@ -117,14 +116,10 @@ class FeaturedBrands extends ConsumerWidget {
                                   overflow: TextOverflow.ellipsis,
                                   textAlign: TextAlign.center,
                                   style: context.textTheme.subtitle2!.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 11,
-                                    color: EasyDynamicTheme.of(context)
-                                                .themeMode ==
-                                            ThemeMode.dark
-                                        ? kFadeColor
-                                        : kDarkColor,
-                                  ),
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 11,
+                                      color: getColorBasedOnTheme(
+                                          context, kDarkColor, kFadeColor)),
                                 )
                               ],
                             ),

@@ -3,6 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:zcart/Theme/styles/colors.dart';
+import 'package:zcart/helper/get_color_based_on_theme.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 
 class VendorsActivityCard extends StatelessWidget {
@@ -19,9 +20,7 @@ class VendorsActivityCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-          ? kDarkCardBgColor
-          : kLightColor,
+      color: getColorBasedOnTheme(context, kLightColor, kDarkCardBgColor),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,

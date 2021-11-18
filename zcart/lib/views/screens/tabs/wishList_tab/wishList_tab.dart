@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:zcart/helper/get_color_based_on_theme.dart';
 import 'package:zcart/helper/get_recently_viewed.dart';
 import 'package:zcart/riverpod/providers/product_provider.dart';
 import 'package:zcart/riverpod/providers/product_slug_list_provider.dart';
@@ -97,10 +98,8 @@ class WishListTab extends ConsumerWidget {
                         itemBuilder: (context, index) {
                           return Container(
                             decoration: BoxDecoration(
-                                color: EasyDynamicTheme.of(context).themeMode ==
-                                        ThemeMode.dark
-                                    ? kDarkCardBgColor
-                                    : kLightColor,
+                                color: getColorBasedOnTheme(
+                                    context, kLightColor, kDarkCardBgColor),
                                 borderRadius: BorderRadius.circular(10)),
                             margin: const EdgeInsets.symmetric(
                                 horizontal: 10, vertical: 5),

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:velocity_x/velocity_x.dart';
+import 'package:zcart/helper/get_color_based_on_theme.dart';
 import 'package:zcart/riverpod/providers/provider.dart';
 import 'package:zcart/riverpod/providers/user_provider.dart';
 import 'package:zcart/riverpod/state/user_state.dart';
@@ -51,10 +52,8 @@ class SignUpScreen extends StatelessWidget {
                         margin: const EdgeInsets.all(16),
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
-                            color: EasyDynamicTheme.of(context).themeMode ==
-                                    ThemeMode.dark
-                                ? kDarkCardBgColor
-                                : kLightCardBgColor,
+                            color: getColorBasedOnTheme(
+                                context, kLightCardBgColor, kDarkCardBgColor),
                             borderRadius:
                                 const BorderRadius.all(Radius.circular(10))),
                         child: Column(
@@ -158,10 +157,8 @@ class SignUpScreen extends StatelessWidget {
                   return Visibility(
                     visible: authState is UserLoadingState,
                     child: Container(
-                      color: EasyDynamicTheme.of(context).themeMode ==
-                              ThemeMode.dark
-                          ? kDarkBgColor
-                          : kLightColor,
+                      color: getColorBasedOnTheme(
+                          context, kLightColor, kDarkCardBgColor),
                       child: const LoadingWidget(),
                     ),
                   );

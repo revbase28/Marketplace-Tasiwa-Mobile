@@ -1,6 +1,8 @@
 import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:zcart/Theme/styles/colors.dart';
+import 'package:zcart/helper/get_color_based_on_theme.dart';
 
 Future<void> showCustomConfirmDialog(
   BuildContext context, {
@@ -69,10 +71,8 @@ Future<void> showCustomConfirmDialog(
                   title ?? getTitle(dialogType),
                   style: boldTextStyle(
                     size: 16,
-                    color:
-                        EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-                            ? Colors.white
-                            : Colors.black,
+                    color: getColorBasedOnTheme(
+                        context, Colors.black, Colors.white),
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -81,10 +81,10 @@ Future<void> showCustomConfirmDialog(
                   subTitle.validate(),
                   style: secondaryTextStyle(
                     size: 16,
-                    color:
-                        EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-                            ? Colors.white.withOpacity(0.8)
-                            : Colors.black.withOpacity(0.8),
+                    color: getColorBasedOnTheme(
+                        context,
+                        kDarkColor.withOpacity(0.8),
+                        kLightColor.withOpacity(0.8)),
                   ),
                   textAlign: TextAlign.center,
                 ).visible(subTitle.validate().isNotEmpty),
@@ -103,20 +103,16 @@ Future<void> showCustomConfirmDialog(
                         children: [
                           Icon(
                             Icons.close,
-                            color: EasyDynamicTheme.of(context).themeMode ==
-                                    ThemeMode.dark
-                                ? Colors.white
-                                : Colors.black,
+                            color: getColorBasedOnTheme(
+                                context, Colors.black, Colors.white),
                             size: 20,
                           ),
                           6.width,
                           Text(
                             negativeText ?? 'Cancel',
                             style: boldTextStyle(
-                              color: EasyDynamicTheme.of(context).themeMode ==
-                                      ThemeMode.dark
-                                  ? Colors.white
-                                  : Colors.black,
+                              color: getColorBasedOnTheme(
+                                  context, Colors.black, Colors.white),
                             ),
                           ),
                         ],

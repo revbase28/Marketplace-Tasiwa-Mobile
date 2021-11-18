@@ -2,6 +2,7 @@ import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:zcart/helper/get_color_based_on_theme.dart';
 import 'package:zcart/riverpod/providers/dispute_provider.dart';
 import 'package:zcart/riverpod/providers/provider.dart';
 import 'package:zcart/riverpod/state/dispute/dispute_info_state.dart';
@@ -50,10 +51,8 @@ class _OpenDisputeScreenState extends State<OpenDisputeScreen> {
                         children: [
                           /// Order details
                           Container(
-                            color: EasyDynamicTheme.of(context).themeMode ==
-                                    ThemeMode.dark
-                                ? kDarkCardBgColor
-                                : kLightColor,
+                            color: getColorBasedOnTheme(
+                                context, kLightColor, kDarkCardBgColor),
                             child: Padding(
                               padding: const EdgeInsets.all(10.0),
                               child: Column(
@@ -132,10 +131,8 @@ class _OpenDisputeScreenState extends State<OpenDisputeScreen> {
 
                           /// Open dispute
                           Container(
-                            color: EasyDynamicTheme.of(context).themeMode ==
-                                    ThemeMode.dark
-                                ? kDarkCardBgColor
-                                : kLightColor,
+                            color: getColorBasedOnTheme(
+                                context, kLightColor, kDarkCardBgColor),
                             child: Padding(
                               padding: const EdgeInsets.all(10.0),
                               child: Column(
@@ -362,10 +359,8 @@ class _OpenDisputeScreenState extends State<OpenDisputeScreen> {
 
                           /// How to open a dispute
                           Container(
-                            color: EasyDynamicTheme.of(context).themeMode ==
-                                    ThemeMode.dark
-                                ? kDarkCardBgColor
-                                : kLightColor,
+                            color: getColorBasedOnTheme(
+                                context, kLightColor, kDarkCardBgColor),
                             child: Padding(
                               padding: const EdgeInsets.all(10.0),
                               child: Column(

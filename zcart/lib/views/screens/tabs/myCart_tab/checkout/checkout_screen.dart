@@ -2,6 +2,7 @@ import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:velocity_x/velocity_x.dart';
@@ -15,6 +16,7 @@ import 'package:zcart/data/models/cart/cart_item_details_model.dart';
 import 'package:zcart/data/network/network_utils.dart';
 import 'package:zcart/helper/constants.dart';
 import 'package:zcart/helper/get_amount_from_string.dart';
+import 'package:zcart/helper/get_color_based_on_theme.dart';
 import 'package:zcart/riverpod/providers/address_provider.dart';
 import 'package:zcart/riverpod/providers/checkout_provider.dart';
 import 'package:zcart/riverpod/providers/provider.dart';
@@ -114,7 +116,14 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         textTheme: EasyDynamicTheme.of(context).themeMode ==
                                 ThemeMode.dark
                             ? darkTextTheme(context)
-                            : lightTextTheme(context),
+                            : EasyDynamicTheme.of(context).themeMode ==
+                                    ThemeMode.system
+                                ? SchedulerBinding.instance!.window
+                                            .platformBrightness ==
+                                        Brightness.dark
+                                    ? darkTextTheme(context)
+                                    : lightTextTheme(context)
+                                : lightTextTheme(context),
                         colorScheme: ColorScheme.light(
                             primary: kPrimaryColor, secondary: kAccentColor),
                       ),
@@ -157,9 +166,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         style: context.textTheme.subtitle2,
       ),
       content: Container(
-        color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-            ? kDarkCardBgColor
-            : kLightColor,
+        color: getColorBasedOnTheme(context, kLightColor, kDarkCardBgColor),
         padding: const EdgeInsets.all(10),
         child: cartItemDetailsState is CartItemDetailsLoadedState
             ? Column(
@@ -183,14 +190,12 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                           title: Text(cartItemDetailsState
                               .cartItemDetails!.items![index].description!),
                           subtitle: Text(
-                            cartItemDetailsState
-                                .cartItemDetails!.items![index].unitPrice!,
-                            style: context.textTheme.subtitle2!.copyWith(
-                                color: EasyDynamicTheme.of(context).themeMode ==
-                                        ThemeMode.dark
-                                    ? kDarkPriceColor
-                                    : kPriceColor),
-                          ),
+                              cartItemDetailsState
+                                  .cartItemDetails!.items![index].unitPrice!,
+                              style: context.textTheme.subtitle2!.copyWith(
+                                color: getColorBasedOnTheme(
+                                    context, kPriceColor, kDarkPriceColor),
+                              )),
                           trailing: Text('x ' +
                               cartItemDetailsState
                                   .cartItemDetails!.items![index].quantity
@@ -360,10 +365,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                           margin: const EdgeInsets.only(bottom: 10),
                           padding: const EdgeInsets.all(16),
                           decoration: BoxDecoration(
-                              color: EasyDynamicTheme.of(context).themeMode ==
-                                      ThemeMode.dark
-                                  ? kDarkCardBgColor
-                                  : kLightBgColor,
+                              color: getColorBasedOnTheme(
+                                  context, kLightBgColor, kDarkBgColor),
                               borderRadius: BorderRadius.circular(10),
                               boxShadow: [
                                 BoxShadow(
@@ -551,10 +554,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               },
                             ).cornerRadius(10)
                           : Container(
-                              color: EasyDynamicTheme.of(context).themeMode ==
-                                      ThemeMode.dark
-                                  ? kDarkCardBgColor
-                                  : kLightColor,
+                              color: getColorBasedOnTheme(
+                                  context, kLightColor, kDarkCardBgColor),
                               padding: const EdgeInsets.all(10),
                               width: context.screenWidth,
                               child: Column(
@@ -582,9 +583,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             ],
           ).pOnly(top: 10, bottom: 10),
           Container(
-            color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-                ? kDarkCardBgColor
-                : kLightColor,
+            color: getColorBasedOnTheme(context, kLightColor, kDarkCardBgColor),
             padding: const EdgeInsets.symmetric(vertical: 10),
             child: cartItemDetailsState is CartItemDetailsLoadedState
                 ? PackagingListBuilder(
@@ -633,9 +632,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             ],
           ).pOnly(bottom: 10),
           Container(
-            color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-                ? kDarkCardBgColor
-                : kLightColor,
+            color: getColorBasedOnTheme(context, kLightColor, kDarkCardBgColor),
             padding: const EdgeInsets.all(10),
             child: Row(
               children: [
@@ -847,9 +844,7 @@ class _PaymentOptionsListBuilderState extends State<PaymentOptionsListBuilder> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-          ? kDarkCardBgColor
-          : kLightColor,
+      color: getColorBasedOnTheme(context, kLightColor, kDarkCardBgColor),
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: Consumer(
         builder: (context, watch, _) {
@@ -888,10 +883,8 @@ class _PaymentOptionsListBuilderState extends State<PaymentOptionsListBuilder> {
                         ? Icon(Icons.check_circle, color: kPrimaryColor)
                         : Icon(
                             Icons.radio_button_unchecked,
-                            color: EasyDynamicTheme.of(context).themeMode ==
-                                    ThemeMode.dark
-                                ? kLightColor
-                                : kDarkColor,
+                            color: getColorBasedOnTheme(
+                                context, kDarkColor, kLightColor),
                           ),
                   );
                 }).toList());
@@ -955,10 +948,8 @@ class _PackagingListBuilderState extends State<PackagingListBuilder> {
                         ? Icon(Icons.check_circle, color: kPrimaryColor)
                         : Icon(
                             Icons.radio_button_unchecked,
-                            color: EasyDynamicTheme.of(context).themeMode ==
-                                    ThemeMode.dark
-                                ? kLightColor
-                                : kDarkColor,
+                            color: getColorBasedOnTheme(
+                                context, kDarkColor, kLightColor),
                           ),
                   );
                 })
@@ -990,9 +981,7 @@ class _ShippingOptionsBuilderState extends State<ShippingOptionsBuilder> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-          ? kDarkCardBgColor
-          : kLightColor,
+      color: getColorBasedOnTheme(context, kLightColor, kDarkCardBgColor),
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: ListView.builder(
           shrinkWrap: true,
@@ -1047,10 +1036,8 @@ class _ShippingOptionsBuilderState extends State<ShippingOptionsBuilder> {
                   ? Icon(Icons.check_circle, color: kPrimaryColor)
                   : Icon(
                       Icons.radio_button_unchecked,
-                      color: EasyDynamicTheme.of(context).themeMode ==
-                              ThemeMode.dark
-                          ? kLightColor
-                          : kDarkColor,
+                      color: getColorBasedOnTheme(
+                          context, kDarkColor, kLightColor),
                     ),
             );
           }),

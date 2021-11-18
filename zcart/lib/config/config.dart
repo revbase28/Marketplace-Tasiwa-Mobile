@@ -42,7 +42,7 @@ class MyConfig {
 
   ///App Gradient Colors
   static final Color gradientColor1 = HexColor("#B12704");
-  static final Color gradientColor2 = HexColor("#F7CE19");
+  static final Color gradientColor2 = HexColor("#F75463");
 
   ///
 
@@ -58,7 +58,7 @@ class MyConfig {
     required Duration duration,
     required double size,
   }) =>
-      SpinKitCubeGrid(color: color, size: size, duration: duration);
+      SpinKitDancingSquare(color: color, size: size, duration: duration);
 
   ///
 

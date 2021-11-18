@@ -11,6 +11,7 @@ import 'package:velocity_x/velocity_x.dart';
 import 'package:zcart/Theme/styles/colors.dart';
 import 'package:zcart/data/models/product/product_details_model.dart';
 import 'package:zcart/data/network/api.dart';
+import 'package:zcart/helper/get_color_based_on_theme.dart';
 import 'package:zcart/riverpod/providers/wishlist_provider.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 
@@ -26,9 +27,7 @@ class ProductNameCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(10),
-      color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-          ? kDarkCardBgColor
-          : kLightColor,
+      color: getColorBasedOnTheme(context, kLightColor, kDarkCardBgColor),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
@@ -67,10 +66,8 @@ class ProductNameCard extends StatelessWidget {
                             : productModel.data!.price!
                         : productModel.data!.price!,
                     style: context.textTheme.headline6!.copyWith(
-                      color: EasyDynamicTheme.of(context).themeMode ==
-                              ThemeMode.dark
-                          ? kDarkPriceColor
-                          : kPriceColor,
+                      color: getColorBasedOnTheme(
+                          context, kPriceColor, kDarkPriceColor),
                       fontWeight: FontWeight.bold,
                     ),
                   ),

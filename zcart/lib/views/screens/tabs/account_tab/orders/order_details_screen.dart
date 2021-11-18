@@ -2,6 +2,7 @@ import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:zcart/helper/get_color_based_on_theme.dart';
 import 'package:zcart/helper/get_recently_viewed.dart';
 import 'package:zcart/riverpod/providers/dispute_provider.dart';
 import 'package:zcart/riverpod/providers/order_provider.dart';
@@ -38,23 +39,23 @@ class OrderDetailsScreen extends ConsumerWidget {
                   child: Column(
                     children: [
                       Container(
-                        color: EasyDynamicTheme.of(context).themeMode ==
-                                ThemeMode.dark
-                            ? kDarkCardBgColor
-                            : kLightColor,
+                        color: getColorBasedOnTheme(
+                            context, kLightColor, kDarkCardBgColor),
                         child: Padding(
                           padding: const EdgeInsets.all(10.0),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              CustomButton(
-                                buttonText:
-                                    orderDetailsState.orderDetails!.orderStatus,
-                                buttonBGColor: orderDetailsState
-                                            .orderDetails!.orderStatus ==
-                                        "DELIVERED"
-                                    ? kGreenColor
-                                    : kPrimaryColor,
+                              Center(
+                                child: CustomButton(
+                                  buttonText: orderDetailsState
+                                      .orderDetails!.orderStatus,
+                                  buttonBGColor: orderDetailsState
+                                              .orderDetails!.orderStatus ==
+                                          "DELIVERED"
+                                      ? kGreenColor
+                                      : kPrimaryColor,
+                                ),
                               ),
                               Column(
                                 children: [
@@ -250,10 +251,8 @@ class OrderDetailsScreen extends ConsumerWidget {
                         ),
                       ).cornerRadius(10),
                       Container(
-                        color: EasyDynamicTheme.of(context).themeMode ==
-                                ThemeMode.dark
-                            ? kDarkCardBgColor
-                            : kLightColor,
+                        color: getColorBasedOnTheme(
+                            context, kLightColor, kDarkCardBgColor),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -326,7 +325,11 @@ class OrderDetailsScreen extends ConsumerWidget {
                                       orderDetailsState.orderDetails!
                                           .items![index].unitPrice!,
                                       style: context.textTheme.subtitle2!
-                                          .copyWith(color: kPrimaryColor),
+                                          .copyWith(
+                                              color: getColorBasedOnTheme(
+                                                  context,
+                                                  kPriceColor,
+                                                  kDarkPriceColor)),
                                     ),
                                     trailing: Text('x ' +
                                         orderDetailsState.orderDetails!
@@ -338,10 +341,8 @@ class OrderDetailsScreen extends ConsumerWidget {
                         ),
                       ).cornerRadius(10).py(10),
                       Container(
-                        color: EasyDynamicTheme.of(context).themeMode ==
-                                ThemeMode.dark
-                            ? kDarkCardBgColor
-                            : kLightColor,
+                        color: getColorBasedOnTheme(
+                            context, kLightColor, kDarkCardBgColor),
                         child: Padding(
                           padding: const EdgeInsets.all(10.0),
                           child: Column(
@@ -461,12 +462,9 @@ class OrderDetailsScreen extends ConsumerWidget {
                                                 .orderDetails!.total!,
                                         style: context.textTheme.subtitle2!
                                             .copyWith(
-                                                color:
-                                                    EasyDynamicTheme.of(context)
-                                                                .themeMode ==
-                                                            ThemeMode.dark
-                                                        ? kDarkPriceColor
-                                                        : kPriceColor),
+                                          color: getColorBasedOnTheme(context,
+                                              kPriceColor, kDarkPriceColor),
+                                        ),
                                       )
                                     ],
                                   ).pOnly(bottom: 10),

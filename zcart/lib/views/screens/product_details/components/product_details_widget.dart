@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:zcart/Theme/styles/colors.dart';
+import 'package:zcart/helper/get_color_based_on_theme.dart';
 import 'package:zcart/helper/url_launcher_helper.dart';
 import 'package:zcart/riverpod/state/product/product_state.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
@@ -22,9 +23,7 @@ class ProductDetailsWidget extends StatelessWidget {
       children: [
         Container(
           padding: const EdgeInsets.all(10),
-          color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-              ? kDarkCardBgColor
-              : kLightColor,
+          color: getColorBasedOnTheme(context, kLightColor, kDarkCardBgColor),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -226,16 +225,13 @@ class ProductDetailsWidget extends StatelessWidget {
         productDetailsState.productModel.data!.product!.description == null
             ? Container()
             : Container(
-                color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-                    ? kDarkCardBgColor
-                    : kLightColor,
+                color: getColorBasedOnTheme(
+                    context, kLightColor, kDarkCardBgColor),
                 child: ExpansionTile(
                   title: Text(LocaleKeys.product_desc.tr(),
                       style: context.textTheme.subtitle2),
                   iconColor:
-                      EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-                          ? kLightColor
-                          : kDarkColor,
+                      getColorBasedOnTheme(context, kLightColor, kDarkColor),
                   collapsedIconColor: kPrimaryColor,
                   children: [
                     HtmlWidget(
@@ -253,16 +249,13 @@ class ProductDetailsWidget extends StatelessWidget {
         productDetailsState.productModel.data!.description == null
             ? Container()
             : Container(
-                color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-                    ? kDarkCardBgColor
-                    : kLightColor,
+                color: getColorBasedOnTheme(
+                    context, kLightColor, kDarkCardBgColor),
                 child: ExpansionTile(
                   title: Text(LocaleKeys.seller_spec.tr(),
                       style: context.textTheme.subtitle2),
                   iconColor:
-                      EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-                          ? kLightColor
-                          : kDarkColor,
+                      getColorBasedOnTheme(context, kLightColor, kDarkColor),
                   collapsedIconColor: kPrimaryColor,
                   children: [
                     HtmlWidget(

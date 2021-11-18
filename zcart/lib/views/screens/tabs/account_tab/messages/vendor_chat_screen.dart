@@ -5,6 +5,7 @@ import 'package:zcart/Theme/styles/colors.dart';
 import 'package:zcart/data/controller/chat/chat_controller.dart';
 import 'package:zcart/data/controller/chat/chat_state.dart';
 import 'package:zcart/data/models/chat/product/product_chat_model.dart';
+import 'package:zcart/helper/get_color_based_on_theme.dart';
 import 'package:zcart/helper/url_launcher_helper.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:zcart/views/shared_widgets/loading_widget.dart';
@@ -35,9 +36,7 @@ class VendorChatScreen extends StatelessWidget {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         backgroundColor:
-            EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-                ? kDarkCardBgColor
-                : kLightColor,
+            getColorBasedOnTheme(context, kLightColor, kDarkCardBgColor),
         flexibleSpace: SafeArea(
           child: Container(
             padding: const EdgeInsets.only(right: 16),
@@ -147,9 +146,7 @@ class VendorChatScreen extends StatelessWidget {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8),
                 border: Border.all(width: 1, color: kAccentColor),
-                color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-                    ? kDarkCardBgColor
-                    : kLightColor,
+                color: getColorBasedOnTheme(context, kLightColor, kDarkBgColor),
               ),
               child: TextField(
                 controller: messageController,
@@ -237,10 +234,8 @@ class VendorChatScreen extends StatelessWidget {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             color: (message.customer == null
-                                ? EasyDynamicTheme.of(context).themeMode ==
-                                        ThemeMode.dark
-                                    ? kDarkCardBgColor
-                                    : Colors.grey.shade200
+                                ? getColorBasedOnTheme(context,
+                                    Colors.grey.shade200, kDarkCardBgColor)
                                 : kPrimaryColor.withOpacity(0.1)),
                           ),
                           padding: const EdgeInsets.all(16),

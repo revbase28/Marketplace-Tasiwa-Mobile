@@ -6,6 +6,7 @@ import 'package:nb_utils/nb_utils.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:zcart/Theme/styles/colors.dart';
 import 'package:zcart/data/models/product/product_details_model.dart';
+import 'package:zcart/helper/get_color_based_on_theme.dart';
 import 'package:zcart/riverpod/providers/product_provider.dart';
 import 'package:zcart/riverpod/providers/product_slug_list_provider.dart';
 import 'package:zcart/riverpod/state/product/product_state.dart';
@@ -36,9 +37,7 @@ class _AttributeCardState extends State<AttributeCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-          ? kDarkCardBgColor
-          : kLightColor,
+      color: getColorBasedOnTheme(context, kLightColor, kDarkCardBgColor),
       child: Column(
         children: [
           /// Quantity
@@ -63,15 +62,12 @@ class _AttributeCardState extends State<AttributeCard> {
                   OutlinedButton(
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all(
-                            EasyDynamicTheme.of(context).themeMode ==
-                                    ThemeMode.dark
-                                ? kDarkBgColor
-                                : kLightBgColor),
+                          getColorBasedOnTheme(
+                              context, kLightBgColor, kDarkBgColor),
+                        ),
                         foregroundColor: MaterialStateProperty.all(
-                            EasyDynamicTheme.of(context).themeMode ==
-                                    ThemeMode.dark
-                                ? kPrimaryLightTextColor
-                                : kPrimaryDarkTextColor),
+                            getColorBasedOnTheme(context, kPrimaryDarkTextColor,
+                                kPrimaryLightTextColor)),
                         shape: MaterialStateProperty.all(RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10))),
                       ),
@@ -94,15 +90,14 @@ class _AttributeCardState extends State<AttributeCard> {
                   OutlinedButton(
                       style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.all(
-                              EasyDynamicTheme.of(context).themeMode ==
-                                      ThemeMode.dark
-                                  ? kDarkBgColor
-                                  : kLightBgColor),
+                            getColorBasedOnTheme(
+                                context, kLightBgColor, kDarkBgColor),
+                          ),
                           foregroundColor: MaterialStateProperty.all(
-                              EasyDynamicTheme.of(context).themeMode ==
-                                      ThemeMode.dark
-                                  ? kPrimaryLightTextColor
-                                  : kPrimaryDarkTextColor),
+                              getColorBasedOnTheme(
+                                  context,
+                                  kPrimaryDarkTextColor,
+                                  kPrimaryLightTextColor)),
                           shape: MaterialStateProperty.all(
                               RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10)))),

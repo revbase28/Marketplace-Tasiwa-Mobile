@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:zcart/data/controller/search/search_controller.dart';
 import 'package:zcart/data/controller/search/search_state.dart';
+import 'package:zcart/helper/get_color_based_on_theme.dart';
 import 'package:zcart/helper/get_recently_viewed.dart';
 import 'package:zcart/riverpod/providers/provider.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
@@ -68,10 +69,8 @@ class _SearchScreenState extends State<SearchScreen> {
                       itemCount: searchState.searchedItem!.length,
                       itemBuilder: (context, index) {
                         return Container(
-                          color: EasyDynamicTheme.of(context).themeMode ==
-                                  ThemeMode.dark
-                              ? kDarkCardBgColor
-                              : kLightColor,
+                          color: getColorBasedOnTheme(
+                              context, kLightColor, kDarkCardBgColor),
                           padding: const EdgeInsets.symmetric(vertical: 5),
                           child: ListTile(
                             leading: Image.network(

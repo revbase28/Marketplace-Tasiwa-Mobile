@@ -10,7 +10,7 @@ class LoadingWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return MyConfig.loadingIndicator(
       color: kPrimaryColor,
-      size: 24,
+      size: 46,
       duration: const Duration(milliseconds: 700),
     ).center();
   }

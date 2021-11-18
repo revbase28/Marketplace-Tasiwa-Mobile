@@ -8,6 +8,7 @@ import 'package:velocity_x/velocity_x.dart';
 import 'package:zcart/Theme/styles/colors.dart';
 import 'package:zcart/data/controller/feedback/feedback_controller.dart';
 import 'package:zcart/data/models/orders/order_details_model.dart';
+import 'package:zcart/helper/get_color_based_on_theme.dart';
 import 'package:zcart/riverpod/providers/order_provider.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:zcart/views/shared_widgets/custom_textfield.dart';
@@ -127,9 +128,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
             Container(
               decoration: BoxDecoration(
                   color:
-                      EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-                          ? kDarkCardBgColor
-                          : kLightColor,
+                      getColorBasedOnTheme(context, kLightColor, kDarkBgColor),
                   borderRadius: BorderRadius.circular(10)),
               margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
               padding: const EdgeInsets.all(10),
@@ -200,9 +199,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
             Container(
               decoration: BoxDecoration(
                   color:
-                      EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-                          ? kDarkCardBgColor
-                          : kLightColor,
+                      getColorBasedOnTheme(context, kLightColor, kDarkBgColor),
                   borderRadius: BorderRadius.circular(10)),
               margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
               padding: const EdgeInsets.all(10),

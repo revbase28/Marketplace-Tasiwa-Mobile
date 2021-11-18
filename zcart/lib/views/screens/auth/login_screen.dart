@@ -4,6 +4,7 @@ import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -14,6 +15,7 @@ import 'package:velocity_x/velocity_x.dart';
 import 'package:zcart/Theme/styles/colors.dart';
 import 'package:zcart/config/config.dart';
 import 'package:zcart/data/controller/cart/coupon_controller.dart';
+import 'package:zcart/helper/get_color_based_on_theme.dart';
 import 'package:zcart/riverpod/providers/dispute_provider.dart';
 import 'package:zcart/riverpod/providers/provider.dart';
 import 'package:zcart/riverpod/state/user_state.dart';
@@ -80,10 +82,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         margin: const EdgeInsets.all(16),
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
-                            color: EasyDynamicTheme.of(context).themeMode ==
-                                    ThemeMode.dark
-                                ? kDarkCardBgColor
-                                : kLightCardBgColor,
+                            color: getColorBasedOnTheme(
+                                context, kLightCardBgColor, kDarkCardBgColor),
                             borderRadius:
                                 const BorderRadius.all(Radius.circular(10))),
                         child: Column(
@@ -288,10 +288,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 return Visibility(
                   visible: authState is UserLoadingState,
                   child: Container(
-                    color:
-                        EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-                            ? kDarkBgColor
-                            : kLightColor,
+                    color: getColorBasedOnTheme(
+                        context, kLightColor, kDarkBgColor),
                     child: const LoadingWidget(),
                   ),
                 );

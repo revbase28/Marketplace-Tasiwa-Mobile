@@ -6,6 +6,7 @@ import 'package:zcart/Theme/styles/colors.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import 'package:flutter/material.dart';
+import 'package:zcart/helper/get_color_based_on_theme.dart';
 
 class CustomDateTimeField extends StatefulWidget {
   final String? title;
@@ -45,9 +46,8 @@ class _CustomDateTimeFieldState extends State<CustomDateTimeField> {
           labelText: widget.hintText,
           labelStyle: Theme.of(context).textTheme.subtitle2!.copyWith(
                 fontWeight: FontWeight.bold,
-                color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-                    ? kLightColor.withOpacity(0.6)
-                    : kDarkColor.withOpacity(0.6),
+                color: getColorBasedOnTheme(context,
+                    kDarkColor.withOpacity(0.6), kLightColor.withOpacity(0.6)),
               ),
           contentPadding:
               const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
@@ -58,9 +58,8 @@ class _CustomDateTimeFieldState extends State<CustomDateTimeField> {
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
             borderSide: BorderSide(
-                color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-                    ? kLightColor.withOpacity(0.8)
-                    : kDarkColor.withOpacity(0.8),
+                color: getColorBasedOnTheme(context,
+                    kDarkColor.withOpacity(0.8), kLightColor.withOpacity(0.8)),
                 width: 2),
           ),
         ),

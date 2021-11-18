@@ -4,6 +4,7 @@ import 'package:flutter_credit_card/flutter_credit_card.dart';
 import 'package:zcart/Theme/styles/colors.dart';
 import 'package:zcart/helper/constants.dart';
 import 'package:zcart/helper/app_images.dart';
+import 'package:zcart/helper/get_color_based_on_theme.dart';
 import 'package:zcart/views/shared_widgets/shared_widgets.dart';
 
 class CustomPaymentCardScreen extends StatefulWidget {
@@ -93,10 +94,8 @@ class CustomPaymentCardScreenState extends State<CustomPaymentCardScreen> {
                       cardHolderName: cardHolderName,
                       expiryDate: expiryDate,
                       themeColor: kPrimaryColor,
-                      textColor: EasyDynamicTheme.of(context).themeMode ==
-                              ThemeMode.dark
-                          ? Colors.white
-                          : Colors.black,
+                      textColor: getColorBasedOnTheme(
+                          context, Colors.black, Colors.white),
                       cardNumberDecoration: InputDecoration(
                         labelText: 'Number',
                         hintText: 'XXXX XXXX XXXX XXXX',

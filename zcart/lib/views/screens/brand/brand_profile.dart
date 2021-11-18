@@ -7,6 +7,7 @@ import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:zcart/Theme/styles/colors.dart';
 import 'package:zcart/data/models/brand/brand_profile_model.dart';
+import 'package:zcart/helper/get_color_based_on_theme.dart';
 import 'package:zcart/helper/url_launcher_helper.dart';
 import 'package:zcart/riverpod/providers/brand_provider.dart';
 import 'package:zcart/riverpod/state/brand_state.dart';
@@ -88,10 +89,8 @@ class BrandProfileScreen extends ConsumerWidget {
                         ).p(10),
 
                         Container(
-                          color: EasyDynamicTheme.of(context).themeMode ==
-                                  ThemeMode.dark
-                              ? kDarkBgColor
-                              : kLightColor,
+                          color: getColorBasedOnTheme(
+                              context, kLightColor, kDarkBgColor),
                           child: Column(
                             children: [
                               BrandDetailsRowItem(
@@ -164,9 +163,7 @@ class BrandDescription extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 5),
-      color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-          ? kDarkBgColor
-          : kLightColor,
+      color: getColorBasedOnTheme(context, kLightColor, kDarkCardBgColor),
       child: ListTile(
         title: Text(LocaleKeys.description.tr()).py(5),
         subtitle: HtmlWidget(

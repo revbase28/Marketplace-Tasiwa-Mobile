@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:zcart/data/controller/chat/chat_controller.dart';
+import 'package:zcart/helper/get_color_based_on_theme.dart';
 import 'package:zcart/helper/get_recently_viewed.dart';
 import 'package:zcart/riverpod/providers/dispute_provider.dart';
 import 'package:zcart/riverpod/providers/order_provider.dart';
@@ -94,9 +95,7 @@ class OrderCard extends StatelessWidget {
       children: [
         Container(
           decoration: BoxDecoration(
-            color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-                ? kDarkCardBgColor
-                : kLightColor,
+            color: getColorBasedOnTheme(context, kLightColor, kDarkCardBgColor),
             borderRadius: BorderRadius.circular(10),
           ),
           margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
@@ -348,10 +347,8 @@ class OrderCard extends StatelessWidget {
                     children: [
                       Text(orderListState.orders![orderIndex!].grandTotal!,
                           style: context.textTheme.bodyText2!.copyWith(
-                              color: EasyDynamicTheme.of(context).themeMode ==
-                                      ThemeMode.dark
-                                  ? kDarkPriceColor
-                                  : kPriceColor,
+                              color: getColorBasedOnTheme(
+                                  context, kPriceColor, kDarkPriceColor),
                               fontWeight: FontWeight.bold)),
                       Text(LocaleKeys.total.tr(),
                           style: context.textTheme.overline)

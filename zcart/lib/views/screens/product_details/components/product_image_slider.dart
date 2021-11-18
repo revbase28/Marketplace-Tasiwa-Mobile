@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:zcart/Theme/styles/colors.dart';
+import 'package:zcart/helper/get_color_based_on_theme.dart';
 
 class ProductImageSlider extends StatelessWidget {
   final List? sliderList;
@@ -28,10 +29,8 @@ class ProductImageSlider extends StatelessWidget {
             items: sliderList!
                 .map((item) => Container(
                       width: double.infinity,
-                      color: EasyDynamicTheme.of(context).themeMode ==
-                              ThemeMode.dark
-                          ? kDarkCardBgColor
-                          : kLightColor,
+                      color: getColorBasedOnTheme(
+                          context, kLightColor, kDarkCardBgColor),
                       child: Image.network(
                         item.path,
                         fit: BoxFit.scaleDown,
@@ -49,9 +48,7 @@ class ProductImageSlider extends StatelessWidget {
             backgroundColor: kFadeColor.withOpacity(0.3),
           ),
           child: BackButton(
-            color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-                ? kLightColor
-                : kDarkColor,
+            color: getColorBasedOnTheme(context, kLightColor, kDarkColor),
             onPressed: () async {
               context.pop();
             },

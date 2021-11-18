@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:zcart/data/models/address/address_model.dart';
+import 'package:zcart/helper/get_color_based_on_theme.dart';
 import 'package:zcart/riverpod/providers/address_provider.dart';
 import 'package:zcart/riverpod/state/address/country_state.dart';
 import 'package:zcart/riverpod/state/address/states_state.dart';
@@ -91,10 +92,8 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
             child: Column(
               children: [
                 Container(
-                  color:
-                      EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-                          ? kDarkCardBgColor
-                          : kLightColor,
+                  color: getColorBasedOnTheme(
+                      context, kLightColor, kDarkCardBgColor),
                   width: context.screenWidth,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

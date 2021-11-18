@@ -1,6 +1,7 @@
 import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:zcart/helper/get_color_based_on_theme.dart';
 import 'package:zcart/helper/get_formated_date.dart';
 import 'package:zcart/riverpod/state/state.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
@@ -38,9 +39,7 @@ class PersonalDetails extends StatelessWidget {
         _dateOfBirth = getDateFormatedFromString(userState.user!.dob);
 
         return Container(
-          color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-              ? kDarkCardBgColor
-              : kLightColor,
+          color: getColorBasedOnTheme(context, kLightColor, kDarkCardBgColor),
           width: context.screenWidth,
           child: Form(
             key: _formKey,

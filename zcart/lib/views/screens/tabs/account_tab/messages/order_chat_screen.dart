@@ -9,6 +9,7 @@ import 'package:zcart/data/models/orders/orders_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
+import 'package:zcart/helper/get_color_based_on_theme.dart';
 import 'package:zcart/helper/url_launcher_helper.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:zcart/views/shared_widgets/loading_widget.dart';
@@ -31,9 +32,7 @@ class OrderChatScreen extends StatelessWidget {
         elevation: 0,
         automaticallyImplyLeading: false,
         backgroundColor:
-            EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-                ? kDarkCardBgColor
-                : kLightColor,
+            getColorBasedOnTheme(context, kLightColor, kDarkCardBgColor),
         actions: [
           IconButton(
             onPressed: () async {
@@ -108,9 +107,8 @@ class OrderChatScreen extends StatelessWidget {
           child: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-                  ? kDarkCardBgColor
-                  : kLightColor,
+              color:
+                  getColorBasedOnTheme(context, kLightColor, kDarkCardBgColor),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -177,9 +175,8 @@ class OrderChatScreen extends StatelessWidget {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8),
                 border: Border.all(width: 1, color: kAccentColor),
-                color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-                    ? kDarkCardBgColor
-                    : kLightColor,
+                color: getColorBasedOnTheme(
+                    context, kLightColor, kDarkCardBgColor),
               ),
               child: TextField(
                 controller: messageController,
@@ -267,10 +264,8 @@ class OrderChatScreen extends StatelessWidget {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             color: (message.customer == null
-                                ? EasyDynamicTheme.of(context).themeMode ==
-                                        ThemeMode.dark
-                                    ? kDarkCardBgColor
-                                    : Colors.grey.shade200
+                                ? getColorBasedOnTheme(context,
+                                    Colors.grey.shade200, kDarkCardBgColor)
                                 : kPrimaryColor.withOpacity(0.1)),
                           ),
                           padding: const EdgeInsets.all(16),

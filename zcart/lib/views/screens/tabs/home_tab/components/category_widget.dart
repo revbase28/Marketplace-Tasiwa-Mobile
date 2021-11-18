@@ -2,6 +2,7 @@ import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:zcart/data/models/categories/category_model.dart';
 import 'package:zcart/helper/category_icons.dart';
+import 'package:zcart/helper/get_color_based_on_theme.dart';
 import 'package:zcart/riverpod/providers/product_provider.dart';
 import 'package:zcart/riverpod/providers/provider.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
@@ -31,10 +32,8 @@ class CategoryWidget extends StatelessWidget {
             return Container(
               padding: const EdgeInsets.all(10),
               decoration: customBoxDecoration.copyWith(
-                boxShadow: [],
-                color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-                    ? kDarkCardBgColor
-                    : kLightColor,
+                color: getColorBasedOnTheme(
+                    context, kLightColor, kDarkCardBgColor),
               ),
               width: context.screenWidth * .35,
               child: Center(
@@ -44,10 +43,8 @@ class CategoryWidget extends StatelessWidget {
                   // Category Icon
                   FaIcon(
                     getCategoryIcon(categoryList[index].icon),
-                    color:
-                        EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-                            ? kLightColor
-                            : kDarkBgColor,
+                    color: getColorBasedOnTheme(
+                        context, kDarkBgColor, kLightColor),
                   ).pOnly(bottom: 5),
                   Text(
                     categoryList[index].name!,
@@ -98,10 +95,8 @@ class CategoryLoadingWidget extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 10),
             itemBuilder: (BuildContext context, int index) {
               return Chip(
-                backgroundColor:
-                    EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-                        ? kDarkCardBgColor
-                        : kLightCardBgColor,
+                backgroundColor: getColorBasedOnTheme(
+                    context, kLightCardBgColor, kDarkCardBgColor),
                 label: Text(
                   LocaleKeys.loading.tr(),
                 ).pSymmetric(h: 12, v: 8),

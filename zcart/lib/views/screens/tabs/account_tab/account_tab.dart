@@ -6,6 +6,7 @@ import 'package:zcart/data/controller/blog/blog_controller.dart';
 import 'package:zcart/data/controller/cart/coupon_controller.dart';
 import 'package:zcart/data/controller/cart/coupon_state.dart';
 import 'package:zcart/data/controller/chat/chat_controller.dart';
+import 'package:zcart/helper/get_color_based_on_theme.dart';
 import 'package:zcart/riverpod/providers/dispute_provider.dart';
 import 'package:zcart/riverpod/providers/order_provider.dart';
 import 'package:zcart/riverpod/providers/provider.dart';
@@ -87,9 +88,8 @@ class AccountDashboard extends StatelessWidget {
       return userState is UserLoadedState
           ? Container(
               padding: const EdgeInsets.all(16),
-              color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-                  ? kDarkCardBgColor
-                  : kLightColor,
+              color:
+                  getColorBasedOnTheme(context, kLightColor, kDarkCardBgColor),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -359,9 +359,7 @@ class ActionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-            ? kDarkCardBgColor
-            : kLightColor,
+        color: getColorBasedOnTheme(context, kLightColor, kDarkCardBgColor),
         padding: const EdgeInsets.symmetric(vertical: 20),
         child: Row(
           children: [

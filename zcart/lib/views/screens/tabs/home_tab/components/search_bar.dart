@@ -5,6 +5,7 @@ import 'package:zcart/Theme/styles/colors.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:zcart/helper/app_images.dart';
+import 'package:zcart/helper/get_color_based_on_theme.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:zcart/views/screens/tabs/home_tab/search/search_screen.dart';
 
@@ -25,9 +26,8 @@ class CustomSearchBar extends StatelessWidget {
             onTap: () => context.nextPage(const SearchScreen()),
             child: Container(
               decoration: customBoxDecoration.copyWith(
-                color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-                    ? kDarkCardBgColor
-                    : kLightBgColor,
+                color: getColorBasedOnTheme(
+                    context, kLightBgColor, kDarkCardBgColor),
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

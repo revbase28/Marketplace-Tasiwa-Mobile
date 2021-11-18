@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:velocity_x/velocity_x.dart';
+import 'package:zcart/helper/get_color_based_on_theme.dart';
 import 'package:zcart/riverpod/providers/provider.dart';
 import 'package:zcart/riverpod/state/state.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
@@ -21,9 +22,7 @@ class AddressList extends StatelessWidget {
       appBar: AppBar(title: Text(LocaleKeys.your_address.tr())),
       resizeToAvoidBottomInset: true,
       body: Container(
-        color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-            ? kDarkCardBgColor
-            : kLightColor,
+        color: getColorBasedOnTheme(context, kLightColor, kDarkCardBgColor),
         width: context.screenWidth,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

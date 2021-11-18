@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:zcart/helper/get_color_based_on_theme.dart';
 import 'package:zcart/helper/url_launcher_helper.dart';
 import 'package:zcart/riverpod/providers/dispute_provider.dart';
 import 'package:zcart/riverpod/state/dispute/dispute_details_state.dart';
@@ -68,10 +69,8 @@ class DisputeResponseScreen extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(30),
                                 border:
                                     Border.all(width: 1, color: kAccentColor),
-                                color: EasyDynamicTheme.of(context).themeMode ==
-                                        ThemeMode.dark
-                                    ? kDarkCardBgColor
-                                    : kLightColor,
+                                color: getColorBasedOnTheme(
+                                    context, kLightColor, kDarkCardBgColor),
                               ),
                               child: Row(
                                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -149,9 +148,7 @@ class DisputeResponseScreen extends StatelessWidget {
       reverse: true,
       children: _reversedMessageList.map((message) {
         return Container(
-          color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-              ? kDarkBgColor
-              : kLightBgColor,
+          color: getColorBasedOnTheme(context, kLightBgColor, kDarkBgColor),
           child: Column(
             children: [
               Container(
