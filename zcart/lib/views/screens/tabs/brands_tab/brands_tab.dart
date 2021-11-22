@@ -8,7 +8,6 @@ import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:zcart/views/screens/brand/brand_profile.dart';
 import 'package:zcart/views/screens/tabs/home_tab/components/error_widget.dart';
-import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:velocity_x/velocity_x.dart';
 

@@ -7,12 +7,14 @@ class BannerModel {
 
   List<BannerList>? data;
 
-  factory BannerModel.fromRawJson(String str) => BannerModel.fromJson(json.decode(str));
+  factory BannerModel.fromRawJson(String str) =>
+      BannerModel.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
   factory BannerModel.fromJson(Map<String, dynamic> json) => BannerModel(
-        data: List<BannerList>.from(json["data"].map((x) => BannerList.fromJson(x))),
+        data: List<BannerList>.from(
+            json["data"].map((x) => BannerList.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -41,7 +43,8 @@ class BannerList {
   String? bgColor;
   String? groupId;
 
-  factory BannerList.fromRawJson(String str) => BannerList.fromJson(json.decode(str));
+  factory BannerList.fromRawJson(String str) =>
+      BannerList.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
@@ -51,7 +54,6 @@ class BannerList {
         description: json["description"] ?? '',
         image: json["image"],
         link: json["link"].toString(),
-        //TODO: Notify developer id 11 -> link param -> value '{}' instead of null
         linkLabel: json["link_label"] ?? "",
         bgColor: json["bg_color"] ?? '',
         groupId: json["group_id"] ?? '',
@@ -68,5 +70,3 @@ class BannerList {
         "group_id": groupId,
       };
 }
-
-

@@ -1,4 +1,3 @@
-import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:zcart/data/models/categories/category_model.dart';
 import 'package:zcart/helper/category_icons.dart';
