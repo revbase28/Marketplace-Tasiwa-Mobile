@@ -55,7 +55,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     print(ThemeMode.system);
     final _brightness = SchedulerBinding.instance!.window.platformBrightness;
-    print(_brightness);
 
     return MaterialApp(
       supportedLocales: context.supportedLocales,
