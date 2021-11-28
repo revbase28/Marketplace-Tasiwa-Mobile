@@ -73,7 +73,8 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
                                 "Billing",
                                 "Shipping"
                               ],
-                              value: "Select",
+                              hintText: LocaleKeys.address_type.tr(),
+                              value: "Primary",
                               controller: addressTypeController,
                               validator: (text) {
                                 if (text == null ||
@@ -120,7 +121,7 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
                                       .toList(),
                                   //value: "Select",
                                   controller: countryController,
-
+                                  hintText: LocaleKeys.country.tr(),
                                   isCallback: true,
                                   callbackFunction: (int countryId) {
                                     selectedCountryID =
@@ -160,7 +161,7 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
                                           .toList(),
                                   //value: "Select",
                                   controller: statesController,
-
+                                  hintText: LocaleKeys.states.tr(),
                                   isCallback: true,
                                   callbackFunction: (int stateId) {
                                     selectedStateID =

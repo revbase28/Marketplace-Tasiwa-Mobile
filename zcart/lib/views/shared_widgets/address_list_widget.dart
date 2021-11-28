@@ -38,7 +38,8 @@ class _AddressListBuilderState extends State<AddressListBuilder> {
           return Container(
               padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
               decoration: BoxDecoration(
-                color: getColorBasedOnTheme(context, kLightColor, kDarkBgColor),
+                color: getColorBasedOnTheme(
+                    context, kLightColor, kDarkCardBgColor),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: ListTile(
@@ -138,6 +139,14 @@ class _AddressListBuilderState extends State<AddressListBuilder> {
                           context
                               .read(countryNotifierProvider.notifier)
                               .getCountries();
+                          if (widget.addressesList![index].country?.id !=
+                              null) {
+                            print(widget.addressesList![index].country?.id);
+                            context
+                                .read(statesNotifierProvider.notifier)
+                                .getState(
+                                    widget.addressesList![index].country?.id);
+                          }
                           context.nextPage(
                             EditAddressScreen(
                                 address: widget.addressesList![index]),

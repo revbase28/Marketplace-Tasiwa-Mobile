@@ -23,7 +23,7 @@ class ShippingCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ListTile(
-            contentPadding: EdgeInsets.zero,
+            contentPadding: const EdgeInsets.all(8),
             leading: const Icon(Icons.location_pin, size: 25).pOnly(left: 10),
             title: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

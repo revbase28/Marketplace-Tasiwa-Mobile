@@ -337,83 +337,72 @@ class DisputeDetailsScreen extends ConsumerWidget {
                       },
                     );
                   } else {
-                    showModalBottomSheet(
+                    showDialog(
                         context: context,
                         builder: (context) {
-                          return Container(
-                            margin: const EdgeInsets.symmetric(vertical: 10),
-                            // child: Center(
-                            //   child: Row(
-                            //     crossAxisAlignment: CrossAxisAlignment.center,
-                            //     children: [
-                            //       GestureDetector(
-                            //         onTap: () {
-                            //           //TODO: Attach Images
-                            //         },
-                            //         child: Container(
-                            //           height: 30,
-                            //           width: 30,
-                            //           decoration: BoxDecoration(
-                            //               color: kPrimaryColor,
-                            //               borderRadius:
-                            //                   BorderRadius.circular(30)),
-                            //           child: Icon(Icons.image,
-                            //               color: kLightColor, size: 20),
-                            //         ),
-                            //       ),
-                            //       SizedBox(width: 10),
+                          return Dialog(
+                            backgroundColor: Colors.transparent,
+                            child: Container(
+                              // color: getColorBasedOnTheme(
+                              //     context, kDarkCardBgColor, kLightBgColor),
+                              decoration: BoxDecoration(
+                                color: getColorBasedOnTheme(
+                                    context, kLightColor, kDarkCardBgColor),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
 
-                            //     ],
-                            //   ),
-                            // ),
-
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                const SizedBox(height: 20),
-                                CustomTextField(
-                                  title: LocaleKeys.appeal.tr(),
-                                  controller: _appealTextController,
-                                  hintText: LocaleKeys.appeal_message.tr(),
-                                ),
-                                const SizedBox(height: 10),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    ElevatedButton(
-                                        onPressed: () {
-                                          //TODO: Attach Images
-                                        },
-                                        child:
-                                            Text(LocaleKeys.attach_files.tr())),
-                                    ElevatedButton(
-                                        onPressed: () {
-                                          if (_appealTextController
-                                              .text.isNotEmpty) {
-                                            context
-                                                .read(disputeDetailsProvider
-                                                    .notifier)
-                                                .postDisputeAppeal(
-                                              disputeDetailsState
-                                                  .disputeDetails!.id,
-                                              {
-                                                'reply': _appealTextController
-                                                    .text
-                                                    .trim()
-                                              },
-                                            ).then((value) => context.pop());
-                                          } else {
-                                            toast(LocaleKeys
-                                                .message_cannot_be_empty
-                                                .tr());
-                                          }
-                                        },
-                                        child:
-                                            Text(LocaleKeys.send_appeal.tr())),
-                                  ],
-                                )
-                              ],
+                              padding: const EdgeInsets.all(16),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const SizedBox(height: 20),
+                                  CustomTextField(
+                                    title: LocaleKeys.appeal.tr(),
+                                    controller: _appealTextController,
+                                    hintText: LocaleKeys.appeal_message.tr(),
+                                    keyboardType: TextInputType.multiline,
+                                    maxLines: 5,
+                                  ),
+                                  const SizedBox(height: 10),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      ElevatedButton(
+                                          onPressed: () {
+                                            //TODO: Attach Images
+                                          },
+                                          child: Text(
+                                              LocaleKeys.attach_files.tr())),
+                                      const SizedBox(width: 10),
+                                      ElevatedButton(
+                                          onPressed: () {
+                                            if (_appealTextController
+                                                .text.isNotEmpty) {
+                                              context
+                                                  .read(disputeDetailsProvider
+                                                      .notifier)
+                                                  .postDisputeAppeal(
+                                                disputeDetailsState
+                                                    .disputeDetails!.id,
+                                                {
+                                                  'reply': _appealTextController
+                                                      .text
+                                                      .trim()
+                                                },
+                                              ).then((value) => context.pop());
+                                            } else {
+                                              toast(LocaleKeys
+                                                  .message_cannot_be_empty
+                                                  .tr());
+                                            }
+                                          },
+                                          child: Text(
+                                              LocaleKeys.send_appeal.tr())),
+                                    ],
+                                  )
+                                ],
+                              ),
                             ),
                           );
                         });

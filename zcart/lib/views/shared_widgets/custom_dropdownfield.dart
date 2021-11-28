@@ -6,27 +6,28 @@ import 'package:zcart/helper/get_color_based_on_theme.dart';
 class CustomDropDownField extends StatefulWidget {
   final String? title;
   final String? value;
-  TextEditingController? controller;
+  final TextEditingController? controller;
   final FormFieldValidator? validator;
   final Function? onChange;
   final List<String?>? optionsList;
   final double widthMultiplier;
+  final String? hintText;
 
   final void Function(int)? callbackFunction;
   final bool isCallback;
   final bool isProductDetailsView;
-
-  CustomDropDownField(
+  const CustomDropDownField(
       {Key? key,
       this.title,
       this.value,
       this.controller,
+      this.validator,
+      this.hintText,
       this.onChange,
       this.optionsList,
       this.widthMultiplier = 0.8,
       this.callbackFunction,
       this.isCallback = false,
-      this.validator,
       this.isProductDetailsView = false})
       : super(key: key);
 
@@ -69,10 +70,15 @@ class _CustomDropDownFieldState extends State<CustomDropDownField> {
                 width: 2),
           ),
         ),
-        value: widget.optionsList!.first,
+        value: widget.hintText != null
+            ? null
+            : widget.value ?? widget.optionsList?.first,
+        hint:
+            widget.hintText == null ? null : Text(widget.hintText ?? "Select"),
         items: widget.optionsList!.map((String? value) {
           return DropdownMenuItem<String>(
             value: value,
+
             child: Text(
               value!,
               maxLines: 1,
@@ -90,9 +96,16 @@ class _CustomDropDownFieldState extends State<CustomDropDownField> {
             widget.controller!.text = newValue!;
           });
           if (widget.isCallback) {
-            widget.callbackFunction!(widget.optionsList!.indexOf(newValue));
+            if (widget.callbackFunction != null) {
+              widget.callbackFunction!(widget.optionsList!.indexOf(newValue));
+            }
+          }
+          if (widget.onChange != null) {
+            widget.onChange!(newValue);
           }
         },
+        autovalidateMode: AutovalidateMode.onUserInteraction,
+        validator: widget.validator,
       ),
     );
   }

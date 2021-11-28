@@ -18,46 +18,43 @@ class AddressList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(LocaleKeys.your_address.tr())),
-      resizeToAvoidBottomInset: true,
-      body: Container(
-        color: getColorBasedOnTheme(context, kLightColor, kDarkCardBgColor),
-        width: context.screenWidth,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Consumer(
-              builder: (context, watch, _) {
-                final addressState = watch(addressNotifierProvider);
-                final cartItemDetailsState =
-                    watch(cartItemDetailsNotifierProvider);
-
-                return addressState is AddressLoadedState
-                    ? addressState.addresses == null
-                        ? Container()
-                        : addressState.addresses!.isEmpty
-                            ? Container()
-                            : cartItemDetailsState is CartItemDetailsLoadedState
-                                ? AddressListBuilder(
-                                    addressesList: addressState.addresses)
-                                : AddressListBuilder(
-                                    addressesList: addressState.addresses)
-                    : addressState is AddressLoadingState
-                        ? const LoadingWidget().py(100)
-                        : Container();
-              },
-            ),
-            Align(
-              alignment: Alignment.bottomRight,
-              child: ElevatedButton(
-                      onPressed: () =>
-                          context.nextPage(const AddNewAddressScreen()),
-                      child: Text(LocaleKeys.new_address.tr()))
-                  .p(10),
-            ),
-          ],
-        ).p(10),
+      appBar: AppBar(
+        title: Text(LocaleKeys.your_address.tr()),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.add),
+            tooltip: LocaleKeys.add_address.tr(),
+            onPressed: () {
+              context.nextPage(const AddNewAddressScreen());
+            },
+          ),
+        ],
       ),
+      resizeToAvoidBottomInset: true,
+      body: Consumer(
+        builder: (context, watch, _) {
+          final addressState = watch(addressNotifierProvider);
+          final cartItemDetailsState = watch(cartItemDetailsNotifierProvider);
+
+          return addressState is AddressLoadedState
+              ? addressState.addresses == null
+                  ? Center(
+                      child: Text(LocaleKeys.no_item_found.tr()),
+                    )
+                  : addressState.addresses!.isEmpty
+                      ? Center(
+                          child: Text(LocaleKeys.no_item_found.tr()),
+                        )
+                      : cartItemDetailsState is CartItemDetailsLoadedState
+                          ? AddressListBuilder(
+                              addressesList: addressState.addresses)
+                          : AddressListBuilder(
+                              addressesList: addressState.addresses)
+              : addressState is AddressLoadingState
+                  ? const LoadingWidget().py(100)
+                  : Container();
+        },
+      ).p(10),
     );
   }
 }

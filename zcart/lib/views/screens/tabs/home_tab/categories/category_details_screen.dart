@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:zcart/Theme/styles/colors.dart';
 import 'package:zcart/data/models/categories/category_model.dart';
+import 'package:zcart/helper/get_color_based_on_theme.dart';
 import 'package:zcart/riverpod/providers/product_provider.dart';
 import 'package:zcart/riverpod/providers/provider.dart';
 import 'package:zcart/riverpod/state/product/product_state.dart';
@@ -117,11 +118,8 @@ class CategoryDetailsScreen extends ConsumerWidget {
                                                     .getSelectedSubgroup ==
                                                 index
                                             ? kPrimaryLightTextColor
-                                            : EasyDynamicTheme.of(context)
-                                                        .themeMode ==
-                                                    ThemeMode.dark
-                                                ? kLightColor
-                                                : kDarkColor,
+                                            : getColorBasedOnTheme(context,
+                                                kDarkColor, kLightColor),
                                       ),
                                     ).pSymmetric(h: 12, v: 8),
                                     onPressed: () {
@@ -183,11 +181,8 @@ class CategoryDetailsScreen extends ConsumerWidget {
                                                     .getSelectedSubgroupCategory ==
                                                 index
                                             ? kPrimaryLightTextColor
-                                            : EasyDynamicTheme.of(context)
-                                                        .themeMode ==
-                                                    ThemeMode.dark
-                                                ? kLightColor
-                                                : kDarkColor,
+                                            : getColorBasedOnTheme(context,
+                                                kDarkColor, kLightColor),
                                       ),
                                     ).pSymmetric(h: 12, v: 8),
                                     onPressed: () {

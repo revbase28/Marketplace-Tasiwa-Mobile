@@ -40,6 +40,7 @@ class _OpenDisputeScreenState extends State<OpenDisputeScreen> {
       body: Consumer(
         builder: (context, watch, _) {
           final disputeInfoState = watch(disputeInfoProvider);
+
           return disputeInfoState is DisputeInfoLoadedState
               ? SingleChildScrollView(
                   child: Padding(
@@ -145,7 +146,6 @@ class _OpenDisputeScreenState extends State<OpenDisputeScreen> {
                                     optionsList: disputeInfoState
                                         .disputeInfo!.disputeType!.values
                                         .toList(),
-                                    value: "Select",
                                     isCallback: true,
                                     controller: disputeReasonController,
                                     callbackFunction: (int disputeValueIndex) {
@@ -157,6 +157,8 @@ class _OpenDisputeScreenState extends State<OpenDisputeScreen> {
                                               .disputeInfo!.disputeType!.keys
                                               .toList()[disputeValueIndex];
                                     },
+                                    hintText:
+                                        LocaleKeys.select_dispute_reason.tr(),
                                     validator: (text) {
                                       if (text == null || text.isEmpty) {
                                         return LocaleKeys.field_required.tr();
@@ -171,7 +173,8 @@ class _OpenDisputeScreenState extends State<OpenDisputeScreen> {
                                       LocaleKeys.no.tr(),
                                       LocaleKeys.yes.tr(),
                                     ],
-                                    value: "Select",
+                                    hintText:
+                                        LocaleKeys.have_you_received_goods.tr(),
                                     controller:
                                         goodsReceivedConfirmationController,
                                     isCallback: true,
@@ -203,7 +206,6 @@ class _OpenDisputeScreenState extends State<OpenDisputeScreen> {
                                       optionsList: disputeInfoState
                                           .disputeInfo!.items!.values
                                           .toList(),
-                                      value: "Select",
                                       controller: productController,
                                       isCallback: true,
                                       callbackFunction:

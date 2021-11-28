@@ -112,7 +112,7 @@ class _AttributeCardState extends State<AttributeCard> {
                 ],
               ),
             ],
-          ).px(10).py(5),
+          ).px(16),
 
           /// Attribute field
           if (widget.productModel.variants!.attributes != null)
@@ -186,7 +186,7 @@ class _AttributeCardState extends State<AttributeCard> {
                       ),
                     );
                   }),
-            ),
+            ).px(10).pOnly(bottom: 8),
         ],
       ),
     ).cornerRadius(10);
@@ -247,10 +247,12 @@ class _AttributeDropdownFieldState extends State<AttributeDropdownField> {
               widget.productModel!.variants!.attributes!.values
                   .toList()[widget.index!]
                   .name!,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
               style: context.textTheme.bodyText1,
             ).pOnly(left: 5)),
         Flexible(
-          flex: 3,
+          flex: 2,
           child: CustomDropDownField(
             isProductDetailsView: true,
             controller: controller,
@@ -260,9 +262,10 @@ class _AttributeDropdownFieldState extends State<AttributeDropdownField> {
                 .values
                 .toList(),
             isCallback: true,
-            callbackFunction: (index) {
+            hintText: LocaleKeys.select_options.tr(),
+            callbackFunction: (index) async {
               toast(LocaleKeys.please_wait.tr());
-              context
+              await context
                   .read(productVariantNotifierProvider.notifier)
                   .getProductVariantDetails(
                       widget.productModel!.data!.slug,
@@ -273,6 +276,8 @@ class _AttributeDropdownFieldState extends State<AttributeDropdownField> {
                           .value!
                           .values
                           .toList()[index]);
+
+              setState(() {});
             },
             validator: (text) {
               if (text == null || text.isEmpty) {

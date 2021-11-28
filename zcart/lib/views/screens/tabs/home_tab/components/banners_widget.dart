@@ -56,11 +56,12 @@ class BannerWidget extends StatelessWidget {
                   ],
                 ).onInkTap(() {
                   if (item.link!.isNotEmpty) {
+                    print(item.link);
                     context
                         .read(categoryItemNotifierProvider.notifier)
                         .getCategoryItem(item.link.splitAfter(
                             '.${API.base.split(".").last.split("/").first}'));
-                    context.nextPage(const ProductListScreen());
+                    context.nextPage(ProductListScreen(title: item.title));
                   } else {
                     toast(
                       LocaleKeys.no_offer.tr(),
