@@ -17,7 +17,7 @@ class RecentlyViewed extends ConsumerWidget {
 
     return recentlyViewedItemState is RecentlyViewedLoadedState
         ? recentlyViewedItemState.recentItems == null
-            ? Container()
+            ? const SizedBox()
             : ProductCard(
                     willShuffle: false,
                     title: LocaleKeys.recently_viewed.tr(),
@@ -25,7 +25,7 @@ class RecentlyViewed extends ConsumerWidget {
                         recentlyViewedItemState.recentItems!.reversed.toList())
                 .pOnly(bottom: 15)
         : recentlyViewedItemState is RecentlyViewedErrorState
-            ? Container()
-            : Container();
+            ? const SizedBox()
+            : const SizedBox();
   }
 }

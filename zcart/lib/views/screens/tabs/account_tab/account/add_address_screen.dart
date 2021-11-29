@@ -140,7 +140,7 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
                                 )
                               : countryState is CountryLoadingState
                                   ? const FieldLoading()
-                                  : Container();
+                                  : const SizedBox();
                         },
                       ),
                       Consumer(
@@ -176,7 +176,7 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
                                 )
                               : statesState is StatesLoadingState
                                   ? const FieldLoading()
-                                  : Container();
+                                  : const SizedBox();
                         },
                       ),
                       CustomTextField(

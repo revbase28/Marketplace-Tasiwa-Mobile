@@ -11,7 +11,7 @@ class VendorCard extends StatelessWidget {
   final bool? isVerified;
   final String? verifiedText;
   final String? rating;
-  final Function? onTap;
+  final VoidCallback? onTap;
   final bool trailingEnabled;
 
   const VendorCard(
@@ -40,7 +40,8 @@ class VendorCard extends StatelessWidget {
           ],
         ),
         child: ListTile(
-          contentPadding: EdgeInsets.zero,
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
           leading: Image.network(
             logo!,
             width: context.screenWidth * 0.15,
@@ -66,7 +67,7 @@ class VendorCard extends StatelessWidget {
                       .onInkTap(() {
                       toast(verifiedText);
                     })
-                  : Container()
+                  : const SizedBox()
             ],
           ),
           subtitle: Row(
@@ -97,7 +98,7 @@ class VendorCard extends StatelessWidget {
           trailing: trailingEnabled
               ? const Icon(Icons.arrow_forward_ios, size: 15).pOnly(right: 10)
               : null,
-          onTap: onTap as void Function()?,
+          onTap: onTap,
         )).cornerRadius(10).py(5).px(10);
   }
 }

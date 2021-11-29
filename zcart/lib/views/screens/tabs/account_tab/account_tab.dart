@@ -147,12 +147,12 @@ class AccountDashboard extends StatelessWidget {
                           height: 16,
                           thickness: 1,
                         )
-                      : Container(),
+                      : const SizedBox(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       userState.user!.sex == null
-                          ? Container()
+                          ? const SizedBox()
                           : Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -172,7 +172,7 @@ class AccountDashboard extends StatelessWidget {
                               ),
                             ),
                       userState.user!.dob == null
-                          ? Container()
+                          ? const SizedBox()
                           : Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -196,7 +196,7 @@ class AccountDashboard extends StatelessWidget {
                 ],
               ),
             ).cornerRadius(10).p(10)
-          : Container();
+          : const SizedBox();
     });
   }
 }

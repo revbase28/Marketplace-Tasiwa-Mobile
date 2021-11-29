@@ -43,6 +43,6 @@ class ProductListScreen extends ConsumerWidget {
                                 productList: categoryItemState.categoryItemList)
                             .px(10),
                       )
-                : Container());
+                : const SizedBox());
   }
 }

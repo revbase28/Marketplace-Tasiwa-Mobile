@@ -262,7 +262,7 @@ class OrderDetailsScreen extends ConsumerWidget {
                                   orderDetailsState.orderDetails!.shop!.image!,
                                   errorBuilder: (BuildContext _, Object error,
                                       StackTrace? stack) {
-                                    return Container();
+                                    return const SizedBox();
                                   },
                                   height: 50,
                                   width: 50,
@@ -280,7 +280,7 @@ class OrderDetailsScreen extends ConsumerWidget {
                                         toast(orderDetailsState
                                             .orderDetails!.shop!.verifiedText);
                                       })
-                                    : Container()
+                                    : const SizedBox()
                               ],
                             ),
                             const Divider(),
@@ -315,7 +315,7 @@ class OrderDetailsScreen extends ConsumerWidget {
                                           .orderDetails!.items![index].image!,
                                       errorBuilder: (BuildContext _,
                                           Object error, StackTrace? stack) {
-                                        return Container();
+                                        return const SizedBox();
                                       },
                                     ),
                                     title: Text(orderDetailsState.orderDetails!

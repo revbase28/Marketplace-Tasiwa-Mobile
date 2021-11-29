@@ -36,7 +36,7 @@ class BrandItemsListView extends ConsumerWidget {
                           ],
                         ),
                       ).px(10).py(20)
-                    : Container(),
+                    : const SizedBox(),
       ],
     );
   }

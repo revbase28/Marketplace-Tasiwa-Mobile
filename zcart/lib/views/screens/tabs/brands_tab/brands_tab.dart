@@ -106,7 +106,7 @@ class BrandsTab extends ConsumerWidget {
             ).px(10)
           : brandsState is BrandsErrorState
               ? ErrorMessageWidget(brandsState.message)
-              : Container(),
+              : const SizedBox(),
     );
   }
 }

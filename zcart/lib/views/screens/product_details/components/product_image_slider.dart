@@ -37,7 +37,7 @@ class ProductImageSlider extends StatelessWidget {
                             StackTrace? stackTrace) {
                           print(
                               "Exception: $exception\nStackTrace: $stackTrace");
-                          return Container();
+                          return const SizedBox();
                         },
                       ),
                     ))

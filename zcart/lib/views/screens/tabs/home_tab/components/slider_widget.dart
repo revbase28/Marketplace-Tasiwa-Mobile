@@ -32,7 +32,7 @@ class SliderWidget extends StatelessWidget {
                     errorBuilder: (BuildContext context, Object exception,
                         StackTrace? stackTrace) {
                       print("Exception: $exception\nStackTrace: $stackTrace");
-                      return Container();
+                      return const SizedBox();
                     },
                   ),
                 ).cornerRadius(10).onInkTap(() {

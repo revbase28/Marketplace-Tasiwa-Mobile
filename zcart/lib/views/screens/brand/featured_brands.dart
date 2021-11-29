@@ -142,7 +142,7 @@ class FeaturedBrands extends ConsumerWidget {
             ),
           )
         : featuredBrandsState is FeaturedBrandsErrorState
-            ? Container().p(10)
-            : Container();
+            ? const SizedBox().p(10)
+            : const SizedBox();
   }
 }

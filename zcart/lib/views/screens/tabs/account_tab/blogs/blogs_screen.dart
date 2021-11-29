@@ -40,7 +40,7 @@ class BlogsScreen extends ConsumerWidget {
                                 blogsState.blogList![index].featuredImage!,
                                 errorBuilder: (BuildContext _, Object error,
                                     StackTrace? stack) {
-                                  return Container();
+                                  return const SizedBox();
                                 },
                                 fit: BoxFit.cover,
                               ),
@@ -156,7 +156,7 @@ class BlogsScreen extends ConsumerWidget {
                     )
               : blogsState is BlogsLoadingState
                   ? const LoadingWidget()
-                  : Container(),
+                  : const SizedBox(),
         ));
   }
 }

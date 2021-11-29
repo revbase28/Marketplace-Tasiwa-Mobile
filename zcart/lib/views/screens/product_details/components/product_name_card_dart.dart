@@ -15,12 +15,15 @@ import 'package:zcart/riverpod/providers/wishlist_provider.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 
 class ProductNameCard extends StatelessWidget {
+  final ProductDetailsModel productModel;
+
+  final bool isWishlist;
+
   const ProductNameCard({
     Key? key,
     required this.productModel,
+    required this.isWishlist,
   }) : super(key: key);
-
-  final ProductDetailsModel productModel;
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +46,7 @@ class ProductNameCard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(5)),
                   child: Center(
                     child: CountdownTimer(
-                      endWidget: Container(),
+                      endWidget: const SizedBox(),
                       endTime:
                           productModel.data!.offerEnd!.millisecondsSinceEpoch,
                       textStyle: context.textTheme.bodyText1!
@@ -51,7 +54,7 @@ class ProductNameCard extends StatelessWidget {
                     ),
                   ),
                 )
-              : Container(),
+              : const SizedBox(),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -103,16 +106,26 @@ class ProductNameCard extends StatelessWidget {
                   }),
                   Column(
                     children: [
-                      const Icon(CupertinoIcons.heart, size: 18),
+                      Icon(
+                        isWishlist
+                            ? CupertinoIcons.heart_fill
+                            : CupertinoIcons.heart,
+                        size: 18,
+                        color: isWishlist ? Colors.red : null,
+                      ),
                       Text(LocaleKeys.wishlist_text.tr(),
                               style: context.textTheme.overline)
                           .pOnly(top: 3),
                     ],
                   ).onInkTap(() async {
-                    toast(LocaleKeys.adding_to_wishlist.tr());
-                    await context
-                        .read(wishListNotifierProvider.notifier)
-                        .addToWishList(productModel.data!.slug, context);
+                    if (isWishlist) {
+                      toast("Item is already added in the wishlist.");
+                    } else {
+                      toast(LocaleKeys.adding_to_wishlist.tr());
+                      await context
+                          .read(wishListNotifierProvider.notifier)
+                          .addToWishList(productModel.data!.slug, context);
+                    }
                   })
                 ],
               )
@@ -127,7 +140,7 @@ class ProductNameCard extends StatelessWidget {
             ],
           ).paddingBottom(10),
           productModel.data!.rating == null
-              ? Container()
+              ? const SizedBox()
               : Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -217,7 +230,7 @@ class ProductNameCard extends StatelessWidget {
                                     ),
                                   );
                                 })
-                              : Container(),
+                              : const SizedBox(),
                           Container(
                             decoration: BoxDecoration(
                                 color: kPrimaryColor,

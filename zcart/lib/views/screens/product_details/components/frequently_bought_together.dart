@@ -29,6 +29,6 @@ class FrequentlyBoughtTogetherCard extends StatelessWidget {
                   .px(10),
             ],
           )
-        : Container();
+        : const SizedBox();
   }
 }

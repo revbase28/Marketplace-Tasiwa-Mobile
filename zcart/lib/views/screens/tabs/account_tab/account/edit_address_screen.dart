@@ -199,7 +199,7 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
                                       )
                                     : countryState is CountryLoadingState
                                         ? const FieldLoading()
-                                        : Container();
+                                        : const SizedBox();
                               },
                             ),
                             Consumer(
@@ -260,7 +260,7 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
                                       )
                                     : statesState is StatesLoadingState
                                         ? const FieldLoading()
-                                        : Container();
+                                        : const SizedBox();
                               },
                             ),
                             CustomTextField(

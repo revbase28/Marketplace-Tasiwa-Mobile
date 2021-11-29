@@ -80,7 +80,7 @@ class BrandProfileScreen extends ConsumerWidget {
                               brandProfileState.brandProfile.data!.image!,
                               errorBuilder: (BuildContext _, Object error,
                                   StackTrace? stack) {
-                                return Container();
+                                return const SizedBox();
                               },
                               fit: BoxFit.cover,
                             ),
@@ -141,7 +141,7 @@ class BrandProfileScreen extends ConsumerWidget {
                                 ],
                               ),
                             ).px(10)
-                          : Container(),
+                          : const SizedBox(),
             ],
           ),
         ),

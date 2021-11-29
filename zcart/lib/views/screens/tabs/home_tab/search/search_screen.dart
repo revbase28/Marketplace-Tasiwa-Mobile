@@ -76,7 +76,7 @@ class _SearchScreenState extends State<SearchScreen> {
                               searchState.searchedItem![index].image!,
                               errorBuilder: (BuildContext _, Object error,
                                   StackTrace? stack) {
-                                return Container();
+                                return const SizedBox();
                               },
                             ),
                             title: Text(
@@ -134,7 +134,7 @@ class _SearchScreenState extends State<SearchScreen> {
                         )
                       : searchState is SearchErrorState
                           ? ErrorMessageWidget(searchState.message)
-                          : Container();
+                          : const SizedBox();
         },
       ).p(10),
     );

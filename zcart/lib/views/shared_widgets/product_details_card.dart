@@ -25,7 +25,7 @@ class ProductDetailsCard extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         title == null
-            ? Container()
+            ? const SizedBox()
             : Text(title!,
                     textAlign:
                         isTitleCentered ? TextAlign.center : TextAlign.left,
@@ -99,7 +99,7 @@ class ProductDetailsCard extends StatelessWidget {
                                                 color: kPrimaryLightTextColor),
                                       ),
                                     )
-                                  : Container(),
+                                  : const SizedBox(),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
@@ -120,7 +120,7 @@ class ProductDetailsCard extends StatelessWidget {
                                               BorderRadius.circular(30),
                                           color: kPrimaryColor),
                                     ).pOnly(right: 3)
-                                  : Container(),
+                                  : const SizedBox(),
                               productList![index].discount != null
                                   ? Container(
                                       padding: const EdgeInsets.symmetric(
@@ -138,7 +138,7 @@ class ProductDetailsCard extends StatelessWidget {
                                               BorderRadius.circular(30),
                                           color: kPrimaryColor),
                                     )
-                                  : Container(),
+                                  : const SizedBox(),
                             ],
                           ),
                         ],

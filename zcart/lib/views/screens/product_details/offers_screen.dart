@@ -41,7 +41,7 @@ class OffersScreen extends ConsumerWidget {
                                       offersState.offersModel.data!.image!,
                                       errorBuilder: (BuildContext _,
                                           Object error, StackTrace? stack) {
-                                return Container();
+                                return const SizedBox();
                               }, fit: BoxFit.fitWidth)),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
@@ -71,7 +71,7 @@ class OffersScreen extends ConsumerWidget {
                             .px(10)
                       ],
                     )
-                  : Container(),
+                  : const SizedBox(),
         ),
       ),
     );

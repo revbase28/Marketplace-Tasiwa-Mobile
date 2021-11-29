@@ -74,7 +74,7 @@ class MyOrderScreen extends ConsumerWidget {
                   )
             : ordersState is OrdersErrorState
                 ? ErrorMessageWidget(ordersState.message)
-                : Container(),
+                : const SizedBox(),
       ),
     );
   }
@@ -114,7 +114,7 @@ class OrderCard extends StatelessWidget {
                         orderListState.orders![orderIndex!].shop!.image!,
                         errorBuilder:
                             (BuildContext _, Object error, StackTrace? stack) {
-                          return Container();
+                          return const SizedBox();
                         },
                         fit: BoxFit.contain,
                       ).pOnly(left: 10),
@@ -189,7 +189,7 @@ class OrderCard extends StatelessWidget {
                             .orders![orderIndex!].items![itemsIndex].image!,
                         errorBuilder:
                             (BuildContext _, Object error, StackTrace? stack) {
-                          return Container();
+                          return const SizedBox();
                         },
                         height: 50,
                         width: 50,

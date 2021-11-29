@@ -170,7 +170,7 @@ class _PayPalPaymentState extends State<PayPalPayment> {
                 "https://www.paypalobjects.com/webstatic/en_US/i/buttons/PP_logo_h_200x51.png",
                 errorBuilder:
                     (BuildContext _, Object error, StackTrace? stack) {
-                  return Container();
+                  return const SizedBox();
                 },
                 fit: BoxFit.cover,
               ),

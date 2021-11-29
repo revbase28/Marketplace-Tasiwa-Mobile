@@ -21,7 +21,7 @@ class MoreOffersFromSellerCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return productDetailsState.productModel.data!.product!.listingCount == 0 ||
             productDetailsState.productModel.data!.product!.listingCount == null
-        ? Container()
+        ? const SizedBox()
         : Container(
             color: getColorBasedOnTheme(context, kLightColor, kDarkCardBgColor),
             child: ListTile(

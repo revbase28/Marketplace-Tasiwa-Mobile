@@ -208,7 +208,7 @@ class DisputeDetailsScreen extends ConsumerWidget {
                                       .disputeDetails!.shop!.image!,
                                   errorBuilder: (BuildContext _, Object error,
                                       StackTrace? stack) {
-                                    return Container();
+                                    return const SizedBox();
                                   },
                                   height: 50,
                                   width: 50,
@@ -224,7 +224,7 @@ class DisputeDetailsScreen extends ConsumerWidget {
                                             color: kPrimaryColor, size: 15)
                                         .px2()
                                         .pOnly(top: 3)
-                                    : Container()
+                                    : const SizedBox()
                               ],
                             ),
                             const Divider(),
@@ -240,7 +240,7 @@ class DisputeDetailsScreen extends ConsumerWidget {
                                           .orderDetails!.items![index].image!,
                                       errorBuilder: (BuildContext _,
                                           Object error, StackTrace? stack) {
-                                        return Container();
+                                        return const SizedBox();
                                       },
                                     ),
                                     title: Text(disputeDetailsState

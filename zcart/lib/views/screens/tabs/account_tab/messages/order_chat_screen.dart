@@ -62,7 +62,7 @@ class OrderChatScreen extends StatelessWidget {
                     orders.shop!.image!,
                     errorBuilder:
                         (BuildContext _, Object error, StackTrace? stack) {
-                      return Container();
+                      return const SizedBox();
                     },
                   ),
                 ),

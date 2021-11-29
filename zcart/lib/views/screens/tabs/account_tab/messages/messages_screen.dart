@@ -49,7 +49,7 @@ class MessagesScreen extends StatelessWidget {
                                     .shop!.image!,
                                 errorBuilder: (BuildContext _, Object error,
                                     StackTrace? stack) {
-                                  return Container();
+                                  return const SizedBox();
                                 },
                                 width: context.screenWidth * 0.20,
                                 fit: BoxFit.cover,

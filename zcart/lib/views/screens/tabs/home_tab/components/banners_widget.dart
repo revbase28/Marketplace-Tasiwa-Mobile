@@ -38,7 +38,7 @@ class BannerWidget extends StatelessWidget {
                           item.image!,
                           errorBuilder: (BuildContext _, Object error,
                               StackTrace? stack) {
-                            return Container();
+                            return const SizedBox();
                           },
                           fit: BoxFit.cover,
                         )).cornerRadius(10),

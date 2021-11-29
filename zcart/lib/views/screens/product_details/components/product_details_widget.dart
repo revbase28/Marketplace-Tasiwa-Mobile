@@ -27,7 +27,7 @@ class ProductDetailsWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               productDetailsState.productModel.data!.keyFeatures!.isEmpty
-                  ? Container()
+                  ? const SizedBox()
                   : Text('${LocaleKeys.key_features.tr()}\n',
                       style: context.textTheme.subtitle2),
               ListView.builder(
@@ -222,7 +222,7 @@ class ProductDetailsWidget extends StatelessWidget {
           ),
         ).cornerRadius(10).p(10),
         productDetailsState.productModel.data!.product!.description == null
-            ? Container()
+            ? const SizedBox()
             : Container(
                 color: getColorBasedOnTheme(
                     context, kLightColor, kDarkCardBgColor),
@@ -237,6 +237,7 @@ class ProductDetailsWidget extends StatelessWidget {
                       productDetailsState
                           .productModel.data!.product!.description!,
                       enableCaching: true,
+                      factoryBuilder: () => WidgetFactory(),
                       onTapUrl: (url) {
                         launchURL(url);
                         return true;
@@ -246,7 +247,7 @@ class ProductDetailsWidget extends StatelessWidget {
                 ),
               ).cornerRadius(10).p(10),
         productDetailsState.productModel.data!.description == null
-            ? Container()
+            ? const SizedBox()
             : Container(
                 color: getColorBasedOnTheme(
                     context, kLightColor, kDarkCardBgColor),

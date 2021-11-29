@@ -161,7 +161,7 @@ class DisputeScreen extends ConsumerWidget {
                                                   (BuildContext context,
                                                       Object error,
                                                       StackTrace? stack) {
-                                                return Container();
+                                                return const SizedBox();
                                               },
                                             ).pOnly(right: 10),
                                             Expanded(

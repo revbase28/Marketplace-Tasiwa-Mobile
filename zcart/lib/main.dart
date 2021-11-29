@@ -53,7 +53,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(ThemeMode.system);
     final _brightness = SchedulerBinding.instance!.window.platformBrightness;
 
     return MaterialApp(

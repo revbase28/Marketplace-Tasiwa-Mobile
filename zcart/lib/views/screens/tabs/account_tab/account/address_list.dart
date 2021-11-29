@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:velocity_x/velocity_x.dart';
-import 'package:zcart/helper/get_color_based_on_theme.dart';
 import 'package:zcart/riverpod/providers/provider.dart';
 import 'package:zcart/riverpod/state/state.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:zcart/views/shared_widgets/address_list_widget.dart';
-import 'package:zcart/Theme/styles/colors.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:zcart/views/shared_widgets/loading_widget.dart';
 import 'add_address_screen.dart';
@@ -52,7 +49,7 @@ class AddressList extends StatelessWidget {
                               addressesList: addressState.addresses)
               : addressState is AddressLoadingState
                   ? const LoadingWidget().py(100)
-                  : Container();
+                  : const SizedBox();
         },
       ).p(10),
     );

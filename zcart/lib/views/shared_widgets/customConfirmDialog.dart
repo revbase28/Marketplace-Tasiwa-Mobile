@@ -33,7 +33,7 @@ Future<void> showCustomConfirmDialog(
     context: context,
     barrierColor: barrierColor ?? Colors.black54,
     pageBuilder: (context, animation, secondaryAnimation) {
-      return Container();
+      return const SizedBox();
     },
     barrierDismissible: barrierDismissible,
     barrierLabel: '',

@@ -1,4 +1,3 @@
-import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -146,7 +145,7 @@ class CategoryDetailsScreen extends ConsumerWidget {
                           ).px(10)
                         : categorySubgroupState is CategorySubgroupErrorState
                             ? ErrorMessageWidget(categorySubgroupState.message)
-                            : Container(),
+                            : const SizedBox(),
 
                 /// Category under Subgroup
                 subgroupCategoryState is SubgroupCategoryLoadingState
@@ -230,7 +229,7 @@ class CategoryDetailsScreen extends ConsumerWidget {
                                   //     .pOnly(right: 10);
                                 }),
                           ).px(10)
-                        : Container(),
+                        : const SizedBox(),
 
                 /// Product List
                 productListState is ProductListLoadedState

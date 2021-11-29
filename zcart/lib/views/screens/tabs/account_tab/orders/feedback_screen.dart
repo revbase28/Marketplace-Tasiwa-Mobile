@@ -144,7 +144,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                         Image.network(widget.order!.shop!.image!, errorBuilder:
                                 (BuildContext _, Object error,
                                     StackTrace? stack) {
-                          return Container();
+                          return const SizedBox();
                         }, height: 50, width: 50)
                             .p(10),
                         Text(widget.order!.shop!.name!,
@@ -259,7 +259,7 @@ class ProductRatingCard extends StatelessWidget {
           leading: Image.network(
             order!.items![index].image!,
             errorBuilder: (BuildContext _, Object error, StackTrace? stack) {
-              return Container();
+              return const SizedBox();
             },
           ),
           title: Text(order!.items![index].description!),

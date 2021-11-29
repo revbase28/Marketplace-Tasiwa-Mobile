@@ -1,4 +1,3 @@
-import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -114,7 +113,7 @@ class WishListTab extends ConsumerWidget {
                                     wishListState.wishList[index].image!,
                                     errorBuilder: (BuildContext _, Object error,
                                         StackTrace? stack) {
-                                      return Container();
+                                      return const SizedBox();
                                     },
                                     height: 50,
                                     width: 50,
@@ -281,12 +280,11 @@ class WishListTab extends ConsumerWidget {
                                                 style: context
                                                     .textTheme.bodyText2!
                                                     .copyWith(
-                                                        color: EasyDynamicTheme.of(
-                                                                        context)
-                                                                    .themeMode ==
-                                                                ThemeMode.dark
-                                                            ? kDarkPriceColor
-                                                            : kPriceColor,
+                                                        color:
+                                                            getColorBasedOnTheme(
+                                                                context,
+                                                                kPriceColor,
+                                                                kDarkPriceColor),
                                                         fontWeight:
                                                             FontWeight.bold)),
                                             wishListState

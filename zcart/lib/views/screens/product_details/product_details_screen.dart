@@ -7,9 +7,11 @@ import 'package:zcart/data/network/network_utils.dart';
 import 'package:zcart/riverpod/providers/cart_provider.dart';
 import 'package:zcart/riverpod/providers/product_slug_list_provider.dart';
 import 'package:zcart/riverpod/providers/product_provider.dart';
+import 'package:zcart/riverpod/providers/provider.dart';
 import 'package:zcart/riverpod/state/cart_state.dart';
 import 'package:zcart/riverpod/state/product/product_state.dart';
 import 'package:velocity_x/velocity_x.dart';
+import 'package:zcart/riverpod/state/wishlist_state.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:zcart/views/screens/auth/login_screen.dart';
 import 'package:zcart/views/screens/bottom_nav_bar/bottom_nav_bar.dart';
@@ -51,6 +53,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     });
   }
 
+  bool _isInWishList = false;
+
   @override
   Widget build(BuildContext context) {
     double _totalPrice = 0.0;
@@ -64,22 +68,31 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
         },
         child: Consumer(
           builder: (context, watch, _) {
-            final productDetailsState = watch(productNotifierProvider);
+            final _productDetailsState = watch(productNotifierProvider);
+            final _wishListState = watch(wishListNotifierProvider);
 
-            if (productDetailsState is ProductLoadedState) {
+            if (_productDetailsState is ProductLoadedState) {
+              if (_wishListState is WishListLoadedState) {
+                _isInWishList = _wishListState.wishList.any((element) =>
+                    element.slug ==
+                    _productDetailsState.productModel.data!.slug);
+              }
+            }
+
+            if (_productDetailsState is ProductLoadedState) {
               _totalPrice = double.parse(
-                      productDetailsState.productModel.data!.rawPrice!) *
+                      _productDetailsState.productModel.data!.rawPrice!) *
                   _quantity;
             }
 
-            final cartState = watch(cartNotifierProvider);
+            final _cartState = watch(cartNotifierProvider);
 
-            int? cartItems;
-            if (cartState is CartLoadedState) {
-              cartItems = 0;
-              if (cartState.cartList != null) {
-                for (var item in cartState.cartList!) {
-                  cartItems = cartItems! + item.items!.length;
+            int? _cartItems;
+            if (_cartState is CartLoadedState) {
+              _cartItems = 0;
+              if (_cartState.cartList != null) {
+                for (var item in _cartState.cartList!) {
+                  _cartItems = _cartItems! + item.items!.length;
                 }
               }
             }
@@ -108,20 +121,21 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     children: [
                       Expanded(
                         child: SingleChildScrollView(
-                          child: productDetailsState is ProductLoadedState
+                          child: _productDetailsState is ProductLoadedState
                               ? Column(
                                   children: [
                                     ProductImageSlider(
-                                      sliderList: productDetailsState
+                                      sliderList: _productDetailsState
                                           .productModel.variants!.images,
                                     ),
                                     ProductNameCard(
-                                            productModel: productDetailsState
+                                            isWishlist: _isInWishList,
+                                            productModel: _productDetailsState
                                                 .productModel)
                                         .pOnly(top: 5),
                                     AttributeCard(
                                       productModel:
-                                          productDetailsState.productModel,
+                                          _productDetailsState.productModel,
                                       quantity: _quantity,
                                       increaseQuantity: () =>
                                           _increaseQuantity(),
@@ -129,36 +143,36 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                           _decreaseQuantity(),
                                       formKey: _formKey,
                                     ).cornerRadius(10).p(10),
-                                    productDetailsState
+                                    _productDetailsState
                                                 .productModel.shippingOptions ==
                                             null
-                                        ? Container()
+                                        ? const SizedBox()
                                         : ShippingCard(
                                                 productDetailsState:
-                                                    productDetailsState)
+                                                    _productDetailsState)
                                             .cornerRadius(10)
                                             .px(10),
                                     ProductDetailsWidget(
                                         productDetailsState:
-                                            productDetailsState),
+                                            _productDetailsState),
                                     // BrandCards
                                     ProductBrandCard(
-                                      productDetailsState: productDetailsState,
+                                      productDetailsState: _productDetailsState,
                                     ).cornerRadius(10).px(10).pOnly(top: 10),
 
                                     MoreOffersFromSellerCard(
                                             productDetailsState:
-                                                productDetailsState)
+                                                _productDetailsState)
                                         .cornerRadius(10)
                                         .px(10)
                                         .pOnly(top: 10),
 
                                     ShopCard(
                                         productDetailsState:
-                                            productDetailsState),
+                                            _productDetailsState),
                                     FrequentlyBoughtTogetherCard(
                                             productDetailsState:
-                                                productDetailsState)
+                                                _productDetailsState)
                                         .pOnly(bottom: 50)
                                   ],
                                 )
@@ -166,7 +180,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         ),
                       ),
                       Visibility(
-                        visible: productDetailsState is! ProductLoadingState,
+                        visible: _productDetailsState is! ProductLoadingState,
                         child: Container(
                           color: kDarkColor,
                           padding: const EdgeInsets.all(10),
@@ -180,21 +194,23 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                     child: Icon(CupertinoIcons.bubble_left_fill,
                                         color: kDarkColor, size: 20)),
                               ).cornerRadius(10).px(5).onInkTap(() {
-                                if (productDetailsState is ProductLoadedState) {
+                                if (_productDetailsState
+                                    is ProductLoadedState) {
                                   if (accessAllowed) {
                                     context
                                         .read(productChatProvider.notifier)
-                                        .productConversation(productDetailsState
-                                            .productModel.data!.shop!.id);
+                                        .productConversation(
+                                            _productDetailsState
+                                                .productModel.data!.shop!.id);
 
                                     context.nextPage(VendorChatScreen(
-                                        shopId: productDetailsState
+                                        shopId: _productDetailsState
                                             .productModel.data!.shop!.id,
-                                        shopImage: productDetailsState
+                                        shopImage: _productDetailsState
                                             .productModel.data!.shop!.image,
-                                        shopName: productDetailsState
+                                        shopName: _productDetailsState
                                             .productModel.data!.shop!.name,
-                                        shopVerifiedText: productDetailsState
+                                        shopVerifiedText: _productDetailsState
                                             .productModel
                                             .data!
                                             .shop!
@@ -225,11 +241,11 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                   },
                                   icon: const Icon(CupertinoIcons.cart,
                                       color: kDarkColor, size: 20),
-                                  label: Text(cartItems == null
+                                  label: Text(_cartItems == null
                                       ? "+"
-                                      : cartItems.toString())),
+                                      : _cartItems.toString())),
                               const Spacer(),
-                              productDetailsState is ProductLoadedState
+                              _productDetailsState is ProductLoadedState
                                   ? Container(
                                       height: 40,
                                       width: context.screenWidth * 0.50,
@@ -253,7 +269,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                                           color:
                                                               kPrimaryLightTextColor)),
                                               Text(
-                                                "${LocaleKeys.total.tr()} - ${productDetailsState.productModel.data!.currencySymbol!}${_totalPrice.toDoubleStringAsPrecised(length: 2)}",
+                                                "${LocaleKeys.total.tr()} - ${_productDetailsState.productModel.data!.currencySymbol!}${_totalPrice.toDoubleStringAsPrecised(length: 2)}",
                                                 style: context
                                                     .textTheme.overline!
                                                     .copyWith(
@@ -274,9 +290,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                         ],
                                       ).px(10),
                                     ).cornerRadius(10).onInkTap(() async {
-                                      if (productDetailsState
+                                      if (_productDetailsState
                                           is ProductLoadedState) {
-                                        if (productDetailsState.productModel
+                                        if (_productDetailsState.productModel
                                                     .variants!.attributes !=
                                                 null
                                             ? _formKey.currentState!.validate()
@@ -287,28 +303,28 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                                   cartNotifierProvider.notifier)
                                               .addToCart(
                                                   context,
-                                                  productDetailsState
+                                                  _productDetailsState
                                                       .productModel.data!.slug,
                                                   _quantity,
-                                                  productDetailsState
+                                                  _productDetailsState
                                                       .productModel
                                                       .shippingCountryId,
-                                                  productDetailsState
+                                                  _productDetailsState
                                                               .productModel
                                                               .shippingOptions ==
                                                           null
                                                       ? null
-                                                      : productDetailsState
+                                                      : _productDetailsState
                                                           .productModel
                                                           .shippingOptions!
                                                           .first
                                                           .id,
-                                                  productDetailsState
+                                                  _productDetailsState
                                                               .productModel
                                                               .shippingOptions ==
                                                           null
                                                       ? null
-                                                      : productDetailsState
+                                                      : _productDetailsState
                                                           .productModel
                                                           .shippingOptions!
                                                           .first
@@ -316,11 +332,11 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                         }
                                       }
                                     })
-                                  : Container(),
+                                  : const SizedBox(),
                             ],
                           ),
                         ),
-                        replacement: Container(),
+                        replacement: const SizedBox(),
                       ),
                     ],
                   ),

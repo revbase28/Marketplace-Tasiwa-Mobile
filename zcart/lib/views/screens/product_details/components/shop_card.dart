@@ -22,7 +22,11 @@ class ShopCard extends StatelessWidget {
     return Container(
       color: getColorBasedOnTheme(context, kLightColor, kDarkCardBgColor),
       child: ListTile(
-        contentPadding: EdgeInsets.zero,
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+        trailing: const Icon(
+          Icons.keyboard_arrow_right,
+        ),
         leading: Image.network(
           productDetailsState.productModel.data!.shop!.image!,
           width: context.screenWidth * 0.15,

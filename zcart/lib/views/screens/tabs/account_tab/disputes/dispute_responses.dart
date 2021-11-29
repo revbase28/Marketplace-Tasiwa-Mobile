@@ -44,7 +44,7 @@ class DisputeResponseScreen extends StatelessWidget {
                       },
                       icon: const Icon(Icons.refresh),
                     )
-                  : Container()
+                  : const SizedBox()
             ],
           ),
           body: disputeDetailsState is DisputeDetailsLoadedState
@@ -53,7 +53,7 @@ class DisputeResponseScreen extends StatelessWidget {
                     Expanded(
                       child:
                           disputeDetailsState.disputeDetails!.replies!.isEmpty
-                              ? Container()
+                              ? const SizedBox()
                               : _chatBody(context, disputeDetailsState),
                     ),
                     _chatTextBody(context, messageController, _statuses,

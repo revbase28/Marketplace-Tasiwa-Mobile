@@ -65,24 +65,24 @@ class HomeTab extends ConsumerWidget {
                     ? SliderWidget(sliderState.sliderList).py(5)
                     : sliderState is SliderErrorState
                         ? ErrorMessageWidget(sliderState.message)
-                        : Container(),
+                        : const SizedBox(),
 
                 /// Category
                 (categoryState is CategoryInitialState ||
                         categoryState is CategoryLoadingState)
-                    ? Container()
+                    ? const SizedBox()
                     : categoryState is CategoryLoadedState
                         ? CategoryWidget(categoryState.categoryList).py(5)
                         : categoryState is CategoryErrorState
                             ? ErrorMessageWidget(categoryState.message)
-                            : Container(),
+                            : const SizedBox(),
 
                 /// Banner
                 bannerState is BannerLoadedState
                     ? BannerWidget(bannerState.bannerList!.sublist(0, 3))
                     : bannerState is BannerErrorState
                         ? ErrorMessageWidget(bannerState.message)
-                        : Container(),
+                        : const SizedBox(),
 
                 /// Trending Now
                 trendingNowState is TrendingNowLoadedState
@@ -102,7 +102,7 @@ class HomeTab extends ConsumerWidget {
                       )
                     : bannerState is BannerErrorState
                         ? ErrorMessageWidget(bannerState.message)
-                        : Container(),
+                        : const SizedBox(),
 
                 ///Deals under the price
                 dealsUnderThePrice is DealsUnderThePriceStateLoadedState
@@ -113,7 +113,7 @@ class HomeTab extends ConsumerWidget {
                                 dealsUnderThePrice.dealsUnderThePrice!.data)
                         .py(15)
                     : dealsUnderThePrice is DealsUnderThePriceStateErrorState
-                        ? Container()
+                        ? const SizedBox()
                         : const ProductLoadingWidget(),
 
                 ///Featured Brands
@@ -125,7 +125,7 @@ class HomeTab extends ConsumerWidget {
                             dealOfTheDay: dealOfTheDay.dealOfTheDay!)
                         .pOnly(bottom: 15)
                     : dealOfTheDay is DealOfTheDayStateErrorState
-                        ? Container()
+                        ? const SizedBox()
                         : const ProductLoadingWidget(),
 
                 /// Recently Added (Latest Item)
@@ -143,7 +143,7 @@ class HomeTab extends ConsumerWidget {
                     ? BannerWidget(bannerState.bannerList!.sublist(5, 7))
                     : bannerState is BannerErrorState
                         ? ErrorMessageWidget(bannerState.message)
-                        : Container(),
+                        : const SizedBox(),
 
                 /// Popular Items
                 popularItemState is PopularItemLoadedState
@@ -163,7 +163,7 @@ class HomeTab extends ConsumerWidget {
                       )
                     : bannerState is BannerErrorState
                         ? ErrorMessageWidget(bannerState.message)
-                        : Container(),
+                        : const SizedBox(),
 
                 /// Random Items (Additional Items to Explore in the UI)
                 randomItemState is RandomItemLoadedState
@@ -242,7 +242,7 @@ class DealOfTheDayWidget extends StatelessWidget {
                                           StackTrace? stackTrace) {
                                         print(
                                             "Exception: $exception\nStackTrace: $stackTrace");
-                                        return Container();
+                                        return const SizedBox();
                                       },
                                     ).pSymmetric(v: 24))
                                 .toList()),

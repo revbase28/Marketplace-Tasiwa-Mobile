@@ -56,7 +56,7 @@ class VendorChatScreen extends StatelessWidget {
                     shopImage!,
                     errorBuilder:
                         (BuildContext _, Object error, StackTrace? stack) {
-                      return Container();
+                      return const SizedBox();
                     },
                   ),
                 ),

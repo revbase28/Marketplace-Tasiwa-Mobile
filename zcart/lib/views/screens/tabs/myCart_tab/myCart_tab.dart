@@ -56,7 +56,7 @@ class _MyCartTabState extends State<MyCartTab> {
                               .read(cartNotifierProvider.notifier)
                               .getCartList();
                         })
-                      : Container(),
+                      : const SizedBox(),
                 ],
               ),
               body: cartState is CartLoadedState
@@ -271,7 +271,7 @@ class _ItemCardState extends State<ItemCard> {
             height: 50,
             width: 50,
             errorBuilder: (BuildContext _, Object error, StackTrace? stack) {
-              return Container();
+              return const SizedBox();
             },
           ).px(10),
           Expanded(

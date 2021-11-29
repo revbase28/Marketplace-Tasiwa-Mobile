@@ -44,7 +44,7 @@ class VendorsTab extends ConsumerWidget {
               })
           : vendorsState is VendorsErrorState
               ? ErrorMessageWidget(vendorsState.message)
-              : Container(),
+              : const SizedBox(),
     );
   }
 }

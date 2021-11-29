@@ -117,7 +117,7 @@ class BlogDetailsScreen extends ConsumerWidget {
                       blogState.blog!.featuredImage!,
                       errorBuilder:
                           (BuildContext _, Object error, StackTrace? stack) {
-                        return Container();
+                        return const SizedBox();
                       },
                       fit: BoxFit.cover,
                     ).pOnly(bottom: 10),

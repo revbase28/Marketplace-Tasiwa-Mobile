@@ -184,7 +184,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                 .cartItemDetails!.items![index].image!,
                             errorBuilder: (BuildContext _, Object error,
                                 StackTrace? stack) {
-                              return Container();
+                              return const SizedBox();
                             },
                           ),
                           title: Text(cartItemDetailsState
@@ -516,7 +516,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         ),
                 ],
               )
-            : Container(),
+            : const SizedBox(),
       ).cornerRadius(10),
       isActive: _currentStep >= 0,
       state: _currentStep >= 2 ? StepState.complete : StepState.disabled,
@@ -573,7 +573,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               onPressedCheckBox: (value) {},
                               shippingOptions: shippingState.shippingOptions)
                           .cornerRadius(10)
-                  : Container();
+                  : const SizedBox();
             },
           ),
           Row(
@@ -655,9 +655,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
               return addressState is AddressLoadedState
                   ? addressState.addresses == null
-                      ? Container()
+                      ? const SizedBox()
                       : addressState.addresses!.isEmpty
-                          ? Container()
+                          ? const SizedBox()
                           : cartItemDetailsState is CartItemDetailsLoadedState
                               ? AddressListBuilder(
                                   addressesList: addressState.addresses,
@@ -682,8 +682,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               horizontalTitleGap: 0,
                             )
                           : addressState is AddressInitialState
-                              ? Container()
-                              : Container();
+                              ? const SizedBox()
+                              : const SizedBox();
             },
           )
         ],
@@ -889,7 +889,7 @@ class _PaymentOptionsListBuilderState extends State<PaymentOptionsListBuilder> {
                   );
                 }).toList());
           } else {
-            return Container();
+            return const SizedBox();
           }
         },
       ),
@@ -953,7 +953,7 @@ class _PackagingListBuilderState extends State<PackagingListBuilder> {
                           ),
                   );
                 })
-            : Container();
+            : const SizedBox();
       },
     );
   }

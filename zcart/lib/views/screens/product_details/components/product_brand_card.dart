@@ -23,7 +23,7 @@ class ProductBrandCard extends StatelessWidget {
       child: productDetailsState
                   .productModel.data!.product!.manufacturer!.slug ==
               null
-          ? Container()
+          ? const SizedBox()
           : Container(
               color:
                   getColorBasedOnTheme(context, kLightColor, kDarkCardBgColor),
