@@ -35,7 +35,7 @@ class ProductImageSlider extends StatelessWidget {
                         fit: BoxFit.scaleDown,
                         errorBuilder: (BuildContext context, Object exception,
                             StackTrace? stackTrace) {
-                          print(
+                          debugPrint(
                               "Exception: $exception\nStackTrace: $stackTrace");
                           return const SizedBox();
                         },

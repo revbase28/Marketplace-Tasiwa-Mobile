@@ -64,14 +64,13 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
 
   @override
   Widget build(BuildContext context) {
-    //print(widget.address.country!.id);
-    // print(widget.address.state!.id);
+    //debugPrint(widget.address.country!.id);
+    // debugPrint(widget.address.state!.id);
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
+        systemOverlayStyle: SystemUiOverlayStyle.light,
         title: Text(LocaleKeys.edit_address.tr()),
-        centerTitle: true,
-        elevation: 0,
         actions: [
           IconButton(
             onPressed: () async {
@@ -137,7 +136,7 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
                                 return null;
                               },
                               onChange: (value) {
-                                print(_addressTypeController.text);
+                                debugPrint(_addressTypeController.text);
                               },
                             ),
                             CustomTextField(

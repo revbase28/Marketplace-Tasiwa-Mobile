@@ -32,7 +32,7 @@ class WishListRepository implements IWishListRepository {
   @override
   Future<List<WIshListItem>> fetchMoreWishList() async {
     dynamic responseBody;
-    print("Fetch More Wishlist (before): ${items.length}");
+    debugPrint("Fetch More Wishlist (before): ${items.length}");
 
     if (wishListModel.links!.next != null) {
       toast(LocaleKeys.loading.tr());
@@ -42,7 +42,7 @@ class WishListRepository implements IWishListRepository {
 
       wishListModel = WishListModel.fromJson(responseBody);
       items.addAll(wishListModel.data!);
-      print("Fetch More Wishlist (after): ${items.length}");
+      debugPrint("Fetch More Wishlist (after): ${items.length}");
       return items;
     } else {
       toast(LocaleKeys.reached_to_the_end.tr());

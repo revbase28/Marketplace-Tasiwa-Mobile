@@ -35,6 +35,7 @@ class _OpenDisputeScreenState extends State<OpenDisputeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        systemOverlayStyle: SystemUiOverlayStyle.light,
         title: Text(LocaleKeys.open_a_dispute.tr()),
       ),
       body: Consumer(

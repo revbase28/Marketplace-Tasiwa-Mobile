@@ -31,7 +31,8 @@ class SliderWidget extends StatelessWidget {
                     fit: BoxFit.cover,
                     errorBuilder: (BuildContext context, Object exception,
                         StackTrace? stackTrace) {
-                      print("Exception: $exception\nStackTrace: $stackTrace");
+                      debugPrint(
+                          "Exception: $exception\nStackTrace: $stackTrace");
                       return const SizedBox();
                     },
                   ),

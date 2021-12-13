@@ -144,7 +144,8 @@ class _RazorpayPaymentState extends State<RazorpayPayment> {
 
     final _result = json.decode(_response.body);
 
-    print(getAmountFromString(widget.cartItemDetails.grandTotal!));
+    debugPrint(
+        getAmountFromString(widget.cartItemDetails.grandTotal!).toString());
 
     var options = {
       'key': API.razorPayApiKey,
@@ -165,10 +166,12 @@ class _RazorpayPaymentState extends State<RazorpayPayment> {
   }
 
   void _handlePaymentSuccess(PaymentSuccessResponse response) {
-    print("Razorpay Responseeeeeeeeeeeee : ${response.toString()}");
-    print("Razorpay Responseeeeeeeeeeeee Order ID : ${response.orderId}");
-    print("Razorpay Responseeeeeeeeeeeee Payment ID : ${response.paymentId}");
-    print("Razorpay Responseeeeeeeeeeeee Signature: ${response.signature}");
+    debugPrint("Razorpay Responseeeeeeeeeeeee : ${response.toString()}");
+    debugPrint("Razorpay Responseeeeeeeeeeeee Order ID : ${response.orderId}");
+    debugPrint(
+        "Razorpay Responseeeeeeeeeeeee Payment ID : ${response.paymentId}");
+    debugPrint(
+        "Razorpay Responseeeeeeeeeeeee Signature: ${response.signature}");
 
     _paymentMeta = {
       'order_id': response.orderId!,
@@ -189,7 +192,8 @@ class _RazorpayPaymentState extends State<RazorpayPayment> {
     setState(() {
       _result = false;
     });
-    print("ERROR: " + response.code.toString() + " - " + response.message!);
+    debugPrint(
+        "ERROR: " + response.code.toString() + " - " + response.message!);
 
     Fluttertoast.showToast(
         msg: LocaleKeys.something_went_wrong.tr(),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:zcart/data/controller/others/others_controller.dart';
@@ -16,6 +17,7 @@ class TermsAndConditionScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(LocaleKeys.terms_condition.tr()),
+        systemOverlayStyle: SystemUiOverlayStyle.light,
       ),
       body: SafeArea(
         child: SingleChildScrollView(

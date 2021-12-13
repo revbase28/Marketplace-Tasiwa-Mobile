@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zcart/data/controller/chat/chat_controller.dart';
 import 'package:zcart/helper/get_color_based_on_theme.dart';
@@ -33,6 +34,7 @@ class DisputeScreen extends ConsumerWidget {
       },
       child: Scaffold(
         appBar: AppBar(
+          systemOverlayStyle: SystemUiOverlayStyle.light,
           title: Text(LocaleKeys.disputes.tr()),
           actions: [
             Visibility(

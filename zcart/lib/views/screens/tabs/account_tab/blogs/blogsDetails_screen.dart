@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:velocity_x/velocity_x.dart';
@@ -21,6 +22,7 @@ class BlogDetailsScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(LocaleKeys.blog_details.tr()),
+        systemOverlayStyle: SystemUiOverlayStyle.light,
       ),
       body: blogState is BlogLoadedState
           ? SingleChildScrollView(

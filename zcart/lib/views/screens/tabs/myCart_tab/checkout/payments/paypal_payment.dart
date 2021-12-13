@@ -91,7 +91,7 @@ class _PayPalPaymentState extends State<PayPalPayment> {
                 ],
                 note: "Contact us for any questions on your order.",
                 onSuccess: (Map params) async {
-                  print("onSuccess: $params");
+                  debugPrint("onSuccess: $params");
 
                   _paymentMeta = {
                     "payerID": params["payerID"],
@@ -106,13 +106,13 @@ class _PayPalPaymentState extends State<PayPalPayment> {
                   });
                 },
                 onError: (error) {
-                  print("onError: $error");
+                  debugPrint("onError: $error");
                   setState(() {
                     _result = false;
                   });
                 },
                 onCancel: (params) {
-                  print('cancelled: $params');
+                  debugPrint('cancelled: $params');
                   setState(() {
                     _result = false;
                   });

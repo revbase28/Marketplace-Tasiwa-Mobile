@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:zcart/data/controller/search/search_controller.dart';
 import 'package:zcart/data/controller/search/search_state.dart';
@@ -31,6 +32,7 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        systemOverlayStyle: SystemUiOverlayStyle.light,
         title: TextField(
           autofocus: true,
           style: const TextStyle(color: kPrimaryLightTextColor),

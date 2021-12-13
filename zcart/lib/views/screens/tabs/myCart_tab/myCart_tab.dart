@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -48,6 +49,7 @@ class _MyCartTabState extends State<MyCartTab> {
 
           return Scaffold(
               appBar: AppBar(
+                systemOverlayStyle: SystemUiOverlayStyle.light,
                 title: Text(LocaleKeys.cart_text.tr()),
                 actions: [
                   (cartState is CartErrorState || cartState is CartLoadingState)

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:zcart/helper/get_color_based_on_theme.dart';
@@ -37,6 +38,7 @@ class WishListTab extends ConsumerWidget {
     return Scaffold(
         appBar: AppBar(
           title: Text(LocaleKeys.wishlist_text.tr()),
+          systemOverlayStyle: SystemUiOverlayStyle.light,
         ),
         body: wishListState is WishListLoadedState
             ? wishListState.wishList.isEmpty

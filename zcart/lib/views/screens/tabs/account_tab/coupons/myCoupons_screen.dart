@@ -19,6 +19,7 @@ class MyCouponsScreen extends ConsumerWidget {
     final couponState = watch(couponsProvider);
     return Scaffold(
       appBar: AppBar(
+        systemOverlayStyle: SystemUiOverlayStyle.light,
         title: Text(LocaleKeys.coupons.tr()),
       ),
       body: RefreshIndicator(

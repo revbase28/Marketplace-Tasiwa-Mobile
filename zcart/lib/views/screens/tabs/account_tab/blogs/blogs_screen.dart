@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:zcart/data/controller/blog/blog_controller.dart';
@@ -21,8 +22,7 @@ class BlogsScreen extends ConsumerWidget {
     return Scaffold(
         appBar: AppBar(
           title: Text(LocaleKeys.blogs.tr()),
-          centerTitle: true,
-          elevation: 0,
+          systemOverlayStyle: SystemUiOverlayStyle.light,
         ),
         body: RefreshIndicator(
           onRefresh: () => context.read(blogsProvider.notifier).blogs(),

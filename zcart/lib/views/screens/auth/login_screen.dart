@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -67,7 +68,11 @@ class _LoginScreenState extends State<LoginScreen> {
         }
       },
       child: Scaffold(
-        appBar: widget.needBackButton ? AppBar() : null,
+        appBar: widget.needBackButton
+            ? AppBar(
+                systemOverlayStyle: SystemUiOverlayStyle.light,
+              )
+            : null,
         body: SafeArea(
           child: Stack(
             children: [
@@ -257,7 +262,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                             AppleIDAuthorizationScopes.fullName,
                                           ],
                                         ).then((value) {
-                                          print(value.authorizationCode);
+                                          debugPrint(value.authorizationCode);
                                           if (value.identityToken != null) {
                                             context
                                                 .read(userNotifierProvider

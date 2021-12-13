@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zcart/Theme/styles/colors.dart';
 import 'package:zcart/helper/get_color_based_on_theme.dart';
@@ -20,6 +21,7 @@ class BrandsTab extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
+        systemOverlayStyle: SystemUiOverlayStyle.light,
         title: Text(LocaleKeys.brands.tr()),
       ),
       body: brandsState is BrandsLoadedState

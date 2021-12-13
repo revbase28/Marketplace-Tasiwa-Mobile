@@ -157,7 +157,7 @@ class ProductNameCard extends StatelessWidget {
                       unratedColor: kFadeColor,
                       itemBuilder: (context, _) =>
                           Icon(Icons.star, color: kPrimaryColor),
-                      onRatingUpdate: (rating) => print(rating),
+                      onRatingUpdate: (rating) => debugPrint(rating.toString()),
                     ),
                     Text(
                       (productModel.data!.rating).toString(),

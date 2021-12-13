@@ -49,9 +49,9 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
-          title: Text(LocaleKeys.add_address.tr()),
-          centerTitle: true,
-          elevation: 0),
+        systemOverlayStyle: SystemUiOverlayStyle.light,
+        title: Text(LocaleKeys.add_address.tr()),
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Form(

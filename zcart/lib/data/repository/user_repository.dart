@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:zcart/data/interface/iUser_repository.dart';
 import 'package:zcart/data/models/user/user_model.dart';
 import 'package:zcart/helper/constants.dart';
@@ -136,7 +137,7 @@ class UserRepository implements IUserRepository {
       responseBody =
           await handleResponse(await postRequest(API.register, requestBody));
     } catch (e) {
-      print(e);
+      debugPrint(e.toString());
       throw NetworkException();
     }
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zcart/riverpod/providers/provider.dart';
 import 'package:zcart/riverpod/state/state.dart';
@@ -17,6 +18,7 @@ class VendorsTab extends ConsumerWidget {
     final vendorsState = watch(vendorsNotifierProvider);
     return Scaffold(
       appBar: AppBar(
+        systemOverlayStyle: SystemUiOverlayStyle.light,
         title: Text(LocaleKeys.vendor_text.tr()),
       ),
       body: vendorsState is VendorsLoadedState

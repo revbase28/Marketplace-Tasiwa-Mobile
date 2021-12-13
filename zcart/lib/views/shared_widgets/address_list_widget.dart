@@ -95,8 +95,8 @@ class _AddressListBuilderState extends State<AddressListBuilder> {
                           widget.addressesList![index].phone;
                     }
 
-                    print(selectedIndex);
-                    print(index);
+                    debugPrint(selectedIndex.toString());
+                    debugPrint(index.toString());
                     setState(() {
                       selectedIndex = index;
                     });
@@ -141,7 +141,8 @@ class _AddressListBuilderState extends State<AddressListBuilder> {
                               .getCountries();
                           if (widget.addressesList![index].country?.id !=
                               null) {
-                            print(widget.addressesList![index].country?.id);
+                            debugPrint(widget.addressesList![index].country?.id
+                                .toString());
                             context
                                 .read(statesNotifierProvider.notifier)
                                 .getState(

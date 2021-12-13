@@ -240,7 +240,7 @@ class DealOfTheDayWidget extends StatelessWidget {
                                       errorBuilder: (BuildContext context,
                                           Object exception,
                                           StackTrace? stackTrace) {
-                                        print(
+                                        debugPrint(
                                             "Exception: $exception\nStackTrace: $stackTrace");
                                         return const SizedBox();
                                       },

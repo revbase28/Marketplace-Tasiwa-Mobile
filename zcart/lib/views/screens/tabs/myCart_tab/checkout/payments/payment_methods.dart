@@ -44,7 +44,7 @@ class PaymentMethods {
           _checkoutNotifier.expYear = value.expYear;
           _checkoutNotifier.cvc = value.cvc;
 
-          print("Card Details: ${value.cardNumber}");
+          debugPrint("Card Details: ${value.cardNumber}");
 
           return true;
         } else {
@@ -68,7 +68,7 @@ class PaymentMethods {
         _checkoutNotifier.paymentStatus = _result?["status"];
         _checkoutNotifier.paymentMeta = _result?["paymentMeta"];
 
-        print("Payment Result: $_result");
+        debugPrint("Payment Result: $_result");
 
         return _result?["success"] ?? false;
       } else {
@@ -88,7 +88,7 @@ class PaymentMethods {
         _checkoutNotifier.paymentStatus = _result?["status"];
         _checkoutNotifier.paymentMeta = _result?["paymentMeta"];
 
-        print("Payment Result: $_result");
+        debugPrint("Payment Result: $_result");
         return _result?["success"] ?? false;
       } else {
         return false;

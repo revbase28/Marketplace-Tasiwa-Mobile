@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:zcart/helper/get_color_based_on_theme.dart';
@@ -22,6 +23,7 @@ class DisputeDetailsScreen extends ConsumerWidget {
     final disputeDetailsState = watch(disputeDetailsProvider);
     return Scaffold(
       appBar: AppBar(
+        systemOverlayStyle: SystemUiOverlayStyle.light,
         title: Text(LocaleKeys.dispute_details.tr()),
         automaticallyImplyLeading: true,
         centerTitle: true,
@@ -304,7 +306,8 @@ class DisputeDetailsScreen extends ConsumerWidget {
                   style: const TextStyle(color: kLightColor),
                 ),
               ).onInkTap(() {
-                print(disputeDetailsState.disputeDetails!.replies);
+                debugPrint(
+                    disputeDetailsState.disputeDetails!.replies.toString());
                 context.nextPage(const DisputeResponseScreen());
               }),
               Container(

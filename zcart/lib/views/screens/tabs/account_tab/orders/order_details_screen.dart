@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:zcart/helper/get_color_based_on_theme.dart';
@@ -28,6 +29,7 @@ class OrderDetailsScreen extends ConsumerWidget {
     final orderDetailsState = watch(orderProvider);
     return Scaffold(
       appBar: AppBar(
+        systemOverlayStyle: SystemUiOverlayStyle.light,
         title: Text(LocaleKeys.order_details.tr()),
         automaticallyImplyLeading: true,
       ),

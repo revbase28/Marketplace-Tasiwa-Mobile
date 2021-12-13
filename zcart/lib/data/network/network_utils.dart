@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:http_parser/http_parser.dart';
@@ -33,11 +34,11 @@ Future<Response> getRequest(String? endPoint,
     }
 
     if (!noBaseUrl) {
-      print('URL: ${API.base}$endPoint');
+      debugPrint('URL: ${API.base}$endPoint');
     } else {
-      print('URL: $endPoint');
+      debugPrint('URL: $endPoint');
     }
-    //print('Header: $headers');
+    //debugPrint('Header: $headers');
 
     if (bearerToken) {
       response = await get(Uri.parse('${API.base}$endPoint'), headers: headers);
@@ -47,7 +48,7 @@ Future<Response> getRequest(String? endPoint,
       response = await get(Uri.parse('${API.base}$endPoint'));
     }
 
-    //print('Response: ${response.statusCode} ${response.body}');
+    //debugPrint('Response: ${response.statusCode} ${response.body}');
     return response;
   } else {
     throw noInternetMsg;
@@ -59,11 +60,11 @@ postRequest(String endPoint, Map? requestBody,
   if (await isNetworkAvailable()) {
     Response? response;
     if (!noBaseUrl) {
-      print('URL: ${API.base}$endPoint');
+      debugPrint('URL: ${API.base}$endPoint');
     } else {
-      print('URL: $endPoint');
+      debugPrint('URL: $endPoint');
     }
-    print('body: $requestBody');
+    debugPrint('body: $requestBody');
 
     var accessToken = getStringAsync(access);
 
@@ -76,7 +77,7 @@ postRequest(String endPoint, Map? requestBody,
       headers.addAll(header);
     }
 
-    print("Headers: $headers");
+    debugPrint("Headers: $headers");
     try {
       if (!noBaseUrl) {
         response = await post(Uri.parse('${API.base}$endPoint'),
@@ -86,9 +87,9 @@ postRequest(String endPoint, Map? requestBody,
             body: requestBody, headers: headers);
       }
     } catch (e) {
-      print(e.toString());
+      debugPrint(e.toString());
     }
-    //print('Response: ${response.statusCode} ${response.body}');
+    //debugPrint('Response: ${response.statusCode} ${response.body}');
     return response;
   } else {
     throw noInternetMsg;
@@ -98,8 +99,8 @@ postRequest(String endPoint, Map? requestBody,
 putRequest(String endPoint, Map request, {bool bearerToken = true}) async {
   if (await isNetworkAvailable()) {
     late Response response;
-    print('URL: ${API.base}$endPoint');
-    print('Request: $request');
+    debugPrint('URL: ${API.base}$endPoint');
+    debugPrint('Request: $request');
 
     var accessToken = getStringAsync(access);
 
@@ -112,14 +113,14 @@ putRequest(String endPoint, Map request, {bool bearerToken = true}) async {
       headers.addAll(header);
     }
 
-    print("Headers: $headers");
+    debugPrint("Headers: $headers");
     try {
       response = await put(Uri.parse('${API.base}$endPoint'),
           body: request, headers: headers);
     } catch (e) {
-      print(e.toString());
+      debugPrint(e.toString());
     }
-    print('Response: ${response.statusCode} ${response.body}');
+    debugPrint('Response: ${response.statusCode} ${response.body}');
     return response;
   } else {
     throw noInternetMsg;
@@ -167,10 +168,10 @@ multiPartRequest(String endPoint, Map body,
     request.headers.addAll(headers);
     request.fields.addAll(body as Map<String, String>);
 
-    print('Request: $request');
+    debugPrint('Request: $request');
     StreamedResponse streamedResponse = await request.send();
     Response response = await Response.fromStream(streamedResponse);
-    print('Response: ${response.statusCode} ${response.body}');
+    debugPrint('Response: ${response.statusCode} ${response.body}');
     return response;
   } else {
     throw noInternetMsg;
@@ -185,7 +186,7 @@ patchRequest(String endPoint, Map request,
 deleteRequest(String endPoint, {bool bearerToken = true}) async {
   if (await isNetworkAvailable()) {
     var accessToken = getStringAsync(access);
-    print('URL: ${API.base}$endPoint');
+    debugPrint('URL: ${API.base}$endPoint');
 
     var headers = {
       HttpHeaders.acceptHeader: 'application/json; charset=utf-8',
@@ -196,10 +197,10 @@ deleteRequest(String endPoint, {bool bearerToken = true}) async {
       headers.addAll(header);
     }
 
-    print(headers);
+    debugPrint(headers.toString());
     Response response =
         await delete(Uri.parse('${API.base}$endPoint'), headers: headers);
-    print('Response: ${response.statusCode} ${response.body}');
+    debugPrint('Response: ${response.statusCode} ${response.body}');
     return response;
   } else {
     throw noInternetMsg;
@@ -212,15 +213,15 @@ Future handleResponse(Response response, {bool showToast = true}) async {
   }
   if (isSuccessful(response.statusCode)) {
     if (response.body.isNotEmpty) {
-      print(response.statusCode);
-      print(response.body);
+      debugPrint(response.statusCode.toString());
+      debugPrint(response.body);
       return jsonDecode(response.body);
     } else {
       return response.body;
     }
   } else {
     if (response.body.isJson()) {
-      print("handleResponse (json): ${jsonDecode(response.body)}");
+      debugPrint("handleResponse (json): ${jsonDecode(response.body)}");
       if (jsonDecode(response.body)['errors'] != null) {
         toast(
           jsonDecode(response.body)['errors']
@@ -240,9 +241,9 @@ Future handleResponse(Response response, {bool showToast = true}) async {
       return response.statusCode;
     } else {
       try {
-        print("handleResponse: ${jsonDecode(response.body)}");
+        debugPrint("handleResponse: ${jsonDecode(response.body)}");
       } catch (e) {
-        print(response.body);
+        debugPrint(response.body);
         return 500;
       }
       return response.statusCode;

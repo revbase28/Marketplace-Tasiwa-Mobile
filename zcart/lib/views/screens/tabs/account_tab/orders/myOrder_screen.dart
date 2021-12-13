@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -34,6 +35,7 @@ class MyOrderScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
+        systemOverlayStyle: SystemUiOverlayStyle.light,
         title: Text(LocaleKeys.orders.tr()),
       ),
       body: SafeArea(
@@ -151,7 +153,8 @@ class OrderCard extends StatelessWidget {
                                   const EdgeInsets.symmetric(horizontal: 0.0),
                               itemBuilder: (context, _) =>
                                   const Icon(Icons.star, color: Colors.amber),
-                              onRatingUpdate: (rating) => print(rating),
+                              onRatingUpdate: (rating) =>
+                                  debugPrint(rating.toString()),
                             ).pOnly(top: 5),
                             Container(
                               margin: const EdgeInsets.only(left: 10, top: 5),

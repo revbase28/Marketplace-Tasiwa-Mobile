@@ -66,9 +66,9 @@ class PayStackPayment {
           ));
 
       if (_response.status) {
-        print("Payment Successful");
-        print(_response.reference);
-        print(_response);
+        debugPrint("Payment Successful");
+        debugPrint(_response.reference);
+        debugPrint(_response.toString());
 
         Map<String, String> _paymentMeta = {
           "reference": _response.reference!.toString(),
@@ -85,8 +85,8 @@ class PayStackPayment {
         _checkoutNotifier.paymentStatus = _status;
         return true;
       } else {
-        print("Payment Failed");
-        print(_response.message);
+        debugPrint("Payment Failed");
+        debugPrint(_response.message);
         return false;
       }
     });

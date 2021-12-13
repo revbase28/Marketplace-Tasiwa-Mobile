@@ -8,7 +8,7 @@ void getRecentlyViewedItems(BuildContext context) async {
   var _box = Hive.box(hiveBox);
   List<String>? _recentlyViewed = _box.get(recentlyReviewedIds);
 
-  print("Recently Reviewd :  $_recentlyViewed");
+  debugPrint("Recently Reviewd :  $_recentlyViewed");
 
   if (_recentlyViewed == null) {
     await context

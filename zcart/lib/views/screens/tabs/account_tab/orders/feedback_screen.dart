@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -74,50 +75,51 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        systemOverlayStyle: SystemUiOverlayStyle.light,
         title: Text(LocaleKeys.order_feedback.tr()),
         centerTitle: true,
         automaticallyImplyLeading: true,
         elevation: 0,
         actions: [
-          TextButton(
-              onPressed: () {
-                if (_formKey.currentState!.validate()) {
-                  if (_productFormKey.currentState!.validate()) {
-                    if (listingIdList.length == widget.order!.items!.length &&
-                        feedbackList.length == widget.order!.items!.length) {
-                      context
-                          .read(sellerFeedbackProvider.notifier)
-                          .postFeedback(
-                            widget.order!.id,
-                            shopRatingController.text,
-                            shopCommentController.text,
-                          )
-                          .then((value) => context
-                              .read(productFeedbackProvider.notifier)
-                              .postFeedback(
-                                widget.order!.id,
-                                listingIdList,
-                                ratingList,
-                                feedbackList,
-                              ))
-                          .then((value) => context
-                                  .read(ordersProvider.notifier)
-                                  .orders(ignoreLoadingState: false)
-                                  .then((value) {
-                                context.pop();
-                                context.pop();
-                              }));
-                    }
-                  } else {
-                    toast(LocaleKeys.rate_all_product.tr());
+          IconButton(
+            onPressed: () {
+              if (_formKey.currentState!.validate()) {
+                if (_productFormKey.currentState!.validate()) {
+                  if (listingIdList.length == widget.order!.items!.length &&
+                      feedbackList.length == widget.order!.items!.length) {
+                    context
+                        .read(sellerFeedbackProvider.notifier)
+                        .postFeedback(
+                          widget.order!.id,
+                          shopRatingController.text,
+                          shopCommentController.text,
+                        )
+                        .then((value) => context
+                            .read(productFeedbackProvider.notifier)
+                            .postFeedback(
+                              widget.order!.id,
+                              listingIdList,
+                              ratingList,
+                              feedbackList,
+                            ))
+                        .then((value) => context
+                                .read(ordersProvider.notifier)
+                                .orders(ignoreLoadingState: false)
+                                .then((value) {
+                              context.pop();
+                              context.pop();
+                            }));
                   }
+                } else {
+                  toast(LocaleKeys.rate_all_product.tr());
                 }
-              },
-              child: Text(
-                LocaleKeys.submit.tr(),
-                style: context.textTheme.subtitle2!
-                    .copyWith(color: kLightColor, fontWeight: FontWeight.bold),
-              ))
+              }
+            },
+            icon: const Icon(
+              Icons.check,
+              color: kLightColor,
+            ),
+          )
         ],
       ),
       body: SingleChildScrollView(

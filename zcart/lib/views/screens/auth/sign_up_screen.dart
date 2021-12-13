@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:velocity_x/velocity_x.dart';
@@ -39,7 +40,9 @@ class SignUpScreen extends StatelessWidget {
           }
         },
         child: Scaffold(
-          appBar: AppBar(),
+          appBar: AppBar(
+            systemOverlayStyle: SystemUiOverlayStyle.light,
+          ),
           body: Stack(
             children: [
               Center(

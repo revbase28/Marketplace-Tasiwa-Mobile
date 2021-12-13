@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:zcart/data/controller/others/about_us_state.dart';
@@ -17,8 +18,7 @@ class AboutUsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(LocaleKeys.about_us.tr()),
-        centerTitle: true,
-        elevation: 0,
+        systemOverlayStyle: SystemUiOverlayStyle.light,
       ),
       body: SafeArea(
         child: SingleChildScrollView(

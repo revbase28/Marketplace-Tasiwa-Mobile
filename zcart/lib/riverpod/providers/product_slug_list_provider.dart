@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final productSlugListProvider =
@@ -10,11 +11,11 @@ class ProductSlugListNotifier extends StateNotifier<List<String?>> {
   addProductSlug(String? slug) {
     state.add(slug);
 
-    print("Addition: $state");
+    debugPrint("Addition: $state");
   }
 
   removeProductSlug() {
     state.removeLast();
-    print("Remove: $state");
+    debugPrint("Remove: $state");
   }
 }

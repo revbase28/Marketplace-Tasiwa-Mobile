@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zcart/data/controller/blog/blog_controller.dart';
 import 'package:zcart/data/controller/cart/coupon_controller.dart';
@@ -37,6 +38,7 @@ class AccountTab extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          systemOverlayStyle: SystemUiOverlayStyle.light,
           title: Text(LocaleKeys.account_text.tr()),
           actions: [
             // IconButton(
@@ -228,7 +230,9 @@ class UserActivityCard extends StatelessWidget {
                         ? orderListState.totalOrder.toString()
                         : "0",
                     style: context.textTheme.headline4!.copyWith(
-                        color: kPrimaryColor, fontWeight: FontWeight.bold),
+                        color: getColorBasedOnTheme(
+                            context, kPrimaryColor, kDarkPriceColor),
+                        fontWeight: FontWeight.bold),
                   );
                 }),
                 Text(
@@ -262,7 +266,9 @@ class UserActivityCard extends StatelessWidget {
                           ? "${couponState.coupon!.length}"
                           : "0",
                       style: context.textTheme.headline4!.copyWith(
-                          color: kPrimaryColor, fontWeight: FontWeight.bold),
+                          color: getColorBasedOnTheme(
+                              context, kPrimaryColor, kDarkPriceColor),
+                          fontWeight: FontWeight.bold),
                     );
                   },
                 ),
@@ -297,7 +303,9 @@ class UserActivityCard extends StatelessWidget {
                           ? disputesState.disputes.length.toString()
                           : "0",
                       style: context.textTheme.headline4!.copyWith(
-                          color: kPrimaryColor, fontWeight: FontWeight.bold),
+                          color: getColorBasedOnTheme(
+                              context, kPrimaryColor, kDarkPriceColor),
+                          fontWeight: FontWeight.bold),
                     );
                   },
                 ),
@@ -332,7 +340,9 @@ class UserActivityCard extends StatelessWidget {
                           ? wishListState.wishList.length.toString()
                           : '0',
                       style: context.textTheme.headline4!.copyWith(
-                          color: kPrimaryColor, fontWeight: FontWeight.bold),
+                          color: getColorBasedOnTheme(
+                              context, kPrimaryColor, kDarkPriceColor),
+                          fontWeight: FontWeight.bold),
                     );
                   },
                 ),

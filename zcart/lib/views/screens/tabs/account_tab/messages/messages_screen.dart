@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zcart/data/controller/chat/chat_controller.dart';
 import 'package:zcart/data/controller/chat/chat_state.dart';
@@ -19,6 +20,7 @@ class MessagesScreen extends StatelessWidget {
         final conversationState = watch(conversationProvider);
         return Scaffold(
             appBar: AppBar(
+              systemOverlayStyle: SystemUiOverlayStyle.light,
               title: Text(LocaleKeys.messages.tr()),
               centerTitle: true,
               elevation: 0,
@@ -39,50 +41,55 @@ class MessagesScreen extends StatelessWidget {
                         itemCount:
                             conversationState.conversationModel.data!.length,
                         itemBuilder: (context, index) {
-                          return Card(
-                            child: ListTile(
-                              tileColor: Colors.transparent,
-                              contentPadding:
-                                  const EdgeInsets.symmetric(vertical: 16),
-                              leading: Image.network(
-                                conversationState.conversationModel.data![index]
-                                    .shop!.image!,
-                                errorBuilder: (BuildContext _, Object error,
-                                    StackTrace? stack) {
-                                  return const SizedBox();
-                                },
-                                width: context.screenWidth * 0.20,
-                                fit: BoxFit.cover,
-                              ).p(5),
-                              title: Text(
+                          return Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Card(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: ListTile(
+                                tileColor: Colors.transparent,
+                                contentPadding: const EdgeInsets.all(8),
+                                leading: Image.network(
                                   conversationState.conversationModel
-                                      .data![index].shop!.name!,
-                                  style: context.textTheme.bodyText2!),
-                              trailing: const Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Icon(CupertinoIcons.chevron_forward),
+                                      .data![index].shop!.image!,
+                                  errorBuilder: (BuildContext _, Object error,
+                                      StackTrace? stack) {
+                                    return const SizedBox();
+                                  },
+                                  width: context.screenWidth * 0.20,
+                                  fit: BoxFit.cover,
+                                ).p(5),
+                                title: Text(
+                                    conversationState.conversationModel
+                                        .data![index].shop!.name!,
+                                    style: context.textTheme.bodyText2!
+                                        .copyWith(fontWeight: FontWeight.bold)),
+                                trailing: const Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: Icon(CupertinoIcons.chevron_forward),
+                                ),
                               ),
-                            ),
-                          ).onInkTap(() async {
-                            context.nextPage(VendorChatScreen(
-                                shopId: conversationState
-                                    .conversationModel.data![index].shop!.id,
-                                shopImage: conversationState
-                                    .conversationModel.data![index].shop!.image,
-                                shopName: conversationState
-                                    .conversationModel.data![index].shop!.name,
-                                shopVerifiedText: conversationState
-                                    .conversationModel
-                                    .data![index]
-                                    .shop!
-                                    .verifiedText));
-                            await context
-                                .read(productChatProvider.notifier)
-                                .productConversation(
-                                  conversationState
+                            ).onInkTap(() async {
+                              context.nextPage(VendorChatScreen(
+                                  shopId: conversationState
                                       .conversationModel.data![index].shop!.id,
-                                );
-                          });
+                                  shopImage: conversationState.conversationModel
+                                      .data![index].shop!.image,
+                                  shopName: conversationState.conversationModel
+                                      .data![index].shop!.name,
+                                  shopVerifiedText: conversationState
+                                      .conversationModel
+                                      .data![index]
+                                      .shop!
+                                      .verifiedText));
+                              await context
+                                  .read(productChatProvider.notifier)
+                                  .productConversation(
+                                    conversationState.conversationModel
+                                        .data![index].shop!.id,
+                                  );
+                            }),
+                          );
                         }).pOnly(top: 5)
                 : const Center(child: LoadingWidget()));
       },

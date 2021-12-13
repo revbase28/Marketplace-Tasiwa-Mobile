@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:zcart/data/interface/iProduct_repository.dart';
 import 'package:zcart/data/models/product/product_model.dart';
 import 'package:zcart/data/network/api.dart';
@@ -28,7 +29,7 @@ class RandomItemRepository implements IRandomItemRepository {
   @override
   Future<List<ProductList>> fetchMoreRandomItems() async {
     dynamic responseBody;
-    print("fetchMoreRandomItems (before): ${randomItemList.length}");
+    debugPrint("fetchMoreRandomItems (before): ${randomItemList.length}");
 
     if (randomItemModel.links!.next != null) {
       toast(LocaleKeys.loading.tr());
@@ -37,7 +38,7 @@ class RandomItemRepository implements IRandomItemRepository {
 
       randomItemModel = ProductModel.fromJson(responseBody);
       randomItemList.addAll(randomItemModel.data!);
-      print("fetchMoreRandomItems (after): ${randomItemList.length}");
+      debugPrint("fetchMoreRandomItems (after): ${randomItemList.length}");
       return randomItemList;
     } else {
       toast(LocaleKeys.reached_to_the_end.tr());

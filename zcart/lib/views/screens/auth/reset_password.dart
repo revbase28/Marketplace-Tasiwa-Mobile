@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:zcart/Theme/styles/colors.dart';
@@ -18,7 +19,9 @@ class ResetPassword extends StatelessWidget {
     final _formKey = GlobalKey<FormState>();
     final _emailController = TextEditingController();
     return Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(
+          systemOverlayStyle: SystemUiOverlayStyle.light,
+        ),
         body: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Container(

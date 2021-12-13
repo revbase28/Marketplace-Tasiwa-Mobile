@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:zcart/helper/get_color_based_on_theme.dart';
@@ -17,7 +18,10 @@ class AccountDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(LocaleKeys.account_detatils.tr())),
+      appBar: AppBar(
+        systemOverlayStyle: SystemUiOverlayStyle.light,
+        title: Text(LocaleKeys.account_detatils.tr()),
+      ),
       resizeToAvoidBottomInset: true,
       body: SafeArea(
         child: Stack(
