@@ -246,24 +246,38 @@ class _LoginScreenState extends State<LoginScreen> {
                                 SignInWithAppleButton(
                                   text: "Apple",
                                   onPressed: () async {
-                                    // try {
-                                    //   await SignInWithApple
-                                    //       .getAppleIDCredential(
-                                    //     scopes: [
-                                    //       AppleIDAuthorizationScopes.email,
-                                    //       AppleIDAuthorizationScopes.fullName,
-                                    //     ],
-                                    //   ).then((value) {
-                                    //     print(value.authorizationCode);
-                                    //     context
-                                    //         .read(userNotifierProvider.notifier)
-                                    //         .loginUsingApple(
-                                    //             value.authorizationCode);
-                                    //   });
-                                    // } catch (e) {
-                                    //   toast(
-                                    //       LocaleKeys.something_went_wrong.tr());
-                                    // }
+                                    final _checkAvailability =
+                                        await SignInWithApple.isAvailable();
+                                    if (_checkAvailability) {
+                                      try {
+                                        await SignInWithApple
+                                            .getAppleIDCredential(
+                                          scopes: [
+                                            AppleIDAuthorizationScopes.email,
+                                            AppleIDAuthorizationScopes.fullName,
+                                          ],
+                                        ).then((value) {
+                                          print(value.authorizationCode);
+                                          if (value.identityToken != null) {
+                                            context
+                                                .read(userNotifierProvider
+                                                    .notifier)
+                                                .loginUsingApple(
+                                                    value.identityToken!);
+                                          } else {
+                                            toast(LocaleKeys
+                                                .something_went_wrong
+                                                .tr());
+                                          }
+                                        });
+                                      } catch (e) {
+                                        toast(LocaleKeys.something_went_wrong
+                                            .tr());
+                                      }
+                                    } else {
+                                      toast(
+                                          "Apple Login is not available on your device");
+                                    }
                                   },
                                 ).px(5).py(5),
                             Text(
