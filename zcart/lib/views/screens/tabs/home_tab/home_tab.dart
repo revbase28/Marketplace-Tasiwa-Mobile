@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -234,16 +235,16 @@ class DealOfTheDayWidget extends StatelessWidget {
                               autoPlay: true,
                             ),
                             items: dealOfTheDay.data!.images!
-                                .map((item) => Image.network(
-                                      item.path!,
+                                .map((item) => CachedNetworkImage(
+                                      imageUrl: item.path!,
                                       fit: BoxFit.contain,
-                                      errorBuilder: (BuildContext context,
-                                          Object exception,
-                                          StackTrace? stackTrace) {
-                                        debugPrint(
-                                            "Exception: $exception\nStackTrace: $stackTrace");
-                                        return const SizedBox();
-                                      },
+                                      errorWidget: (context, url, error) =>
+                                          const SizedBox(),
+                                      progressIndicatorBuilder:
+                                          (context, url, progress) => Center(
+                                        child: CircularProgressIndicator(
+                                            value: progress.progress),
+                                      ),
                                     ).pSymmetric(v: 24))
                                 .toList()),
                       ),

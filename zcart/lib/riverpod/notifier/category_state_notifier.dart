@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:zcart/data/interface/iCategory_repository.dart';
+import 'package:zcart/data/interface/i_category_repository.dart';
 import 'package:zcart/data/network/network_exception.dart';
 import 'package:zcart/riverpod/state/category_item_state.dart';
 import 'package:zcart/riverpod/state/category_state.dart';

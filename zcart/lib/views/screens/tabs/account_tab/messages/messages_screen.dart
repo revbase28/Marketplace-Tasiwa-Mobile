@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -49,13 +50,16 @@ class MessagesScreen extends StatelessWidget {
                               child: ListTile(
                                 tileColor: Colors.transparent,
                                 contentPadding: const EdgeInsets.all(8),
-                                leading: Image.network(
-                                  conversationState.conversationModel
+                                leading: CachedNetworkImage(
+                                  imageUrl: conversationState.conversationModel
                                       .data![index].shop!.image!,
-                                  errorBuilder: (BuildContext _, Object error,
-                                      StackTrace? stack) {
-                                    return const SizedBox();
-                                  },
+                                  errorWidget: (context, url, error) =>
+                                      const SizedBox(),
+                                  progressIndicatorBuilder:
+                                      (context, url, progress) => Center(
+                                    child: CircularProgressIndicator(
+                                        value: progress.progress),
+                                  ),
                                   width: context.screenWidth * 0.20,
                                   fit: BoxFit.cover,
                                 ).p(5),

@@ -52,225 +52,217 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
         systemOverlayStyle: SystemUiOverlayStyle.light,
         title: Text(LocaleKeys.add_address.tr()),
       ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Form(
-            key: _formKey,
-            child: Column(
-              children: [
-                Container(
-                  color: getColorBasedOnTheme(
-                      context, kLightColor, kDarkCardBgColor),
-                  width: context.screenWidth,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      widget.isAccessed
-                          ? CustomDropDownField(
-                              title: LocaleKeys.address_type.tr(),
-                              optionsList: const [
-                                "Primary",
-                                "Billing",
-                                "Shipping"
-                              ],
-                              hintText: LocaleKeys.address_type.tr(),
-                              value: "Primary",
-                              controller: addressTypeController,
-                              validator: (text) {
-                                if (text == null ||
-                                    text.isEmpty ||
-                                    text == "") {
-                                  return LocaleKeys.field_required.tr();
-                                }
-                                return null;
-                              },
-                            )
-                          : const SizedBox(),
-                      CustomTextField(
-                        title: LocaleKeys.contact_person_name.tr(),
-                        hintText: LocaleKeys.contact_person_name.tr(),
-                        controller: contactPersonController,
-                        validator: (text) {
-                          if (text == null || text.isEmpty) {
-                            return LocaleKeys.field_required.tr();
-                          }
-                          return null;
-                        },
-                      ),
-                      CustomTextField(
-                        title: LocaleKeys.contact_number.tr(),
-                        hintText: LocaleKeys.contact_number.tr(),
-                        keyboardType: TextInputType.number,
-                        controller: contactNumberController,
-                        validator: (text) {
-                          if (text == null || text.isEmpty) {
-                            return LocaleKeys.field_required.tr();
-                          }
-                          return null;
-                        },
-                      ),
-                      Consumer(
-                        builder: (context, watch, _) {
-                          final countryState = watch(countryNotifierProvider);
-
-                          return countryState is CountryLoadedState
-                              ? CustomDropDownField(
-                                  title: LocaleKeys.country.tr(),
-                                  optionsList: countryState.countryList!
-                                      .map((e) => e.name)
-                                      .toList(),
-                                  //value: "Select",
-                                  controller: countryController,
-                                  hintText: LocaleKeys.country.tr(),
-                                  isCallback: true,
-                                  callbackFunction: (int countryId) {
-                                    selectedCountryID =
-                                        countryState.countryList![countryId].id;
-                                    context
-                                        .read(statesNotifierProvider.notifier)
-                                        .getState(countryState
-                                            .countryList![countryId].id);
-                                  },
-                                  validator: (text) {
-                                    if (text == null || text.isEmpty) {
-                                      return 'Please select a country';
-                                    }
-                                    return null;
-                                  },
-                                )
-                              : countryState is CountryLoadingState
-                                  ? const FieldLoading()
-                                  : const SizedBox();
-                        },
-                      ),
-                      Consumer(
-                        builder: (context, watch, _) {
-                          final statesState = watch(statesNotifierProvider);
-                          if (statesState is StatesLoadedState) {
-                            selectedStateID = statesState.statesList!.isEmpty
-                                ? null
-                                : statesState.statesList![0].id;
-                          }
-                          return statesState is StatesLoadedState
-                              ? CustomDropDownField(
-                                  title: LocaleKeys.states.tr(),
-                                  optionsList: statesState.statesList!.isEmpty
-                                      ? ["Select"]
-                                      : statesState.statesList!
-                                          .map((e) => e.name)
-                                          .toList(),
-                                  //value: "Select",
-                                  controller: statesController,
-                                  hintText: LocaleKeys.states.tr(),
-                                  isCallback: true,
-                                  callbackFunction: (int stateId) {
-                                    selectedStateID =
-                                        statesState.statesList![stateId].id;
-                                  },
-                                  validator: (text) {
-                                    if (text == null || text.isEmpty) {
-                                      return 'Please select a state';
-                                    }
-                                    return null;
-                                  },
-                                )
-                              : statesState is StatesLoadingState
-                                  ? const FieldLoading()
-                                  : const SizedBox();
-                        },
-                      ),
-                      CustomTextField(
-                        title: LocaleKeys.zip_code.tr(),
-                        hintText: LocaleKeys.zip_code.tr(),
-                        keyboardType: TextInputType.number,
-                        controller: zipCodeController,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly
-                        ],
-                        validator: (text) {
-                          if (text == null || text.isEmpty) {
-                            return LocaleKeys.field_required.tr();
-                          }
-                          return null;
-                        },
-                      ),
-                      CustomTextField(
-                          title: LocaleKeys.address_line_1.tr(),
-                          hintText: LocaleKeys.address_line_1.tr(),
-                          controller: addressLine1Controller,
-                          validator: (text) {
-                            if (text == null || text.isEmpty) {
-                              if (addressLine1Controller.text.isEmpty) {
+      body: SingleChildScrollView(
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              Container(
+                color: getColorBasedOnTheme(
+                    context, kLightColor, kDarkCardBgColor),
+                width: context.screenWidth,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    widget.isAccessed
+                        ? CustomDropDownField(
+                            title: LocaleKeys.address_type.tr(),
+                            optionsList: const [
+                              "Primary",
+                              "Billing",
+                              "Shipping"
+                            ],
+                            hintText: LocaleKeys.address_type.tr(),
+                            value: "Primary",
+                            controller: addressTypeController,
+                            validator: (text) {
+                              if (text == null || text.isEmpty || text == "") {
                                 return LocaleKeys.field_required.tr();
                               }
-                            }
-                            return null;
-                          }),
-                      CustomTextField(
-                        title: LocaleKeys.address_line_2.tr(),
-                        hintText: LocaleKeys.address_line_2.tr(),
-                        controller: addressLine2Controller,
+                              return null;
+                            },
+                          )
+                        : const SizedBox(),
+                    CustomTextField(
+                      title: LocaleKeys.contact_person_name.tr(),
+                      hintText: LocaleKeys.contact_person_name.tr(),
+                      controller: contactPersonController,
+                      validator: (text) {
+                        if (text == null || text.isEmpty) {
+                          return LocaleKeys.field_required.tr();
+                        }
+                        return null;
+                      },
+                    ),
+                    CustomTextField(
+                      title: LocaleKeys.contact_number.tr(),
+                      hintText: LocaleKeys.contact_number.tr(),
+                      keyboardType: TextInputType.number,
+                      controller: contactNumberController,
+                      validator: (text) {
+                        if (text == null || text.isEmpty) {
+                          return LocaleKeys.field_required.tr();
+                        }
+                        return null;
+                      },
+                    ),
+                    Consumer(
+                      builder: (context, watch, _) {
+                        final countryState = watch(countryNotifierProvider);
+
+                        return countryState is CountryLoadedState
+                            ? CustomDropDownField(
+                                title: LocaleKeys.country.tr(),
+                                optionsList: countryState.countryList!
+                                    .map((e) => e.name)
+                                    .toList(),
+                                //value: "Select",
+                                controller: countryController,
+                                hintText: LocaleKeys.country.tr(),
+                                isCallback: true,
+                                callbackFunction: (int countryId) {
+                                  selectedCountryID =
+                                      countryState.countryList![countryId].id;
+                                  context
+                                      .read(statesNotifierProvider.notifier)
+                                      .getState(countryState
+                                          .countryList![countryId].id);
+                                },
+                                validator: (text) {
+                                  if (text == null || text.isEmpty) {
+                                    return 'Please select a country';
+                                  }
+                                  return null;
+                                },
+                              )
+                            : countryState is CountryLoadingState
+                                ? const FieldLoading()
+                                : const SizedBox();
+                      },
+                    ),
+                    Consumer(
+                      builder: (context, watch, _) {
+                        final statesState = watch(statesNotifierProvider);
+                        if (statesState is StatesLoadedState) {
+                          selectedStateID = statesState.statesList!.isEmpty
+                              ? null
+                              : statesState.statesList![0].id;
+                        }
+                        return statesState is StatesLoadedState
+                            ? CustomDropDownField(
+                                title: LocaleKeys.states.tr(),
+                                optionsList: statesState.statesList!.isEmpty
+                                    ? ["Select"]
+                                    : statesState.statesList!
+                                        .map((e) => e.name)
+                                        .toList(),
+                                //value: "Select",
+                                controller: statesController,
+                                hintText: LocaleKeys.states.tr(),
+                                isCallback: true,
+                                callbackFunction: (int stateId) {
+                                  selectedStateID =
+                                      statesState.statesList![stateId].id;
+                                },
+                                validator: (text) {
+                                  if (text == null || text.isEmpty) {
+                                    return 'Please select a state';
+                                  }
+                                  return null;
+                                },
+                              )
+                            : statesState is StatesLoadingState
+                                ? const FieldLoading()
+                                : const SizedBox();
+                      },
+                    ),
+                    CustomTextField(
+                      title: LocaleKeys.zip_code.tr(),
+                      hintText: LocaleKeys.zip_code.tr(),
+                      keyboardType: TextInputType.number,
+                      controller: zipCodeController,
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                      validator: (text) {
+                        if (text == null || text.isEmpty) {
+                          return LocaleKeys.field_required.tr();
+                        }
+                        return null;
+                      },
+                    ),
+                    CustomTextField(
+                        title: LocaleKeys.address_line_1.tr(),
+                        hintText: LocaleKeys.address_line_1.tr(),
+                        controller: addressLine1Controller,
                         validator: (text) {
-                          if (addressLine2Controller.text.isEmpty) {
-                            if (text == null || text.isEmpty) {
+                          if (text == null || text.isEmpty) {
+                            if (addressLine1Controller.text.isEmpty) {
                               return LocaleKeys.field_required.tr();
                             }
                           }
                           return null;
-                        },
-                      ),
-                      CustomTextField(
-                        title: LocaleKeys.city.tr(),
-                        hintText: LocaleKeys.city.tr(),
-                        controller: cityController,
-                        validator: (text) {
+                        }),
+                    CustomTextField(
+                      title: LocaleKeys.address_line_2.tr(),
+                      hintText: LocaleKeys.address_line_2.tr(),
+                      controller: addressLine2Controller,
+                      validator: (text) {
+                        if (addressLine2Controller.text.isEmpty) {
                           if (text == null || text.isEmpty) {
                             return LocaleKeys.field_required.tr();
                           }
-                          return null;
-                        },
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          ElevatedButton(
-                              onPressed: () {
-                                if (_formKey.currentState!.validate()) {
-                                  toast(
-                                    LocaleKeys.please_wait.tr(),
-                                  );
-                                  context
-                                      .read(addressNotifierProvider.notifier)
-                                      .createAddress(
-                                        addressType: addressTypeController
-                                                    .text.isEmpty ||
-                                                addressTypeController.text == ""
-                                            ? "Shipping"
-                                            : addressTypeController.text,
-                                        contactPerson:
-                                            contactPersonController.text,
-                                        contactNumber:
-                                            contactNumberController.text,
-                                        countryId: selectedCountryID ?? 4,
-                                        stateId: selectedStateID,
-                                        cityId: cityController.text,
-                                        addressLine1:
-                                            addressLine1Controller.text,
-                                        addressLine2:
-                                            addressLine2Controller.text,
-                                        zipCode: zipCodeController.text,
-                                      );
-                                  context.pop();
-                                }
-                              },
-                              child: Text(LocaleKeys.add_address.tr())),
-                        ],
-                      ),
-                    ],
-                  ).p(10),
-                ).cornerRadius(10).p(10),
-              ],
-            ),
+                        }
+                        return null;
+                      },
+                    ),
+                    CustomTextField(
+                      title: LocaleKeys.city.tr(),
+                      hintText: LocaleKeys.city.tr(),
+                      controller: cityController,
+                      validator: (text) {
+                        if (text == null || text.isEmpty) {
+                          return LocaleKeys.field_required.tr();
+                        }
+                        return null;
+                      },
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        ElevatedButton(
+                            onPressed: () {
+                              if (_formKey.currentState!.validate()) {
+                                toast(
+                                  LocaleKeys.please_wait.tr(),
+                                );
+                                context
+                                    .read(addressNotifierProvider.notifier)
+                                    .createAddress(
+                                      addressType: addressTypeController
+                                                  .text.isEmpty ||
+                                              addressTypeController.text == ""
+                                          ? "Shipping"
+                                          : addressTypeController.text,
+                                      contactPerson:
+                                          contactPersonController.text,
+                                      contactNumber:
+                                          contactNumberController.text,
+                                      countryId: selectedCountryID ?? 4,
+                                      stateId: selectedStateID,
+                                      cityId: cityController.text,
+                                      addressLine1: addressLine1Controller.text,
+                                      addressLine2: addressLine2Controller.text,
+                                      zipCode: zipCodeController.text,
+                                    );
+                                context.pop();
+                              }
+                            },
+                            child: Text(LocaleKeys.add_address.tr())),
+                      ],
+                    ),
+                  ],
+                ).p(10),
+              ).cornerRadius(10).p(10),
+            ],
           ),
         ),
       ),

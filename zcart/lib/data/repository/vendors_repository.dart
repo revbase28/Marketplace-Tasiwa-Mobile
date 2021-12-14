@@ -1,4 +1,4 @@
-import 'package:zcart/data/interface/iVendors_repository.dart';
+import 'package:zcart/data/interface/i_vendors_repository.dart';
 import 'package:zcart/data/models/vendors/vendor_details_model.dart';
 import 'package:zcart/data/models/vendors/vendor_feedback_model.dart';
 import 'package:zcart/data/models/vendors/vendor_items_model.dart';

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -115,12 +116,14 @@ class BlogDetailsScreen extends ConsumerWidget {
                   ),
                   SizedBox(
                     width: context.screenWidth,
-                    child: Image.network(
-                      blogState.blog!.featuredImage!,
-                      errorBuilder:
-                          (BuildContext _, Object error, StackTrace? stack) {
-                        return const SizedBox();
-                      },
+                    child: CachedNetworkImage(
+                      imageUrl: blogState.blog!.featuredImage!,
+                      errorWidget: (context, url, error) => const SizedBox(),
+                      progressIndicatorBuilder: (context, url, progress) =>
+                          Center(
+                        child:
+                            CircularProgressIndicator(value: progress.progress),
+                      ),
                       fit: BoxFit.cover,
                     ).pOnly(bottom: 10),
                   ),

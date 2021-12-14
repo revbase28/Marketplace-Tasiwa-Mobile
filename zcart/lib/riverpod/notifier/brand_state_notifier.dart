@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:zcart/data/interface/iBrand_repository.dart';
+import 'package:zcart/data/interface/i_brand_repository.dart';
 import 'package:zcart/data/network/network_exception.dart';
 import 'package:zcart/riverpod/state/brand_state.dart';
 import 'package:zcart/translations/locale_keys.g.dart';

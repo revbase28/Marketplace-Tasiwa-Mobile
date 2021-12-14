@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zcart/Theme/styles/colors.dart';
@@ -84,28 +85,17 @@ class FeaturedBrands extends ConsumerWidget {
                                               ? kDarkBgColor
                                               : kFadeColor),
                                     ),
-                                    child: Image.network(
-                                      featuredBrandsState
+                                    child: CachedNetworkImage(
+                                      imageUrl: featuredBrandsState
                                           .featuredBrands!.data[index].image!,
                                       fit: BoxFit.contain,
-                                      loadingBuilder:
-                                          (context, child, loadingProgress) {
-                                        if (loadingProgress == null) {
-                                          return child;
-                                        } else {
-                                          return const Center(
-                                              child: Icon(Icons.image));
-                                        }
-                                      },
-                                      errorBuilder: (BuildContext context,
-                                          Object exception,
-                                          StackTrace? stackTrace) {
-                                        return const Center(
-                                          child: Icon(
-                                            Icons.image_not_supported,
-                                          ),
-                                        );
-                                      },
+                                      errorWidget: (context, url, error) =>
+                                          const SizedBox(),
+                                      progressIndicatorBuilder:
+                                          (context, url, progress) => Center(
+                                        child: CircularProgressIndicator(
+                                            value: progress.progress),
+                                      ),
                                     ),
                                   ).pOnly(bottom: 10),
                                 ),

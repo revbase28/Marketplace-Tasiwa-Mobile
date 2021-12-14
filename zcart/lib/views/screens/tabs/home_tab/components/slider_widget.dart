@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -26,15 +27,15 @@ class SliderWidget extends StatelessWidget {
         items: sliderList!
             .map((item) => SizedBox(
                   width: double.infinity,
-                  child: Image.network(
-                    item.image!.path!,
+                  child: CachedNetworkImage(
+                    imageUrl: item.image!.path!,
                     fit: BoxFit.cover,
-                    errorBuilder: (BuildContext context, Object exception,
-                        StackTrace? stackTrace) {
-                      debugPrint(
-                          "Exception: $exception\nStackTrace: $stackTrace");
-                      return const SizedBox();
-                    },
+                    errorWidget: (context, url, error) => const SizedBox(),
+                    progressIndicatorBuilder: (context, url, progress) =>
+                        Center(
+                      child:
+                          CircularProgressIndicator(value: progress.progress),
+                    ),
                   ),
                 ).cornerRadius(10).onInkTap(() {
                   if (item.link!.isNotEmpty) {

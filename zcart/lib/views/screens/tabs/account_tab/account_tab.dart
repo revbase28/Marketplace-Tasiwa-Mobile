@@ -22,10 +22,10 @@ import 'package:zcart/views/screens/product_list/recently_viewed.dart';
 import 'package:zcart/views/screens/tabs/account_tab/account/account_details_screen.dart';
 import 'package:zcart/views/screens/tabs/account_tab/account/address_list.dart';
 import 'package:zcart/views/screens/tabs/account_tab/blogs/blogs_screen.dart';
-import 'package:zcart/views/screens/tabs/account_tab/coupons/myCoupons_screen.dart';
+import 'package:zcart/views/screens/tabs/account_tab/coupons/my_coupons_screen.dart';
 import 'package:zcart/views/screens/tabs/account_tab/disputes/disputes_screen.dart';
 import 'package:zcart/views/screens/tabs/account_tab/messages/messages_screen.dart';
-import 'package:zcart/views/screens/tabs/account_tab/orders/myOrder_screen.dart';
+import 'package:zcart/views/screens/tabs/account_tab/orders/my_order_screen.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:zcart/Theme/styles/colors.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -41,13 +41,6 @@ class AccountTab extends StatelessWidget {
           systemOverlayStyle: SystemUiOverlayStyle.light,
           title: Text(LocaleKeys.account_text.tr()),
           actions: [
-            // IconButton(
-            //   onPressed: () {
-            //     context.nextPage(const RazorpayTest());
-            //   },
-            //   icon: const Icon(Icons.payment),
-            //   tooltip: "Settings",
-            // ),
             IconButton(
               onPressed: () {
                 context.nextPage(const SettingsPage());
@@ -57,22 +50,20 @@ class AccountTab extends StatelessWidget {
             ),
           ],
         ),
-        body: SafeArea(
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                const AccountDashboard(),
-                const UserActivityCard(),
-                const ActionCard(),
+        body: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const AccountDashboard(),
+              const UserActivityCard(),
+              const ActionCard(),
 
-                /// Recently viewed
-                const RecentlyViewed()
-                    .pOnly(bottom: 0, top: 10, right: 10, left: 10),
-                const FeaturedBrands()
-                    .pOnly(bottom: 10, top: 0, right: 10, left: 10),
-              ],
-            ),
+              /// Recently viewed
+              const RecentlyViewed()
+                  .pOnly(bottom: 0, top: 10, right: 10, left: 10),
+              const FeaturedBrands()
+                  .pOnly(bottom: 10, top: 0, right: 10, left: 10),
+            ],
           ),
         ));
   }

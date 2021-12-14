@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:zcart/data/interface/iWishlist_repository.dart';
+import 'package:zcart/data/interface/i_wishlist_repository.dart';
 import 'package:zcart/data/network/network_exception.dart';
 import 'package:zcart/riverpod/state/wishlist_state.dart';
 import 'package:zcart/translations/locale_keys.g.dart';

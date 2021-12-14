@@ -1,4 +1,4 @@
-import 'package:zcart/data/interface/iDeals_repository.dart';
+import 'package:zcart/data/interface/i_deals_repository.dart';
 import 'package:zcart/data/models/deals/deal_of_the_day_model.dart';
 import 'package:zcart/data/models/deals/deals_under_the_price_model.dart';
 import 'package:zcart/data/network/api.dart';

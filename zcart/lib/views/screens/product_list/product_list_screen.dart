@@ -40,7 +40,8 @@ class ProductListScreen extends ConsumerWidget {
                         )))
                     : SingleChildScrollView(
                         child: ProductDetailsCard(
-                                productList: categoryItemState.categoryItemList)
+                                productList:
+                                    categoryItemState.categoryItemList!)
                             .px(10),
                       )
                 : const SizedBox());

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:velocity_x/velocity_x.dart';
@@ -34,12 +35,15 @@ class BannerWidget extends StatelessWidget {
                     SizedBox(
                         height: context.percentHeight * 15,
                         width: double.infinity,
-                        child: Image.network(
-                          item.image!,
-                          errorBuilder: (BuildContext _, Object error,
-                              StackTrace? stack) {
-                            return const SizedBox();
-                          },
+                        child: CachedNetworkImage(
+                          imageUrl: item.image!,
+                          errorWidget: (context, url, error) =>
+                              const SizedBox(),
+                          progressIndicatorBuilder: (context, url, progress) =>
+                              Center(
+                            child: CircularProgressIndicator(
+                                value: progress.progress),
+                          ),
                           fit: BoxFit.cover,
                         )).cornerRadius(10),
                     Column(

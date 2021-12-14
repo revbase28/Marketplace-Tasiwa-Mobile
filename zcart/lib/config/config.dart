@@ -29,7 +29,7 @@ class MyConfig {
   ///This is your app api url. You must change this url as your own app api url. Currently the app api
   ///url is [https://test.incevio.com/api/]. This is the url that you will use to access the api. Don't ////forget the slash [/] at the end and [https://] at the front.
   ///
-  static const String appApiUrl = 'https://staging.incevio.cloud/api/';
+  static const String appApiUrl = 'https://zcart.incevio.com/api/';
 
   ///
 
@@ -37,8 +37,8 @@ class MyConfig {
   /// These are your app colors. You must change this colors as your own app colors.
   ///Only change the hex values of the colors. Format of the color is [#FFFFFF].
   ///
-  static final Color primaryColor = HexColor("#28007c");
-  static final Color accentColor = HexColor("#3f0084");
+  static final Color primaryColor = HexColor("#286ed8");
+  static final Color accentColor = HexColor("#286ed8");
 
   ///App Gradient Colors
   static final Color gradientColor1 = HexColor("#B12704");
@@ -58,7 +58,7 @@ class MyConfig {
     required Duration duration,
     required double size,
   }) =>
-      SpinKitDancingSquare(color: color, size: size, duration: duration);
+      SpinKitRing(color: color, size: size, duration: duration);
 
   ///
 

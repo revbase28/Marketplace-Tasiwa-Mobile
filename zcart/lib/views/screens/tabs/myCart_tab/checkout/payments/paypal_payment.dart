@@ -1,4 +1,6 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_paypal/flutter_paypal.dart';
 import 'package:zcart/data/models/address/address_model.dart';
 import 'package:zcart/data/models/cart/cart_item_details_model.dart';
@@ -125,6 +127,7 @@ class _PayPalPaymentState extends State<PayPalPayment> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        systemOverlayStyle: SystemUiOverlayStyle.light,
         title: const Text("Paypal Express Checkout"),
         leading: BackButton(
           onPressed: () {
@@ -166,12 +169,13 @@ class _PayPalPaymentState extends State<PayPalPayment> {
                   ],
                 ),
               ),
-              Image.network(
-                "https://www.paypalobjects.com/webstatic/en_US/i/buttons/PP_logo_h_200x51.png",
-                errorBuilder:
-                    (BuildContext _, Object error, StackTrace? stack) {
-                  return const SizedBox();
-                },
+              CachedNetworkImage(
+                imageUrl:
+                    "https://www.paypalobjects.com/webstatic/en_US/i/buttons/PP_logo_h_200x51.png",
+                errorWidget: (context, url, error) => const SizedBox(),
+                progressIndicatorBuilder: (context, url, progress) => Center(
+                  child: CircularProgressIndicator(value: progress.progress),
+                ),
                 fit: BoxFit.cover,
               ),
               const SizedBox(height: 10),

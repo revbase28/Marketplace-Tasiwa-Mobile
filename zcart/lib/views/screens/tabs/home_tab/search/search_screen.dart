@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -74,12 +75,15 @@ class _SearchScreenState extends State<SearchScreen> {
                               context, kLightColor, kDarkCardBgColor),
                           padding: const EdgeInsets.symmetric(vertical: 5),
                           child: ListTile(
-                            leading: Image.network(
-                              searchState.searchedItem![index].image!,
-                              errorBuilder: (BuildContext _, Object error,
-                                  StackTrace? stack) {
-                                return const SizedBox();
-                              },
+                            leading: CachedNetworkImage(
+                              imageUrl: searchState.searchedItem![index].image!,
+                              errorWidget: (context, url, error) =>
+                                  const SizedBox(),
+                              progressIndicatorBuilder:
+                                  (context, url, progress) => Center(
+                                child: CircularProgressIndicator(
+                                    value: progress.progress),
+                              ),
                             ),
                             title: Text(
                               searchState.searchedItem![index].title!,

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:zcart/data/interface/iUser_repository.dart';
+import 'package:zcart/data/interface/i_user_repository.dart';
 import 'package:zcart/data/models/user/user_model.dart';
 import 'package:zcart/helper/constants.dart';
 import 'package:zcart/data/network/api.dart';

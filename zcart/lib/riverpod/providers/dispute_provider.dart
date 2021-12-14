@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:zcart/data/interface/iDispute_repository.dart';
+import 'package:zcart/data/interface/i_dispute_repository.dart';
 import 'package:zcart/data/repository/dispute_repository.dart';
 import 'package:zcart/riverpod/notifier/dispute/dispute_details_notifier.dart';
 import 'package:zcart/riverpod/notifier/dispute/dispute_info_notifier.dart';

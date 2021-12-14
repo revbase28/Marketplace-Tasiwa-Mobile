@@ -1,8 +1,10 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:velocity_x/velocity_x.dart';
@@ -26,7 +28,7 @@ import 'package:zcart/riverpod/state/checkout_state.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:zcart/views/screens/startup/loading_screen.dart';
 import 'package:zcart/views/screens/tabs/account_tab/account/add_address_screen.dart';
-import 'package:zcart/views/screens/tabs/account_tab/others/termsAndConditions_screen.dart';
+import 'package:zcart/views/screens/tabs/account_tab/others/terms_and_conditions_screen.dart';
 import 'package:zcart/views/screens/tabs/myCart_tab/checkout/payments/payment_methods.dart';
 import 'package:zcart/views/shared_widgets/address_list_widget.dart';
 import 'package:zcart/views/shared_widgets/custom_textfield.dart';
@@ -101,6 +103,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         },
         child: Scaffold(
             appBar: AppBar(
+              systemOverlayStyle: SystemUiOverlayStyle.light,
               title: Text(LocaleKeys.checkout.tr()),
             ),
             body: Consumer(builder: (context, watch, _) {
@@ -179,13 +182,16 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                           cartItemDetailsState.cartItemDetails!.items!.length,
                       itemBuilder: (context, index) {
                         return ListTile(
-                          leading: Image.network(
-                            cartItemDetailsState
+                          leading: CachedNetworkImage(
+                            imageUrl: cartItemDetailsState
                                 .cartItemDetails!.items![index].image!,
-                            errorBuilder: (BuildContext _, Object error,
-                                StackTrace? stack) {
-                              return const SizedBox();
-                            },
+                            errorWidget: (context, url, error) =>
+                                const SizedBox(),
+                            progressIndicatorBuilder:
+                                (context, url, progress) => Center(
+                              child: CircularProgressIndicator(
+                                  value: progress.progress),
+                            ),
                           ),
                           title: Text(cartItemDetailsState
                               .cartItemDetails!.items![index].description!),

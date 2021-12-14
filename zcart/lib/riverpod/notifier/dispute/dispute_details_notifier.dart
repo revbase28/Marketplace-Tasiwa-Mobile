@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nb_utils/nb_utils.dart';
-import 'package:zcart/data/interface/iDispute_repository.dart';
+import 'package:zcart/data/interface/i_dispute_repository.dart';
 import 'package:zcart/data/network/network_exception.dart';
 import 'package:zcart/riverpod/state/dispute/dispute_details_state.dart';
 import 'package:easy_localization/easy_localization.dart';

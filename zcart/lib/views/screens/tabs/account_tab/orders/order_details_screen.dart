@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -14,7 +15,7 @@ import 'package:zcart/views/screens/product_details/product_details_screen.dart'
 import 'package:zcart/views/screens/tabs/account_tab/disputes/dispute_details_screen.dart';
 import 'package:zcart/views/screens/tabs/account_tab/disputes/open_dispute_screen.dart';
 import 'package:zcart/views/screens/tabs/account_tab/orders/feedback_screen.dart';
-import 'package:zcart/views/shared_widgets/customConfirmDialog.dart';
+import 'package:zcart/views/shared_widgets/custom_confirm_dialog.dart';
 import 'package:zcart/views/shared_widgets/custom_button.dart';
 import 'package:zcart/views/shared_widgets/loading_widget.dart';
 import 'package:zcart/Theme/styles/colors.dart';
@@ -260,12 +261,16 @@ class OrderDetailsScreen extends ConsumerWidget {
                           children: [
                             Row(
                               children: [
-                                Image.network(
-                                  orderDetailsState.orderDetails!.shop!.image!,
-                                  errorBuilder: (BuildContext _, Object error,
-                                      StackTrace? stack) {
-                                    return const SizedBox();
-                                  },
+                                CachedNetworkImage(
+                                  imageUrl: orderDetailsState
+                                      .orderDetails!.shop!.image!,
+                                  errorWidget: (context, url, error) =>
+                                      const SizedBox(),
+                                  progressIndicatorBuilder:
+                                      (context, url, progress) => Center(
+                                    child: CircularProgressIndicator(
+                                        value: progress.progress),
+                                  ),
                                   height: 50,
                                   width: 50,
                                 ).p(10),
@@ -312,13 +317,16 @@ class OrderDetailsScreen extends ConsumerWidget {
                                       context.nextPage(
                                           const ProductDetailsScreen());
                                     },
-                                    leading: Image.network(
-                                      orderDetailsState
+                                    leading: CachedNetworkImage(
+                                      imageUrl: orderDetailsState
                                           .orderDetails!.items![index].image!,
-                                      errorBuilder: (BuildContext _,
-                                          Object error, StackTrace? stack) {
-                                        return const SizedBox();
-                                      },
+                                      errorWidget: (context, url, error) =>
+                                          const SizedBox(),
+                                      progressIndicatorBuilder:
+                                          (context, url, progress) => Center(
+                                        child: CircularProgressIndicator(
+                                            value: progress.progress),
+                                      ),
                                     ),
                                     title: Text(orderDetailsState.orderDetails!
                                         .items![index].description!),

@@ -1,5 +1,5 @@
 import 'package:nb_utils/nb_utils.dart';
-import 'package:zcart/data/interface/iDispute_repository.dart';
+import 'package:zcart/data/interface/i_dispute_repository.dart';
 import 'package:zcart/data/models/dispute/dispute_details_model.dart';
 import 'package:zcart/data/models/dispute/dispute_info_model.dart';
 import 'package:zcart/data/models/dispute/disputes_model.dart';

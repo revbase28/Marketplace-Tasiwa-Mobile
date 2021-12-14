@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:zcart/helper/get_color_based_on_theme.dart';
 import 'package:zcart/helper/get_recently_viewed.dart';
@@ -53,17 +54,16 @@ class ProductCard extends StatelessWidget {
                     child: Column(
                       children: [
                         Expanded(
-                            child: Image.network(
-                          productList![index].image,
+                            child: CachedNetworkImage(
+                          imageUrl: productList![index].image,
                           fit: BoxFit.fitWidth,
-                          errorBuilder: (BuildContext context, Object exception,
-                              StackTrace? stackTrace) {
-                            return const Center(
-                              child: Icon(
-                                Icons.image_not_supported,
-                              ),
-                            );
-                          },
+                          errorWidget: (context, url, error) =>
+                              const SizedBox(),
+                          progressIndicatorBuilder: (context, url, progress) =>
+                              Center(
+                            child: CircularProgressIndicator(
+                                value: progress.progress),
+                          ),
                         ).pOnly(bottom: 10)),
                         Text(
                           "${productList![index].offerPrice ?? ''}",

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -143,12 +144,18 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                         .py(5),
                     Row(
                       children: [
-                        Image.network(widget.order!.shop!.image!, errorBuilder:
-                                (BuildContext _, Object error,
-                                    StackTrace? stack) {
-                          return const SizedBox();
-                        }, height: 50, width: 50)
-                            .p(10),
+                        CachedNetworkImage(
+                          imageUrl: widget.order!.shop!.image!,
+                          errorWidget: (context, url, error) =>
+                              const SizedBox(),
+                          progressIndicatorBuilder: (context, url, progress) =>
+                              Center(
+                            child: CircularProgressIndicator(
+                                value: progress.progress),
+                          ),
+                          height: 50,
+                          width: 50,
+                        ).p(10),
                         Text(widget.order!.shop!.name!,
                             style: context.textTheme.subtitle2),
                       ],
@@ -258,11 +265,12 @@ class ProductRatingCard extends StatelessWidget {
     return Column(
       children: [
         ListTile(
-          leading: Image.network(
-            order!.items![index].image!,
-            errorBuilder: (BuildContext _, Object error, StackTrace? stack) {
-              return const SizedBox();
-            },
+          leading: CachedNetworkImage(
+            imageUrl: order!.items![index].image!,
+            errorWidget: (context, url, error) => const SizedBox(),
+            progressIndicatorBuilder: (context, url, progress) => Center(
+              child: CircularProgressIndicator(value: progress.progress),
+            ),
           ),
           title: Text(order!.items![index].description!),
           subtitle: Text(

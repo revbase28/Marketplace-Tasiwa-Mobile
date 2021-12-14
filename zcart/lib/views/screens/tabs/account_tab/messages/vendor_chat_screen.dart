@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:zcart/Theme/styles/colors.dart';
@@ -52,12 +53,14 @@ class VendorChatScreen extends StatelessWidget {
                 SizedBox(
                   width: 20,
                   height: 20,
-                  child: Image.network(
-                    shopImage!,
-                    errorBuilder:
-                        (BuildContext _, Object error, StackTrace? stack) {
-                      return const SizedBox();
-                    },
+                  child: CachedNetworkImage(
+                    imageUrl: shopImage!,
+                    errorWidget: (context, url, error) => const SizedBox(),
+                    progressIndicatorBuilder: (context, url, progress) =>
+                        Center(
+                      child:
+                          CircularProgressIndicator(value: progress.progress),
+                    ),
                   ),
                 ),
                 const SizedBox(width: 20),

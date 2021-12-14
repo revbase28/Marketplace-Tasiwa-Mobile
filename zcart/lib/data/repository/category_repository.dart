@@ -1,4 +1,4 @@
-import 'package:zcart/data/interface/iCategory_repository.dart';
+import 'package:zcart/data/interface/i_category_repository.dart';
 import 'package:zcart/data/models/categories/subgroup_category_model.dart';
 import 'package:zcart/data/models/categories/category_model.dart';
 import 'package:zcart/data/models/categories/category_subgroup_model.dart';

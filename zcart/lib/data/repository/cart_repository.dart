@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
-import 'package:zcart/data/interface/iCart_repository.dart';
+import 'package:zcart/data/interface/i_cart_repository.dart';
 import 'package:zcart/data/models/cart/cart_item_details_model.dart';
 import 'package:zcart/data/models/cart/cart_model.dart';
 import 'package:zcart/data/network/api.dart';

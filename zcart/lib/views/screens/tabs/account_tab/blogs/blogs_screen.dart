@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,7 +8,7 @@ import 'package:zcart/data/controller/blog/blog_controller.dart';
 import 'package:zcart/data/controller/blog/blog_state.dart';
 import 'package:zcart/helper/url_launcher_helper.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
-import 'package:zcart/views/screens/tabs/account_tab/blogs/blogsDetails_screen.dart';
+import 'package:zcart/views/screens/tabs/account_tab/blogs/blogs_details_screen.dart';
 import 'package:zcart/views/shared_widgets/loading_widget.dart';
 import 'package:zcart/Theme/styles/colors.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -36,12 +37,16 @@ class BlogsScreen extends ConsumerWidget {
                           child: ListTile(
                             leading: SizedBox(
                               width: 50,
-                              child: Image.network(
-                                blogsState.blogList![index].featuredImage!,
-                                errorBuilder: (BuildContext _, Object error,
-                                    StackTrace? stack) {
-                                  return const SizedBox();
-                                },
+                              child: CachedNetworkImage(
+                                imageUrl:
+                                    blogsState.blogList![index].featuredImage!,
+                                errorWidget: (context, url, error) =>
+                                    const SizedBox(),
+                                progressIndicatorBuilder:
+                                    (context, url, progress) => Center(
+                                  child: CircularProgressIndicator(
+                                      value: progress.progress),
+                                ),
                                 fit: BoxFit.cover,
                               ),
                             ),

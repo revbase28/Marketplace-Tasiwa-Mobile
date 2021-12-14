@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:zcart/data/models/product/product_details_model.dart';
@@ -11,12 +12,15 @@ import 'package:velocity_x/velocity_x.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ProductDetailsCard extends StatelessWidget {
-  final List<dynamic>? productList;
+  final List<dynamic> productList;
   final String? title;
   final bool isTitleCentered;
 
   const ProductDetailsCard(
-      {this.productList, this.title, this.isTitleCentered = false, Key? key})
+      {required this.productList,
+      this.title,
+      this.isTitleCentered = false,
+      Key? key})
       : super(key: key);
 
   @override
@@ -42,19 +46,19 @@ class ProductDetailsCard extends StatelessWidget {
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             padding: const EdgeInsets.symmetric(vertical: 10),
-            itemCount: productList!.length,
+            itemCount: productList.length,
             itemBuilder: (context, index) {
               return GestureDetector(
                 onTap: () {
                   context
                       .read(productNotifierProvider.notifier)
-                      .getProductDetails(productList![index].slug)
+                      .getProductDetails(productList[index].slug)
                       .then((value) {
                     getRecentlyViewedItems(context);
                   });
                   context
                       .read(productSlugListProvider.notifier)
-                      .addProductSlug(productList![index].slug);
+                      .addProductSlug(productList[index].slug);
                   context.nextPage(const ProductDetailsScreen());
                 },
                 child: Card(
@@ -69,9 +73,9 @@ class ProductDetailsCard extends StatelessWidget {
                       header: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          productList![index] is LinkedItem
+                          productList[index] is LinkedItem
                               ? const SizedBox()
-                              : productList![index].hotItem
+                              : productList[index].hotItem
                                   ? ShaderMask(
                                       shaderCallback: (bounds) =>
                                           LinearGradient(
@@ -103,12 +107,12 @@ class ProductDetailsCard extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              productList![index].condition == "New"
+                              productList[index].condition == "New"
                                   ? Container(
                                       padding: const EdgeInsets.symmetric(
                                           vertical: 4, horizontal: 6),
                                       child: Text(
-                                        productList![index].condition,
+                                        productList[index].condition,
                                         style: context.textTheme.caption!
                                             .copyWith(
                                                 fontSize: 10,
@@ -121,12 +125,12 @@ class ProductDetailsCard extends StatelessWidget {
                                           color: kPrimaryColor),
                                     ).pOnly(right: 3)
                                   : const SizedBox(),
-                              productList![index].discount != null
+                              productList[index].discount != null
                                   ? Container(
                                       padding: const EdgeInsets.symmetric(
                                           vertical: 4, horizontal: 6),
                                       child: Text(
-                                        productList![index].discount,
+                                        productList[index].discount,
                                         style: context.textTheme.caption!
                                             .copyWith(
                                                 fontSize: 10,
@@ -147,69 +151,50 @@ class ProductDetailsCard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Expanded(
-                              child: Image.network(
-                            productList![index].image,
+                              child: CachedNetworkImage(
+                            imageUrl: productList[index].image,
                             fit: BoxFit.fitWidth,
-                            loadingBuilder: (BuildContext context, Widget child,
-                                ImageChunkEvent? loadingProgress) {
-                              if (loadingProgress == null) {
-                                return child;
-                              } else {
-                                return const Center(child: Icon(Icons.image));
-                              }
-                            },
-                            errorBuilder: (BuildContext context,
-                                Object exception, StackTrace? stackTrace) {
-                              return const Center(
-                                child: Icon(
-                                  Icons.image_not_supported,
-                                  color: kDarkColor,
-                                ),
-                              );
-                            },
+                            errorWidget: (context, url, error) =>
+                                const SizedBox(),
+                            progressIndicatorBuilder:
+                                (context, url, progress) => Center(
+                              child: CircularProgressIndicator(
+                                  value: progress.progress),
+                            ),
                           )),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Flexible(
-                                child: Text(
-                                  productList![index].title,
-                                  maxLines: null,
-                                  softWrap: true,
-                                  style: context.textTheme.subtitle2,
-                                ),
-                              ),
-                            ],
+                          Text(
+                            productList[index].title,
+                            maxLines: 2,
+                            softWrap: true,
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.start,
+                            style: context.textTheme.subtitle2,
                           ).pOnly(bottom: 5, top: 5),
                           Row(
                             textBaseline: TextBaseline.alphabetic,
                             crossAxisAlignment: CrossAxisAlignment.baseline,
                             children: [
-                              Flexible(
-                                child: productList![index].hasOffer
-                                    ? Text(productList![index].offerPrice,
-                                        style: context.textTheme.subtitle2!
-                                            .copyWith(
-                                                color: getColorBasedOnTheme(
-                                                    context,
-                                                    kPriceColor,
-                                                    kDarkPriceColor),
-                                                fontWeight: FontWeight.bold))
-                                    : Text(productList![index].price,
-                                        style: context.textTheme.subtitle2!
-                                            .copyWith(
-                                                color: getColorBasedOnTheme(
-                                                    context,
-                                                    kPriceColor,
-                                                    kDarkPriceColor),
-                                                fontWeight: FontWeight.bold)),
-                              ),
-                              const SizedBox(
-                                width: 3,
-                              ),
-                              productList![index].hasOffer
+                              productList[index].hasOffer
+                                  ? Text(productList[index].offerPrice,
+                                      style: context.textTheme.subtitle2!
+                                          .copyWith(
+                                              color: getColorBasedOnTheme(
+                                                  context,
+                                                  kPriceColor,
+                                                  kDarkPriceColor),
+                                              fontWeight: FontWeight.bold))
+                                  : Text(productList[index].price,
+                                      style: context.textTheme.subtitle2!
+                                          .copyWith(
+                                              color: getColorBasedOnTheme(
+                                                  context,
+                                                  kPriceColor,
+                                                  kDarkPriceColor),
+                                              fontWeight: FontWeight.bold)),
+                              const SizedBox(width: 3),
+                              productList[index].hasOffer
                                   ? Text(
-                                      productList![index].price,
+                                      productList[index].price,
                                       style: context.textTheme.caption!
                                           .copyWith(
                                               decoration:
@@ -217,6 +202,27 @@ class ProductDetailsCard extends StatelessWidget {
                                               fontStyle: FontStyle.italic,
                                               fontSize: 10,
                                               color: kPrimaryFadeTextColor),
+                                    )
+                                  : const SizedBox(),
+                              productList[index].rating != null
+                                  ? Expanded(
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        children: [
+                                          const Icon(Icons.star,
+                                              color: kDarkPriceColor, size: 14),
+                                          Text(
+                                            productList[index].rating,
+                                            textAlign: TextAlign.end,
+                                            style: context.textTheme.caption!
+                                                .copyWith(
+                                                    fontSize: 10,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                          ),
+                                        ],
+                                      ),
                                     )
                                   : const SizedBox(),
                             ],

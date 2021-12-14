@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_credit_card/flutter_credit_card.dart';
 import 'package:zcart/Theme/styles/colors.dart';
 import 'package:zcart/helper/constants.dart';
@@ -59,6 +60,7 @@ class CustomPaymentCardScreenState extends State<CustomPaymentCardScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        systemOverlayStyle: SystemUiOverlayStyle.light,
         title: Text(
             widget.payMentMethod == stripe ? 'Stripe Checkout' : 'Checkout'),
       ),

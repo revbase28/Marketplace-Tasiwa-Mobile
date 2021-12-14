@@ -1,4 +1,4 @@
-import 'package:zcart/data/interface/iOffers_repository.dart';
+import 'package:zcart/data/interface/i_offers_repository.dart';
 import 'package:zcart/data/models/offers/offers_model.dart';
 import 'package:zcart/data/network/api.dart';
 import 'package:zcart/data/network/network_exception.dart';

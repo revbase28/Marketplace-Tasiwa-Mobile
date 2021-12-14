@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,7 +8,7 @@ import 'package:zcart/riverpod/providers/dispute_provider.dart';
 import 'package:zcart/riverpod/state/dispute/dispute_details_state.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:zcart/views/screens/tabs/account_tab/disputes/dispute_responses.dart';
-import 'package:zcart/views/shared_widgets/customConfirmDialog.dart';
+import 'package:zcart/views/shared_widgets/custom_confirm_dialog.dart';
 import 'package:zcart/views/shared_widgets/custom_button.dart';
 import 'package:zcart/views/shared_widgets/custom_textfield.dart';
 import 'package:zcart/views/shared_widgets/loading_widget.dart';
@@ -205,13 +206,16 @@ class DisputeDetailsScreen extends ConsumerWidget {
                           children: [
                             Row(
                               children: [
-                                Image.network(
-                                  disputeDetailsState
+                                CachedNetworkImage(
+                                  imageUrl: disputeDetailsState
                                       .disputeDetails!.shop!.image!,
-                                  errorBuilder: (BuildContext _, Object error,
-                                      StackTrace? stack) {
-                                    return const SizedBox();
-                                  },
+                                  errorWidget: (context, url, error) =>
+                                      const SizedBox(),
+                                  progressIndicatorBuilder:
+                                      (context, url, progress) => Center(
+                                    child: CircularProgressIndicator(
+                                        value: progress.progress),
+                                  ),
                                   height: 50,
                                   width: 50,
                                 ).p(10),
@@ -237,13 +241,19 @@ class DisputeDetailsScreen extends ConsumerWidget {
                                     .orderDetails!.items!.length,
                                 itemBuilder: (context, index) {
                                   return ListTile(
-                                    leading: Image.network(
-                                      disputeDetailsState.disputeDetails!
-                                          .orderDetails!.items![index].image!,
-                                      errorBuilder: (BuildContext _,
-                                          Object error, StackTrace? stack) {
-                                        return const SizedBox();
-                                      },
+                                    leading: CachedNetworkImage(
+                                      imageUrl: disputeDetailsState
+                                          .disputeDetails!
+                                          .orderDetails!
+                                          .items![index]
+                                          .image!,
+                                      errorWidget: (context, url, error) =>
+                                          const SizedBox(),
+                                      progressIndicatorBuilder:
+                                          (context, url, progress) => Center(
+                                        child: CircularProgressIndicator(
+                                            value: progress.progress),
+                                      ),
                                     ),
                                     title: Text(disputeDetailsState
                                         .disputeDetails!

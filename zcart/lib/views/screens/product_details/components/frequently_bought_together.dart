@@ -25,7 +25,7 @@ class FrequentlyBoughtTogetherCard extends StatelessWidget {
                   .pOnly(top: 10, left: 10, bottom: 5),
               ProductDetailsCard(
                       productList:
-                          productDetailsState.productModel.data!.linkedItems)
+                          productDetailsState.productModel.data!.linkedItems!)
                   .px(10),
             ],
           )

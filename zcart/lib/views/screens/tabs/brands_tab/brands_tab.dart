@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -63,26 +64,15 @@ class BrandsTab extends ConsumerWidget {
                           Expanded(
                               child: Padding(
                             padding: const EdgeInsets.all(16.0),
-                            child: Image.network(
-                              brand.image!,
-                              loadingBuilder: (BuildContext context,
-                                  Widget child,
-                                  ImageChunkEvent? loadingProgress) {
-                                if (loadingProgress == null) {
-                                  return child;
-                                } else {
-                                  return const Center(child: Icon(Icons.image));
-                                }
-                              },
-                              errorBuilder: (BuildContext context,
-                                  Object exception, StackTrace? stackTrace) {
-                                return const Center(
-                                  child: Icon(
-                                    Icons.image_not_supported,
-                                    color: kDarkColor,
-                                  ),
-                                );
-                              },
+                            child: CachedNetworkImage(
+                              imageUrl: brand.image!,
+                              errorWidget: (context, url, error) =>
+                                  const SizedBox(),
+                              progressIndicatorBuilder:
+                                  (context, url, progress) => Center(
+                                child: CircularProgressIndicator(
+                                    value: progress.progress),
+                              ),
                             ),
                           )),
                           Row(
@@ -94,7 +84,8 @@ class BrandsTab extends ConsumerWidget {
                                   maxLines: null,
                                   softWrap: true,
                                   textAlign: TextAlign.center,
-                                  style: context.textTheme.subtitle2,
+                                  style: context.textTheme.subtitle2!
+                                      .copyWith(fontWeight: FontWeight.bold),
                                 ),
                               ),
                             ],

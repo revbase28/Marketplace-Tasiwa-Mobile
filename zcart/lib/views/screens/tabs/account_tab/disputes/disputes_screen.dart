@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -10,7 +11,7 @@ import 'package:zcart/riverpod/state/state.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:zcart/views/screens/tabs/account_tab/disputes/dispute_details_screen.dart';
 import 'package:zcart/views/screens/tabs/account_tab/messages/vendor_chat_screen.dart';
-import 'package:zcart/views/shared_widgets/customConfirmDialog.dart';
+import 'package:zcart/views/shared_widgets/custom_confirm_dialog.dart';
 import 'package:zcart/views/shared_widgets/loading_widget.dart';
 import 'package:zcart/Theme/styles/colors.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -151,20 +152,25 @@ class DisputeScreen extends ConsumerWidget {
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
                                           children: [
-                                            Image.network(
-                                              disputesState
+                                            CachedNetworkImage(
+                                              imageUrl: disputesState
                                                   .disputes[index]
                                                   .orderDetails!
                                                   .items![itemsIndex]
                                                   .image!,
                                               height: 50,
                                               width: 50,
-                                              errorBuilder:
-                                                  (BuildContext context,
-                                                      Object error,
-                                                      StackTrace? stack) {
-                                                return const SizedBox();
-                                              },
+                                              errorWidget:
+                                                  (context, url, error) =>
+                                                      const SizedBox(),
+                                              progressIndicatorBuilder:
+                                                  (context, url, progress) =>
+                                                      Center(
+                                                child:
+                                                    CircularProgressIndicator(
+                                                        value:
+                                                            progress.progress),
+                                              ),
                                             ).pOnly(right: 10),
                                             Expanded(
                                               child: Column(

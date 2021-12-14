@@ -1,5 +1,5 @@
 import 'package:nb_utils/nb_utils.dart';
-import 'package:zcart/data/interface/iProduct_repository.dart';
+import 'package:zcart/data/interface/i_product_repository.dart';
 import 'package:zcart/data/models/product/product_model.dart';
 import 'package:zcart/data/models/product/product_details_model.dart';
 import 'package:zcart/data/models/product/product_variant_details_model.dart';

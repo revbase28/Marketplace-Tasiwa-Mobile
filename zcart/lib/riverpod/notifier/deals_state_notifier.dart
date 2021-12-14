@@ -1,6 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:zcart/data/interface/iDeals_repository.dart';
+import 'package:zcart/data/interface/i_deals_repository.dart';
 import 'package:zcart/data/network/network_exception.dart';
 import 'package:zcart/riverpod/state/deals_state.dart';
 import 'package:zcart/translations/locale_keys.g.dart';

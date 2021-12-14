@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -22,7 +23,7 @@ import 'package:zcart/views/screens/tabs/account_tab/orders/order_details_screen
 import 'package:zcart/Theme/styles/colors.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:zcart/views/screens/tabs/home_tab/components/error_widget.dart';
-import 'package:zcart/views/shared_widgets/customConfirmDialog.dart';
+import 'package:zcart/views/shared_widgets/custom_confirm_dialog.dart';
 
 class MyOrderScreen extends ConsumerWidget {
   const MyOrderScreen({Key? key}) : super(key: key);
@@ -112,12 +113,15 @@ class OrderCard extends StatelessWidget {
                     child: SizedBox(
                       height: 50,
                       width: 50,
-                      child: Image.network(
-                        orderListState.orders![orderIndex!].shop!.image!,
-                        errorBuilder:
-                            (BuildContext _, Object error, StackTrace? stack) {
-                          return const SizedBox();
-                        },
+                      child: CachedNetworkImage(
+                        imageUrl:
+                            orderListState.orders![orderIndex!].shop!.image!,
+                        errorWidget: (context, url, error) => const SizedBox(),
+                        progressIndicatorBuilder: (context, url, progress) =>
+                            Center(
+                          child: CircularProgressIndicator(
+                              value: progress.progress),
+                        ),
                         fit: BoxFit.contain,
                       ).pOnly(left: 10),
                     ),
@@ -187,13 +191,15 @@ class OrderCard extends StatelessWidget {
                         orderListState.orders![orderIndex!].items!.length,
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (BuildContext context, itemsIndex) {
-                      return Image.network(
-                        orderListState
+                      return CachedNetworkImage(
+                        imageUrl: orderListState
                             .orders![orderIndex!].items![itemsIndex].image!,
-                        errorBuilder:
-                            (BuildContext _, Object error, StackTrace? stack) {
-                          return const SizedBox();
-                        },
+                        errorWidget: (context, url, error) => const SizedBox(),
+                        progressIndicatorBuilder: (context, url, progress) =>
+                            Center(
+                          child: CircularProgressIndicator(
+                              value: progress.progress),
+                        ),
                         height: 50,
                         width: 50,
                       ).p(10).onInkTap(() {

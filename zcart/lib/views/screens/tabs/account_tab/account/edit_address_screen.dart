@@ -8,7 +8,7 @@ import 'package:zcart/riverpod/providers/address_provider.dart';
 import 'package:zcart/riverpod/state/address/country_state.dart';
 import 'package:zcart/riverpod/state/address/states_state.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
-import 'package:zcart/views/shared_widgets/customConfirmDialog.dart';
+import 'package:zcart/views/shared_widgets/custom_confirm_dialog.dart';
 import 'package:zcart/views/shared_widgets/custom_dropdownfield.dart';
 import 'package:zcart/views/shared_widgets/custom_textfield.dart';
 import 'package:zcart/views/shared_widgets/dropdown_field_loading_widget.dart';
@@ -107,266 +107,259 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
       ),
       body: _isLoading
           ? const LoadingWidget()
-          : SafeArea(
-              child: SingleChildScrollView(
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    children: [
-                      Container(
-                        color: getColorBasedOnTheme(
-                            context, kLightColor, kDarkCardBgColor),
-                        width: context.screenWidth,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            CustomDropDownField(
-                              title: LocaleKeys.address_type.tr(),
-                              optionsList: const [
-                                "Primary",
-                                "Billing",
-                                "Shipping"
-                              ],
-                              value: widget.address.addressType,
-                              controller: _addressTypeController,
-                              validator: (text) {
-                                if (text == null || text.isEmpty) {
-                                  return LocaleKeys.field_required.tr();
-                                }
-                                return null;
-                              },
-                              onChange: (value) {
-                                debugPrint(_addressTypeController.text);
-                              },
-                            ),
-                            CustomTextField(
-                              title: LocaleKeys.contact_person_name.tr(),
-                              hintText: LocaleKeys.contact_person_name.tr(),
-                              controller: _contactPersonController,
-                              validator: (text) {
-                                if (text == null || text.isEmpty) {
-                                  return LocaleKeys.field_required.tr();
-                                }
-                                return null;
-                              },
-                            ),
-                            CustomTextField(
-                              title: LocaleKeys.contact_number.tr(),
-                              hintText: LocaleKeys.contact_number.tr(),
-                              keyboardType: TextInputType.number,
-                              controller: _contactNumberController,
-                              validator: (text) {
-                                if (text == null || text.isEmpty) {
-                                  return LocaleKeys.field_required.tr();
-                                }
-                                return null;
-                              },
-                            ),
-                            Consumer(
-                              builder: (context, watch, _) {
-                                final countryState =
-                                    watch(countryNotifierProvider);
+          : SingleChildScrollView(
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    Container(
+                      color: getColorBasedOnTheme(
+                          context, kLightColor, kDarkCardBgColor),
+                      width: context.screenWidth,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          CustomDropDownField(
+                            title: LocaleKeys.address_type.tr(),
+                            optionsList: const [
+                              "Primary",
+                              "Billing",
+                              "Shipping"
+                            ],
+                            value: widget.address.addressType,
+                            controller: _addressTypeController,
+                            validator: (text) {
+                              if (text == null || text.isEmpty) {
+                                return LocaleKeys.field_required.tr();
+                              }
+                              return null;
+                            },
+                            onChange: (value) {
+                              debugPrint(_addressTypeController.text);
+                            },
+                          ),
+                          CustomTextField(
+                            title: LocaleKeys.contact_person_name.tr(),
+                            hintText: LocaleKeys.contact_person_name.tr(),
+                            controller: _contactPersonController,
+                            validator: (text) {
+                              if (text == null || text.isEmpty) {
+                                return LocaleKeys.field_required.tr();
+                              }
+                              return null;
+                            },
+                          ),
+                          CustomTextField(
+                            title: LocaleKeys.contact_number.tr(),
+                            hintText: LocaleKeys.contact_number.tr(),
+                            keyboardType: TextInputType.number,
+                            controller: _contactNumberController,
+                            validator: (text) {
+                              if (text == null || text.isEmpty) {
+                                return LocaleKeys.field_required.tr();
+                              }
+                              return null;
+                            },
+                          ),
+                          Consumer(
+                            builder: (context, watch, _) {
+                              final countryState =
+                                  watch(countryNotifierProvider);
 
-                                return countryState is CountryLoadedState
-                                    ? CustomDropDownField(
-                                        title: LocaleKeys.country.tr(),
-                                        optionsList: countryState.countryList!
-                                            .map((e) => e.name)
-                                            .toList(),
-                                        controller: countryController,
-                                        value: countryState.countryList!
-                                            .firstWhere((e) =>
-                                                e.id ==
-                                                widget.address.country!.id)
-                                            .name,
-                                        isCallback: true,
-                                        callbackFunction: (int countryId) {
-                                          selectedCountryID = countryState
-                                              .countryList![countryId].id;
-                                          context
-                                              .read(statesNotifierProvider
-                                                  .notifier)
-                                              .getState(countryState
-                                                  .countryList![countryId].id);
-                                        },
-                                        validator: (text) {
-                                          if (text == null || text.isEmpty) {
-                                            return 'Please select a country';
-                                          }
-                                          return null;
-                                        },
-                                      )
-                                    : countryState is CountryLoadingState
-                                        ? const FieldLoading()
-                                        : const SizedBox();
-                              },
-                            ),
-                            Consumer(
-                              builder: (context, watch, _) {
-                                final statesState =
-                                    watch(statesNotifierProvider);
-                                if (statesState is StatesLoadedState) {
-                                  selectedStateID =
-                                      statesState.statesList!.isEmpty
-                                          ? null
-                                          : statesState.statesList![0].id;
-                                }
-                                return statesState is StatesLoadedState
-                                    ? CustomDropDownField(
-                                        title: LocaleKeys.states.tr(),
+                              return countryState is CountryLoadedState
+                                  ? CustomDropDownField(
+                                      title: LocaleKeys.country.tr(),
+                                      optionsList: countryState.countryList!
+                                          .map((e) => e.name)
+                                          .toList(),
+                                      controller: countryController,
+                                      value: countryState.countryList!
+                                          .firstWhere((e) =>
+                                              e.id ==
+                                              widget.address.country!.id)
+                                          .name,
+                                      isCallback: true,
+                                      callbackFunction: (int countryId) {
+                                        selectedCountryID = countryState
+                                            .countryList![countryId].id;
+                                        context
+                                            .read(
+                                                statesNotifierProvider.notifier)
+                                            .getState(countryState
+                                                .countryList![countryId].id);
+                                      },
+                                      validator: (text) {
+                                        if (text == null || text.isEmpty) {
+                                          return 'Please select a country';
+                                        }
+                                        return null;
+                                      },
+                                    )
+                                  : countryState is CountryLoadingState
+                                      ? const FieldLoading()
+                                      : const SizedBox();
+                            },
+                          ),
+                          Consumer(
+                            builder: (context, watch, _) {
+                              final statesState = watch(statesNotifierProvider);
+                              if (statesState is StatesLoadedState) {
+                                selectedStateID =
+                                    statesState.statesList!.isEmpty
+                                        ? null
+                                        : statesState.statesList![0].id;
+                              }
+                              return statesState is StatesLoadedState
+                                  ? CustomDropDownField(
+                                      title: LocaleKeys.states.tr(),
 
-                                        optionsList:
-                                            statesState.statesList!.isEmpty
-                                                ? ["Select"]
-                                                : statesState.statesList!
-                                                    .map((e) => e.name)
-                                                    .toList(),
-                                        //value: "Select",
-                                        controller: _stateController,
-                                        // value: statesState.statesList!.isEmpty
-                                        //     ? "Select"
-                                        //     : statesState.statesList!
-                                        //         .firstWhere((e) =>
-                                        //             e.id == widget.address.state!.id)
-                                        //         .name,
-                                        value: widget.address.state != null
-                                            ? statesState.statesList!.isEmpty
-                                                ? "Select"
-                                                : statesState.statesList!
-                                                    .firstWhere((e) =>
-                                                        e.id ==
-                                                        widget
-                                                            .address.state!.id)
-                                                    .name
-                                            : statesState.statesList!.isEmpty
-                                                ? "Select"
-                                                : statesState
-                                                    .statesList!.first.name,
-                                        isCallback: true,
-                                        callbackFunction: statesState
-                                                .statesList!.isNotEmpty
-                                            ? (int stateId) {
-                                                selectedStateID = statesState
-                                                    .statesList![stateId].id;
-                                              }
-                                            : null,
-                                        validator: (text) {
-                                          if (text == null || text.isEmpty) {
-                                            return 'Please select a state';
-                                          }
-                                          return null;
-                                        },
-                                      )
-                                    : statesState is StatesLoadingState
-                                        ? const FieldLoading()
-                                        : const SizedBox();
-                              },
-                            ),
-                            CustomTextField(
-                              title: LocaleKeys.zip_code.tr(),
-                              hintText: LocaleKeys.zip_code.tr(),
-                              keyboardType: TextInputType.number,
-                              controller: _zipCodeController,
-                              inputFormatters: [
-                                FilteringTextInputFormatter.digitsOnly
-                              ],
+                                      optionsList:
+                                          statesState.statesList!.isEmpty
+                                              ? ["Select"]
+                                              : statesState.statesList!
+                                                  .map((e) => e.name)
+                                                  .toList(),
+                                      //value: "Select",
+                                      controller: _stateController,
+                                      // value: statesState.statesList!.isEmpty
+                                      //     ? "Select"
+                                      //     : statesState.statesList!
+                                      //         .firstWhere((e) =>
+                                      //             e.id == widget.address.state!.id)
+                                      //         .name,
+                                      value: widget.address.state != null
+                                          ? statesState.statesList!.isEmpty
+                                              ? "Select"
+                                              : statesState.statesList!
+                                                  .firstWhere((e) =>
+                                                      e.id ==
+                                                      widget.address.state!.id)
+                                                  .name
+                                          : statesState.statesList!.isEmpty
+                                              ? "Select"
+                                              : statesState
+                                                  .statesList!.first.name,
+                                      isCallback: true,
+                                      callbackFunction:
+                                          statesState.statesList!.isNotEmpty
+                                              ? (int stateId) {
+                                                  selectedStateID = statesState
+                                                      .statesList![stateId].id;
+                                                }
+                                              : null,
+                                      validator: (text) {
+                                        if (text == null || text.isEmpty) {
+                                          return 'Please select a state';
+                                        }
+                                        return null;
+                                      },
+                                    )
+                                  : statesState is StatesLoadingState
+                                      ? const FieldLoading()
+                                      : const SizedBox();
+                            },
+                          ),
+                          CustomTextField(
+                            title: LocaleKeys.zip_code.tr(),
+                            hintText: LocaleKeys.zip_code.tr(),
+                            keyboardType: TextInputType.number,
+                            controller: _zipCodeController,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly
+                            ],
+                            validator: (text) {
+                              if (text == null || text.isEmpty) {
+                                return LocaleKeys.field_required.tr();
+                              }
+                              return null;
+                            },
+                          ),
+                          CustomTextField(
+                              title: LocaleKeys.address_line_1.tr(),
+                              hintText: LocaleKeys.address_line_1.tr(),
+                              controller: _addressLine1Controller,
                               validator: (text) {
                                 if (text == null || text.isEmpty) {
-                                  return LocaleKeys.field_required.tr();
-                                }
-                                return null;
-                              },
-                            ),
-                            CustomTextField(
-                                title: LocaleKeys.address_line_1.tr(),
-                                hintText: LocaleKeys.address_line_1.tr(),
-                                controller: _addressLine1Controller,
-                                validator: (text) {
-                                  if (text == null || text.isEmpty) {
-                                    if (_addressLine2Controller.text.isEmpty) {
-                                      return LocaleKeys.field_required.tr();
-                                    }
-                                  }
-                                  return null;
-                                }),
-                            CustomTextField(
-                              title: LocaleKeys.address_line_2.tr(),
-                              hintText: LocaleKeys.address_line_2.tr(),
-                              controller: _addressLine2Controller,
-                              validator: (text) {
-                                if (_addressLine1Controller.text.isEmpty) {
-                                  if (text == null || text.isEmpty) {
+                                  if (_addressLine2Controller.text.isEmpty) {
                                     return LocaleKeys.field_required.tr();
                                   }
                                 }
                                 return null;
-                              },
-                            ),
-                            CustomTextField(
-                              title: LocaleKeys.city.tr(),
-                              hintText: LocaleKeys.city.tr(),
-                              controller: _cityController,
-                              validator: (text) {
+                              }),
+                          CustomTextField(
+                            title: LocaleKeys.address_line_2.tr(),
+                            hintText: LocaleKeys.address_line_2.tr(),
+                            controller: _addressLine2Controller,
+                            validator: (text) {
+                              if (_addressLine1Controller.text.isEmpty) {
                                 if (text == null || text.isEmpty) {
                                   return LocaleKeys.field_required.tr();
                                 }
-                                return null;
-                              },
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                ElevatedButton(
-                                    onPressed: () {
-                                      if (_formKey.currentState!.validate()) {
-                                        toast(
-                                          LocaleKeys.please_wait.tr(),
-                                        );
-                                        context
-                                            .read(addressNotifierProvider
-                                                .notifier)
-                                            .editAddress(
-                                              addressId: widget.address.id,
-                                              addressType:
-                                                  _addressTypeController.text,
-                                              contactPerson:
-                                                  _contactPersonController.text,
-                                              contactNumber:
-                                                  _contactNumberController.text,
-                                              countryId: selectedCountryID ==
-                                                      null
-                                                  ? widget.address.country!.id
-                                                      .toString()
-                                                  : selectedCountryID
-                                                      .toString(),
-                                              stateId: selectedStateID == null
-                                                  ? widget.address.state == null
-                                                      ? null
-                                                      : widget.address.state!.id
-                                                          .toString()
-                                                  : selectedStateID.toString(),
-                                              cityId: _cityController.text,
-                                              addressLine1:
-                                                  _addressLine1Controller.text,
-                                              addressLine2:
-                                                  _addressLine2Controller.text,
-                                              zipCode: _zipCodeController.text,
-                                            );
-                                        context
-                                            .read(addressRepositoryProvider)
-                                            .fetchAddresses();
-                                        context.pop();
-                                      }
-                                    },
-                                    child:
-                                        Text(LocaleKeys.update_address.tr())),
-                              ],
-                            ),
-                          ],
-                        ).p(10),
-                      ).cornerRadius(10).p(10),
-                    ],
-                  ),
+                              }
+                              return null;
+                            },
+                          ),
+                          CustomTextField(
+                            title: LocaleKeys.city.tr(),
+                            hintText: LocaleKeys.city.tr(),
+                            controller: _cityController,
+                            validator: (text) {
+                              if (text == null || text.isEmpty) {
+                                return LocaleKeys.field_required.tr();
+                              }
+                              return null;
+                            },
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              ElevatedButton(
+                                  onPressed: () {
+                                    if (_formKey.currentState!.validate()) {
+                                      toast(
+                                        LocaleKeys.please_wait.tr(),
+                                      );
+                                      context
+                                          .read(
+                                              addressNotifierProvider.notifier)
+                                          .editAddress(
+                                            addressId: widget.address.id,
+                                            addressType:
+                                                _addressTypeController.text,
+                                            contactPerson:
+                                                _contactPersonController.text,
+                                            contactNumber:
+                                                _contactNumberController.text,
+                                            countryId: selectedCountryID == null
+                                                ? widget.address.country!.id
+                                                    .toString()
+                                                : selectedCountryID.toString(),
+                                            stateId: selectedStateID == null
+                                                ? widget.address.state == null
+                                                    ? null
+                                                    : widget.address.state!.id
+                                                        .toString()
+                                                : selectedStateID.toString(),
+                                            cityId: _cityController.text,
+                                            addressLine1:
+                                                _addressLine1Controller.text,
+                                            addressLine2:
+                                                _addressLine2Controller.text,
+                                            zipCode: _zipCodeController.text,
+                                          );
+                                      context
+                                          .read(addressRepositoryProvider)
+                                          .fetchAddresses();
+                                      context.pop();
+                                    }
+                                  },
+                                  child: Text(LocaleKeys.update_address.tr())),
+                            ],
+                          ),
+                        ],
+                      ).p(10),
+                    ).cornerRadius(10).p(10),
+                  ],
                 ),
               ),
             ),

@@ -1,6 +1,5 @@
 // DO NOT EDIT. This is code generated via package:easy_localization/generate.dart
-
-abstract class  LocaleKeys {
+abstract class LocaleKeys {
   static const about_us = 'about_us';
   static const about_vendor = 'about_vendor';
   static const accept_terms_policy = 'accept_terms_policy';
@@ -166,12 +165,16 @@ abstract class  LocaleKeys {
   static const second_step = 'second_step';
   static const select_dispute_reason = 'select_dispute_reason';
   static const select_options = 'select_options';
-  static const select_packaging_method_continue = 'select_packaging_method_continue';
-  static const select_payment_method_continue = 'select_payment_method_continue';
+  static const select_packaging_method_continue =
+      'select_packaging_method_continue';
+  static const select_payment_method_continue =
+      'select_payment_method_continue';
   static const select_product = 'select_product';
   static const select_shipping_address = 'select_shipping_address';
-  static const select_shipping_address_continue = 'select_shipping_address_continue';
-  static const select_shipping_option_continue = 'select_shipping_option_continue';
+  static const select_shipping_address_continue =
+      'select_shipping_address_continue';
+  static const select_shipping_option_continue =
+      'select_shipping_option_continue';
   static const seller_sku = 'seller_sku';
   static const seller_spec = 'seller_spec';
   static const send_appeal = 'send_appeal';
@@ -233,5 +236,4 @@ abstract class  LocaleKeys {
   static const create_account = 'create_account';
   static const agree_terms = 'agree_terms';
   static const please_agree_terms = 'please_agree_terms';
-
 }

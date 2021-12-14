@@ -1,4 +1,4 @@
-import 'package:zcart/data/interface/iSlider_repository.dart';
+import 'package:zcart/data/interface/i_slider_repository.dart';
 import 'package:zcart/data/models/sliders/slider_model.dart';
 import 'package:zcart/data/network/api.dart';
 import 'package:zcart/data/network/network_exception.dart';

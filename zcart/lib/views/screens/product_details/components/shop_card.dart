@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -27,16 +28,14 @@ class ShopCard extends StatelessWidget {
         trailing: const Icon(
           Icons.keyboard_arrow_right,
         ),
-        leading: Image.network(
-          productDetailsState.productModel.data!.shop!.image!,
+        leading: CachedNetworkImage(
+          imageUrl: productDetailsState.productModel.data!.shop!.image!,
           width: context.screenWidth * 0.15,
           fit: BoxFit.cover,
-          errorBuilder:
-              (BuildContext context, Object exception, StackTrace? stackTrace) {
-            return const Icon(
-              Icons.image_not_supported,
-            );
-          },
+          errorWidget: (context, url, error) => const SizedBox(),
+          progressIndicatorBuilder: (context, url, progress) => Center(
+            child: CircularProgressIndicator(value: progress.progress),
+          ),
         ).p(5),
         title: Row(
           crossAxisAlignment: CrossAxisAlignment.center,

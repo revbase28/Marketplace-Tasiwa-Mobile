@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -111,12 +112,16 @@ class WishListTab extends ConsumerWidget {
                               child: Row(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  Image.network(
-                                    wishListState.wishList[index].image!,
-                                    errorBuilder: (BuildContext _, Object error,
-                                        StackTrace? stack) {
-                                      return const SizedBox();
-                                    },
+                                  CachedNetworkImage(
+                                    imageUrl:
+                                        wishListState.wishList[index].image!,
+                                    errorWidget: (context, url, error) =>
+                                        const SizedBox(),
+                                    progressIndicatorBuilder:
+                                        (context, url, progress) => Center(
+                                      child: CircularProgressIndicator(
+                                          value: progress.progress),
+                                    ),
                                     height: 50,
                                     width: 50,
                                   ).p(10),

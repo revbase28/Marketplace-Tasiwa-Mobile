@@ -18,12 +18,12 @@ import 'package:zcart/helper/constants.dart';
 import 'package:zcart/riverpod/providers/provider.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:zcart/views/screens/bottom_nav_bar/bottom_nav_bar.dart';
-import 'package:zcart/views/screens/tabs/account_tab/others/aboutUs_screen.dart';
-import 'package:zcart/views/screens/tabs/account_tab/others/privacyPolicy_screen.dart';
-import 'package:zcart/views/screens/tabs/account_tab/others/termsAndConditions_screen.dart';
+import 'package:zcart/views/screens/tabs/account_tab/others/about_us_screen.dart';
+import 'package:zcart/views/screens/tabs/account_tab/others/privacy_policy_screen.dart';
+import 'package:zcart/views/screens/tabs/account_tab/others/terms_and_conditions_screen.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:zcart/views/shared_widgets/customConfirmDialog.dart';
+import 'package:zcart/views/shared_widgets/custom_confirm_dialog.dart';
 import 'package:zcart/views/shared_widgets/shared_widgets.dart';
 import 'package:zcart/views/shared_widgets/update_language.dart';
 

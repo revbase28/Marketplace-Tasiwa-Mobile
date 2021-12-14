@@ -1,4 +1,4 @@
-import 'package:zcart/data/interface/iBrand_repository.dart';
+import 'package:zcart/data/interface/i_brand_repository.dart';
 import 'package:zcart/data/models/brand/all_brands_model.dart';
 import 'package:zcart/data/models/brand/brand_profile_model.dart';
 import 'package:zcart/data/models/brand/brand_items_list_model.dart';

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:zcart/Theme/styles/colors.dart';
@@ -58,12 +59,14 @@ class OrderChatScreen extends StatelessWidget {
                 SizedBox(
                   width: 20,
                   height: 20,
-                  child: Image.network(
-                    orders.shop!.image!,
-                    errorBuilder:
-                        (BuildContext _, Object error, StackTrace? stack) {
-                      return const SizedBox();
-                    },
+                  child: CachedNetworkImage(
+                    imageUrl: orders.shop!.image!,
+                    errorWidget: (context, url, error) => const SizedBox(),
+                    progressIndicatorBuilder: (context, url, progress) =>
+                        Center(
+                      child:
+                          CircularProgressIndicator(value: progress.progress),
+                    ),
                   ),
                 ),
                 const SizedBox(width: 20),

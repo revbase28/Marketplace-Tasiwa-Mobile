@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:zcart/Theme/styles/colors.dart';
@@ -42,23 +43,22 @@ class VendorCard extends StatelessWidget {
         child: ListTile(
           contentPadding:
               const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-          leading: Image.network(
-            logo!,
+          leading: CachedNetworkImage(
+            imageUrl: logo!,
             width: context.screenWidth * 0.15,
             fit: BoxFit.cover,
-            errorBuilder: (BuildContext context, Object exception,
-                StackTrace? stackTrace) {
-              return const Icon(
-                Icons.image_not_supported,
-              );
-            },
+            errorWidget: (context, url, error) => const SizedBox(),
+            progressIndicatorBuilder: (context, url, progress) => Center(
+              child: CircularProgressIndicator(value: progress.progress),
+            ),
           ).p(10),
           title: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
                 name!,
-                style: context.textTheme.headline6!,
+                style: context.textTheme.headline6!
+                    .copyWith(fontWeight: FontWeight.bold),
               ),
               isVerified!
                   ? Icon(Icons.check_circle, color: kPrimaryColor, size: 15)

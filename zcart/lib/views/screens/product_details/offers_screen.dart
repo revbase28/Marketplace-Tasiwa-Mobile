@@ -1,4 +1,6 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zcart/helper/get_color_based_on_theme.dart';
 import 'package:zcart/riverpod/providers/offers_provider.dart';
@@ -18,61 +20,66 @@ class OffersScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Offers"),
+        systemOverlayStyle: SystemUiOverlayStyle.light,
       ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: offersState is OffersLoadingState
-              ? SizedBox(
-                  height: context.screenHeight - 100,
-                  child: const Center(child: LoadingWidget()))
-              : offersState is OffersLoadedState
-                  ? Column(
-                      children: [
-                        const SizedBox(height: 10),
-                        Container(
-                          color: getColorBasedOnTheme(
-                              context, kLightColor, kDarkBgColor),
-                          padding: const EdgeInsets.all(10),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Center(
-                                  child: Image.network(
-                                      offersState.offersModel.data!.image!,
-                                      errorBuilder: (BuildContext _,
-                                          Object error, StackTrace? stack) {
-                                return const SizedBox();
-                              }, fit: BoxFit.fitWidth)),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Flexible(
-                                    child: Text(
-                                        offersState.offersModel.data!.name!,
-                                        maxLines: null,
-                                        softWrap: true,
-                                        style: context.textTheme.bodyText2!),
-                                  ),
-                                ],
-                              ).py(5),
-                              Text(
-                                  offersState.offersModel.data!.brand ??
-                                      LocaleKeys.not_available.tr(),
-                                  style: context.textTheme.subtitle2),
-                              Text(
-                                  "${offersState.offersModel.data!.gtinType ?? ""} : ${offersState.offersModel.data!.gtin ?? LocaleKeys.not_available.tr()}",
-                                  style: context.textTheme.subtitle2!),
-                            ],
-                          ),
-                        ).px(10),
-                        ProductDetailsCard(
-                                productList:
-                                    offersState.offersModel.data!.listings)
-                            .px(10)
-                      ],
-                    )
-                  : const SizedBox(),
-        ),
+      body: SingleChildScrollView(
+        child: offersState is OffersLoadingState
+            ? SizedBox(
+                height: context.screenHeight - 100,
+                child: const Center(child: LoadingWidget()))
+            : offersState is OffersLoadedState
+                ? Column(
+                    children: [
+                      const SizedBox(height: 10),
+                      Container(
+                        color: getColorBasedOnTheme(
+                            context, kLightColor, kDarkBgColor),
+                        padding: const EdgeInsets.all(10),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Center(
+                              child: CachedNetworkImage(
+                                imageUrl: offersState.offersModel.data!.image!,
+                                errorWidget: (context, url, error) =>
+                                    const SizedBox(),
+                                progressIndicatorBuilder:
+                                    (context, url, progress) => Center(
+                                  child: CircularProgressIndicator(
+                                      value: progress.progress),
+                                ),
+                                fit: BoxFit.fitWidth,
+                              ),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Flexible(
+                                  child: Text(
+                                      offersState.offersModel.data!.name!,
+                                      maxLines: null,
+                                      softWrap: true,
+                                      style: context.textTheme.bodyText2!),
+                                ),
+                              ],
+                            ).py(5),
+                            Text(
+                                offersState.offersModel.data!.brand ??
+                                    LocaleKeys.not_available.tr(),
+                                style: context.textTheme.subtitle2),
+                            Text(
+                                "${offersState.offersModel.data!.gtinType ?? ""} : ${offersState.offersModel.data!.gtin ?? LocaleKeys.not_available.tr()}",
+                                style: context.textTheme.subtitle2!),
+                          ],
+                        ),
+                      ).px(10),
+                      ProductDetailsCard(
+                              productList:
+                                  offersState.offersModel.data!.listings!)
+                          .px(10)
+                    ],
+                  )
+                : const SizedBox(),
       ),
     );
   }

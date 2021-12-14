@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:zcart/data/interface/iAddress_repository.dart';
+import 'package:zcart/data/interface/i_address_repository.dart';
 import 'package:zcart/data/repository/address_repository.dart';
 import 'package:zcart/riverpod/notifier/address/address_state_notifier.dart';
 import 'package:zcart/riverpod/notifier/address/country_state_notifier.dart';

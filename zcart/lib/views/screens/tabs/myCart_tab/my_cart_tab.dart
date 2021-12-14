@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +20,7 @@ import 'package:zcart/views/screens/product_details/product_details_screen.dart'
 import 'package:zcart/views/screens/product_list/recently_viewed.dart';
 import 'package:zcart/views/screens/tabs/home_tab/components/error_widget.dart';
 import 'package:zcart/views/screens/tabs/myCart_tab/checkout/checkout_screen.dart';
-import 'package:zcart/views/shared_widgets/customConfirmDialog.dart';
+import 'package:zcart/views/shared_widgets/custom_confirm_dialog.dart';
 import 'package:zcart/views/shared_widgets/product_details_card.dart';
 import 'package:zcart/views/shared_widgets/product_loading_widget.dart';
 
@@ -268,13 +269,14 @@ class _ItemCardState extends State<ItemCard> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.network(
-            widget.cartItem.image!,
+          CachedNetworkImage(
+            imageUrl: widget.cartItem.image!,
             height: 50,
             width: 50,
-            errorBuilder: (BuildContext _, Object error, StackTrace? stack) {
-              return const SizedBox();
-            },
+            errorWidget: (context, url, error) => const SizedBox(),
+            progressIndicatorBuilder: (context, url, progress) => Center(
+              child: CircularProgressIndicator(value: progress.progress),
+            ),
           ).px(10),
           Expanded(
             child: Column(

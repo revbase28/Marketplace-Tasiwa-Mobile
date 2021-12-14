@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
-import 'package:zcart/data/interface/iWishlist_repository.dart';
+import 'package:zcart/data/interface/i_wishlist_repository.dart';
 import 'package:zcart/data/models/wishlist/wish_list_model.dart';
 import 'package:zcart/data/network/api.dart';
 import 'package:zcart/data/network/network_exception.dart';

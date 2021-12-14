@@ -9,7 +9,7 @@ import 'package:zcart/riverpod/providers/user_provider.dart';
 import 'package:zcart/riverpod/state/user_state.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:zcart/views/screens/bottom_nav_bar/bottom_nav_bar.dart';
-import 'package:zcart/views/screens/tabs/account_tab/others/termsAndConditions_screen.dart';
+import 'package:zcart/views/screens/tabs/account_tab/others/terms_and_conditions_screen.dart';
 import 'package:zcart/views/shared_widgets/shared_widgets.dart';
 import 'package:zcart/Theme/styles/colors.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -52,7 +52,8 @@ class SignUpScreen extends StatelessWidget {
                       key: _formKey,
                       child: Container(
                         margin: const EdgeInsets.all(16),
-                        padding: const EdgeInsets.all(16),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 24),
                         decoration: BoxDecoration(
                             color: getColorBasedOnTheme(
                                 context, kLightCardBgColor, kDarkCardBgColor),
@@ -63,16 +64,11 @@ class SignUpScreen extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.8,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(LocaleKeys.sign_up.tr(),
-                                      style: context.textTheme.headline5),
-                                ],
-                              ),
-                            ).paddingBottom(20),
+                            Text(LocaleKeys.sign_up.tr(),
+                                    textAlign: TextAlign.center,
+                                    style: context.textTheme.headline5!
+                                        .copyWith(fontWeight: FontWeight.bold))
+                                .paddingBottom(20),
                             CustomTextField(
                               hintText: LocaleKeys.your_full_name.tr(),
                               title: LocaleKeys.your_full_name.tr(),

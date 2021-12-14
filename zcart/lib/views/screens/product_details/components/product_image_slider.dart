@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -30,15 +31,15 @@ class ProductImageSlider extends StatelessWidget {
                       width: double.infinity,
                       color: getColorBasedOnTheme(
                           context, kLightColor, kDarkCardBgColor),
-                      child: Image.network(
-                        item.path,
+                      child: CachedNetworkImage(
+                        imageUrl: item.path,
                         fit: BoxFit.scaleDown,
-                        errorBuilder: (BuildContext context, Object exception,
-                            StackTrace? stackTrace) {
-                          debugPrint(
-                              "Exception: $exception\nStackTrace: $stackTrace");
-                          return const SizedBox();
-                        },
+                        errorWidget: (context, url, error) => const SizedBox(),
+                        progressIndicatorBuilder: (context, url, progress) =>
+                            Center(
+                          child: CircularProgressIndicator(
+                              value: progress.progress),
+                        ),
                       ),
                     ))
                 .toList()),

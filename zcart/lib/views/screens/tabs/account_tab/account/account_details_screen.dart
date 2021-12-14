@@ -23,32 +23,30 @@ class AccountDetailsScreen extends StatelessWidget {
         title: Text(LocaleKeys.account_detatils.tr()),
       ),
       resizeToAvoidBottomInset: true,
-      body: SafeArea(
-        child: Stack(
-          children: [
-            SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  /// Personal Details
-                  PersonalDetails().cornerRadius(10).p(10),
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                /// Personal Details
+                PersonalDetails().cornerRadius(10).p(10),
 
-                  /// Password
-                  PasswordUpdate().cornerRadius(10).p(10),
-                ],
-              ),
+                /// Password
+                PasswordUpdate().cornerRadius(10).p(10),
+              ],
             ),
-            Consumer(builder: (context, watch, _) {
-              final userState = watch(userNotifierProvider);
-              return Visibility(
-                  visible: userState is UserLoadingState,
-                  child: Container(
-                      color: getColorBasedOnTheme(
-                          context, kLightColor, kDarkColor),
-                      child: const LoadingWidget()));
-            })
-          ],
-        ),
+          ),
+          Consumer(builder: (context, watch, _) {
+            final userState = watch(userNotifierProvider);
+            return Visibility(
+                visible: userState is UserLoadingState,
+                child: Container(
+                    color:
+                        getColorBasedOnTheme(context, kLightColor, kDarkColor),
+                    child: const LoadingWidget()));
+          })
+        ],
       ),
     );
   }
