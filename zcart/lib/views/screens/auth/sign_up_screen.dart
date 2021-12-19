@@ -5,7 +5,6 @@ import 'package:nb_utils/nb_utils.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:zcart/helper/get_color_based_on_theme.dart';
 import 'package:zcart/riverpod/providers/provider.dart';
-import 'package:zcart/riverpod/providers/user_provider.dart';
 import 'package:zcart/riverpod/state/user_state.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:zcart/views/screens/bottom_nav_bar/bottom_nav_bar.dart';

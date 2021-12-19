@@ -1,5 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:zcart/data/models/product/product_details_model.dart';
 import 'package:zcart/helper/get_color_based_on_theme.dart';

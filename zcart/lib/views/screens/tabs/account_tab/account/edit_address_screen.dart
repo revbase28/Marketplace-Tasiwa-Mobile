@@ -9,8 +9,6 @@ import 'package:zcart/riverpod/state/address/country_state.dart';
 import 'package:zcart/riverpod/state/address/states_state.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:zcart/views/shared_widgets/custom_confirm_dialog.dart';
-import 'package:zcart/views/shared_widgets/custom_dropdownfield.dart';
-import 'package:zcart/views/shared_widgets/custom_textfield.dart';
 import 'package:zcart/views/shared_widgets/dropdown_field_loading_widget.dart';
 import 'package:zcart/Theme/styles/colors.dart';
 import 'package:easy_localization/easy_localization.dart';

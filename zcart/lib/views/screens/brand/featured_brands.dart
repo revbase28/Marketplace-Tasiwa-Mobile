@@ -10,7 +10,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:zcart/views/screens/bottom_nav_bar/bottom_nav_bar.dart';
 import 'package:zcart/views/screens/brand/brand_profile.dart';
 import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 class FeaturedBrands extends ConsumerWidget {

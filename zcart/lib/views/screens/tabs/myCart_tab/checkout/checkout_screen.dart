@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
@@ -19,8 +18,6 @@ import 'package:zcart/data/network/network_utils.dart';
 import 'package:zcart/helper/constants.dart';
 import 'package:zcart/helper/get_amount_from_string.dart';
 import 'package:zcart/helper/get_color_based_on_theme.dart';
-import 'package:zcart/riverpod/providers/address_provider.dart';
-import 'package:zcart/riverpod/providers/checkout_provider.dart';
 import 'package:zcart/riverpod/providers/provider.dart';
 import 'package:zcart/riverpod/state/address/address_state.dart';
 import 'package:zcart/riverpod/state/cart_state.dart';

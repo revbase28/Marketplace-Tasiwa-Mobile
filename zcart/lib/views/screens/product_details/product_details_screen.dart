@@ -5,9 +5,6 @@ import 'package:nb_utils/nb_utils.dart';
 import 'package:zcart/data/controller/chat/chat_controller.dart';
 import 'package:zcart/data/network/network_utils.dart';
 import 'package:zcart/helper/get_color_based_on_theme.dart';
-import 'package:zcart/riverpod/providers/cart_provider.dart';
-import 'package:zcart/riverpod/providers/product_slug_list_provider.dart';
-import 'package:zcart/riverpod/providers/product_provider.dart';
 import 'package:zcart/riverpod/providers/provider.dart';
 import 'package:zcart/riverpod/state/cart_state.dart';
 import 'package:zcart/riverpod/state/product/product_state.dart';
@@ -289,45 +286,39 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                       ],
                                     ).px(10),
                                   ).cornerRadius(10).onInkTap(() async {
-                                    if (_productDetailsState
-                                        is ProductLoadedState) {
-                                      if (_productDetailsState.productModel
-                                                  .variants!.attributes !=
-                                              null
-                                          ? _formKey.currentState!.validate()
-                                          : true) {
-                                        toast(LocaleKeys.please_wait.tr());
-                                        context
-                                            .read(cartNotifierProvider.notifier)
-                                            .addToCart(
-                                                context,
-                                                _productDetailsState
-                                                    .productModel.data!.slug,
-                                                _quantity,
-                                                _productDetailsState
-                                                    .productModel
-                                                    .shippingCountryId,
-                                                _productDetailsState
-                                                            .productModel
-                                                            .shippingOptions ==
-                                                        null
-                                                    ? null
-                                                    : _productDetailsState
-                                                        .productModel
-                                                        .shippingOptions!
-                                                        .first
-                                                        .id,
-                                                _productDetailsState
-                                                            .productModel
-                                                            .shippingOptions ==
-                                                        null
-                                                    ? null
-                                                    : _productDetailsState
-                                                        .productModel
-                                                        .shippingOptions!
-                                                        .first
-                                                        .shippingZoneId);
-                                      }
+                                    if (_productDetailsState.productModel
+                                                .variants!.attributes !=
+                                            null
+                                        ? _formKey.currentState!.validate()
+                                        : true) {
+                                      toast(LocaleKeys.please_wait.tr());
+                                      context
+                                          .read(cartNotifierProvider.notifier)
+                                          .addToCart(
+                                              context,
+                                              _productDetailsState
+                                                  .productModel.data!.slug,
+                                              _quantity,
+                                              _productDetailsState.productModel
+                                                  .shippingCountryId,
+                                              _productDetailsState.productModel
+                                                          .shippingOptions ==
+                                                      null
+                                                  ? null
+                                                  : _productDetailsState
+                                                      .productModel
+                                                      .shippingOptions!
+                                                      .first
+                                                      .id,
+                                              _productDetailsState.productModel
+                                                          .shippingOptions ==
+                                                      null
+                                                  ? null
+                                                  : _productDetailsState
+                                                      .productModel
+                                                      .shippingOptions!
+                                                      .first
+                                                      .shippingZoneId);
                                     }
                                   })
                                 : const SizedBox(),

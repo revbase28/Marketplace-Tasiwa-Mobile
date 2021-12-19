@@ -1,5 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -10,7 +9,6 @@ import 'package:zcart/data/controller/chat/chat_controller.dart';
 import 'package:zcart/helper/get_color_based_on_theme.dart';
 import 'package:zcart/helper/get_recently_viewed.dart';
 import 'package:zcart/riverpod/providers/dispute_provider.dart';
-import 'package:zcart/riverpod/providers/order_provider.dart';
 import 'package:zcart/riverpod/providers/provider.dart';
 import 'package:zcart/riverpod/state/order_state.dart';
 import 'package:zcart/riverpod/state/scroll_state.dart';

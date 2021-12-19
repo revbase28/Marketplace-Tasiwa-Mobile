@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:zcart/data/network/network_utils.dart';
 import 'package:zcart/translations/locale_keys.g.dart';

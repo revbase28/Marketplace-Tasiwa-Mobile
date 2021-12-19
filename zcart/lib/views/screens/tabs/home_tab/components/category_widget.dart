@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:zcart/data/models/categories/category_model.dart';
 import 'package:zcart/helper/category_icons.dart';
 import 'package:zcart/helper/get_color_based_on_theme.dart';
-import 'package:zcart/riverpod/providers/product_provider.dart';
 import 'package:zcart/riverpod/providers/provider.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:zcart/views/screens/tabs/home_tab/categories/categoris_list_screen.dart';
