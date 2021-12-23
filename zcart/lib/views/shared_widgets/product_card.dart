@@ -32,10 +32,12 @@ class ProductCard extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(title!,
-                style: context.textTheme.headline6!
-                    .copyWith(color: kPrimaryFadeTextColor))
-            .pOnly(bottom: 10),
+        title == null
+            ? const SizedBox()
+            : Text(title!,
+                    style: context.textTheme.headline6!
+                        .copyWith(color: kPrimaryFadeTextColor))
+                .pOnly(bottom: 10),
         Flexible(
           child: Container(
             color: getColorBasedOnTheme(context, kLightColor, kDarkCardBgColor),

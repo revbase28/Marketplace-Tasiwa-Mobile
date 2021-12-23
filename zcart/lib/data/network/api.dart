@@ -203,6 +203,10 @@ class API {
   /// Conversation
   static const conversations = 'conversations';
 
+  ///Plugins
+  static checkPluginAvailability(String pluginSlug) => 'plugin/$pluginSlug';
+  static const flashDealPlugin = "deals/flash-deals";
+
   ///Others
   static const aboutUs = 'page/about-us';
   static const privacyPolicy = 'page/privacy-policy';

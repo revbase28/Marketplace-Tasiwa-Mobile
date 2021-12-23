@@ -1,14 +1,18 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_countdown_timer/index.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:zcart/Theme/styles/colors.dart';
 import 'package:zcart/data/models/deals/deal_of_the_day_model.dart' as deal;
+import 'package:zcart/data/models/deals/flash_deals_model.dart';
 import 'package:zcart/helper/get_color_based_on_theme.dart';
 import 'package:zcart/helper/get_recently_viewed.dart';
 import 'package:zcart/riverpod/providers/deals_provider.dart';
+import 'package:zcart/riverpod/providers/plugin_provider.dart';
 import 'package:zcart/riverpod/providers/provider.dart';
 import 'package:zcart/riverpod/state/deals_state.dart';
 import 'package:zcart/riverpod/state/state.dart';
@@ -16,12 +20,12 @@ import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:zcart/views/screens/brand/featured_brands.dart';
 import 'package:zcart/views/screens/product_details/product_details_screen.dart';
 import 'package:zcart/views/shared_widgets/shared_widgets.dart';
+
+import 'components/banners_widget.dart';
 import 'components/category_widget.dart';
 import 'components/error_widget.dart';
-import 'components/slider_widget.dart';
 import 'components/search_bar.dart';
-import 'components/banners_widget.dart';
-import 'package:easy_localization/easy_localization.dart';
+import 'components/slider_widget.dart';
 
 class HomeTab extends ConsumerWidget {
   const HomeTab({Key? key}) : super(key: key);
@@ -39,6 +43,8 @@ class HomeTab extends ConsumerWidget {
     final randomItemState = watch(randomItemNotifierProvider);
     final scrollControllerProvider =
         watch(randomItemScrollNotifierProvider.notifier);
+
+    final _flashDealsProvider = watch(flashDealPluginProvider);
 
     return ProviderListener<ScrollState>(
         provider: randomItemScrollNotifierProvider,
@@ -75,6 +81,15 @@ class HomeTab extends ConsumerWidget {
                         : categoryState is CategoryErrorState
                             ? ErrorMessageWidget(categoryState.message)
                             : const SizedBox(),
+
+                ///Flash Deals
+                _flashDealsProvider.when(
+                  data: (value) => value == null
+                      ? const SizedBox()
+                      : FlashDealsSection(flashDeals: value).pOnly(bottom: 16),
+                  loading: () => const SizedBox(),
+                  error: (error, stackTrace) => const SizedBox(),
+                ),
 
                 /// Banner
                 bannerState is BannerLoadedState
@@ -393,6 +408,71 @@ class DealOfTheDayWidget extends StatelessWidget {
               ],
             ),
           ),
+        ],
+      ),
+    );
+  }
+}
+
+class FlashDealsSection extends StatelessWidget {
+  final FlashDealsModel flashDeals;
+  const FlashDealsSection({
+    Key? key,
+    required this.flashDeals,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        boxShadow: [
+          BoxShadow(
+            color: getColorBasedOnTheme(context, kDarkColor.withOpacity(0.4),
+                kLightBgColor.withOpacity(0.2)),
+            blurRadius: 10,
+            offset: const Offset(0, 5),
+          ),
+        ],
+        color: kDarkBgColor,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 16),
+            child: Text(
+              "Flash Deals",
+              style: context.textTheme.headline5!.copyWith(
+                  color: kPrimaryLightTextColor, fontWeight: FontWeight.bold),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: ProductDetailsCard(
+              isTitleCentered: true,
+              productList: flashDeals.listings ?? [],
+            ),
+          ),
+          CountdownTimer(
+            endWidget: Text(
+              "Offer Expired",
+              style: context.textTheme.subtitle2!.copyWith(
+                  color: kDarkPriceColor, fontWeight: FontWeight.bold),
+            ),
+            endTime: flashDeals.meta?.endTime?.millisecondsSinceEpoch,
+            textStyle: context.textTheme.headline6!
+                .copyWith(color: kDarkPriceColor, fontWeight: FontWeight.bold),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: ProductDetailsCard(
+              isTitleCentered: true,
+              productList: flashDeals.featured ?? [],
+            ),
+          ),
+          const SizedBox(height: 8),
         ],
       ),
     );
