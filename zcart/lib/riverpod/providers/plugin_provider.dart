@@ -17,3 +17,17 @@ final flashDealPluginProvider = FutureProvider<FlashDealsModel?>((ref) async {
 
   return FlashDealsModel.fromJson(_responseBody);
 });
+
+final checkAppleLoginPluginProvider = FutureProvider<bool>((ref) async {
+  return await _pluginCheck("apple-login");
+});
+
+Future<bool> _pluginCheck(String pluginlsug) async {
+  var _responseBody = await handleResponse(
+      await getRequest(API.checkPluginAvailability(pluginlsug)));
+  print("_pluginCheck: $_responseBody");
+  if (_responseBody == 1) {
+    return true;
+  }
+  return false;
+}

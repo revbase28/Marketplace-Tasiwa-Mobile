@@ -204,7 +204,7 @@ class API {
   static const conversations = 'conversations';
 
   ///Plugins
-  static checkPluginAvailability(String pluginSlug) => 'plugin/$pluginSlug';
+  static checkPluginAvailability(pluginSlug) => 'plugin/$pluginSlug';
   static const flashDealPlugin = "deals/flash-deals";
 
   ///Others
