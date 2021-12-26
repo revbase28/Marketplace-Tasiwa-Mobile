@@ -39,7 +39,7 @@ class ProductListScreen extends ConsumerWidget {
                           ],
                         )))
                     : SingleChildScrollView(
-                        child: ProductDetailsCard(
+                        child: ProductDetailsCardGridView(
                                 productList:
                                     categoryItemState.categoryItemList!)
                             .px(10),

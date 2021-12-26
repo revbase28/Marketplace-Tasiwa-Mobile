@@ -96,7 +96,7 @@ class _MyCartTabState extends State<MyCartTab> {
                                       horizontal: 16),
                                   child: randomItemState
                                           is RandomItemLoadedState
-                                      ? ProductDetailsCard(
+                                      ? ProductDetailsCardGridView(
                                               title: LocaleKeys.additional_items
                                                   .tr(),
                                               isTitleCentered: true,

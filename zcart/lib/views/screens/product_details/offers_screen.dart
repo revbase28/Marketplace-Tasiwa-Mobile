@@ -73,7 +73,7 @@ class OffersScreen extends ConsumerWidget {
                           ],
                         ),
                       ).px(10),
-                      ProductDetailsCard(
+                      ProductDetailsCardGridView(
                               productList:
                                   offersState.offersModel.data!.listings!)
                           .px(10)

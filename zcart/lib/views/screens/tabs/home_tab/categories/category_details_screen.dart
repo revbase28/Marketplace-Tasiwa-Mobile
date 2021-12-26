@@ -241,7 +241,7 @@ class CategoryDetailsScreen extends ConsumerWidget {
                               Text(LocaleKeys.no_item_found.tr()),
                             ],
                           )
-                        : ProductDetailsCard(
+                        : ProductDetailsCardGridView(
                                 productList: productListState.productList)
                             .px(10)
                     : const ProductLoadingWidget().px(10),

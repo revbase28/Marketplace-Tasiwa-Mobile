@@ -66,7 +66,7 @@ class WishListTab extends ConsumerWidget {
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 16),
                             child: randomItemState is RandomItemLoadedState
-                                ? ProductDetailsCard(
+                                ? ProductDetailsCardGridView(
                                         title: LocaleKeys.additional_items.tr(),
                                         isTitleCentered: true,
                                         productList:

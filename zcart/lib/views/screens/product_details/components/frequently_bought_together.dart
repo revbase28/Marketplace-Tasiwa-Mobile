@@ -23,7 +23,7 @@ class FrequentlyBoughtTogetherCard extends StatelessWidget {
                       style: context.textTheme.subtitle2!
                           .copyWith(color: kPrimaryFadeTextColor))
                   .pOnly(top: 10, left: 10, bottom: 5),
-              ProductDetailsCard(
+              ProductDetailsCardGridView(
                       productList:
                           productDetailsState.productModel.data!.linkedItems!)
                   .px(10),

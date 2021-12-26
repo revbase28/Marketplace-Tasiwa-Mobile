@@ -134,7 +134,7 @@ class VendorsDetailsScreen extends ConsumerWidget {
                           ? ErrorMessageWidget(vendorDetailsState.message)
                           : const SizedBox(),
               vendorItemDetailsListState is VendorItemLoadedState
-                  ? ProductDetailsCard(
+                  ? ProductDetailsCardGridView(
                           productList: vendorItemDetailsListState.vendorItem!)
                       .px(10)
                   : vendorItemDetailsListState is VendorItemLoadingState ||
