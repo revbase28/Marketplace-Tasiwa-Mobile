@@ -189,6 +189,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               child: CircularProgressIndicator(
                                   value: progress.progress),
                             ),
+                            width: 40,
+                            height: 40,
                           ),
                           title: Text(cartItemDetailsState
                               .cartItemDetails!.items![index].description!),
@@ -196,6 +198,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               cartItemDetailsState
                                   .cartItemDetails!.items![index].unitPrice!,
                               style: context.textTheme.subtitle2!.copyWith(
+                                fontWeight: FontWeight.bold,
                                 color: getColorBasedOnTheme(
                                     context, kPriceColor, kDarkPriceColor),
                               )),

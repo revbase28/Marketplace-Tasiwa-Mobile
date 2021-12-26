@@ -86,7 +86,9 @@ class HomeTab extends ConsumerWidget {
                       ? const SizedBox()
                       : FlashDealsSection(flashDeals: value).pOnly(bottom: 16),
                   loading: () => const SizedBox(),
-                  error: (error, stackTrace) => const SizedBox(),
+                  error: (error, stackTrace) => const SizedBox(
+                      //  child: Text(error.toString()),
+                      ),
                 ),
 
                 /// Banner

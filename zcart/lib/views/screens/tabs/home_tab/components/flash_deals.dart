@@ -1,6 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_countdown_timer/index.dart';
 import 'package:slide_countdown/slide_countdown.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:zcart/Theme/styles/colors.dart';
@@ -48,12 +47,17 @@ class FlashDealsSection extends StatelessWidget {
                   duration: flashDeals.meta!.endTime!.difference(
                     DateTime.now(),
                   ),
-                  //countUp: true,
                   decoration: BoxDecoration(
-                    color: kPrimaryColor,
+                    gradient: LinearGradient(
+                      colors: [
+                        kGradientColor1,
+                        kGradientColor2,
+                      ],
+                      begin: Alignment.topRight,
+                      end: Alignment.bottomLeft,
+                    ),
                     borderRadius: BorderRadius.circular(6),
                   ),
-
                   separator: "",
                   showZeroValue: false,
                   textStyle: context.textTheme.subtitle2!.copyWith(
@@ -70,13 +74,18 @@ class FlashDealsSection extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: ProductDetailsCardGridView(
-              productList: flashDeals.featured ?? [],
+              productList: flashDeals.featured,
             ),
           ),
+          flashDeals.featured.isEmpty
+              ? const SizedBox(
+                  height: 8,
+                )
+              : const SizedBox(),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: CarouselSlider(
-              items: flashDeals.listings!
+              items: flashDeals.listings
                   .map((e) => ProductDetailsCard(product: e))
                   .toList(),
               options: CarouselOptions(

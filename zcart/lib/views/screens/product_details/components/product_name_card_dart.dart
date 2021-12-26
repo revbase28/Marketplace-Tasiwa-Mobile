@@ -6,6 +6,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:slide_countdown/slide_countdown.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:zcart/Theme/styles/colors.dart';
 import 'package:zcart/data/models/product/product_details_model.dart';
@@ -27,6 +28,7 @@ class ProductNameCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("Feedback: ${productModel.data!.feedbacksCount}");
     return Container(
       padding: const EdgeInsets.all(10),
       color: getColorBasedOnTheme(context, kLightColor, kDarkCardBgColor),
@@ -37,20 +39,27 @@ class ProductNameCard extends StatelessWidget {
           productModel.data!.hasOffer!
               ? Container(
                   width: context.screenWidth,
-                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  padding: const EdgeInsets.symmetric(vertical: 6),
                   margin: const EdgeInsets.symmetric(vertical: 5),
                   decoration: BoxDecoration(
                       gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
                         colors: [kGradientColor1, kGradientColor2],
                       ),
                       borderRadius: BorderRadius.circular(5)),
                   child: Center(
-                    child: CountdownTimer(
-                      endWidget: const SizedBox(),
-                      endTime:
-                          productModel.data!.offerEnd!.millisecondsSinceEpoch,
-                      textStyle: context.textTheme.bodyText1!
-                          .copyWith(color: kPrimaryLightTextColor),
+                    child: SlideCountdown(
+                      duration: productModel.data!.offerEnd!
+                          .difference(DateTime.now()),
+                      decoration: const BoxDecoration(
+                        color: Colors.transparent,
+                      ),
+                      textStyle:
+                          Theme.of(context).textTheme.headline6!.copyWith(
+                                color: Colors.grey[100],
+                                fontWeight: FontWeight.bold,
+                              ),
                     ),
                   ),
                 )

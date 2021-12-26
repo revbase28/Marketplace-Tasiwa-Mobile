@@ -7,27 +7,31 @@ String flashDealsToJson(FlashDealsModel data) => json.encode(data.toJson());
 
 class FlashDealsModel {
   FlashDealsModel({
-    this.listings,
-    this.featured,
+    required this.listings,
+    required this.featured,
     this.meta,
   });
 
-  List<Featured>? listings;
-  List<Featured>? featured;
+  List<Featured> listings;
+  List<Featured> featured;
   Meta? meta;
 
   factory FlashDealsModel.fromJson(Map<String, dynamic> json) =>
       FlashDealsModel(
-        listings: List<Featured>.from(
-            json["listings"].map((x) => Featured.fromJson(x))),
-        featured: List<Featured>.from(
-            json["featured"].map((x) => Featured.fromJson(x))),
+        listings: json["listings"] == null
+            ? []
+            : List<Featured>.from(
+                json["listings"].map((x) => Featured.fromJson(x))),
+        featured: json["featured"] == null
+            ? []
+            : List<Featured>.from(
+                json["featured"].map((x) => Featured.fromJson(x))),
         meta: Meta.fromJson(json["meta"]),
       );
 
   Map<String, dynamic> toJson() => {
-        "listings": List<dynamic>.from(listings?.map((x) => x.toJson()) ?? []),
-        "featured": List<dynamic>.from(featured?.map((x) => x.toJson()) ?? []),
+        "listings": List<dynamic>.from(listings.map((x) => x.toJson())),
+        "featured": List<dynamic>.from(featured.map((x) => x.toJson())),
         "meta": meta?.toJson(),
       };
 }
