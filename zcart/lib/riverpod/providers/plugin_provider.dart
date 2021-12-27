@@ -25,7 +25,6 @@ final checkAppleLoginPluginProvider = FutureProvider<bool>((ref) async {
 Future<bool> _pluginCheck(String pluginlsug) async {
   var _responseBody = await handleResponse(
       await getRequest(API.checkPluginAvailability(pluginlsug)));
-  print("_pluginCheck: $_responseBody");
   if (_responseBody == 1) {
     return true;
   }

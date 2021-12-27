@@ -1,7 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -28,7 +27,6 @@ class ProductNameCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("Feedback: ${productModel.data!.feedbacksCount}");
     return Container(
       padding: const EdgeInsets.all(10),
       color: getColorBasedOnTheme(context, kLightColor, kDarkCardBgColor),
@@ -57,7 +55,7 @@ class ProductNameCard extends StatelessWidget {
                       ),
                       textStyle:
                           Theme.of(context).textTheme.headline6!.copyWith(
-                                color: Colors.grey[100],
+                                color: Colors.white,
                                 fontWeight: FontWeight.bold,
                               ),
                     ),

@@ -254,6 +254,8 @@ class DisputeDetailsScreen extends ConsumerWidget {
                                         child: CircularProgressIndicator(
                                             value: progress.progress),
                                       ),
+                                      width: 50,
+                                      height: 50,
                                     ),
                                     title: Text(disputeDetailsState
                                         .disputeDetails!

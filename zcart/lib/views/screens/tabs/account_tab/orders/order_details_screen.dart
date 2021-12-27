@@ -273,7 +273,7 @@ class OrderDetailsScreen extends ConsumerWidget {
                                   ),
                                   height: 50,
                                   width: 50,
-                                ).p(10),
+                                ).pOnly(right: 10, left: 10, top: 10),
                                 Text(
                                   orderDetailsState.orderDetails!.shop!.name!,
                                   style: context.textTheme.headline6!,
@@ -327,6 +327,8 @@ class OrderDetailsScreen extends ConsumerWidget {
                                         child: CircularProgressIndicator(
                                             value: progress.progress),
                                       ),
+                                      width: 50,
+                                      height: 50,
                                     ),
                                     title: Text(orderDetailsState.orderDetails!
                                         .items![index].description!),

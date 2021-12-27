@@ -14,6 +14,7 @@ import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:zcart/views/screens/auth/login_screen.dart';
 import 'package:zcart/views/screens/bottom_nav_bar/bottom_nav_bar.dart';
 import 'package:zcart/views/screens/product_details/components/product_brand_card.dart';
+import 'package:zcart/views/screens/product_details/components/ratings_and_reviews.dart';
 import 'package:zcart/views/screens/product_details/components/shop_card.dart';
 import 'package:zcart/views/screens/tabs/account_tab/messages/vendor_chat_screen.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -152,6 +153,17 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                                   _productDetailsState)
                                           .cornerRadius(10)
                                           .px(10),
+
+                                  _productDetailsState
+                                          .productModel.data!.feedbacks.isEmpty
+                                      ? const SizedBox()
+                                      : ProductRatingsAndReview(
+                                              feedbacks: _productDetailsState
+                                                  .productModel.data!.feedbacks)
+                                          .cornerRadius(10)
+                                          .px(10)
+                                          .pOnly(top: 10),
+
                                   ProductDetailsWidget(
                                       productDetailsState:
                                           _productDetailsState),

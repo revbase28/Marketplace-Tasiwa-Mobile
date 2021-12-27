@@ -113,8 +113,8 @@ class _AttributeCardState extends State<AttributeCard> {
               ),
             ],
           ).px(16),
-
-          /// Attribute field
+          if (widget.productModel.variants!.attributes != null)
+            const SizedBox(height: 16),
           if (widget.productModel.variants!.attributes != null)
             Form(
               key: widget.formKey,
@@ -186,7 +186,7 @@ class _AttributeCardState extends State<AttributeCard> {
                       ),
                     );
                   }),
-            ).px(10).pOnly(bottom: 8),
+            ).px(10),
         ],
       ),
     ).cornerRadius(10);

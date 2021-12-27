@@ -73,7 +73,7 @@ class Data {
     this.imageId,
     this.feedbacksCount,
     this.rating,
-    this.feedbacks,
+    this.feedbacks = const [],
     this.shop,
     this.product,
     this.freeShipping,
@@ -107,7 +107,7 @@ class Data {
   int? imageId;
   int? feedbacksCount;
   dynamic rating;
-  List<dynamic>? feedbacks;
+  List<FeedBack> feedbacks;
   Shop? shop;
   Product? product;
   bool? freeShipping;
@@ -150,14 +150,21 @@ class Data {
         imageId: json["image_id"],
         feedbacksCount: json["feedbacks_count"],
         rating: json["rating"],
-        feedbacks: List<dynamic>.from(json["feedbacks"].map((x) => x)),
+        feedbacks: json["feedbacks"] == null
+            ? []
+            : List<FeedBack>.from(
+                json["feedbacks"].map((x) => FeedBack.fromJson(x))),
         shop: Shop.fromJson(json["shop"]),
         product: Product.fromJson(json["product"]),
         freeShipping: json["free_shipping"],
         stuffPick: json["stuff_pick"],
-        labels: List<String>.from(json["labels"].map((x) => x)),
-        linkedItems: List<LinkedItem>.from(
-            json["linked_items"].map((x) => LinkedItem.fromJson(x))),
+        labels: json["labels"] == null
+            ? []
+            : List<String>.from(json["labels"].map((x) => x)),
+        linkedItems: json["linked_items"] == null
+            ? []
+            : List<LinkedItem>.from(
+                json["linked_items"].map((x) => LinkedItem.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -186,7 +193,7 @@ class Data {
         "image_id": imageId,
         "feedbacks_count": feedbacksCount,
         "rating": rating,
-        "feedbacks": List<dynamic>.from(feedbacks!.map((x) => x)),
+        "feedbacks": List<dynamic>.from(feedbacks.map((x) => x)),
         "shop": shop!.toJson(),
         "product": product!.toJson(),
         "free_shipping": freeShipping,
@@ -597,5 +604,66 @@ class ProductImage {
         "extension": extension,
         "order": order,
         "featured": featured,
+      };
+}
+
+class FeedBack {
+  FeedBack({
+    this.id,
+    this.rating,
+    this.comment,
+    this.approved,
+    this.spam,
+    this.updatedAt,
+    this.labels,
+    this.customer,
+  });
+
+  int? id;
+  int? rating;
+  String? comment;
+  bool? approved;
+  bool? spam;
+  String? updatedAt;
+  List<String>? labels;
+  Customer? customer;
+
+  factory FeedBack.fromJson(Map<String, dynamic> json) => FeedBack(
+        id: json["id"],
+        rating: json["rating"],
+        comment: json["comment"],
+        approved: json["approved"],
+        spam: json["spam"],
+        updatedAt: json["updated_at"],
+        labels: json["labels"] == null
+            ? []
+            : List<String>.from(json["labels"].map((x) => x)),
+        customer: json["customer"] == null
+            ? null
+            : Customer.fromJson(json["customer"]),
+      );
+}
+
+class Customer {
+  Customer({
+    this.id,
+    this.name,
+    this.avatar,
+  });
+
+  int? id;
+  String? name;
+  String? avatar;
+
+  factory Customer.fromJson(Map<String, dynamic> json) => Customer(
+        id: json["id"],
+        name: json["name"],
+        avatar: json["avatar"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "name": name,
+        "avatar": avatar,
       };
 }

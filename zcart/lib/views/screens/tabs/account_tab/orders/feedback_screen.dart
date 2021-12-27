@@ -271,6 +271,8 @@ class ProductRatingCard extends StatelessWidget {
             progressIndicatorBuilder: (context, url, progress) => Center(
               child: CircularProgressIndicator(value: progress.progress),
             ),
+            width: 50,
+            height: 50,
           ),
           title: Text(order!.items![index].description!),
           subtitle: Text(

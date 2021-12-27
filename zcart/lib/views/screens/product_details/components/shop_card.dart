@@ -23,15 +23,14 @@ class ShopCard extends StatelessWidget {
     return Container(
       color: getColorBasedOnTheme(context, kLightColor, kDarkCardBgColor),
       child: ListTile(
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+        contentPadding: const EdgeInsets.only(top: 10, right: 16, left: 16),
         trailing: const Icon(
           Icons.keyboard_arrow_right,
         ),
         leading: CachedNetworkImage(
           imageUrl: productDetailsState.productModel.data!.shop!.image!,
           width: context.screenWidth * 0.15,
-          fit: BoxFit.cover,
+          fit: BoxFit.contain,
           errorWidget: (context, url, error) => const SizedBox(),
           progressIndicatorBuilder: (context, url, progress) => Center(
             child: CircularProgressIndicator(value: progress.progress),

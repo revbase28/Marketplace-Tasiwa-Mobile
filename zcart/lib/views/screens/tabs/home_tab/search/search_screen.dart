@@ -84,6 +84,8 @@ class _SearchScreenState extends State<SearchScreen> {
                                 child: CircularProgressIndicator(
                                     value: progress.progress),
                               ),
+                              width: 50,
+                              height: 50,
                             ),
                             title: Text(
                               searchState.searchedItem![index].title!,

@@ -220,7 +220,7 @@ class ProductDetailsWidget extends StatelessWidget {
               )
             ],
           ),
-        ).cornerRadius(10).p(10),
+        ).cornerRadius(10).pOnly(top: 10, right: 10, left: 10),
         productDetailsState.productModel.data!.product!.description == null
             ? const SizedBox()
             : Container(
@@ -230,7 +230,7 @@ class ProductDetailsWidget extends StatelessWidget {
                   title: Text(LocaleKeys.product_desc.tr(),
                       style: context.textTheme.subtitle2),
                   iconColor:
-                      getColorBasedOnTheme(context, kLightColor, kDarkColor),
+                      getColorBasedOnTheme(context, kDarkColor, kLightColor),
                   collapsedIconColor: kPrimaryColor,
                   children: [
                     HtmlWidget(

@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:velocity_x/velocity_x.dart';
@@ -44,13 +45,14 @@ class ProductImageSlider extends StatelessWidget {
                 .toList()),
         Container(
           decoration: boxDecorationWithRoundedCorners(
-            backgroundColor: kFadeColor.withOpacity(0.3),
+            backgroundColor: kFadeColor.withOpacity(0.8),
           ),
-          child: BackButton(
+          child: IconButton(
             color: getColorBasedOnTheme(context, kLightColor, kDarkColor),
             onPressed: () async {
               context.pop();
             },
+            icon: const Icon(CupertinoIcons.chevron_left),
           ),
         ).p(10),
       ],
