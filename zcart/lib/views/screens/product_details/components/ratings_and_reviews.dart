@@ -73,6 +73,7 @@ class RatingAndReviewAllPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        systemOverlayStyle: getOverlayStyleBasedOnTheme(context),
         title: const Text('Ratings & Reviews'),
       ),
       body: ListView(
