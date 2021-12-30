@@ -43,8 +43,8 @@ class OrderChatRepository extends StateNotifier<OrderChatState> {
 class OrderChatSendRepository extends StateNotifier<OrderChatSendState> {
   OrderChatSendRepository() : super(const OrderChatSendInitialState());
 
-  Future sendMessage(orderId, message) async {
-    var body = {'message': message};
+  Future sendMessage(orderId, String message, {photo}) async {
+    var body = {'message': message, if (photo != null) 'photo': photo};
     state = const OrderChatSendLoadingState();
     dynamic responseBody;
     try {
@@ -98,9 +98,8 @@ class ProductChatRepository extends StateNotifier<ProductChatState> {
 class ProductChatSendRepository extends StateNotifier<ProductChatSendState> {
   ProductChatSendRepository() : super(const ProductChatSendInitialState());
 
-  Future sendMessage(shopId, message) async {
-    //TODO: Send Attachment as a body
-    var body = {'message': message};
+  Future sendMessage(shopId, message, {photo}) async {
+    var body = {'message': message, if (photo != null) 'photo': photo};
     state = const ProductChatSendLoadingState();
     dynamic responseBody;
     try {

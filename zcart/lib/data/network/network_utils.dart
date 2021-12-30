@@ -1,10 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:nb_utils/nb_utils.dart';
-import 'package:http_parser/http_parser.dart';
 import 'package:zcart/helper/constants.dart';
 
 import 'api.dart';
@@ -127,56 +125,54 @@ putRequest(String endPoint, Map request, {bool bearerToken = true}) async {
   }
 }
 
-//TODO: Multipart Request need to be solved
+// multiPartRequest(String endPoint, Map body,
+//     {File? file, String? filename, bool bearerToken = true}) async {
+//   if (await isNetworkAvailable()) {
+//     ///MultiPart request
+//     var request = MultipartRequest(
+//       'PUT',
+//       Uri.parse('${API.base}$endPoint'),
+//     );
 
-multiPartRequest(String endPoint, Map body,
-    {File? file, String? filename, bool bearerToken = true}) async {
-  if (await isNetworkAvailable()) {
-    ///MultiPart request
-    var request = MultipartRequest(
-      'PUT',
-      Uri.parse('${API.base}$endPoint'),
-    );
+//     var accessToken = getStringAsync(access);
 
-    var accessToken = getStringAsync(access);
+//     var headers = {
+//       HttpHeaders.acceptHeader: 'application/json; charset=utf-8',
+//     };
 
-    var headers = {
-      HttpHeaders.acceptHeader: 'application/json; charset=utf-8',
-    };
+//     if (bearerToken) {
+//       var header = {
+//         "Authorization": "Bearer $accessToken",
+//         "Content-type": "application/json",
+//       };
 
-    if (bearerToken) {
-      var header = {
-        "Authorization": "Bearer $accessToken",
-        "Content-type": "application/json",
-      };
+//       headers.addAll(header);
+//     }
 
-      headers.addAll(header);
-    }
+//     if (file != null && filename != null) {
+//       request.files.add(
+//         MultipartFile(
+//           'profile_image',
+//           file.readAsBytes().asStream(),
+//           file.lengthSync(),
+//           filename: filename,
+//           contentType: MediaType('image', 'jpeg'),
+//         ),
+//       );
+//     }
 
-    if (file != null && filename != null) {
-      request.files.add(
-        MultipartFile(
-          'profile_image',
-          file.readAsBytes().asStream(),
-          file.lengthSync(),
-          filename: filename,
-          contentType: MediaType('image', 'jpeg'),
-        ),
-      );
-    }
+//     request.headers.addAll(headers);
+//     request.fields.addAll(body as Map<String, String>);
 
-    request.headers.addAll(headers);
-    request.fields.addAll(body as Map<String, String>);
-
-    debugPrint('Request: $request');
-    StreamedResponse streamedResponse = await request.send();
-    Response response = await Response.fromStream(streamedResponse);
-    debugPrint('Response: ${response.statusCode} ${response.body}');
-    return response;
-  } else {
-    throw noInternetMsg;
-  }
-}
+//     debugPrint('Request: $request');
+//     StreamedResponse streamedResponse = await request.send();
+//     Response response = await Response.fromStream(streamedResponse);
+//     debugPrint('Response: ${response.statusCode} ${response.body}');
+//     return response;
+//   } else {
+//     throw noInternetMsg;
+//   }
+// }
 
 patchRequest(String endPoint, Map request,
     {bool requireToken = false,

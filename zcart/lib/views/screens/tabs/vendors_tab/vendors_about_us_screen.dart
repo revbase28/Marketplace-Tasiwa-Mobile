@@ -148,25 +148,30 @@ class VendorRatingsAndReview extends StatelessWidget {
               ),
               TextButton(
                   style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                _RatingAndReviewAllPage(feedbacks: feedbacks)));
-                  },
+                  onPressed: _feedbacks.isEmpty
+                      ? null
+                      : () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => _RatingAndReviewAllPage(
+                                      feedbacks: feedbacks)));
+                        },
                   child: Text(LocaleKeys.view_all.tr(),
                       style: Theme.of(context).textTheme.subtitle2!.copyWith(
-                          color: kPrimaryColor, fontWeight: FontWeight.bold))),
+                          color: _feedbacks.isEmpty ? null : kPrimaryColor,
+                          fontWeight: FontWeight.bold))),
             ],
           ),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10),
-            child: Divider(
-              height: 0,
-            ),
-          ),
-          const SizedBox(height: 10),
+          _feedbacks.isEmpty
+              ? const SizedBox()
+              : const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: Divider(
+                    height: 0,
+                  ),
+                ),
+          _feedbacks.isEmpty ? const SizedBox() : const SizedBox(height: 10),
           for (var feedBack in _feedbacks)
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8),

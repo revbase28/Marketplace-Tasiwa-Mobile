@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:velocity_x/velocity_x.dart';
@@ -5,21 +7,24 @@ import 'package:zcart/Theme/styles/colors.dart';
 import 'package:zcart/data/controller/chat/chat_controller.dart';
 import 'package:zcart/data/controller/chat/chat_state.dart';
 import 'package:zcart/data/models/chat/product/product_chat_model.dart';
+import 'package:zcart/data/network/api.dart';
 import 'package:zcart/helper/get_color_based_on_theme.dart';
+import 'package:zcart/helper/pick_image_helper.dart';
 import 'package:zcart/helper/url_launcher_helper.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
+import 'package:zcart/views/shared_widgets/image_viewer_page.dart';
 import 'package:zcart/views/shared_widgets/loading_widget.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 
-class VendorChatScreen extends StatelessWidget {
+class VendorChatScreen extends StatefulWidget {
   final int? shopId;
   final String? shopImage;
   final String? shopName;
   final String? shopVerifiedText;
-  VendorChatScreen({
+  const VendorChatScreen({
     Key? key,
     required this.shopId,
     required this.shopImage,
@@ -27,8 +32,13 @@ class VendorChatScreen extends StatelessWidget {
     required this.shopVerifiedText,
   }) : super(key: key);
 
-  /// Controller
-  final TextEditingController messageController = TextEditingController();
+  @override
+  State<VendorChatScreen> createState() => _VendorChatScreenState();
+}
+
+class _VendorChatScreenState extends State<VendorChatScreen> {
+  final TextEditingController _messageController = TextEditingController();
+  String _attachment = "";
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +64,7 @@ class VendorChatScreen extends StatelessWidget {
                   width: 20,
                   height: 20,
                   child: CachedNetworkImage(
-                    imageUrl: shopImage!,
+                    imageUrl: widget.shopImage!,
                     errorWidget: (context, url, error) => const SizedBox(),
                     progressIndicatorBuilder: (context, url, progress) =>
                         Center(
@@ -71,13 +81,13 @@ class VendorChatScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Text(
-                        shopName!,
+                        widget.shopName!,
                         style: const TextStyle(
                             fontSize: 16, fontWeight: FontWeight.w600),
                       ),
                       const SizedBox(height: 6),
                       Text(
-                        shopVerifiedText!,
+                        widget.shopVerifiedText!,
                         style: context.textTheme.caption!
                             .copyWith(color: kFadeColor),
                       ),
@@ -94,9 +104,9 @@ class VendorChatScreen extends StatelessWidget {
               onPressed: () async {
                 await context
                     .read(productChatProvider.notifier)
-                    .productConversation(shopId, update: true);
+                    .productConversation(widget.shopId, update: true);
               },
-              icon: const Icon(Icons.refresh))
+              icon: const Icon(Icons.refresh, color: kDarkColor)),
         ],
       ),
       body: SafeArea(child: _chatBody(context)),
@@ -134,64 +144,127 @@ class VendorChatScreen extends StatelessWidget {
   Padding _chatTextBox(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(4),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.end,
+      child: Column(
         children: [
-          IconButton(
-            onPressed: () {
-              //TODO: Attach Images
-            },
-            icon: Icon(Icons.add, color: kPrimaryColor),
-          ),
-          Expanded(
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(width: 1, color: kAccentColor),
-                color: getColorBasedOnTheme(context, kLightColor, kDarkBgColor),
+          _attachment.isNotEmpty
+              ? _attachmentsWidget(context)
+              : const SizedBox(),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              IconButton(
+                onPressed: () async {
+                  final _file = await pickImage();
+                  //  print("_attachments : $_attachments");
+
+                  if (_file != null) {
+                    _attachment = _file;
+
+                    setState(() {});
+                  }
+                },
+                icon: Icon(Icons.add, color: kPrimaryColor),
               ),
-              child: TextField(
-                controller: messageController,
-                keyboardType: TextInputType.multiline,
-                maxLines: 3,
-                minLines: 1,
-                decoration: InputDecoration(
-                  contentPadding: const EdgeInsets.all(8),
-                  border: InputBorder.none,
-                  hintText: LocaleKeys.type_a_message.tr(),
-                  hintStyle: context.textTheme.caption,
+              Expanded(
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(width: 1, color: kAccentColor),
+                    color: getColorBasedOnTheme(
+                        context, kLightColor, kDarkBgColor),
+                  ),
+                  child: TextField(
+                    controller: _messageController,
+                    keyboardType: TextInputType.multiline,
+                    maxLines: 3,
+                    minLines: 1,
+                    decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.all(8),
+                      border: InputBorder.none,
+                      hintText: LocaleKeys.type_a_message.tr(),
+                      hintStyle: context.textTheme.caption,
+                    ),
+                  ),
                 ),
               ),
+              const SizedBox(
+                width: 4,
+              ),
+              IconButton(
+                onPressed: () {
+                  if (_messageController.text.isNotEmpty) {
+                    String message = _messageController.text.trim();
+                    _messageController.clear();
+                    context
+                        .read(productChatSendProvider.notifier)
+                        .sendMessage(
+                          widget.shopId,
+                          message,
+                          photo: _attachment.isNotEmpty ? _attachment : null,
+                        )
+                        .then(
+                      (value) {
+                        _messageController.clear();
+                        _attachment = "";
+                        setState(() {});
+                        context
+                            .read(productChatProvider.notifier)
+                            .productConversation(widget.shopId, update: true);
+                      },
+                    );
+                  } else {
+                    toast(LocaleKeys.empty_message.tr());
+                  }
+                },
+                icon: Icon(Icons.send, color: kPrimaryColor),
+              )
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _attachmentsWidget(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8),
+      child: Wrap(
+        alignment: WrapAlignment.start,
+        spacing: 8,
+        runSpacing: 8,
+        children: [
+          SizedBox(
+            height: 100,
+            child: Stack(
+              children: [
+                Image.memory(
+                  base64Decode(_attachment),
+                  fit: BoxFit.fitHeight,
+                ),
+                Positioned(
+                  right: 0,
+                  top: 0,
+                  child: GestureDetector(
+                    onTap: () {
+                      _attachment = "";
+                      setState(() {});
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.black45,
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      child: const Icon(
+                        Icons.close,
+                        size: 18,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
-          const SizedBox(
-            width: 4,
-          ),
-          IconButton(
-            onPressed: () {
-              if (messageController.text.isNotEmpty) {
-                String message = messageController.text.trim();
-                messageController.clear();
-                context
-                    .read(productChatSendProvider.notifier)
-                    .sendMessage(
-                        //TODO: Send attachement
-                        shopId,
-                        message)
-                    .then(
-                  (value) {
-                    messageController.clear();
-                    context
-                        .read(productChatProvider.notifier)
-                        .productConversation(shopId, update: true);
-                  },
-                );
-              } else {
-                toast(LocaleKeys.empty_message.tr());
-              }
-            },
-            icon: Icon(Icons.send, color: kPrimaryColor),
-          )
         ],
       ),
     );
@@ -246,10 +319,57 @@ class VendorChatScreen extends StatelessWidget {
                                 ? CrossAxisAlignment.start
                                 : CrossAxisAlignment.end,
                             children: [
-                              //TODO: Send Attachement
                               message.attachments!.isEmpty
                                   ? const SizedBox()
-                                  : Text(message.attachments.toString()),
+                                  : GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                ImageViewerPage(
+                                              imageUrl: API.appUrl +
+                                                  "/image/" +
+                                                  message.attachments![0]
+                                                      ["path"],
+                                              title: "Image Viewer",
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      child: Container(
+                                        height: 120,
+                                        padding: const EdgeInsets.all(2),
+                                        margin:
+                                            const EdgeInsets.only(bottom: 5),
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          child: CachedNetworkImage(
+                                            imageUrl: API.appUrl +
+                                                "/image/" +
+                                                message.attachments![0]["path"],
+                                            fit: BoxFit.cover,
+                                            errorWidget:
+                                                (context, url, error) =>
+                                                    const SizedBox(),
+                                            placeholder: (context, url) =>
+                                                const SizedBox(
+                                              height: 50,
+                                              width: 50,
+                                              child: Center(
+                                                child:
+                                                    CircularProgressIndicator(),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
                               HtmlWidget(
                                 message.reply!,
                                 onTapUrl: (url) {
@@ -340,15 +460,51 @@ class FirstMessageBox extends StatelessWidget {
             },
             textStyle: const TextStyle(color: kPrimaryLightTextColor),
           ).paddingBottom(5),
-
-          //TODO: Attatchments
           Visibility(
             visible: productChatModel.data!.attachments!.isNotEmpty,
-            child: Text(
-              "${productChatModel.data!.attachments}",
-              style: context.textTheme.caption!
-                  .copyWith(color: kPrimaryLightTextColor),
-            ).paddingBottom(5),
+            child: productChatModel.data!.attachments!.isEmpty
+                ? const SizedBox()
+                : GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ImageViewerPage(
+                            imageUrl: API.appUrl +
+                                "/image/" +
+                                productChatModel.data!.attachments![0]["path"],
+                            title: productChatModel.data!.subject ?? "Hello",
+                          ),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      height: 120,
+                      padding: const EdgeInsets.all(2),
+                      margin: const EdgeInsets.only(bottom: 5),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: CachedNetworkImage(
+                          imageUrl: API.appUrl +
+                              "/image/" +
+                              productChatModel.data!.attachments![0]["path"],
+                          fit: BoxFit.cover,
+                          errorWidget: (context, url, error) =>
+                              const SizedBox(),
+                          placeholder: (context, url) => const SizedBox(
+                            height: 50,
+                            width: 50,
+                            child: Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
           ),
         ],
       ),

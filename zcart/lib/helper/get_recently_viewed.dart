@@ -10,13 +10,17 @@ void getRecentlyViewedItems(BuildContext context) async {
 
   debugPrint("Recently Reviewd :  $_recentlyViewed");
 
-  if (_recentlyViewed == null) {
-    await context
-        .read(recentlyViewedNotifierProvider.notifier)
-        .getRecentlyViwedItems([]);
-  } else {
-    await context
-        .read(recentlyViewedNotifierProvider.notifier)
-        .getRecentlyViwedItems(_recentlyViewed);
+  try {
+    if (_recentlyViewed == null) {
+      await context
+          .read(recentlyViewedNotifierProvider.notifier)
+          .getRecentlyViwedItems([]);
+    } else {
+      await context
+          .read(recentlyViewedNotifierProvider.notifier)
+          .getRecentlyViwedItems(_recentlyViewed);
+    }
+  } catch (e) {
+    debugPrint("Ancestor warning : $e");
   }
 }

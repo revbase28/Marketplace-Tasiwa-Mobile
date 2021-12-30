@@ -147,7 +147,6 @@ class _LoginScreenState extends State<LoginScreen> {
                           if (!(!MyConfig.isGoogleLoginActive &&
                               !MyConfig.isFacebookLoginActive &&
                               !MyConfig.isAppleLoginActive))
-                            //TODO: Add social login
                             const Text("Or Continue With")
                                 .text
                                 .textStyle(context.textTheme.caption!)
