@@ -53,7 +53,9 @@ class _OrderChatScreenState extends State<OrderChatScreen> {
                     .read(orderChatProvider.notifier)
                     .orderConversation(widget.orders.id, update: true);
               },
-              icon: const Icon(Icons.refresh, color: kDarkColor),
+              icon: Icon(Icons.refresh,
+                  color:
+                      getColorBasedOnTheme(context, kDarkColor, kLightColor)),
             )
           ],
           flexibleSpace: SafeArea(
@@ -184,7 +186,7 @@ class _OrderChatScreenState extends State<OrderChatScreen> {
             children: [
               IconButton(
                 onPressed: () async {
-                  final _file = await pickImage();
+                  final _file = await pickImageToBase64();
                   //  print("_attachments : $_attachments");
 
                   if (_file != null) {

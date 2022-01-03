@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 
-Future<String?> pickImage() async {
+Future<String?> pickImageToBase64() async {
   final ImagePicker _picker = ImagePicker();
   final XFile? _image = await _picker.pickImage(source: ImageSource.gallery);
 

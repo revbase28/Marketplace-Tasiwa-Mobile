@@ -1,20 +1,23 @@
+import 'dart:convert';
+
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:velocity_x/velocity_x.dart';
+import 'package:zcart/Theme/styles/colors.dart';
 import 'package:zcart/helper/get_color_based_on_theme.dart';
+import 'package:zcart/helper/pick_image_helper.dart';
 import 'package:zcart/riverpod/providers/dispute_provider.dart';
 import 'package:zcart/riverpod/state/dispute/dispute_details_state.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:zcart/views/screens/tabs/account_tab/disputes/dispute_responses.dart';
-import 'package:zcart/views/shared_widgets/custom_confirm_dialog.dart';
 import 'package:zcart/views/shared_widgets/custom_button.dart';
+import 'package:zcart/views/shared_widgets/custom_confirm_dialog.dart';
 import 'package:zcart/views/shared_widgets/custom_textfield.dart';
 import 'package:zcart/views/shared_widgets/loading_widget.dart';
-import 'package:zcart/Theme/styles/colors.dart';
-import 'package:easy_localization/easy_localization.dart';
-import 'package:velocity_x/velocity_x.dart';
 
 class DisputeDetailsScreen extends ConsumerWidget {
   const DisputeDetailsScreen({Key? key}) : super(key: key);
@@ -296,8 +299,6 @@ class DisputeDetailsScreen extends ConsumerWidget {
 
   Row _disputeDetailsButtons(
       DisputeDetailsLoadedState disputeDetailsState, BuildContext context) {
-    TextEditingController _appealTextController = TextEditingController();
-
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
@@ -357,68 +358,9 @@ class DisputeDetailsScreen extends ConsumerWidget {
                         builder: (context) {
                           return Dialog(
                             backgroundColor: Colors.transparent,
-                            child: Container(
-                              // color: getColorBasedOnTheme(
-                              //     context, kDarkCardBgColor, kLightBgColor),
-                              decoration: BoxDecoration(
-                                color: getColorBasedOnTheme(
-                                    context, kLightColor, kDarkCardBgColor),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-
-                              padding: const EdgeInsets.all(16),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  const SizedBox(height: 20),
-                                  CustomTextField(
-                                    title: LocaleKeys.appeal.tr(),
-                                    controller: _appealTextController,
-                                    hintText: LocaleKeys.appeal_message.tr(),
-                                    keyboardType: TextInputType.multiline,
-                                    maxLines: 5,
-                                  ),
-                                  const SizedBox(height: 10),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      ElevatedButton(
-                                          onPressed: () {
-                                            //TODO: Attach Images
-                                          },
-                                          child: Text(
-                                              LocaleKeys.attach_files.tr())),
-                                      const SizedBox(width: 10),
-                                      ElevatedButton(
-                                          onPressed: () {
-                                            if (_appealTextController
-                                                .text.isNotEmpty) {
-                                              context
-                                                  .read(disputeDetailsProvider
-                                                      .notifier)
-                                                  .postDisputeAppeal(
-                                                disputeDetailsState
-                                                    .disputeDetails!.id,
-                                                {
-                                                  'reply': _appealTextController
-                                                      .text
-                                                      .trim()
-                                                },
-                                              ).then((value) => context.pop());
-                                            } else {
-                                              toast(LocaleKeys
-                                                  .message_cannot_be_empty
-                                                  .tr());
-                                            }
-                                          },
-                                          child: Text(
-                                              LocaleKeys.send_appeal.tr())),
-                                    ],
-                                  )
-                                ],
-                              ),
-                            ),
+                            child: AppealDialog(
+                                disputeId:
+                                    disputeDetailsState.disputeDetails!.id!),
                           );
                         });
                   }
@@ -428,6 +370,118 @@ class DisputeDetailsScreen extends ConsumerWidget {
           ),
         )
       ],
+    );
+  }
+}
+
+class AppealDialog extends StatefulWidget {
+  final int disputeId;
+  const AppealDialog({
+    Key? key,
+    required this.disputeId,
+  }) : super(key: key);
+
+  @override
+  State<AppealDialog> createState() => _AppealDialogState();
+}
+
+class _AppealDialogState extends State<AppealDialog> {
+  final _appealTextController = TextEditingController();
+
+  String _attachment = "";
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      // color: getColorBasedOnTheme(
+      //     context, kDarkCardBgColor, kLightBgColor),
+      decoration: BoxDecoration(
+        color: getColorBasedOnTheme(context, kLightColor, kDarkCardBgColor),
+        borderRadius: BorderRadius.circular(10),
+      ),
+
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const SizedBox(height: 20),
+          CustomTextField(
+            title: LocaleKeys.appeal.tr(),
+            controller: _appealTextController,
+            hintText: LocaleKeys.appeal_message.tr(),
+            keyboardType: TextInputType.multiline,
+            maxLines: 5,
+          ),
+          const SizedBox(height: 10),
+          _attachment.isNotEmpty
+              ? Stack(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.only(bottom: 10),
+                      height: 120,
+                      child: Image.memory(base64Decode(_attachment)),
+                    ),
+                    Positioned(
+                      right: 0,
+                      top: 0,
+                      child: GestureDetector(
+                        onTap: () {
+                          _attachment = "";
+                          setState(() {});
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.black45,
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          child: const Icon(
+                            Icons.close,
+                            size: 18,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+              : const SizedBox(),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              ElevatedButton(
+                  onPressed: () async {
+                    final _file = await pickImageToBase64();
+
+                    if (_file != null) {
+                      _attachment = _file;
+
+                      setState(() {});
+                    }
+                  },
+                  child: Text(LocaleKeys.attach_files.tr())),
+              const SizedBox(width: 10),
+              ElevatedButton(
+                  onPressed: () {
+                    if (_appealTextController.text.isNotEmpty) {
+                      context
+                          .read(disputeDetailsProvider.notifier)
+                          .postDisputeAppeal(
+                        widget.disputeId,
+                        {
+                          'reply': _appealTextController.text.trim(),
+                          if (_attachment.isNotEmpty) 'attachment': _attachment,
+                        },
+                      ).then((value) => context.pop());
+                    } else {
+                      toast(LocaleKeys.message_cannot_be_empty.tr());
+                    }
+                  },
+                  child: Text(LocaleKeys.send_appeal.tr())),
+            ],
+          )
+        ],
+      ),
     );
   }
 }

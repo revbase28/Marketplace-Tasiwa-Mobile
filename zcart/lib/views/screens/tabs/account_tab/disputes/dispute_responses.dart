@@ -32,6 +32,7 @@ class DisputeResponseScreen extends StatelessWidget {
         return Scaffold(
           appBar: AppBar(
             title: Text(LocaleKeys.dispute_responses.tr()),
+            systemOverlayStyle: getOverlayStyleBasedOnTheme(context),
             automaticallyImplyLeading: true,
             actions: [
               disputeDetailsState is DisputeDetailsLoadedState
@@ -169,11 +170,58 @@ class DisputeResponseScreen extends StatelessWidget {
                           : CrossAxisAlignment.end,
                       children: [
                         //TODO: Attachment Issue
-                        if (!message["attachments"].isEmpty)
-                          for (var i = 0;
-                              i < message["attachments"].length;
-                              i++)
-                            SelectableText("${message["attachments"].first}"),
+
+                        // message["attachments"]!.isEmpty
+                        //     ? const SizedBox()
+                        //     : GestureDetector(
+                        //         onTap: () {
+                        //           Navigator.push(
+                        //             context,
+                        //             MaterialPageRoute(
+                        //               builder: (context) => ImageViewerPage(
+                        //                 imageUrl: API.appUrl +
+                        //                     "/image/" +
+                        //                     message.attachments![0]["path"],
+                        //                 title: message.customer == null
+                        //                     ? disputeDetailsState
+                        //                             .disputeDetails!
+                        //                             .shop!
+                        //                             .name ??
+                        //                         ""
+                        //                     : message.customer!.name ?? "",
+                        //               ),
+                        //             ),
+                        //           );
+                        //         },
+                        //         child: Container(
+                        //           height: 120,
+                        //           padding: const EdgeInsets.all(2),
+                        //           margin: const EdgeInsets.only(bottom: 5),
+                        //           decoration: BoxDecoration(
+                        //             borderRadius: BorderRadius.circular(10),
+                        //           ),
+                        //           child: ClipRRect(
+                        //             borderRadius: BorderRadius.circular(10),
+                        //             child: CachedNetworkImage(
+                        //               imageUrl: API.appUrl +
+                        //                   "/image/" +
+                        //                   message.attachments![0]["path"],
+                        //               fit: BoxFit.cover,
+                        //               errorWidget: (context, url, error) =>
+                        //                   const SizedBox(),
+                        //               placeholder: (context, url) =>
+                        //                   const SizedBox(
+                        //                 height: 50,
+                        //                 width: 50,
+                        //                 child: Center(
+                        //                   child: CircularProgressIndicator(),
+                        //                 ),
+                        //               ),
+                        //             ),
+                        //           ),
+                        //         ),
+                        //       ),
+
                         HtmlWidget(
                           message['reply'],
                           onTapUrl: (url) {

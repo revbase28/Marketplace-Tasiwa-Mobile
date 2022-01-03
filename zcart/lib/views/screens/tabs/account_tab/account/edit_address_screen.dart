@@ -43,13 +43,13 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
 
   @override
   void initState() {
-    _addressTypeController.text = widget.address.addressType!;
-    _contactPersonController.text = widget.address.addressTitle!;
-    _contactNumberController.text = widget.address.phone!;
-    _zipCodeController.text = widget.address.zipCode!;
-    _addressLine1Controller.text = widget.address.addressLine1!;
-    _addressLine2Controller.text = widget.address.addressLine2!;
-    _cityController.text = widget.address.city!;
+    _addressTypeController.text = widget.address.addressType ?? '';
+    _contactPersonController.text = widget.address.addressTitle ?? '';
+    _contactNumberController.text = widget.address.phone ?? '';
+    _zipCodeController.text = widget.address.zipCode ?? '';
+    _addressLine1Controller.text = widget.address.addressLine1 ?? '';
+    _addressLine2Controller.text = widget.address.addressLine2 ?? '';
+    _cityController.text = widget.address.city ?? '';
 
     super.initState();
   }

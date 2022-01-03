@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:velocity_x/velocity_x.dart';
@@ -52,12 +51,7 @@ class _VendorChatScreenState extends State<VendorChatScreen> {
             padding: const EdgeInsets.only(right: 16),
             child: Row(
               children: <Widget>[
-                IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  icon: const Icon(Icons.arrow_back),
-                ),
+                const BackButton(),
 
                 const SizedBox(width: 20),
                 SizedBox(
@@ -106,7 +100,9 @@ class _VendorChatScreenState extends State<VendorChatScreen> {
                     .read(productChatProvider.notifier)
                     .productConversation(widget.shopId, update: true);
               },
-              icon: const Icon(Icons.refresh, color: kDarkColor)),
+              icon: Icon(Icons.refresh,
+                  color:
+                      getColorBasedOnTheme(context, kDarkColor, kLightColor))),
         ],
       ),
       body: SafeArea(child: _chatBody(context)),
@@ -154,7 +150,7 @@ class _VendorChatScreenState extends State<VendorChatScreen> {
             children: [
               IconButton(
                 onPressed: () async {
-                  final _file = await pickImage();
+                  final _file = await pickImageToBase64();
                   //  print("_attachments : $_attachments");
 
                   if (_file != null) {

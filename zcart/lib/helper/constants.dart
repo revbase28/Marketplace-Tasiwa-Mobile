@@ -1,5 +1,4 @@
 //Don't change anything here
-import 'dart:io';
 
 /// Shared Pref
 const String access = 'ACCESS';
@@ -22,7 +21,7 @@ final List<String> paymentMethods = [
   cod,
   wire,
   stripe,
-  paystack,
-  paypal,
-  if (Platform.isAndroid) razorpay
+  // paystack,
+  // paypal,
+  // if (Platform.isAndroid) razorpay
 ];

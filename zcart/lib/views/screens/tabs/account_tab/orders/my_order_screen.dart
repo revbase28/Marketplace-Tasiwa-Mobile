@@ -333,7 +333,7 @@ class OrderCard extends StatelessWidget {
                                       .orderReceived(orders[orderIndex!].id)
                                       .then((value) => context
                                           .read(ordersProvider.notifier)
-                                          .orders(ignoreLoadingState: false));
+                                          .orders(ignoreLoadingState: true));
                                 },
                               );
                             }
