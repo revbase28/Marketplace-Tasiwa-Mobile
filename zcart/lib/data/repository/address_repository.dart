@@ -242,4 +242,9 @@ class AddressRepository implements IAddressRepository {
     }
     return shippingOptionsModel.shippingOptions;
   }
+
+  @override
+  Future<List<Addresses>?> clearAddresses() async {
+    return [];
+  }
 }

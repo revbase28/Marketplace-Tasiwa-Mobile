@@ -13,6 +13,10 @@ class AddressNotifier extends StateNotifier<AddressState> {
   AddressNotifier(this._iAddressRepository)
       : super(const AddressInitialState());
 
+  Future<void> clearAddresses() async {
+    state = AddressLoadedState(await _iAddressRepository.clearAddresses());
+  }
+
   Future fetchAddress() async {
     try {
       state = const AddressLoadingState();

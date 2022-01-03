@@ -7,6 +7,7 @@ import 'package:zcart/data/models/address/shipping_options_model.dart';
 import 'package:zcart/data/models/address/states_model.dart';
 
 abstract class IAddressRepository {
+  Future<List<Addresses>?> clearAddresses();
   Future<List<Addresses>?> fetchAddresses();
 
   Future createAddress(

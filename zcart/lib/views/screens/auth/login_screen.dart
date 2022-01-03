@@ -243,62 +243,42 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           if (Platform.isIOS)
                             if (MyConfig.isAppleLoginActive)
-                              Consumer(
-                                builder: (context, watch, child) {
-                                  final _checkAppleLoginPlugin =
-                                      watch(checkAppleLoginPluginProvider);
-                                  return _checkAppleLoginPlugin.when(
-                                      data: (value) => value
-                                          ? SignInWithAppleButton(
-                                              text: "Apple",
-                                              onPressed: () async {
-                                                final _checkAvailability =
-                                                    await SignInWithApple
-                                                        .isAvailable();
-                                                if (_checkAvailability) {
-                                                  try {
-                                                    await SignInWithApple
-                                                        .getAppleIDCredential(
-                                                      scopes: [
-                                                        AppleIDAuthorizationScopes
-                                                            .email,
-                                                        AppleIDAuthorizationScopes
-                                                            .fullName,
-                                                      ],
-                                                    ).then((value) {
-                                                      debugPrint(value
-                                                          .authorizationCode);
-                                                      if (value.identityToken !=
-                                                          null) {
-                                                        context
-                                                            .read(
-                                                                userNotifierProvider
-                                                                    .notifier)
-                                                            .loginUsingApple(value
-                                                                .identityToken!);
-                                                      } else {
-                                                        toast(LocaleKeys
-                                                            .something_went_wrong
-                                                            .tr());
-                                                      }
-                                                    });
-                                                  } catch (e) {
-                                                    toast(LocaleKeys
-                                                        .something_went_wrong
-                                                        .tr());
-                                                  }
-                                                } else {
-                                                  toast(
-                                                      "Apple Login is not available on your device");
-                                                }
-                                              },
-                                            ).px(5).py(5)
-                                          : const SizedBox(),
-                                      loading: () => const SizedBox(),
-                                      error: (error, stackTrace) =>
-                                          const SizedBox());
+                              SignInWithAppleButton(
+                                text: "Apple",
+                                onPressed: () async {
+                                  final _checkAvailability =
+                                      await SignInWithApple.isAvailable();
+                                  if (_checkAvailability) {
+                                    try {
+                                      await SignInWithApple
+                                          .getAppleIDCredential(
+                                        scopes: [
+                                          AppleIDAuthorizationScopes.email,
+                                          AppleIDAuthorizationScopes.fullName,
+                                        ],
+                                      ).then((value) {
+                                        debugPrint(value.authorizationCode);
+                                        if (value.identityToken != null) {
+                                          context
+                                              .read(
+                                                  userNotifierProvider.notifier)
+                                              .loginUsingApple(
+                                                  value.identityToken!);
+                                        } else {
+                                          toast(LocaleKeys.something_went_wrong
+                                              .tr());
+                                        }
+                                      });
+                                    } catch (e) {
+                                      toast(
+                                          LocaleKeys.something_went_wrong.tr());
+                                    }
+                                  } else {
+                                    toast(
+                                        "Apple Login is not available on your device");
+                                  }
                                 },
-                              ),
+                              ).px(5).py(5),
                           Text(
                             LocaleKeys.dont_have_account.tr(),
                             style: context.textTheme.caption,

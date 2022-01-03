@@ -25,7 +25,6 @@ import 'package:zcart/views/screens/tabs/account_tab/orders/order_details_screen
 import 'package:zcart/views/screens/tabs/home_tab/components/error_widget.dart';
 import 'package:zcart/views/screens/tabs/vendors_tab/vendors_details.dart';
 import 'package:zcart/views/shared_widgets/custom_confirm_dialog.dart';
-import 'package:zcart/views/shared_widgets/shared_widgets.dart';
 
 class MyOrderScreen extends ConsumerWidget {
   const MyOrderScreen({Key? key}) : super(key: key);
