@@ -34,7 +34,7 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
       TextEditingController();
   final TextEditingController _contactNumberController =
       TextEditingController();
-  final TextEditingController countryController = TextEditingController();
+  final TextEditingController _countryController = TextEditingController();
   final TextEditingController _zipCodeController = TextEditingController();
   final TextEditingController _addressLine1Controller = TextEditingController();
   final TextEditingController _addressLine2Controller = TextEditingController();
@@ -43,13 +43,15 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
 
   @override
   void initState() {
-    _addressTypeController.text = widget.address.addressType ?? '';
+    _addressTypeController.text = widget.address.addressType!;
     _contactPersonController.text = widget.address.addressTitle ?? '';
     _contactNumberController.text = widget.address.phone ?? '';
     _zipCodeController.text = widget.address.zipCode ?? '';
     _addressLine1Controller.text = widget.address.addressLine1 ?? '';
     _addressLine2Controller.text = widget.address.addressLine2 ?? '';
     _cityController.text = widget.address.city ?? '';
+    _countryController.text = widget.address.country?.name ?? '';
+    _stateController.text = widget.address.state?.name ?? '';
 
     super.initState();
   }
@@ -170,7 +172,7 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
                                       optionsList: countryState.countryList!
                                           .map((e) => e.name)
                                           .toList(),
-                                      controller: countryController,
+                                      controller: _countryController,
                                       value: countryState.countryList!
                                           .firstWhere((e) =>
                                               e.id ==
@@ -210,29 +212,26 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
                               return statesState is StatesLoadedState
                                   ? CustomDropDownField(
                                       title: LocaleKeys.states.tr(),
-
                                       optionsList:
                                           statesState.statesList!.isEmpty
                                               ? ["Select"]
                                               : statesState.statesList!
                                                   .map((e) => e.name)
                                                   .toList(),
-                                      //value: "Select",
                                       controller: _stateController,
-                                      // value: statesState.statesList!.isEmpty
-                                      //     ? "Select"
-                                      //     : statesState.statesList!
-                                      //         .firstWhere((e) =>
-                                      //             e.id == widget.address.state!.id)
-                                      //         .name,
                                       value: widget.address.state != null
                                           ? statesState.statesList!.isEmpty
                                               ? "Select"
-                                              : statesState.statesList!
-                                                  .firstWhere((e) =>
-                                                      e.id ==
-                                                      widget.address.state!.id)
-                                                  .name
+                                              : widget.address.country!.name !=
+                                                      _countryController.text
+                                                  ? statesState
+                                                      .statesList!.first.name
+                                                  : statesState.statesList!
+                                                      .firstWhere((e) =>
+                                                          e.id ==
+                                                          widget.address.state!
+                                                              .id)
+                                                      .name
                                           : statesState.statesList!.isEmpty
                                               ? "Select"
                                               : statesState

@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:zcart/Theme/styles/colors.dart';
 import 'package:zcart/data/controller/chat/chat_controller.dart';
@@ -24,6 +25,7 @@ import 'package:zcart/views/screens/tabs/account_tab/orders/order_details_screen
 import 'package:zcart/views/screens/tabs/home_tab/components/error_widget.dart';
 import 'package:zcart/views/screens/tabs/vendors_tab/vendors_details.dart';
 import 'package:zcart/views/shared_widgets/custom_confirm_dialog.dart';
+import 'package:zcart/views/shared_widgets/shared_widgets.dart';
 
 class MyOrderScreen extends ConsumerWidget {
   const MyOrderScreen({Key? key}) : super(key: key);
@@ -38,6 +40,15 @@ class MyOrderScreen extends ConsumerWidget {
       appBar: AppBar(
         systemOverlayStyle: SystemUiOverlayStyle.light,
         title: Text(LocaleKeys.orders.tr()),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.refresh,
+                color: getColorBasedOnTheme(context, kLightColor, kLightColor)),
+            onPressed: () {
+              context.read(ordersProvider.notifier).orders();
+            },
+          ),
+        ],
       ),
       body: SafeArea(
         child: ordersState is OrdersLoadedState
@@ -66,31 +77,61 @@ class MyOrderScreen extends ConsumerWidget {
                       }
                     },
                     provider: orderScrollNotifierProvider,
-                    child: ListView.builder(
-                        controller: scrollControllerProvider.controller,
-                        itemCount: ordersState.orders!.length,
-                        itemBuilder: (context, orderIndex) {
-                          return OrderCard(
-                              orders: ordersState.orders!,
-                              orderIndex: orderIndex);
-                        }),
+                    child: ListView(
+                      controller: scrollControllerProvider.controller,
+                      children: ordersState.orders != null
+                          ? ordersState.orders!
+                              .map((e) => OrderCard(
+                                    order: e,
+                                    index: ordersState.orders!.indexOf(e),
+                                  ))
+                              .toList()
+                          : [],
+                    ),
                   )
             : ordersState is OrdersErrorState
                 ? ErrorMessageWidget(ordersState.message)
-                : const SizedBox(),
+                : const OrdersLoadingWidget(),
       ),
     );
   }
 }
 
-/* WIDGET */
+class OrdersLoadingWidget extends StatelessWidget {
+  const OrdersLoadingWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      children: [
+        for (var i = 0; i < 5; i++)
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: Shimmer.fromColors(
+                child: Container(
+                  height: 200,
+                  width: MediaQuery.of(context).size.width,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                baseColor: Colors.grey[300]!,
+                highlightColor: Colors.grey[100]!),
+          ),
+      ],
+    );
+  }
+}
+
 class OrderCard extends StatelessWidget {
-  final List<Orders> orders;
-  final int? orderIndex;
+  final Orders order;
+  final int index;
+
   const OrderCard({
     Key? key,
-    required this.orders,
-    this.orderIndex,
+    required this.order,
+    required this.index,
   }) : super(key: key);
 
   @override
@@ -111,10 +152,10 @@ class OrderCard extends StatelessWidget {
                 onTap: () {
                   context
                       .read(vendorDetailsNotifierProvider.notifier)
-                      .getVendorDetails(orders[orderIndex!].shop!.slug);
+                      .getVendorDetails(order.shop!.slug);
                   context
                       .read(vendorItemsNotifierProvider.notifier)
-                      .getVendorItems(orders[orderIndex!].shop!.slug);
+                      .getVendorItems(order.shop!.slug);
                   context.nextPage(const VendorsDetailsScreen());
                 },
                 child: Row(
@@ -126,7 +167,7 @@ class OrderCard extends StatelessWidget {
                         height: 50,
                         width: 50,
                         child: CachedNetworkImage(
-                          imageUrl: orders[orderIndex!].shop!.image!,
+                          imageUrl: order.shop!.image!,
                           errorWidget: (context, url, error) =>
                               const SizedBox(),
                           progressIndicatorBuilder: (context, url, progress) =>
@@ -142,10 +183,10 @@ class OrderCard extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          orders[orderIndex!].shop!.name == null
+                          order.shop!.name == null
                               ? const Text("")
                               : Text(
-                                  orders[orderIndex!].shop!.name!,
+                                  order.shop!.name!,
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   style: const TextStyle(
@@ -156,8 +197,8 @@ class OrderCard extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               RatingBar.builder(
-                                initialRating: double.parse(
-                                    orders[orderIndex!].shop!.rating ?? '0.0'),
+                                initialRating:
+                                    double.parse(order.shop!.rating ?? '0.0'),
                                 minRating: 0,
                                 direction: Axis.horizontal,
                                 allowHalfRating: true,
@@ -174,14 +215,13 @@ class OrderCard extends StatelessWidget {
                               Container(
                                 margin: const EdgeInsets.only(left: 10, top: 5),
                                 decoration: BoxDecoration(
-                                    color: orders[orderIndex!].orderStatus !=
-                                            "DELIVERED"
+                                    color: order.orderStatus != "DELIVERED"
                                         ? kPrimaryColor
                                         : Colors.green,
                                     borderRadius: BorderRadius.circular(10)),
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 10, vertical: 5),
-                                child: Text(orders[orderIndex!].orderStatus!,
+                                child: Text(order.orderStatus!,
                                     style: context.textTheme.overline!.copyWith(
                                         color: kPrimaryLightTextColor)),
                               ),
@@ -196,11 +236,11 @@ class OrderCard extends StatelessWidget {
               SizedBox(
                 height: 60,
                 child: ListView.builder(
-                    itemCount: orders[orderIndex!].items!.length,
+                    itemCount: order.items!.length,
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (BuildContext context, itemsIndex) {
                       return CachedNetworkImage(
-                        imageUrl: orders[orderIndex!].items![itemsIndex].image!,
+                        imageUrl: order.items![itemsIndex].image!,
                         errorWidget: (context, url, error) => const SizedBox(),
                         progressIndicatorBuilder: (context, url, progress) =>
                             Center(
@@ -212,25 +252,23 @@ class OrderCard extends StatelessWidget {
                       ).p(10).onInkTap(() {
                         context
                             .read(productNotifierProvider.notifier)
-                            .getProductDetails(
-                                orders[orderIndex!].items![itemsIndex].slug)
+                            .getProductDetails(order.items![itemsIndex].slug)
                             .then((value) {
                           getRecentlyViewedItems(context);
                         });
                         context
                             .read(productSlugListProvider.notifier)
-                            .addProductSlug(
-                                orders[orderIndex!].items![itemsIndex].slug);
+                            .addProductSlug(order.items![itemsIndex].slug);
                         context.nextPage(const ProductDetailsScreen());
                       });
                     }),
               ),
               Text(
-                "${LocaleKeys.order_number.tr()} : ${orders[orderIndex!].orderNumber}",
+                "${LocaleKeys.order_number.tr()} : ${order.orderNumber}",
                 style: context.textTheme.overline!.copyWith(fontSize: 11),
               ).pOnly(top: 10),
               Text(
-                "${LocaleKeys.ordered_at.tr()} : ${orders[orderIndex!].orderDate}",
+                "${LocaleKeys.ordered_at.tr()} : ${order.orderDate}",
                 style: context.textTheme.overline!.copyWith(fontSize: 11),
               ).pOnly(bottom: 10),
               Row(
@@ -256,9 +294,8 @@ class OrderCard extends StatelessWidget {
                         ).onInkTap(() {
                           context
                               .read(orderChatProvider.notifier)
-                              .orderConversation(orders[orderIndex!].id);
-                          context.nextPage(
-                              OrderChatScreen(orders: orders[orderIndex!]));
+                              .orderConversation(order.id);
+                          context.nextPage(OrderChatScreen(orders: order));
                         }),
                         Container(
                           decoration: BoxDecoration(
@@ -275,11 +312,11 @@ class OrderCard extends StatelessWidget {
                         ).onInkTap(() {
                           context
                               .read(orderProvider.notifier)
-                              .getOrderDetails(orders[orderIndex!].id);
+                              .getOrderDetails(order.id);
                           context.nextPage(const OrderDetailsScreen());
                         }),
                         Visibility(
-                          visible: orders[orderIndex!].disputeId == null,
+                          visible: order.disputeId == null,
                           child: Container(
                             decoration: BoxDecoration(
                                 color: kPrimaryColor,
@@ -295,13 +332,12 @@ class OrderCard extends StatelessWidget {
                           ).onInkTap(() {
                             context
                                 .read(disputeInfoProvider.notifier)
-                                .getDisputeInfo(orders[orderIndex!].id);
+                                .getDisputeInfo(order.id);
                             context.nextPage(const OpenDisputeScreen());
                           }),
                         ),
                         Visibility(
-                          visible:
-                              orders[orderIndex!].orderStatus != "DELIVERED",
+                          visible: order.orderStatus != "DELIVERED",
                           child: Container(
                             decoration: BoxDecoration(
                                 color: kPrimaryColor,
@@ -310,15 +346,14 @@ class OrderCard extends StatelessWidget {
                                 horizontal: 10, vertical: 7),
                             margin: const EdgeInsets.symmetric(vertical: 5),
                             child: Text(
-                              orders[orderIndex!].orderStatus == "DELIVERED"
+                              order.orderStatus == "DELIVERED"
                                   ? ""
                                   : LocaleKeys.confirm_received.tr(),
                               style: const TextStyle(
                                   fontSize: 12, color: kLightColor),
                             ),
                           ).onInkTap(() {
-                            if (orders[orderIndex!].orderStatus !=
-                                "DELIVERED") {
+                            if (order.orderStatus != "DELIVERED") {
                               showCustomConfirmDialog(
                                 context,
                                 dialogAnimation:
@@ -330,7 +365,7 @@ class OrderCard extends StatelessWidget {
                                 onAccept: () {
                                   context
                                       .read(orderReceivedProvider.notifier)
-                                      .orderReceived(orders[orderIndex!].id)
+                                      .orderReceived(order.id)
                                       .then((value) => context
                                           .read(ordersProvider.notifier)
                                           .orders(ignoreLoadingState: true));
@@ -338,10 +373,10 @@ class OrderCard extends StatelessWidget {
                               );
                             }
 
-                            // if (orderListState.orders[orderIndex].orderStatus ==
-                            //     "DELIVERED") if (!orderListState.orders[orderIndex].canEvaluate)
+                            // if (orderListState.order.orderStatus ==
+                            //     "DELIVERED") if (!orderListState.order.canEvaluate)
                             //   context.nextPage(FeedbackScreen(
-                            //     order: orderListState.orders[orderIndex],
+                            //     order: orderListState.order,
                             //   ));
                             // else
                             //   toast('Feedback already given');
@@ -353,7 +388,7 @@ class OrderCard extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      Text(orders[orderIndex!].grandTotal!,
+                      Text(order.grandTotal!,
                           style: context.textTheme.bodyText2!.copyWith(
                               color: getColorBasedOnTheme(
                                   context, kPriceColor, kDarkPriceColor),
@@ -383,7 +418,7 @@ class OrderCard extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.only(top: 8, left: 10),
               child: Text(
-                "${orderIndex! + 1}",
+                "${index + 1}",
                 style: context.textTheme.overline!.copyWith(
                   fontSize: 12,
                   fontWeight: FontWeight.bold,

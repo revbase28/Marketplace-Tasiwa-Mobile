@@ -128,6 +128,48 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                             primary: kPrimaryColor, secondary: kAccentColor),
                       ),
                       child: Stepper(
+                        controlsBuilder: (context, details) {
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    primary: getColorBasedOnTheme(context,
+                                        kDarkCardBgColor, kLightCardBgColor),
+                                    onPrimary: kLightColor,
+                                    textStyle: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    elevation: 0,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                  ),
+                                  onPressed: details.onStepCancel,
+                                  child: const Text("Back"),
+                                ),
+                                const SizedBox(width: 8),
+                                ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    primary: kPrimaryColor,
+                                    onPrimary: kLightColor,
+                                    textStyle: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    elevation: 0,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                  ),
+                                  onPressed: details.onStepContinue,
+                                  child: const Text("Next"),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
                         type: _stepperType,
                         physics: const BouncingScrollPhysics(),
                         currentStep: _currentStep,
