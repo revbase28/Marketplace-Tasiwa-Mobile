@@ -14,7 +14,6 @@ import 'package:zcart/config/config.dart';
 import 'package:zcart/data/controller/cart/coupon_controller.dart';
 import 'package:zcart/helper/get_color_based_on_theme.dart';
 import 'package:zcart/riverpod/providers/dispute_provider.dart';
-import 'package:zcart/riverpod/providers/plugin_provider.dart';
 import 'package:zcart/riverpod/providers/provider.dart';
 import 'package:zcart/riverpod/state/user_state.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
