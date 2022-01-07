@@ -55,10 +55,12 @@ class VendorCard extends StatelessWidget {
           title: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(
-                name!,
-                style: context.textTheme.headline6!
-                    .copyWith(fontWeight: FontWeight.bold),
+              Flexible(
+                child: Text(
+                  name!,
+                  style: context.textTheme.headline6!
+                      .copyWith(fontWeight: FontWeight.bold),
+                ),
               ),
               isVerified!
                   ? Icon(Icons.check_circle, color: kPrimaryColor, size: 15)
