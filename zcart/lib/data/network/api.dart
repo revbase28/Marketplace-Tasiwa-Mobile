@@ -11,22 +11,9 @@ class API {
 
   /// Payment Gateway Keys
 
-  // Razorpay Configs
-  static const String razorPayApiKey = MyConfig.razorPayApiKey;
-  static const String razorPaySecretKey = MyConfig.razorPaySecretKey;
-  static const String razorPayCurrency = MyConfig.razorPayCurrency;
-
-  // Paystack Configs
-  static const String paystackKey = MyConfig.paystackApiKey;
-  static const String paystackCurrency = MyConfig.paystackCurrency;
-
-  //Paypal Configs
-  static const bool paypalSandboxMode = MyConfig.paypalSandboxMode;
   static const String paypalTransactionDescription =
       MyConfig.paypalTransactionDescription;
-  static const String payPalCurrency = MyConfig.payPalCurrency;
-  static const String paypalClientId = MyConfig.paypalClientId;
-  static const String paypalClientSecret = MyConfig.paypalClientSecret;
+
   //
 
   //
@@ -170,6 +157,10 @@ class API {
 
   /// Payment options
   static paymentOptions(cartId) => 'cart/$cartId/paymentOptions';
+
+  ///Payment Method Credentials
+  static paymentMethodCredential(String paymentMethodCode) =>
+      'payment/$paymentMethodCode/credential';
 
   /// Dispute
   static const disputes = 'disputes';

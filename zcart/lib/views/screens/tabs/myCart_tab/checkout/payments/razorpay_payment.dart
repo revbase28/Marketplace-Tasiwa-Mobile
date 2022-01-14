@@ -7,7 +7,6 @@ import 'package:http/http.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:zcart/data/models/address/address_model.dart';
 import 'package:zcart/data/models/cart/cart_item_details_model.dart';
-import 'package:zcart/data/network/api.dart';
 import 'package:zcart/helper/get_amount_from_string.dart';
 import 'package:zcart/helper/app_images.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
@@ -17,11 +16,17 @@ class RazorpayPayment extends StatefulWidget {
   final CartItemDetails cartItemDetails;
   final Addresses address;
   final String email;
+  final String apiKey;
+  final String secretKey;
+  final String currency;
   const RazorpayPayment({
     Key? key,
     required this.cartItemDetails,
     required this.address,
     required this.email,
+    required this.apiKey,
+    required this.secretKey,
+    required this.currency,
   }) : super(key: key);
 
   @override
@@ -126,14 +131,13 @@ class _RazorpayPaymentState extends State<RazorpayPayment> {
 
   void _openCheckout() async {
     String _basicAuth = 'Basic ' +
-        base64Encode(
-            utf8.encode('${API.razorPayApiKey}:${API.razorPaySecretKey}'));
+        base64Encode(utf8.encode('${widget.apiKey}:${widget.secretKey}'));
 
     final _response = await post(
       Uri.parse("https://api.razorpay.com/v1/orders"),
       body: json.encode({
         "amount": getAmountFromString(widget.cartItemDetails.grandTotal!),
-        "currency": API.razorPayCurrency,
+        "currency": widget.currency,
         "receipt": widget.cartItemDetails.id.toString(),
       }),
       headers: {
@@ -148,7 +152,7 @@ class _RazorpayPaymentState extends State<RazorpayPayment> {
         getAmountFromString(widget.cartItemDetails.grandTotal!).toString());
 
     var options = {
-      'key': API.razorPayApiKey,
+      'key': widget.apiKey,
       'amount': getAmountFromString(widget
           .cartItemDetails.grandTotal!), //in the smallest currency sub-unit.
       'name': widget.address.addressTitle!,

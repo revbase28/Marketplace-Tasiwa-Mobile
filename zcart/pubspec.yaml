@@ -52,9 +52,11 @@ dependencies:
   slide_countdown: ^0.0.9
   image_picker: ^0.8.4+4
   photo_view: ^0.13.0
+  encrypt: ^5.0.1
   razorpay_flutter:
     git:
       url: git://github.com/devShakib015/razorpay-flutter.git
+  crypto: ^3.0.1
   
 
 

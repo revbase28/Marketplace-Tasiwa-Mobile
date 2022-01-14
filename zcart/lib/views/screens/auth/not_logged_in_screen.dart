@@ -8,6 +8,7 @@ import 'package:zcart/config/config.dart';
 import 'package:zcart/data/controller/blog/blog_controller.dart';
 import 'package:zcart/data/controller/others/others_controller.dart';
 import 'package:zcart/helper/get_color_based_on_theme.dart';
+import 'package:zcart/helper/get_payment_method_creds.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:zcart/views/screens/auth/login_screen.dart';
 import 'package:zcart/views/screens/tabs/account_tab/blogs/blogs_screen.dart';
@@ -154,6 +155,19 @@ class NotLoggedInScreen extends StatelessWidget {
                               .read(termsAndConditionProvider.notifier)
                               .fetchTermsAndCondition();
                           context.nextPage(const TermsAndConditionScreen());
+                        },
+                      ),
+                    ),
+                    Card(
+                      elevation: 0,
+                      child: ListTile(
+                        title: Text("Get Payment method!!",
+                            style: context.textTheme.subtitle2!),
+                        trailing: const Icon(Icons.arrow_forward_ios),
+                        onTap: () async {
+                          final _result =
+                              await getPaymentMethodCreds("razorpay");
+                          print(_result ?? "no result");
                         },
                       ),
                     ),

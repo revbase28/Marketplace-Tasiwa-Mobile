@@ -33,19 +33,22 @@ class BannerWidget extends StatelessWidget {
             .map((item) => Stack(
                   children: [
                     SizedBox(
-                        height: context.percentHeight * 15,
-                        width: double.infinity,
-                        child: CachedNetworkImage(
-                          imageUrl: item.image!,
-                          errorWidget: (context, url, error) =>
-                              const SizedBox(),
-                          progressIndicatorBuilder: (context, url, progress) =>
-                              Center(
-                            child: CircularProgressIndicator(
-                                value: progress.progress),
-                          ),
-                          fit: BoxFit.cover,
-                        )).cornerRadius(10),
+                            height: context.percentHeight * 15,
+                            width: double.infinity,
+                            child: item.image == null
+                                ? const SizedBox()
+                                : CachedNetworkImage(
+                                    imageUrl: item.image!,
+                                    errorWidget: (context, url, error) =>
+                                        const SizedBox(),
+                                    progressIndicatorBuilder:
+                                        (context, url, progress) => Center(
+                                      child: CircularProgressIndicator(
+                                          value: progress.progress),
+                                    ),
+                                    fit: BoxFit.cover,
+                                  ))
+                        .cornerRadius(10),
                     Column(
                       children: [
                         BannerTextWidget(item.title, "title")

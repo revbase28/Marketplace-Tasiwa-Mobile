@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:zcart/data/models/address/address_model.dart';
 import 'package:zcart/data/models/cart/cart_item_details_model.dart';
 import 'package:zcart/helper/constants.dart';
+import 'package:zcart/helper/get_payment_method_creds.dart';
 import 'package:zcart/riverpod/providers/provider.dart';
 import 'package:zcart/views/screens/tabs/myCart_tab/checkout/custom_payment_card_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -18,6 +19,7 @@ class PaymentMethods {
     required String email,
     required int price,
     CartItemDetails? cartItemDetails,
+    CartMeta? cartMeta,
     required int shippingId,
     List<Addresses>? addresses,
   }) async {
@@ -52,9 +54,19 @@ class PaymentMethods {
         }
       });
     } else if (code == paystack) {
-      return await PayStackPayment(context: context, email: email, price: price)
-          .chargeCardAndMakePayment()
-          .then((value) => value);
+      final _result = await getPaymentMethodCreds(paystack);
+
+      if (_result == null) {
+        return false;
+      } else {
+        return await PayStackPayment(
+          context: context,
+          email: email,
+          price: price,
+          currency: cartMeta?.currency ?? "",
+          publicKey: _result["public_key"],
+        ).chargeCardAndMakePayment().then((value) => value);
+      }
     } else if (code == paypal) {
       if (cartItemDetails != null && addresses != null) {
         Map<String, dynamic>? _result = await Navigator.of(context).push(
@@ -75,23 +87,32 @@ class PaymentMethods {
         return false;
       }
     } else if (code == razorpay) {
-      if (cartItemDetails != null && addresses != null) {
-        Map<String, dynamic>? _result = await Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (BuildContext context) => RazorpayPayment(
+      final _paymentResult = await getPaymentMethodCreds(paystack);
+      if (_paymentResult == null) {
+        return false;
+      } else {
+        if (cartItemDetails != null && addresses != null) {
+          Map<String, dynamic>? _result = await Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (BuildContext context) => RazorpayPayment(
                 email: email,
                 cartItemDetails: cartItemDetails,
-                address: addresses[shippingId]),
-          ),
-        );
+                address: addresses[shippingId],
+                currency: cartMeta?.currency ?? "",
+                apiKey: _paymentResult["public_key"],
+                secretKey: _paymentResult["secret"],
+              ),
+            ),
+          );
 
-        _checkoutNotifier.paymentStatus = _result?["status"];
-        _checkoutNotifier.paymentMeta = _result?["paymentMeta"];
+          _checkoutNotifier.paymentStatus = _result?["status"];
+          _checkoutNotifier.paymentMeta = _result?["paymentMeta"];
 
-        debugPrint("Payment Result: $_result");
-        return _result?["success"] ?? false;
-      } else {
-        return false;
+          debugPrint("Payment Result: $_result");
+          return _result?["success"] ?? false;
+        } else {
+          return false;
+        }
       }
     } else if (code == cod || code == wire) {
       return true;

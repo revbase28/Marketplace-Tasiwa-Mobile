@@ -29,5 +29,5 @@ abstract class ICartRepository {
 
   Future<List<CartItem>?> fetchCarts();
 
-  Future<CartItemDetails?> fetchCartItemDetails(cartId);
+  Future<CartItemDetailsModel?> fetchCartItemDetails(cartId);
 }

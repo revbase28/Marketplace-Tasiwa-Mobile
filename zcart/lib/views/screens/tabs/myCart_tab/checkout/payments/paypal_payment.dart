@@ -27,13 +27,18 @@ class _PayPalPaymentState extends State<PayPalPayment> {
   Map<String, String>? _paymentMeta;
   String? _status;
 
-  void _pay() => {
+  void _pay(
+          {required bool sandboxMode,
+          required String clientId,
+          required String clientSecret,
+          required String currency}) =>
+      {
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (BuildContext context) => UsePaypal(
-                sandboxMode: API.paypalSandboxMode,
-                clientId: API.paypalClientId,
-                secretKey: API.paypalClientSecret,
+                sandboxMode: sandboxMode,
+                clientId: clientId,
+                secretKey: clientSecret,
                 returnURL: "${API.appUrl}/return",
                 cancelURL: "${API.appUrl}/cancel",
                 transactions: [
@@ -42,7 +47,7 @@ class _PayPalPaymentState extends State<PayPalPayment> {
                       "total": getDoubleAmountFromString(
                               widget.cartItemDetails.grandTotal!)
                           .toString(),
-                      "currency": API.payPalCurrency,
+                      "currency": currency,
                       "details": {
                         "subtotal": getDoubleAmountFromString(
                                 widget.cartItemDetails.total!)
@@ -75,7 +80,7 @@ class _PayPalPaymentState extends State<PayPalPayment> {
                                 "price": getDoubleAmountFromString(e.unitPrice!)
                                     .toString(),
                                 "sku": e.id.toString(),
-                                "currency": API.payPalCurrency,
+                                "currency": currency,
                               })
                           .toList(),
                       "shipping_address": {

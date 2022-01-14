@@ -112,7 +112,7 @@ class CartRepository implements ICartRepository {
   }
 
   @override
-  Future<CartItemDetails?> fetchCartItemDetails(cartId) async {
+  Future<CartItemDetailsModel?> fetchCartItemDetails(cartId) async {
     var responseBody = await handleResponse(
         await getRequest(API.cartItemDetails(cartId), bearerToken: true));
     if (responseBody.runtimeType == int && responseBody > 206) {
@@ -120,6 +120,6 @@ class CartRepository implements ICartRepository {
     }
     CartItemDetailsModel cartItemDetailsModel =
         CartItemDetailsModel.fromJson(responseBody);
-    return cartItemDetailsModel.data;
+    return cartItemDetailsModel;
   }
 }

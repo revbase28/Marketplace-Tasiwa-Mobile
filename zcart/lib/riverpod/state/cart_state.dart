@@ -38,7 +38,7 @@ class CartItemDetailsLoadingState extends CartItemDetailsState {
 }
 
 class CartItemDetailsLoadedState extends CartItemDetailsState {
-  final CartItemDetails? cartItemDetails;
+  final CartItemDetailsModel? cartItemDetails;
 
   const CartItemDetailsLoadedState(this.cartItemDetails);
 }

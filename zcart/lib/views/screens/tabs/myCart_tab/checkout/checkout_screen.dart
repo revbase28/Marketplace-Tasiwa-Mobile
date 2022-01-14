@@ -95,7 +95,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         onChange: (context, state) {
           if (state is CartItemDetailsLoadedState) {
             context.read(checkoutNotifierProvider.notifier).cartId =
-                state.cartItemDetails!.id;
+                state.cartItemDetails!.data!.id;
           }
         },
         child: Scaffold(
@@ -217,13 +217,13 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   ListView.builder(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
-                      itemCount:
-                          cartItemDetailsState.cartItemDetails!.items!.length,
+                      itemCount: cartItemDetailsState
+                          .cartItemDetails!.data!.items!.length,
                       itemBuilder: (context, index) {
                         return ListTile(
                           leading: CachedNetworkImage(
                             imageUrl: cartItemDetailsState
-                                .cartItemDetails!.items![index].image!,
+                                .cartItemDetails!.data!.items![index].image!,
                             errorWidget: (context, url, error) =>
                                 const SizedBox(),
                             progressIndicatorBuilder:
@@ -234,11 +234,11 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                             width: 40,
                             height: 40,
                           ),
-                          title: Text(cartItemDetailsState
-                              .cartItemDetails!.items![index].description!),
+                          title: Text(cartItemDetailsState.cartItemDetails!
+                              .data!.items![index].description!),
                           subtitle: Text(
-                              cartItemDetailsState
-                                  .cartItemDetails!.items![index].unitPrice!,
+                              cartItemDetailsState.cartItemDetails!.data!
+                                  .items![index].unitPrice!,
                               style: context.textTheme.subtitle2!.copyWith(
                                 fontWeight: FontWeight.bold,
                                 color: getColorBasedOnTheme(
@@ -246,7 +246,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               )),
                           trailing: Text('x ' +
                               cartItemDetailsState
-                                  .cartItemDetails!.items![index].quantity
+                                  .cartItemDetails!.data!.items![index].quantity
                                   .toString()),
                         );
                       }),
@@ -263,7 +263,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                           Expanded(
                               flex: 3,
                               child: Text(
-                                  cartItemDetailsState.cartItemDetails!.total!,
+                                  cartItemDetailsState
+                                      .cartItemDetails!.data!.total!,
                                   style: context.textTheme.subtitle2)),
                         ],
                       ),
@@ -278,7 +279,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               flex: 3,
                               child: Text(
                                   cartItemDetailsState
-                                      .cartItemDetails!.discount!,
+                                      .cartItemDetails!.data!.discount!,
                                   style: context.textTheme.subtitle2)),
                         ],
                       ),
@@ -293,7 +294,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               flex: 3,
                               child: Text(
                                   cartItemDetailsState
-                                      .cartItemDetails!.packaging!,
+                                      .cartItemDetails!.data!.packaging!,
                                   style: context.textTheme.subtitle2)),
                         ],
                       ),
@@ -308,7 +309,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               flex: 3,
                               child: Text(
                                   cartItemDetailsState
-                                      .cartItemDetails!.shipping!,
+                                      .cartItemDetails!.data!.shipping!,
                                   style: context.textTheme.subtitle2)),
                         ],
                       ),
@@ -323,7 +324,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               flex: 3,
                               child: Text(
                                   cartItemDetailsState
-                                      .cartItemDetails!.handling!,
+                                      .cartItemDetails!.data!.handling!,
                                   style: context.textTheme.subtitle2)),
                         ],
                       ),
@@ -337,7 +338,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                           Expanded(
                               flex: 3,
                               child: Text(
-                                  '${cartItemDetailsState.cartItemDetails!.taxes} (${cartItemDetailsState.cartItemDetails!.taxrate})',
+                                  '${cartItemDetailsState.cartItemDetails!.data!.taxes} (${cartItemDetailsState.cartItemDetails!.data!.taxrate})',
                                   style: context.textTheme.subtitle2)),
                         ],
                       ),
@@ -354,7 +355,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               flex: 3,
                               child: Text(
                                   cartItemDetailsState
-                                      .cartItemDetails!.grandTotal!,
+                                      .cartItemDetails!.data!.grandTotal!,
                                   style: context.textTheme.subtitle2)),
                         ],
                       ),
@@ -386,13 +387,14 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                             context
                                 .read(applyCouponProvider.notifier)
                                 .applyCoupon(
-                                    cartItemDetailsState.cartItemDetails!.id,
+                                    cartItemDetailsState
+                                        .cartItemDetails!.data!.id,
                                     _couponController.text)
                                 .then((value) => context
                                     .read(cartItemDetailsNotifierProvider
                                         .notifier)
                                     .getCartItemDetails(cartItemDetailsState
-                                        .cartItemDetails!.id));
+                                        .cartItemDetails!.data!.id));
                           },
                           child: Text(LocaleKeys.apply.tr(),
                               style: TextStyle(color: kPrimaryColor)),
@@ -594,7 +596,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       ? shippingState.shippingOptions!.isNotEmpty
                           ? ShippingOptionsBuilder(
                               shippingOptions: shippingState.shippingOptions,
-                              cartItem: cartItemDetailsState.cartItemDetails,
+                              cartItem:
+                                  cartItemDetailsState.cartItemDetails!.data,
                               onPressedCheckBox: (value) {
                                 setState(() {
                                   _selectedShippingOptionsIndex = value;
@@ -635,7 +638,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             padding: const EdgeInsets.symmetric(vertical: 10),
             child: cartItemDetailsState is CartItemDetailsLoadedState
                 ? PackagingListBuilder(
-                    cartItem: cartItemDetailsState.cartItemDetails,
+                    cartItem: cartItemDetailsState.cartItemDetails!.data,
                     onPressedCheckBox: (value) {
                       setState(() {
                         _selectedPackagingIndex = value;
@@ -709,8 +712,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                           : cartItemDetailsState is CartItemDetailsLoadedState
                               ? AddressListBuilder(
                                   addressesList: addressState.addresses,
-                                  cartItem:
-                                      cartItemDetailsState.cartItemDetails,
+                                  cartItem: cartItemDetailsState
+                                      .cartItemDetails!.data,
                                   onPressedCheckBox: (value) {
                                     setState(() {
                                       _selectedAddressIndex = value;
@@ -748,7 +751,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   continued(CartItemDetailsState cartItemDetailsState,
       AddressState addressState) async {
     int _grandTotal = cartItemDetailsState is CartItemDetailsLoadedState
-        ? getAmountFromString(cartItemDetailsState.cartItemDetails!.grandTotal!)
+        ? getAmountFromString(
+            cartItemDetailsState.cartItemDetails!.data!.grandTotal!)
         : 0;
 
     if (_currentStep == 0 && _selectedAddressIndex == null) {
@@ -784,8 +788,11 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       : null,
                   cartItemDetails:
                       cartItemDetailsState is CartItemDetailsLoadedState
-                          ? cartItemDetailsState.cartItemDetails
+                          ? cartItemDetailsState.cartItemDetails!.data
                           : null,
+                  cartMeta: cartItemDetailsState is CartItemDetailsLoadedState
+                      ? cartItemDetailsState.cartItemDetails!.meta
+                      : null,
                 ).then((value) async {
                   if (value) {
                     setState(() {
@@ -819,8 +826,11 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   : null,
               cartItemDetails:
                   cartItemDetailsState is CartItemDetailsLoadedState
-                      ? cartItemDetailsState.cartItemDetails
+                      ? cartItemDetailsState.cartItemDetails!.data
                       : null,
+              cartMeta: cartItemDetailsState is CartItemDetailsLoadedState
+                  ? cartItemDetailsState.cartItemDetails!.meta
+                  : null,
             ).then((value) async {
               if (value) {
                 setState(() {
@@ -849,7 +859,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               ? addressState.addresses!
               : null,
           cartItemDetails: cartItemDetailsState is CartItemDetailsLoadedState
-              ? cartItemDetailsState.cartItemDetails
+              ? cartItemDetailsState.cartItemDetails!.data
+              : null,
+          cartMeta: cartItemDetailsState is CartItemDetailsLoadedState
+              ? cartItemDetailsState.cartItemDetails!.meta
               : null,
         ).then((value) async {
           if (value) {

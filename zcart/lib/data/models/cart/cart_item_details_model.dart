@@ -1,26 +1,21 @@
-// To parse this JSON data, do
-//
-//     final cartItemDetailsModel = cartItemDetailsModelFromJson(jsonString);
-
-import 'dart:convert';
-
-CartItemDetailsModel cartItemDetailsModelFromJson(String str) => CartItemDetailsModel.fromJson(json.decode(str));
-
-String cartItemDetailsModelToJson(CartItemDetailsModel data) => json.encode(data.toJson());
-
 class CartItemDetailsModel {
   CartItemDetailsModel({
     this.data,
+    this.meta,
   });
 
   CartItemDetails? data;
+  CartMeta? meta;
 
-  factory CartItemDetailsModel.fromJson(Map<String, dynamic> json) => CartItemDetailsModel(
+  factory CartItemDetailsModel.fromJson(Map<String, dynamic> json) =>
+      CartItemDetailsModel(
         data: CartItemDetails.fromJson(json["data"]),
+        meta: CartMeta.fromJson(json["meta"]),
       );
 
   Map<String, dynamic> toJson() => {
         "data": data!.toJson(),
+        "meta": meta!.toJson(),
       };
 }
 
@@ -73,7 +68,8 @@ class CartItemDetails {
   Shop? shop;
   List<Item>? items;
 
-  factory CartItemDetails.fromJson(Map<String, dynamic> json) => CartItemDetails(
+  factory CartItemDetails.fromJson(Map<String, dynamic> json) =>
+      CartItemDetails(
         id: json["id"],
         customerId: json["customer_id"],
         ipAddress: json["ip_address"],
@@ -201,5 +197,25 @@ class Shop {
         "verified_text": verifiedText,
         "rating": rating,
         "image": image,
+      };
+}
+
+class CartMeta {
+  CartMeta({
+    this.currency,
+    this.countryCode,
+  });
+
+  String? currency;
+  String? countryCode;
+
+  factory CartMeta.fromJson(Map<String, dynamic> json) => CartMeta(
+        currency: json["currency"],
+        countryCode: json["country_code"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "currency": currency,
+        "country_code": countryCode,
       };
 }

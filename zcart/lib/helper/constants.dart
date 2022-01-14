@@ -1,5 +1,7 @@
 //Don't change anything here
 
+import 'dart:io';
+
 /// Shared Pref
 const String access = 'ACCESS';
 const String loggedIn = 'LOGGED_IN';
@@ -21,7 +23,9 @@ final List<String> paymentMethods = [
   cod,
   wire,
   stripe,
-  // paystack,
+  paystack,
   // paypal,
-  // if (Platform.isAndroid) razorpay
+  //
+  //
+  if (Platform.isAndroid) razorpay
 ];
