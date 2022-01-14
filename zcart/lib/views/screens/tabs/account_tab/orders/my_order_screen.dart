@@ -107,16 +107,19 @@ class OrdersLoadingWidget extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8),
             child: Shimmer.fromColors(
-                child: Container(
-                  height: 200,
-                  width: MediaQuery.of(context).size.width,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
+              child: Container(
+                height: 200,
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8),
                 ),
-                baseColor: Colors.grey[300]!,
-                highlightColor: Colors.grey[100]!),
+              ),
+              baseColor:
+                  getColorBasedOnTheme(context, Colors.grey[200]!, kDarkColor),
+              highlightColor: getColorBasedOnTheme(
+                  context, Colors.grey[100]!, kDarkCardBgColor),
+            ),
           ),
       ],
     );

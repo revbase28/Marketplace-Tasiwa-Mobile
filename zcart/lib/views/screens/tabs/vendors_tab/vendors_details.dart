@@ -19,9 +19,9 @@ class VendorsDetailsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
-    final vendorDetailsState = watch(vendorDetailsNotifierProvider);
-    final vendorItemDetailsListState = watch(vendorItemsNotifierProvider);
-    final scrollControllerProvider =
+    final _vendorDetailsState = watch(vendorDetailsNotifierProvider);
+    final _vendorItemDetailsListState = watch(vendorItemsNotifierProvider);
+    final _scrollControllerProvider =
         watch(vendorItemScrollNotifierProvider.notifier);
 
     return ProviderListener<ScrollState>(
@@ -40,10 +40,10 @@ class VendorsDetailsScreen extends ConsumerWidget {
           backgroundColor: Colors.transparent,
         ),
         body: SingleChildScrollView(
-          controller: scrollControllerProvider.controller,
+          controller: _scrollControllerProvider.controller,
           child: Column(
             children: [
-              vendorDetailsState is VendorDetailsLoadedState
+              _vendorDetailsState is VendorDetailsLoadedState
                   ? Column(
                       children: [
                         Stack(
@@ -53,7 +53,7 @@ class VendorsDetailsScreen extends ConsumerWidget {
                               width: context.screenWidth,
                               decoration: BoxDecoration(
                                 image: DecorationImage(
-                                  image: NetworkImage(vendorDetailsState
+                                  image: NetworkImage(_vendorDetailsState
                                       .vendorDetails!.bannerImage!),
                                   fit: BoxFit.cover,
                                   colorFilter: ColorFilter.mode(
@@ -68,7 +68,7 @@ class VendorsDetailsScreen extends ConsumerWidget {
                               ),
                               child: Center(
                                 child: Text(
-                                  vendorDetailsState.vendorDetails!.name!,
+                                  _vendorDetailsState.vendorDetails!.name!,
                                   style: context.textTheme.headline6!.copyWith(
                                     color: kLightColor.withOpacity(0.9),
                                     fontWeight: FontWeight.bold,
@@ -83,33 +83,33 @@ class VendorsDetailsScreen extends ConsumerWidget {
                           ],
                         ),
                         VendorCard(
-                          logo: vendorDetailsState.vendorDetails!.image,
-                          name: vendorDetailsState.vendorDetails!.name,
+                          logo: _vendorDetailsState.vendorDetails!.image,
+                          name: _vendorDetailsState.vendorDetails!.name,
                           verifiedText:
-                              vendorDetailsState.vendorDetails!.verifiedText,
+                              _vendorDetailsState.vendorDetails!.verifiedText,
                           isVerified:
-                              vendorDetailsState.vendorDetails!.verified,
-                          rating: vendorDetailsState.vendorDetails!.rating,
+                              _vendorDetailsState.vendorDetails!.verified,
+                          rating: _vendorDetailsState.vendorDetails!.rating,
                           onTap: () => context.nextPage(
                             VendorsAboutUsScreen(
-                              vendorDetails: vendorDetailsState.vendorDetails,
+                              vendorDetails: _vendorDetailsState.vendorDetails,
                               onPressedContact: () {
                                 if (accessAllowed) {
                                   context
                                       .read(productChatProvider.notifier)
                                       .productConversation(
-                                        vendorDetailsState.vendorDetails!.id,
+                                        _vendorDetailsState.vendorDetails!.id,
                                       );
 
                                   context.nextPage(
                                     VendorChatScreen(
-                                        shopId: vendorDetailsState
+                                        shopId: _vendorDetailsState
                                             .vendorDetails!.id,
-                                        shopImage: vendorDetailsState
+                                        shopImage: _vendorDetailsState
                                             .vendorDetails!.image,
-                                        shopName: vendorDetailsState
+                                        shopName: _vendorDetailsState
                                             .vendorDetails!.name,
-                                        shopVerifiedText: vendorDetailsState
+                                        shopVerifiedText: _vendorDetailsState
                                             .vendorDetails!.verifiedText),
                                   );
                                 } else {
@@ -127,22 +127,22 @@ class VendorsDetailsScreen extends ConsumerWidget {
                         )
                       ],
                     )
-                  : vendorDetailsState is VendorDetailsLoadingState ||
-                          vendorDetailsState is VendorDetailsInitialState
+                  : _vendorDetailsState is VendorDetailsLoadingState ||
+                          _vendorDetailsState is VendorDetailsInitialState
                       ? const ProductLoadingWidget().px(10)
-                      : vendorDetailsState is VendorDetailsErrorState
-                          ? ErrorMessageWidget(vendorDetailsState.message)
+                      : _vendorDetailsState is VendorDetailsErrorState
+                          ? ErrorMessageWidget(_vendorDetailsState.message)
                           : const SizedBox(),
-              vendorItemDetailsListState is VendorItemLoadedState
+              _vendorItemDetailsListState is VendorItemLoadedState
                   ? ProductDetailsCardGridView(
-                          productList: vendorItemDetailsListState.vendorItem!)
+                          productList: _vendorItemDetailsListState.vendorItem!)
                       .px(10)
-                  : vendorItemDetailsListState is VendorItemLoadingState ||
-                          vendorItemDetailsListState is VendorItemInitialState
+                  : _vendorItemDetailsListState is VendorItemLoadingState ||
+                          _vendorItemDetailsListState is VendorItemInitialState
                       ? const ProductLoadingWidget().px(10)
-                      : vendorItemDetailsListState is VendorItemErrorState
+                      : _vendorItemDetailsListState is VendorItemErrorState
                           ? ErrorMessageWidget(
-                              vendorItemDetailsListState.message)
+                              _vendorItemDetailsListState.message)
                           : const SizedBox()
             ],
           ),

@@ -21,7 +21,7 @@ class MyConfig {
   /// This is your app url. You must change this url as your own app url. Currently the app url is
   /// [https://zcart.incevio.com].
   ///
-  static const String appUrl = "https://staging.incevio.cloud";
+  static const String appUrl = "https://zcart.incevio.cloud";
 
   ///
 
@@ -29,7 +29,7 @@ class MyConfig {
   ///This is your app api url. You must change this url as your own app api url. Currently the app api
   ///url is [https://test.incevio.com/api/]. This is the url that you will use to access the api. Don't ////forget the slash [/] at the end and [https://] at the front.
   ///
-  static const String appApiUrl = 'https://staging.incevio.cloud/api/';
+  static const String appApiUrl = 'https://zcart.incevio.cloud/api/';
 
   ///
 
@@ -86,6 +86,13 @@ class MyConfig {
 
   /// PAYMENT GATEWAY CONFIGS
   /// These are your payment gateway configs. You must change this configs as your own payment gateway API configs. If you don't have any payment gateway API configs then you can leave these configs as it is.
+  ///
+  ///
+  ///
+  ///[Payment gateway API key]
+  static const String zcartApiKey = "2c5f0a1b-bcc0-4f31-b166-412cab9cbba4";
+  static const String zcartSecretKey = "9MNFw7ZLeaCA3uzxcfMjeXj9jPuWIPaC";
+
   ///
   /// [RAZOR PAY]
   /// API KEY
