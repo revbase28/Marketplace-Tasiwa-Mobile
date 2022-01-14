@@ -74,41 +74,47 @@ class _MyCartTabState extends State<MyCartTab> {
                           },
                           child: SingleChildScrollView(
                             controller: scrollControllerProvider.controller,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const SizedBox(height: 100),
-                                const Icon(Icons.info_outline),
-                                Text(LocaleKeys.no_item_found.tr()),
-                                TextButton(
-                                    onPressed: () {
-                                      context.nextReplacementPage(
-                                          const BottomNavBar(selectedIndex: 0));
-                                    },
-                                    child: Text(LocaleKeys.go_shopping.tr())),
-                                const SizedBox(height: 100),
+                            child: SizedBox(
+                              width: double.infinity,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const SizedBox(height: 100),
+                                  const Icon(Icons.info_outline),
+                                  Text(LocaleKeys.no_item_found.tr()),
+                                  TextButton(
+                                      onPressed: () {
+                                        context.nextReplacementPage(
+                                            const BottomNavBar(
+                                                selectedIndex: 0));
+                                      },
+                                      child: Text(LocaleKeys.go_shopping.tr())),
+                                  const SizedBox(height: 100),
 
-                                const RecentlyViewed().p(10),
+                                  const RecentlyViewed().p(10),
 
-                                /// Popular Items
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 16),
-                                  child: randomItemState
-                                          is RandomItemLoadedState
-                                      ? ProductDetailsCardGridView(
-                                              title: LocaleKeys.additional_items
-                                                  .tr(),
-                                              isTitleCentered: true,
-                                              productList: randomItemState
-                                                  .randomItemList)
-                                          .py(15)
-                                      : randomItemState is RandomItemErrorState
-                                          ? ErrorMessageWidget(
-                                              randomItemState.message)
-                                          : const ProductLoadingWidget(),
-                                )
-                              ],
+                                  /// Popular Items
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 16),
+                                    child:
+                                        randomItemState is RandomItemLoadedState
+                                            ? ProductDetailsCardGridView(
+                                                    title: LocaleKeys
+                                                        .additional_items
+                                                        .tr(),
+                                                    isTitleCentered: true,
+                                                    productList: randomItemState
+                                                        .randomItemList)
+                                                .py(15)
+                                            : randomItemState
+                                                    is RandomItemErrorState
+                                                ? ErrorMessageWidget(
+                                                    randomItemState.message)
+                                                : const ProductLoadingWidget(),
+                                  )
+                                ],
+                              ),
                             ),
                           ),
                         )

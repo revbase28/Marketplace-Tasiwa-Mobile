@@ -65,7 +65,10 @@ class HomeTab extends ConsumerWidget {
               children: [
                 /// Slider
                 sliderState is SliderLoadedState
-                    ? SliderWidget(sliderState.sliderList).py(5)
+                    ? sliderState.sliderList == null ||
+                            sliderState.sliderList!.isEmpty
+                        ? const SizedBox()
+                        : SliderWidget(sliderState.sliderList).py(5)
                     : sliderState is SliderErrorState
                         ? ErrorMessageWidget(sliderState.message)
                         : const SizedBox(),
@@ -75,7 +78,9 @@ class HomeTab extends ConsumerWidget {
                         categoryState is CategoryLoadingState)
                     ? const SizedBox()
                     : categoryState is CategoryLoadedState
-                        ? CategoryWidget(categoryState.categoryList).py(5)
+                        ? categoryState.categoryList.isEmpty
+                            ? const SizedBox()
+                            : CategoryWidget(categoryState.categoryList).py(5)
                         : categoryState is CategoryErrorState
                             ? ErrorMessageWidget(categoryState.message)
                             : const SizedBox(),
@@ -93,7 +98,15 @@ class HomeTab extends ConsumerWidget {
 
                 /// Banner
                 bannerState is BannerLoadedState
-                    ? BannerWidget(bannerState.bannerList!.sublist(0, 3))
+                    ? bannerState.bannerList == null ||
+                            bannerState.bannerList!.isEmpty
+                        ? const SizedBox()
+                        : BannerWidget(bannerState.bannerList!.sublist(
+                                0,
+                                bannerState.bannerList!.length >= 3
+                                    ? 3
+                                    : bannerState.bannerList!.length))
+                            .py(5)
                     : bannerState is BannerErrorState
                         ? ErrorMessageWidget(bannerState.message)
                         : const SizedBox(),
@@ -110,10 +123,12 @@ class HomeTab extends ConsumerWidget {
 
                 /// Banner
                 bannerState is BannerLoadedState
-                    ? BannerWidget(
-                        bannerState.bannerList!.sublist(3, 5),
-                        isReverse: false,
-                      )
+                    ? bannerState.bannerList!.length < 3
+                        ? const SizedBox()
+                        : BannerWidget(
+                            bannerState.bannerList!.sublist(3, 5),
+                            isReverse: false,
+                          )
                     : bannerState is BannerErrorState
                         ? ErrorMessageWidget(bannerState.message)
                         : const SizedBox(),
@@ -154,7 +169,9 @@ class HomeTab extends ConsumerWidget {
 
                 /// Banner
                 bannerState is BannerLoadedState
-                    ? BannerWidget(bannerState.bannerList!.sublist(5, 7))
+                    ? bannerState.bannerList!.length < 5
+                        ? const SizedBox()
+                        : BannerWidget(bannerState.bannerList!.sublist(5, 7))
                     : bannerState is BannerErrorState
                         ? ErrorMessageWidget(bannerState.message)
                         : const SizedBox(),
@@ -171,10 +188,12 @@ class HomeTab extends ConsumerWidget {
 
                 /// Banner
                 bannerState is BannerLoadedState
-                    ? BannerWidget(
-                        bannerState.bannerList!.sublist(7),
-                        isReverse: false,
-                      )
+                    ? bannerState.bannerList!.length < 7
+                        ? const SizedBox()
+                        : BannerWidget(
+                            bannerState.bannerList!.sublist(7),
+                            isReverse: false,
+                          )
                     : bannerState is BannerErrorState
                         ? ErrorMessageWidget(bannerState.message)
                         : const SizedBox(),
