@@ -18,6 +18,7 @@ const String stripe = 'stripe';
 const String paystack = 'paystack';
 const String paypal = 'paypal-express';
 const String razorpay = 'razorpay';
+const String zcartWallet = 'zcart-wallet';
 
 final List<String> paymentMethods = [
   cod,
@@ -25,7 +26,6 @@ final List<String> paymentMethods = [
   stripe,
   paystack,
   paypal,
-  //
-  //
+  zcartWallet,
   if (Platform.isAndroid) razorpay
 ];

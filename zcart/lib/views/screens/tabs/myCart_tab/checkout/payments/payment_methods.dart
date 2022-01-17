@@ -142,7 +142,7 @@ class PaymentMethods {
           return false;
         }
       }
-    } else if (code == cod || code == wire) {
+    } else if (code == cod || code == wire || code == zcartWallet) {
       return true;
     }
     return false;

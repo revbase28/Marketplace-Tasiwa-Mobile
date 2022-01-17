@@ -64,79 +64,68 @@ class CustomPaymentCardScreenState extends State<CustomPaymentCardScreen> {
         title: Text(
             widget.payMentMethod == stripe ? 'Stripe Checkout' : 'Checkout'),
       ),
-      resizeToAvoidBottomInset: false,
-      body: SafeArea(
+      body: SingleChildScrollView(
         child: Column(
           children: [
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    const SizedBox(height: 10),
-                    CreditCardWidget(
-                      onCreditCardWidgetChange: (p0) {},
-                      glassmorphismConfig: Glassmorphism.defaultConfig(),
-                      backgroundImage: AppImages.cardBg,
-                      cardNumber: cardNumber,
-                      expiryDate: expiryDate,
-                      cardHolderName: cardHolderName,
-                      cvvCode: cvvCode,
-                      showBackView: isCvvFocused,
-                      obscureCardNumber: true,
-                      obscureCardCvv: true,
-                      cardBgColor: kPrimaryColor,
-                    ),
-                    CreditCardForm(
-                      formKey: formKey,
-                      obscureCvv: true,
-                      obscureNumber: true,
-                      cardNumber: cardNumber,
-                      cvvCode: cvvCode,
-                      cardHolderName: cardHolderName,
-                      expiryDate: expiryDate,
-                      themeColor: kPrimaryColor,
-                      textColor: getColorBasedOnTheme(
-                          context, Colors.black, Colors.white),
-                      cardNumberDecoration: InputDecoration(
-                        labelText: 'Number',
-                        hintText: 'XXXX XXXX XXXX XXXX',
-                        hintStyle: Theme.of(context).textTheme.subtitle2,
-                        labelStyle: Theme.of(context).textTheme.subtitle2,
-                        focusedBorder: border,
-                        enabledBorder: border,
-                      ),
-                      expiryDateDecoration: InputDecoration(
-                        hintStyle: Theme.of(context).textTheme.subtitle2,
-                        labelStyle: Theme.of(context).textTheme.subtitle2,
-                        focusedBorder: border,
-                        enabledBorder: border,
-                        labelText: 'Expired Date',
-                        hintText: 'XX/XX',
-                      ),
-                      cvvCodeDecoration: InputDecoration(
-                        hintStyle: Theme.of(context).textTheme.subtitle2,
-                        labelStyle: Theme.of(context).textTheme.subtitle2,
-                        focusedBorder: border,
-                        enabledBorder: border,
-                        labelText: 'CVV',
-                        hintText: 'XXX',
-                      ),
-                      cardHolderDecoration: InputDecoration(
-                        hintStyle: Theme.of(context).textTheme.subtitle2,
-                        labelStyle: Theme.of(context).textTheme.subtitle2,
-                        focusedBorder: border,
-                        enabledBorder: border,
-                        labelText: 'Card Holder',
-                      ),
-                      onCreditCardModelChange: onCreditCardModelChange,
-                    ),
-                  ],
-                ),
+            const SizedBox(height: 10),
+            CreditCardWidget(
+              onCreditCardWidgetChange: (p0) {},
+              glassmorphismConfig: Glassmorphism.defaultConfig(),
+              backgroundImage: AppImages.cardBg,
+              cardNumber: cardNumber,
+              expiryDate: expiryDate,
+              cardHolderName: cardHolderName,
+              cvvCode: cvvCode,
+              showBackView: isCvvFocused,
+              obscureCardNumber: true,
+              obscureCardCvv: true,
+              cardBgColor: kPrimaryColor,
+            ),
+            CreditCardForm(
+              formKey: formKey,
+              obscureCvv: true,
+              obscureNumber: true,
+              cardNumber: cardNumber,
+              cvvCode: cvvCode,
+              cardHolderName: cardHolderName,
+              expiryDate: expiryDate,
+              themeColor: kPrimaryColor,
+              textColor:
+                  getColorBasedOnTheme(context, Colors.black, Colors.white),
+              cardNumberDecoration: InputDecoration(
+                labelText: 'Number',
+                hintText: 'XXXX XXXX XXXX XXXX',
+                hintStyle: Theme.of(context).textTheme.subtitle2,
+                labelStyle: Theme.of(context).textTheme.subtitle2,
+                focusedBorder: border,
+                enabledBorder: border,
               ),
+              expiryDateDecoration: InputDecoration(
+                hintStyle: Theme.of(context).textTheme.subtitle2,
+                labelStyle: Theme.of(context).textTheme.subtitle2,
+                focusedBorder: border,
+                enabledBorder: border,
+                labelText: 'Expired Date',
+                hintText: 'XX/XX',
+              ),
+              cvvCodeDecoration: InputDecoration(
+                hintStyle: Theme.of(context).textTheme.subtitle2,
+                labelStyle: Theme.of(context).textTheme.subtitle2,
+                focusedBorder: border,
+                enabledBorder: border,
+                labelText: 'CVV',
+                hintText: 'XXX',
+              ),
+              cardHolderDecoration: InputDecoration(
+                hintStyle: Theme.of(context).textTheme.subtitle2,
+                labelStyle: Theme.of(context).textTheme.subtitle2,
+                focusedBorder: border,
+                enabledBorder: border,
+                labelText: 'Card Holder',
+              ),
+              onCreditCardModelChange: onCreditCardModelChange,
             ),
-            const SizedBox(
-              height: 4,
-            ),
+            const SizedBox(height: 32),
             Text(
               'Total Amount: ${widget.amount}',
               style: Theme.of(context).textTheme.headline6!.copyWith(

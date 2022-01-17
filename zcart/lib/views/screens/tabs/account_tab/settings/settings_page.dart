@@ -44,122 +44,124 @@ class _SettingsPageState extends State<SettingsPage> {
       ),
       body: _isLoading
           ? const LoadingWidget()
-          : Column(
-              children: [
-                Card(
-                  child: ListTile(
-                    title: Text(LocaleKeys.language.tr(),
-                        style: context.textTheme.subtitle2!),
-                    trailing: const Icon(
-                      Icons.translate,
-                    ),
-                    onTap: () {
-                      updateLanguage(context);
-                    },
-                  ),
-                ),
-                if (MyConfig.isDynamicThemeActive)
+          : SingleChildScrollView(
+              child: Column(
+                children: [
                   Card(
                     child: ListTile(
-                      title: Text(LocaleKeys.change_theme.tr(),
+                      title: Text(LocaleKeys.language.tr(),
                           style: context.textTheme.subtitle2!),
-                      trailing: EasyDynamicThemeSwitch(),
-                    ),
-                  ),
-                if (Platform.isAndroid)
-                  Card(
-                    elevation: 0,
-                    child: ListTile(
-                      title: Text("Clear Cache",
-                          style: context.textTheme.subtitle2!),
-                      trailing: const Icon(Icons.arrow_forward_ios),
-                      onTap: () async {
-                        await clearCache(context);
+                      trailing: const Icon(
+                        Icons.translate,
+                      ),
+                      onTap: () {
+                        updateLanguage(context);
                       },
                     ),
                   ),
-                const Divider(
-                  height: 30,
-                  thickness: 1,
-                ),
-                Card(
-                  child: ListTile(
-                    title: Text(LocaleKeys.about_us.tr(),
-                        style: context.textTheme.subtitle2!),
-                    trailing: const Icon(Icons.arrow_forward_ios),
-                    onTap: () {
-                      context.read(aboutUsProvider.notifier).fetchAboutUs();
-                      context.nextPage(const AboutUsScreen());
-                    },
-                  ),
-                ),
-                Card(
-                  child: ListTile(
-                    title: Text(LocaleKeys.privacy_policy.tr(),
-                        style: context.textTheme.subtitle2!),
-                    trailing: const Icon(Icons.arrow_forward_ios),
-                    onTap: () {
-                      context
-                          .read(privacyPolicyProvider.notifier)
-                          .fetchPrivacyPolicy();
-                      context.nextPage(const PrivacyPolicyScreen());
-                    },
-                  ),
-                ),
-                Card(
-                  child: ListTile(
-                    title: Text(LocaleKeys.terms_condition.tr(),
-                        style: context.textTheme.subtitle2!),
-                    trailing: const Icon(Icons.arrow_forward_ios),
-                    onTap: () {
-                      context
-                          .read(termsAndConditionProvider.notifier)
-                          .fetchTermsAndCondition();
-                      context.nextPage(const TermsAndConditionScreen());
-                    },
-                  ),
-                ),
-                const Divider(
-                  height: 30,
-                  thickness: 1,
-                ),
-                Card(
-                  child: ListTile(
-                    trailing: const Icon(Icons.logout_outlined),
-                    title: Text(LocaleKeys.sign_out.tr(),
-                        style: context.textTheme.subtitle2!),
-                    onTap: () async {
-                      await showCustomConfirmDialog(
-                        context,
-                        title: "Are you sure to sign out?",
-                        dialogAnimation: DialogAnimation.SLIDE_BOTTOM_TOP,
-                        negativeText: LocaleKeys.no.tr(),
-                        positiveText: LocaleKeys.yes.tr(),
-                        onAccept: () async {
-                          setState(() {
-                            _isLoading = true;
-                          });
-                          await context
-                              .read(addressNotifierProvider.notifier)
-                              .clearAddresses();
-                          await FacebookAuth.instance.logOut();
-                          await GoogleSignIn().signOut();
-                          await context
-                              .read(userNotifierProvider.notifier)
-                              .logout();
-                          setState(() {
-                            _isLoading = false;
-                          });
-                          await setValue(loggedIn, false).then((value) =>
-                              context.nextAndRemoveUntilPage(
-                                  const BottomNavBar()));
+                  if (MyConfig.isDynamicThemeActive)
+                    Card(
+                      child: ListTile(
+                        title: Text(LocaleKeys.change_theme.tr(),
+                            style: context.textTheme.subtitle2!),
+                        trailing: EasyDynamicThemeSwitch(),
+                      ),
+                    ),
+                  if (Platform.isAndroid)
+                    Card(
+                      elevation: 0,
+                      child: ListTile(
+                        title: Text("Clear Cache",
+                            style: context.textTheme.subtitle2!),
+                        trailing: const Icon(Icons.arrow_forward_ios),
+                        onTap: () async {
+                          await clearCache(context);
                         },
-                      );
-                    },
+                      ),
+                    ),
+                  const Divider(
+                    height: 30,
+                    thickness: 1,
                   ),
-                ),
-              ],
-            ).cornerRadius(10).p(10),
+                  Card(
+                    child: ListTile(
+                      title: Text(LocaleKeys.about_us.tr(),
+                          style: context.textTheme.subtitle2!),
+                      trailing: const Icon(Icons.arrow_forward_ios),
+                      onTap: () {
+                        context.read(aboutUsProvider.notifier).fetchAboutUs();
+                        context.nextPage(const AboutUsScreen());
+                      },
+                    ),
+                  ),
+                  Card(
+                    child: ListTile(
+                      title: Text(LocaleKeys.privacy_policy.tr(),
+                          style: context.textTheme.subtitle2!),
+                      trailing: const Icon(Icons.arrow_forward_ios),
+                      onTap: () {
+                        context
+                            .read(privacyPolicyProvider.notifier)
+                            .fetchPrivacyPolicy();
+                        context.nextPage(const PrivacyPolicyScreen());
+                      },
+                    ),
+                  ),
+                  Card(
+                    child: ListTile(
+                      title: Text(LocaleKeys.terms_condition.tr(),
+                          style: context.textTheme.subtitle2!),
+                      trailing: const Icon(Icons.arrow_forward_ios),
+                      onTap: () {
+                        context
+                            .read(termsAndConditionProvider.notifier)
+                            .fetchTermsAndCondition();
+                        context.nextPage(const TermsAndConditionScreen());
+                      },
+                    ),
+                  ),
+                  const Divider(
+                    height: 30,
+                    thickness: 1,
+                  ),
+                  Card(
+                    child: ListTile(
+                      trailing: const Icon(Icons.logout_outlined),
+                      title: Text(LocaleKeys.sign_out.tr(),
+                          style: context.textTheme.subtitle2!),
+                      onTap: () async {
+                        await showCustomConfirmDialog(
+                          context,
+                          title: "Are you sure to sign out?",
+                          dialogAnimation: DialogAnimation.SLIDE_BOTTOM_TOP,
+                          negativeText: LocaleKeys.no.tr(),
+                          positiveText: LocaleKeys.yes.tr(),
+                          onAccept: () async {
+                            setState(() {
+                              _isLoading = true;
+                            });
+                            await context
+                                .read(addressNotifierProvider.notifier)
+                                .clearAddresses();
+                            await FacebookAuth.instance.logOut();
+                            await GoogleSignIn().signOut();
+                            await context
+                                .read(userNotifierProvider.notifier)
+                                .logout();
+                            setState(() {
+                              _isLoading = false;
+                            });
+                            await setValue(loggedIn, false).then((value) =>
+                                context.nextAndRemoveUntilPage(
+                                    const BottomNavBar()));
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ).cornerRadius(10).p(10),
+            ),
     );
   }
 }

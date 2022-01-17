@@ -916,7 +916,19 @@ class _PaymentOptionsListBuilderState extends State<PaymentOptionsListBuilder> {
 
             List<PaymentOptions>? _implementedPaymentOptions =
                 _paymentOptions?.where((element) {
-              return paymentMethods.contains(element.code!);
+              if (paymentMethods.contains(element.code)) {
+                if (element.code! == zcartWallet) {
+                  if (accessAllowed) {
+                    return true;
+                  } else {
+                    return false;
+                  }
+                } else {
+                  return true;
+                }
+              } else {
+                return false;
+              }
             }).toList();
 
             _implementedPaymentOptions!

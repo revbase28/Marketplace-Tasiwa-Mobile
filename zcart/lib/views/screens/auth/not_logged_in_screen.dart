@@ -40,6 +40,7 @@ class NotLoggedInScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
+                    const SizedBox(height: 32),
                     CircleAvatar(
                       radius: 24,
                       backgroundColor: kDarkColor.withOpacity(0.5),
