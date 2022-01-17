@@ -24,7 +24,7 @@ final List<String> paymentMethods = [
   wire,
   stripe,
   paystack,
-  // paypal,
+  paypal,
   //
   //
   if (Platform.isAndroid) razorpay

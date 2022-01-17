@@ -54,41 +54,69 @@ class PaymentMethods {
         }
       });
     } else if (code == paystack) {
-      final _result = await getPaymentMethodCreds(paystack);
+      final _result = await getPaymentMethodCreds(
+        paystack,
+        requestBody: cartItemDetails != null
+            ? {"cart_id": cartItemDetails.id!.toString()}
+            : null,
+      );
 
-      if (_result == null) {
+      if (_result == null || _result["public_key"] == null) {
         return false;
       } else {
         return await PayStackPayment(
           context: context,
           email: email,
           price: price,
-          currency: cartMeta?.currency ?? "",
+          currency: cartMeta?.currency ?? "ZAR",
           publicKey: _result["public_key"],
         ).chargeCardAndMakePayment().then((value) => value);
       }
     } else if (code == paypal) {
-      if (cartItemDetails != null && addresses != null) {
-        Map<String, dynamic>? _result = await Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (BuildContext context) => PayPalPayment(
-                cartItemDetails: cartItemDetails,
-                address: addresses[shippingId]),
-          ),
-        );
-
-        _checkoutNotifier.paymentStatus = _result?["status"];
-        _checkoutNotifier.paymentMeta = _result?["paymentMeta"];
-
-        debugPrint("Payment Result: $_result");
-
-        return _result?["success"] ?? false;
-      } else {
+      final _paymentGatewayResult = await getPaymentMethodCreds(
+        paypal,
+        requestBody: cartItemDetails != null
+            ? {"cart_id": cartItemDetails.id!.toString()}
+            : null,
+      );
+      if (_paymentGatewayResult == null ||
+          (_paymentGatewayResult!["client_id"] == null ||
+              _paymentGatewayResult!["secret"] == null)) {
         return false;
+      } else {
+        if (cartItemDetails != null && addresses != null) {
+          Map<String, dynamic>? _result = await Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (BuildContext context) => PayPalPayment(
+                cartItemDetails: cartItemDetails,
+                address: addresses[shippingId],
+                cartMeta: cartMeta,
+                clientId: _paymentGatewayResult!["client_id"],
+                clientSecret: _paymentGatewayResult!["secret"],
+                isSandbox: _paymentGatewayResult!["sandbox"],
+              ),
+            ),
+          );
+
+          _checkoutNotifier.paymentStatus = _result?["status"];
+          _checkoutNotifier.paymentMeta = _result?["paymentMeta"];
+
+          debugPrint("Payment Result: $_result");
+
+          return _result?["success"] ?? false;
+        } else {
+          return false;
+        }
       }
     } else if (code == razorpay) {
-      final _paymentResult = await getPaymentMethodCreds(paystack);
-      if (_paymentResult == null) {
+      final _paymentResult = await getPaymentMethodCreds(
+        razorpay,
+        requestBody: cartItemDetails != null
+            ? {"cart_id": cartItemDetails.id!.toString()}
+            : null,
+      );
+      if (_paymentResult == null ||
+          (_paymentResult["api_key"] || _paymentResult["secret"])) {
         return false;
       } else {
         if (cartItemDetails != null && addresses != null) {
@@ -99,7 +127,7 @@ class PaymentMethods {
                 cartItemDetails: cartItemDetails,
                 address: addresses[shippingId],
                 currency: cartMeta?.currency ?? "",
-                apiKey: _paymentResult["public_key"],
+                apiKey: _paymentResult["api_key"],
                 secretKey: _paymentResult["secret"],
               ),
             ),

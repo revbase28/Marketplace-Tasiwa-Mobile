@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_paypal/flutter_paypal.dart';
+import 'package:nb_utils/nb_utils.dart';
 import 'package:zcart/data/models/address/address_model.dart';
 import 'package:zcart/data/models/cart/cart_item_details_model.dart';
 import 'package:zcart/data/network/api.dart';
@@ -10,11 +11,19 @@ import 'package:zcart/views/shared_widgets/shared_widgets.dart';
 
 class PayPalPayment extends StatefulWidget {
   final CartItemDetails cartItemDetails;
+  final CartMeta? cartMeta;
+  final bool isSandbox;
+  final String clientId;
+  final String clientSecret;
   final Addresses address;
 
   const PayPalPayment({
     Key? key,
     required this.cartItemDetails,
+    required this.cartMeta,
+    required this.isSandbox,
+    required this.clientId,
+    required this.clientSecret,
     required this.address,
   }) : super(key: key);
 
@@ -27,11 +36,12 @@ class _PayPalPaymentState extends State<PayPalPayment> {
   Map<String, String>? _paymentMeta;
   String? _status;
 
-  void _pay(
-          {required bool sandboxMode,
-          required String clientId,
-          required String clientSecret,
-          required String currency}) =>
+  void _pay({
+    required bool sandboxMode,
+    required String clientId,
+    required String clientSecret,
+    required String currency,
+  }) =>
       {
         Navigator.of(context).push(
           MaterialPageRoute(
@@ -45,26 +55,26 @@ class _PayPalPaymentState extends State<PayPalPayment> {
                   {
                     "amount": {
                       "total": getDoubleAmountFromString(
-                              widget.cartItemDetails.grandTotal!)
+                              widget.cartItemDetails.grandTotal ?? "")
                           .toString(),
                       "currency": currency,
                       "details": {
                         "subtotal": getDoubleAmountFromString(
-                                widget.cartItemDetails.total!)
+                                widget.cartItemDetails.total ?? "")
                             .toString(),
                         "tax": getDoubleAmountFromString(
-                                widget.cartItemDetails.taxes!)
+                                widget.cartItemDetails.taxes ?? "")
                             .toString(),
                         "shipping": getDoubleAmountFromString(
-                                widget.cartItemDetails.shipping!)
+                                widget.cartItemDetails.shipping ?? "")
                             .toString(),
                         "handling_fee": (getDoubleAmountFromString(
-                                    widget.cartItemDetails.handling!) +
+                                    widget.cartItemDetails.handling ?? "") +
                                 getDoubleAmountFromString(
-                                    widget.cartItemDetails.packaging!))
+                                    widget.cartItemDetails.packaging ?? ""))
                             .toString(),
                         "shipping_discount":
-                            "-${getDoubleAmountFromString(widget.cartItemDetails.discount!)}",
+                            "-${getDoubleAmountFromString(widget.cartItemDetails.discount ?? "")}",
                       }
                     },
                     "description": API.paypalTransactionDescription,
@@ -114,12 +124,14 @@ class _PayPalPaymentState extends State<PayPalPayment> {
                 },
                 onError: (error) {
                   debugPrint("onError: $error");
+                  toast(error.toString());
                   setState(() {
                     _result = false;
                   });
                 },
                 onCancel: (params) {
                   debugPrint('cancelled: $params');
+                  toast(params.toString());
                   setState(() {
                     _result = false;
                   });
@@ -186,7 +198,14 @@ class _PayPalPaymentState extends State<PayPalPayment> {
               const SizedBox(height: 10),
               CustomButton(
                 onTap: _result == null
-                    ? _pay
+                    ? () {
+                        _pay(
+                          sandboxMode: widget.isSandbox,
+                          clientId: widget.clientId,
+                          clientSecret: widget.clientSecret,
+                          currency: widget.cartMeta?.currency ?? "",
+                        );
+                      }
                     : _result!
                         ? () {
                             Navigator.pop(context, {
@@ -195,7 +214,14 @@ class _PayPalPaymentState extends State<PayPalPayment> {
                               "status": _status,
                             });
                           }
-                        : _pay,
+                        : () {
+                            _pay(
+                              sandboxMode: widget.isSandbox,
+                              clientId: widget.clientId,
+                              clientSecret: widget.clientSecret,
+                              currency: widget.cartMeta?.currency ?? "",
+                            );
+                          },
                 buttonText: _result == null
                     ? "Make Payment"
                     : _result!

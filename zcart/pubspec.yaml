@@ -56,7 +56,7 @@ dependencies:
   razorpay_flutter:
     git:
       url: git://github.com/devShakib015/razorpay-flutter.git
-  crypto: ^3.0.1
+  
   
 
 
@@ -136,7 +136,7 @@ flutter_native_splash:
   #       To show the notification bar, add the following code to your Flutter app:
   #       WidgetsFlutterBinding.ensureInitialized();
   #       SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom, SystemUiOverlay.top]);
-  fullscreen: true
+  # fullscreen: true
 
   # If you have changed the name(s) of your info.plist file(s), you can specify the filename(s)
   # with the info_plist_files parameter.  Remove only the # characters in the three lines below,
