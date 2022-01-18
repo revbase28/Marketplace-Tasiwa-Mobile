@@ -19,6 +19,7 @@ import 'package:zcart/views/screens/product_details/product_details_screen.dart'
 import 'package:zcart/views/screens/product_list/recently_viewed.dart';
 import 'package:zcart/views/screens/tabs/home_tab/components/error_widget.dart';
 import 'package:zcart/views/screens/tabs/myCart_tab/checkout/checkout_screen.dart';
+import 'package:zcart/views/screens/tabs/vendors_tab/vendors_details.dart';
 import 'package:zcart/views/shared_widgets/custom_confirm_dialog.dart';
 import 'package:zcart/views/shared_widgets/product_details_card.dart';
 import 'package:zcart/views/shared_widgets/product_loading_widget.dart';
@@ -34,14 +35,15 @@ class _MyCartTabState extends State<MyCartTab> {
   @override
   Widget build(BuildContext context) {
     return ProviderListener<CheckoutState>(
-        provider: checkoutNotifierProvider,
-        onChange: (context, state) {
-          if (state is CheckoutLoadedState) {
-            context.read(cartNotifierProvider.notifier).getCartList();
-            if (accessAllowed) context.read(ordersProvider.notifier).orders();
-          }
-        },
-        child: Consumer(builder: (context, watch, _) {
+      provider: checkoutNotifierProvider,
+      onChange: (context, state) {
+        if (state is CheckoutLoadedState) {
+          context.read(cartNotifierProvider.notifier).getCartList();
+          if (accessAllowed) context.read(ordersProvider.notifier).orders();
+        }
+      },
+      child: Consumer(
+        builder: (context, watch, _) {
           final cartState = watch(cartNotifierProvider);
           final randomItemState = watch(randomItemNotifierProvider);
           final scrollControllerProvider =
@@ -118,15 +120,23 @@ class _MyCartTabState extends State<MyCartTab> {
                             ),
                           ),
                         )
-                      : ListView.builder(
-                          itemCount: cartState.cartList!.length,
-                          padding: const EdgeInsets.only(top: 5),
-                          itemBuilder: (context, index) {
-                            return CartItemCard(
-                                cartItem: cartState.cartList![index]);
-                          })
+                      : Column(
+                          children: [
+                            Expanded(
+                              child: ListView(
+                                padding:
+                                    const EdgeInsets.only(top: 8, bottom: 16),
+                                children: cartState.cartList!
+                                    .map((e) => CartItemCard(cartItem: e))
+                                    .toList(),
+                              ),
+                            ),
+                          ],
+                        )
                   : const ProductLoadingWidget().px(10));
-        }));
+        },
+      ),
+    );
   }
 }
 
@@ -145,103 +155,129 @@ class CartItemCard extends StatelessWidget {
           color: getColorBasedOnTheme(context, kLightColor, kDarkCardBgColor),
           borderRadius: BorderRadius.circular(10)),
       margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      padding: const EdgeInsets.all(10),
+      padding: const EdgeInsets.all(12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(cartItem.shop!.name!,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              GestureDetector(
+                onTap: () {
+                  context
+                      .read(vendorDetailsNotifierProvider.notifier)
+                      .getVendorDetails(cartItem.shop!.slug!);
+                  context
+                      .read(vendorItemsNotifierProvider.notifier)
+                      .getVendorItems(cartItem.shop!.slug!);
+                  context.nextPage(const VendorsDetailsScreen());
+                },
+                child: Text(cartItem.shop!.name!,
+                    style: context.textTheme.headline6!
+                        .copyWith(color: kPrimaryColor)),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(right: 4),
+                child: Text(
+                  '${cartItem.items!.fold(0, (int a, b) => a + b.quantity!)}',
                   style: context.textTheme.headline6!
-                      .copyWith(color: kPrimaryColor))
-              .pOnly(bottom: 10),
-          ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: cartItem.items!.length,
-              itemBuilder: (context, index) {
-                return Column(
-                  children: [
-                    ItemCard(
-                            cartID: cartItem.id,
-                            cartItem: cartItem.items![index])
-                        .onInkTap(() {
-                      context
-                          .read(productNotifierProvider.notifier)
-                          .getProductDetails(cartItem.items![index].slug)
-                          .then((value) {
-                        getRecentlyViewedItems(context);
-                      });
-                      context
-                          .read(productSlugListProvider.notifier)
-                          .addProductSlug(cartItem.items![index].slug);
-                      context.nextPage(const ProductDetailsScreen());
-                    }),
-                    Container(
-                      height: 3,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          color: kLightCardBgColor),
-                    )
-                        .pOnly(bottom: 8)
-                        .visible(cartItem.items!.length != 1)
-                        .visible(index != cartItem.items!.length - 1),
-                  ],
-                );
-              }).pOnly(bottom: 10),
+                      .copyWith(fontWeight: FontWeight.bold),
+                ),
+              ),
+            ],
+          ),
+          const Divider(height: 16),
+          const SizedBox(height: 8),
+          Column(
+            children: cartItem.items!.map((e) {
+              return Column(
+                children: [
+                  ItemCard(cartID: cartItem.id, cartItem: e).onInkTap(() {
+                    context
+                        .read(productNotifierProvider.notifier)
+                        .getProductDetails(e.slug)
+                        .then((value) {
+                      getRecentlyViewedItems(context);
+                    });
+                    context
+                        .read(productSlugListProvider.notifier)
+                        .addProductSlug(e.slug);
+                    context.nextPage(const ProductDetailsScreen());
+                  }),
+                  Container(
+                    height: 3,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: kLightCardBgColor),
+                  )
+                      .pOnly(bottom: 8)
+                      .visible(cartItem.items!.length != 1)
+                      .visible(cartItem.items!.indexOf(e) !=
+                          cartItem.items!.length - 1),
+                ],
+              );
+            }).toList(),
+          ).pOnly(bottom: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Text(
+                    LocaleKeys.grand_total.tr(),
+                    style: context.textTheme.subtitle2!
+                        .copyWith(fontWeight: FontWeight.bold),
+                  ),
                   Text(cartItem.grandTotal!,
                       style: context.textTheme.bodyText2!.copyWith(
                           color: getColorBasedOnTheme(
                               context, kPriceColor, kDarkPriceColor),
                           fontWeight: FontWeight.bold)),
-                  Text(LocaleKeys.grand_total.tr(),
-                      style: context.textTheme.bodyText2),
                 ],
               ),
-              Consumer(builder: (context, watch, child) {
-                final userState = watch(userNotifierProvider);
+              Consumer(
+                builder: (context, watch, child) {
+                  final userState = watch(userNotifierProvider);
 
-                return ElevatedButton(
-                    onPressed: () async {
-                      String? customerEmail;
+                  return ElevatedButton(
+                      onPressed: () async {
+                        String? customerEmail;
 
-                      if (accessAllowed) {
-                        context
-                            .read(addressNotifierProvider.notifier)
-                            .fetchAddress();
-                        if (userState is UserLoadedState) {
-                          customerEmail = userState.user!.email!;
+                        if (accessAllowed) {
+                          context
+                              .read(addressNotifierProvider.notifier)
+                              .fetchAddress();
+                          if (userState is UserLoadedState) {
+                            customerEmail = userState.user!.email!;
+                          }
                         }
-                      }
 
-                      context
-                          .read(packagingNotifierProvider.notifier)
-                          .fetchPackagingInfo(cartItem.shop!.slug);
-                      context
-                          .read(paymentOptionsNotifierProvider.notifier)
-                          .fetchPaymentMethod(cartId: cartItem.id!.toString());
-                      context
-                          .read(cartItemDetailsNotifierProvider.notifier)
-                          .getCartItemDetails(cartItem.id);
-                      context
-                          .read(countryNotifierProvider.notifier)
-                          .getCountries();
-                      context
-                          .read(shippingNotifierProvider.notifier)
-                          .fetchShippingInfo(
-                              shopId: cartItem.shop!.id.toString(),
-                              zoneId: cartItem.shippingZoneId.toString());
+                        context
+                            .read(packagingNotifierProvider.notifier)
+                            .fetchPackagingInfo(cartItem.shop!.slug);
+                        context
+                            .read(paymentOptionsNotifierProvider.notifier)
+                            .fetchPaymentMethod(
+                                cartId: cartItem.id!.toString());
+                        context
+                            .read(cartItemDetailsNotifierProvider.notifier)
+                            .getCartItemDetails(cartItem.id);
+                        context
+                            .read(countryNotifierProvider.notifier)
+                            .getCountries();
+                        context
+                            .read(shippingNotifierProvider.notifier)
+                            .fetchShippingInfo(
+                                shopId: cartItem.shop!.id.toString(),
+                                zoneId: cartItem.shippingZoneId.toString());
 
-                      context.nextPage(CheckoutScreen(
-                        customerEmail: customerEmail,
-                      ));
-                    },
-                    child: Text(LocaleKeys.checkout.tr()));
-              })
+                        context.nextPage(
+                            CheckoutScreen(customerEmail: customerEmail));
+                      },
+                      child: Text(LocaleKeys.checkout.tr()));
+                },
+              )
             ],
           )
         ],
@@ -270,32 +306,32 @@ class _ItemCardState extends State<ItemCard> {
     return Slidable(
       actionPane: const SlidableStrechActionPane(),
       actionExtentRatio: 0.25,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          CachedNetworkImage(
-            imageUrl: widget.cartItem.image!,
-            height: 50,
-            width: 50,
-            errorWidget: (context, url, error) => const SizedBox(),
-            progressIndicatorBuilder: (context, url, progress) => Center(
-              child: CircularProgressIndicator(value: progress.progress),
-            ),
-          ).px(10),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Row(
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CachedNetworkImage(
+                imageUrl: widget.cartItem.image!,
+                height: 50,
+                width: 50,
+                errorWidget: (context, url, error) => const SizedBox(),
+                progressIndicatorBuilder: (context, url, progress) => Center(
+                  child: CircularProgressIndicator(value: progress.progress),
+                ),
+              ).px(10),
+              Expanded(
+                child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Flexible(
                       fit: FlexFit.tight,
                       child: Text(widget.cartItem.description!,
-                              maxLines: null,
+                              maxLines: 3,
                               softWrap: true,
+                              overflow: TextOverflow.ellipsis,
                               style: context.textTheme.subtitle2!)
                           .pOnly(right: 10),
                     ),
@@ -308,100 +344,89 @@ class _ItemCardState extends State<ItemCard> {
                     ).pOnly(right: 5),
                   ],
                 ),
-                ButtonBar(
-                  mainAxisSize: MainAxisSize.min,
-                  buttonPadding: const EdgeInsets.symmetric(horizontal: 5),
-                  buttonMinWidth:
-                      30, // this will take space as minimum as posible(to center)
-                  children: <Widget>[
-                    OutlinedButton(
-                        child: const Icon(Icons.remove),
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all(
-                            getColorBasedOnTheme(
-                                context, kLightBgColor, kDarkBgColor),
-                          ),
-                          foregroundColor: MaterialStateProperty.all(
-                              getColorBasedOnTheme(
-                                  context,
-                                  kPrimaryDarkTextColor,
-                                  kPrimaryLightTextColor)),
-                          shape: MaterialStateProperty.all(
-                              RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10))),
-                        ),
-                        onPressed: widget.cartItem.quantity == 1
-                            ? () {
-                                showCustomConfirmDialog(
-                                  context,
-                                  dialogAnimation:
-                                      DialogAnimation.SLIDE_RIGHT_LEFT,
-                                  dialogType: DialogType.DELETE,
-                                  title: LocaleKeys.want_delete_item_from_cart
-                                      .tr(),
-                                  onAccept: () {
-                                    context
-                                        .read(cartNotifierProvider.notifier)
-                                        .removeFromCart(
-                                          widget.cartID,
-                                          widget.cartItem.id,
-                                        );
-                                  },
-                                );
-                              }
-                            : () {
-                                toast(LocaleKeys.please_wait.tr());
-                                setState(() {
-                                  widget.cartItem.quantity =
-                                      widget.cartItem.quantity! - 1;
-                                });
-                                context
-                                    .read(cartNotifierProvider.notifier)
-                                    .updateCart(widget.cartID,
-                                        listingID: widget.cartItem.id,
-                                        quantity: widget.cartItem.quantity);
-                              }),
-                    OutlinedButton(
-                      onPressed: null,
-                      child: Text(
-                        widget.cartItem.quantity.toString(),
-                        style: context.textTheme.subtitle2,
-                      ),
+              ),
+            ],
+          ),
+          ButtonBar(
+            mainAxisSize: MainAxisSize.min,
+            buttonPadding: const EdgeInsets.symmetric(horizontal: 5),
+            buttonMinWidth:
+                30, // this will take space as minimum as posible(to center)
+            children: <Widget>[
+              OutlinedButton(
+                  child: const Icon(Icons.remove),
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(
+                      getColorBasedOnTheme(
+                          context, kLightBgColor, kDarkBgColor),
                     ),
-                    OutlinedButton(
-                        child: const Icon(Icons.add),
-                        style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all(
-                              getColorBasedOnTheme(
-                                  context, kLightBgColor, kDarkBgColor),
-                            ),
-                            foregroundColor: MaterialStateProperty.all(
-                                getColorBasedOnTheme(
-                                    context,
-                                    kPrimaryDarkTextColor,
-                                    kPrimaryLightTextColor)),
-                            shape: MaterialStateProperty.all(
-                                RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10)))),
-                        onPressed: () {
+                    foregroundColor: MaterialStateProperty.all(
+                        getColorBasedOnTheme(context, kPrimaryDarkTextColor,
+                            kPrimaryLightTextColor)),
+                    shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10))),
+                  ),
+                  onPressed: widget.cartItem.quantity == 1
+                      ? () {
+                          showCustomConfirmDialog(
+                            context,
+                            dialogAnimation: DialogAnimation.SLIDE_RIGHT_LEFT,
+                            dialogType: DialogType.DELETE,
+                            title: LocaleKeys.want_delete_item_from_cart.tr(),
+                            onAccept: () {
+                              context
+                                  .read(cartNotifierProvider.notifier)
+                                  .removeFromCart(
+                                    widget.cartID,
+                                    widget.cartItem.id,
+                                  );
+                            },
+                          );
+                        }
+                      : () {
                           toast(LocaleKeys.please_wait.tr());
                           setState(() {
                             widget.cartItem.quantity =
-                                widget.cartItem.quantity! + 1;
+                                widget.cartItem.quantity! - 1;
                           });
                           context
                               .read(cartNotifierProvider.notifier)
-                              .updateCart(
-                                widget.cartID,
-                                listingID: widget.cartItem.id,
-                                quantity: widget.cartItem.quantity,
-                              );
+                              .updateCart(widget.cartID,
+                                  listingID: widget.cartItem.id,
+                                  quantity: widget.cartItem.quantity);
                         }),
-                  ],
-                )
-              ],
-            ),
-          ),
+              OutlinedButton(
+                onPressed: null,
+                child: Text(
+                  widget.cartItem.quantity.toString(),
+                  style: context.textTheme.subtitle2,
+                ),
+              ),
+              OutlinedButton(
+                  child: const Icon(Icons.add),
+                  style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(
+                        getColorBasedOnTheme(
+                            context, kLightBgColor, kDarkBgColor),
+                      ),
+                      foregroundColor: MaterialStateProperty.all(
+                          getColorBasedOnTheme(context, kPrimaryDarkTextColor,
+                              kPrimaryLightTextColor)),
+                      shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)))),
+                  onPressed: () {
+                    toast(LocaleKeys.please_wait.tr());
+                    setState(() {
+                      widget.cartItem.quantity = widget.cartItem.quantity! + 1;
+                    });
+                    context.read(cartNotifierProvider.notifier).updateCart(
+                          widget.cartID,
+                          listingID: widget.cartItem.id,
+                          quantity: widget.cartItem.quantity,
+                        );
+                  }),
+            ],
+          )
         ],
       ),
       secondaryActions: <Widget>[
