@@ -77,7 +77,7 @@ class MyConfig {
   static const bool isGoogleLoginActive = true;
 
   /// APPLE LOGIN [Not Yet Implemented]
-  static const bool isAppleLoginActive = false;
+  static const bool isAppleLoginActive = true;
 
   // Theme
   static const bool isDynamicThemeActive = true;

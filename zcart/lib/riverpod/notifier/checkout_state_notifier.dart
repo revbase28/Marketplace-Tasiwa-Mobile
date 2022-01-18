@@ -27,7 +27,7 @@ class CheckoutNotifier extends StateNotifier<CheckoutState> {
   String? email;
   bool? agreeToTerms;
   bool? createAccount;
-  File? prescription;
+
   String? password;
   String? passwordConfirm;
   String? addressTitle;
@@ -53,6 +53,9 @@ class CheckoutNotifier extends StateNotifier<CheckoutState> {
   Map<String, String>? paymentMeta;
   String? paymentStatus;
 
+  //For Pharmacy
+  String? prescription;
+
   Future<String> _getDeviceId() async {
     if (Platform.isAndroid) {
       AndroidDeviceInfo _androidInfo = await _deviceInfo.androidInfo;
@@ -72,6 +75,7 @@ class CheckoutNotifier extends StateNotifier<CheckoutState> {
       "packaging_id": packagingId.toString(),
       "agree": "1",
       "device_id": deviceId.toString(),
+      if (prescription != null) "prescription": prescription,
       if (paymentMethod == paypal ||
           paymentMethod == paystack ||
           paymentMethod == razorpay)
@@ -111,6 +115,7 @@ class CheckoutNotifier extends StateNotifier<CheckoutState> {
       if (buyerNote != null) "buyer_note": buyerNote,
       "email": email!.toString().toLowerCase().trim(),
       "agree": agreeToTerms ?? false ? "1" : "1",
+      if (prescription != null) "prescription": prescription,
       if (createAccount != null)
         if (createAccount!)
           "create-account": createAccount ?? false ? "1" : "0",

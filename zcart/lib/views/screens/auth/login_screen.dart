@@ -14,6 +14,7 @@ import 'package:zcart/config/config.dart';
 import 'package:zcart/data/controller/cart/coupon_controller.dart';
 import 'package:zcart/helper/get_color_based_on_theme.dart';
 import 'package:zcart/riverpod/providers/dispute_provider.dart';
+import 'package:zcart/riverpod/providers/plugin_provider.dart';
 import 'package:zcart/riverpod/providers/provider.dart';
 import 'package:zcart/riverpod/state/user_state.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
@@ -242,42 +243,67 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           if (Platform.isIOS)
                             if (MyConfig.isAppleLoginActive)
-                              SignInWithAppleButton(
-                                text: "Apple",
-                                onPressed: () async {
-                                  final _checkAvailability =
-                                      await SignInWithApple.isAvailable();
-                                  if (_checkAvailability) {
-                                    try {
-                                      await SignInWithApple
-                                          .getAppleIDCredential(
-                                        scopes: [
-                                          AppleIDAuthorizationScopes.email,
-                                          AppleIDAuthorizationScopes.fullName,
-                                        ],
-                                      ).then((value) {
-                                        debugPrint(value.authorizationCode);
-                                        if (value.identityToken != null) {
-                                          context
-                                              .read(
-                                                  userNotifierProvider.notifier)
-                                              .loginUsingApple(
-                                                  value.identityToken!);
-                                        } else {
-                                          toast(LocaleKeys.something_went_wrong
-                                              .tr());
-                                        }
-                                      });
-                                    } catch (e) {
-                                      toast(
-                                          LocaleKeys.something_went_wrong.tr());
-                                    }
-                                  } else {
-                                    toast(
-                                        "Apple Login is not available on your device");
-                                  }
+                              Consumer(
+                                builder: (context, watch, child) {
+                                  final _checkAppleLoginPluginProvider =
+                                      watch(checkAppleLoginPluginProvider);
+                                  return _checkAppleLoginPluginProvider.when(
+                                    data: (value) {
+                                      if (value) {
+                                        return SignInWithAppleButton(
+                                          text: "Apple",
+                                          onPressed: () async {
+                                            final _checkAvailability =
+                                                await SignInWithApple
+                                                    .isAvailable();
+                                            if (_checkAvailability) {
+                                              try {
+                                                await SignInWithApple
+                                                    .getAppleIDCredential(
+                                                  scopes: [
+                                                    AppleIDAuthorizationScopes
+                                                        .email,
+                                                    AppleIDAuthorizationScopes
+                                                        .fullName,
+                                                  ],
+                                                ).then((value) {
+                                                  debugPrint(
+                                                      value.authorizationCode);
+                                                  if (value.identityToken !=
+                                                      null) {
+                                                    context
+                                                        .read(
+                                                            userNotifierProvider
+                                                                .notifier)
+                                                        .loginUsingApple(value
+                                                            .identityToken!);
+                                                  } else {
+                                                    toast(LocaleKeys
+                                                        .something_went_wrong
+                                                        .tr());
+                                                  }
+                                                });
+                                              } catch (e) {
+                                                toast(LocaleKeys
+                                                    .something_went_wrong
+                                                    .tr());
+                                              }
+                                            } else {
+                                              toast(
+                                                  "Apple Login is not available on your device");
+                                            }
+                                          },
+                                        ).px(5).py(5);
+                                      } else {
+                                        return const SizedBox();
+                                      }
+                                    },
+                                    loading: () => const SizedBox(),
+                                    error: (error, stackTrace) =>
+                                        const SizedBox(),
+                                  );
                                 },
-                              ).px(5).py(5),
+                              ),
                           Text(
                             LocaleKeys.dont_have_account.tr(),
                             style: context.textTheme.caption,

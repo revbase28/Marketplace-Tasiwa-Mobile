@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -18,6 +21,8 @@ import 'package:zcart/data/network/network_utils.dart';
 import 'package:zcart/helper/constants.dart';
 import 'package:zcart/helper/get_amount_from_string.dart';
 import 'package:zcart/helper/get_color_based_on_theme.dart';
+import 'package:zcart/helper/pick_image_helper.dart';
+import 'package:zcart/riverpod/providers/plugin_provider.dart';
 import 'package:zcart/riverpod/providers/provider.dart';
 import 'package:zcart/riverpod/state/address/address_state.dart';
 import 'package:zcart/riverpod/state/cart_state.dart';
@@ -52,6 +57,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   int? _selectedPackagingIndex;
   int? _selectedPaymentIndex;
   String _paymentMethodCode = "";
+  String? _prescriptionImage;
 
   /// Coupon
   bool _showApplyButton = false;
@@ -107,6 +113,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               final cartItemDetailsState =
                   watch(cartItemDetailsNotifierProvider);
               final addressState = watch(addressNotifierProvider);
+
+              final _pharmacyPluginProvider =
+                  watch(checkPharmacyPluginProvider);
 
               return Column(
                 children: [
@@ -177,7 +186,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         onStepContinue: _isLoading
                             ? null
                             : () {
-                                continued(cartItemDetailsState, addressState);
+                                continued(cartItemDetailsState, addressState,
+                                    _pharmacyPluginProvider);
                               },
                         onStepCancel: cancel,
                         steps: <Step>[
@@ -647,6 +657,78 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   )
                 : const PackagingListBuilder(),
           ).cornerRadius(10),
+          Consumer(
+            builder: (context, watch, child) {
+              final _pharmacyPluginProvider =
+                  watch(checkPharmacyPluginProvider);
+              return _pharmacyPluginProvider.when(
+                data: (value) {
+                  if (value) {
+                    return Column(
+                      children: [
+                        Row(
+                          children: [
+                            Text("Prescription",
+                                style: context.textTheme.bodyText2),
+                          ],
+                        ).pOnly(top: 10, bottom: 10),
+                        GestureDetector(
+                          onTap: () async {
+                            await pickImageToBase64().then((value) {
+                              if (value != null) {
+                                setState(() {
+                                  _prescriptionImage = value;
+                                });
+
+                                context
+                                    .read(checkoutNotifierProvider.notifier)
+                                    .prescription = value;
+                              }
+                            });
+                          },
+                          child: Container(
+                            color: getColorBasedOnTheme(
+                                context, kLightColor, kDarkCardBgColor),
+                            padding: const EdgeInsets.all(10),
+                            height: 200,
+                            child: _prescriptionImage != null
+                                ? Image.memory(
+                                    base64Decode(_prescriptionImage!),
+                                    fit: BoxFit.cover,
+                                  )
+                                : Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.stretch,
+                                    children: [
+                                      const Icon(Icons.image).pOnly(bottom: 5),
+                                      const Text(
+                                        "Choose Image",
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ],
+                                  ),
+                          ).cornerRadius(10),
+                        )
+                      ],
+                    );
+                  } else {
+                    return const SizedBox();
+                  }
+                },
+                loading: () {
+                  return const SizedBox();
+                },
+                error: (error, stackTrace) {
+                  return Center(
+                      child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Text(LocaleKeys.something_went_wrong.tr()),
+                  ));
+                },
+              );
+            },
+          ),
           Row(
             children: [
               Text(LocaleKeys.payment.tr(), style: context.textTheme.bodyText2),
@@ -748,12 +830,21 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     setState(() => _currentStep = step);
   }
 
-  continued(CartItemDetailsState cartItemDetailsState,
-      AddressState addressState) async {
+  continued(
+    CartItemDetailsState cartItemDetailsState,
+    AddressState addressState,
+    AsyncValue<bool> pharmacyPluginProvider,
+  ) async {
     int _grandTotal = cartItemDetailsState is CartItemDetailsLoadedState
         ? getAmountFromString(
             cartItemDetailsState.cartItemDetails!.data!.grandTotal!)
         : 0;
+
+    bool _isPharmacyPluginEnabled = false;
+
+    pharmacyPluginProvider.whenData((value) {
+      _isPharmacyPluginEnabled = value;
+    });
 
     if (_currentStep == 0 && _selectedAddressIndex == null) {
       toast(
@@ -767,6 +858,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       toast(
         LocaleKeys.select_packaging_method_continue.tr(),
       );
+    } else if (_isPharmacyPluginEnabled &&
+        _currentStep == 1 &&
+        _prescriptionImage == null) {
+      toast("Please upload prescription");
     } else if (_currentStep == 1 && _selectedPaymentIndex == null) {
       toast(
         LocaleKeys.select_payment_method_continue.tr(),

@@ -8,6 +8,7 @@ import 'package:zcart/data/controller/cart/coupon_state.dart';
 import 'package:zcart/data/controller/chat/chat_controller.dart';
 import 'package:zcart/helper/get_color_based_on_theme.dart';
 import 'package:zcart/riverpod/providers/dispute_provider.dart';
+import 'package:zcart/riverpod/providers/plugin_provider.dart';
 import 'package:zcart/riverpod/providers/provider.dart';
 import 'package:zcart/riverpod/state/dispute/disputes_state.dart';
 import 'package:zcart/riverpod/state/state.dart';
@@ -54,6 +55,23 @@ class AccountTab extends StatelessWidget {
               const AccountDashboard(),
               const UserActivityCard(),
               const ActionCard(),
+              Consumer(
+                builder: (context, watch, child) {
+                  final _checkWalletPluginProvider =
+                      watch(checkWalletPluginProvider);
+                  return _checkWalletPluginProvider.when(
+                    data: (value) {
+                      if (value) {
+                        return const WalletCard();
+                      } else {
+                        return const SizedBox();
+                      }
+                    },
+                    loading: () => const SizedBox(),
+                    error: (error, stackTrace) => const SizedBox(),
+                  );
+                },
+              ),
 
               /// Recently viewed
               const RecentlyViewed()
@@ -437,5 +455,113 @@ class ActionCard extends StatelessWidget {
             ),
           ],
         )).cornerRadius(10).p(10);
+  }
+}
+
+class WalletCard extends StatelessWidget {
+  const WalletCard({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: getColorBasedOnTheme(context, kLightColor, kDarkCardBgColor),
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(
+            "Wallet",
+            style: context.textTheme.bodyText1!.copyWith(
+                color: kPrimaryFadeTextColor, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 16),
+          Text(
+            "\$81265",
+            style: context.textTheme.headline4!.copyWith(
+                color:
+                    getColorBasedOnTheme(context, kDarkColor, kDarkPriceColor),
+                fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              Expanded(
+                child: ElevatedButton.icon(
+                  onPressed: () {},
+                  label: const Text("Add Funds"),
+                  icon: const Icon(CupertinoIcons.plus_circle),
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: ElevatedButton.icon(
+                  onPressed: () {},
+                  label: const Text("Transfer"),
+                  icon: const Icon(CupertinoIcons.minus_circle),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          const Divider(height: 0),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "Transactions (17)",
+                style: context.textTheme.subtitle2!.copyWith(
+                    color: kPrimaryFadeTextColor, fontWeight: FontWeight.bold),
+              ),
+              TextButton(
+                onPressed: () {},
+                child: Text(LocaleKeys.view_all.tr()),
+              ),
+            ],
+          ),
+          Column(
+            children: [
+              Card(
+                elevation: 0,
+                color: kLightCardBgColor,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: ListTile(
+                  dense: true,
+                  title: Text("Deposited"),
+                  trailing: Text(
+                    "\$81265",
+                    style: context.textTheme.subtitle2!.copyWith(
+                        color: getColorBasedOnTheme(
+                            context, kPriceColor, kDarkPriceColor),
+                        fontWeight: FontWeight.bold),
+                  ),
+                  subtitle: Text("Jan 1, 2020"),
+                ),
+              ),
+              Card(
+                elevation: 0,
+                color: kLightCardBgColor,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: ListTile(
+                  title: Text("Withdrawn"),
+                  dense: true,
+                  trailing: Text(
+                    "-\$234",
+                    style: context.textTheme.subtitle2!.copyWith(
+                        color: getColorBasedOnTheme(
+                            context, kPriceColor, kDarkPriceColor),
+                        fontWeight: FontWeight.bold),
+                  ),
+                  subtitle: Text("Jan 1, 2020"),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    ).cornerRadius(10).p(10);
   }
 }
