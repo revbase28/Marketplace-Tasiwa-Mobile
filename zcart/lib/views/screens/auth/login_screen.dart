@@ -16,6 +16,7 @@ import 'package:zcart/helper/get_color_based_on_theme.dart';
 import 'package:zcart/riverpod/providers/dispute_provider.dart';
 import 'package:zcart/riverpod/providers/plugin_provider.dart';
 import 'package:zcart/riverpod/providers/provider.dart';
+import 'package:zcart/riverpod/providers/wallet_provider.dart';
 import 'package:zcart/riverpod/state/user_state.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:zcart/views/screens/auth/reset_password.dart';
@@ -59,6 +60,8 @@ class _LoginScreenState extends State<LoginScreen> {
           context.read(wishListNotifierProvider.notifier).getWishList();
           context.read(disputesProvider.notifier).getDisputes();
           context.read(couponsProvider.notifier).coupons();
+          context.refresh(walletBalanceProvider);
+          context.refresh(walletTransactionFutureProvider);
 
           context.nextAndRemoveUntilPage(const BottomNavBar(selectedIndex: 0));
         }

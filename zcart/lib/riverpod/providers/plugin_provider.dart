@@ -33,6 +33,11 @@ final checkWalletPluginProvider = FutureProvider<bool>((ref) async {
   return _result;
 });
 
+final checkOneCheckoutPluginProvider = FutureProvider<bool>((ref) async {
+  final _result = await _pluginCheck("checkout");
+  return _result;
+});
+
 Future<bool> _pluginCheck(String pluginlsug) async {
   var _responseBody = await handleResponse(
       await getRequest(API.checkPluginAvailability(pluginlsug)));

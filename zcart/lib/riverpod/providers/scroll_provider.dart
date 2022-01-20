@@ -22,3 +22,7 @@ final wishlistScrollNotifierProvider =
 final orderScrollNotifierProvider =
     StateNotifierProvider<OrderScrollNotifier, ScrollState>(
         (ref) => OrderScrollNotifier());
+
+final walletScrollNotifierProvider =
+    StateNotifierProvider<WalletScrollNotifier, ScrollState>(
+        (ref) => WalletScrollNotifier());

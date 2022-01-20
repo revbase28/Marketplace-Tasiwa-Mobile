@@ -5,6 +5,7 @@ import 'package:nb_utils/nb_utils.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:zcart/helper/get_color_based_on_theme.dart';
 import 'package:zcart/riverpod/providers/provider.dart';
+import 'package:zcart/riverpod/providers/wallet_provider.dart';
 import 'package:zcart/riverpod/state/user_state.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:zcart/views/screens/bottom_nav_bar/bottom_nav_bar.dart';
@@ -31,6 +32,8 @@ class SignUpScreen extends StatelessWidget {
           if (state is UserLoadedState) {
             context.read(cartNotifierProvider.notifier).getCartList();
             context.read(wishListNotifierProvider.notifier).getWishList();
+            context.refresh(walletBalanceProvider);
+            context.refresh(walletTransactionFutureProvider);
             context
                 .nextAndRemoveUntilPage(const BottomNavBar(selectedIndex: 0));
           }

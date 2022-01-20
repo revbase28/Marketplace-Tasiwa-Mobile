@@ -139,3 +139,26 @@ class OrderScrollNotifier extends StateNotifier<ScrollState> {
     }
   }
 }
+
+class WalletScrollNotifier extends StateNotifier<ScrollState> {
+  // ignore: prefer_const_constructors
+  WalletScrollNotifier() : super(ScrollInitialState());
+
+  final _scrollController = ScrollController();
+
+  ScrollController get controller {
+    _scrollController.addListener(_scrollListener);
+    return _scrollController;
+  }
+
+  get scrollNotifierState => state;
+
+  _scrollListener() {
+    if (_scrollController.offset >=
+            _scrollController.position.maxScrollExtent &&
+        !_scrollController.position.outOfRange) {
+      // ignore: prefer_const_constructors
+      state = ScrollReachedBottomState();
+    }
+  }
+}

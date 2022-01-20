@@ -198,6 +198,10 @@ class API {
   static checkPluginAvailability(pluginSlug) => 'plugin/$pluginSlug';
   static const flashDealPlugin = "deals/flash-deals";
 
+  ///Wallet
+  static const walletBalance = "wallet";
+  static const walletTransactions = "wallet/transactions";
+
   ///Others
   static const aboutUs = 'page/about-us';
   static const privacyPolicy = 'page/privacy-policy';

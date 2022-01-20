@@ -11,6 +11,7 @@ import 'package:zcart/data/models/cart/cart_model.dart';
 import 'package:zcart/data/network/network_utils.dart';
 import 'package:zcart/helper/get_color_based_on_theme.dart';
 import 'package:zcart/helper/get_recently_viewed.dart';
+import 'package:zcart/riverpod/providers/plugin_provider.dart';
 import 'package:zcart/riverpod/providers/provider.dart';
 import 'package:zcart/riverpod/state/state.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
@@ -44,17 +45,20 @@ class _MyCartTabState extends State<MyCartTab> {
       },
       child: Consumer(
         builder: (context, watch, _) {
-          final cartState = watch(cartNotifierProvider);
-          final randomItemState = watch(randomItemNotifierProvider);
-          final scrollControllerProvider =
+          final _cartState = watch(cartNotifierProvider);
+          final _randomItemState = watch(randomItemNotifierProvider);
+          final _scrollControllerProvider =
               watch(randomItemScrollNotifierProvider.notifier);
+          final _oneCheckoutPluginCheckProvider =
+              watch(checkOneCheckoutPluginProvider);
 
           return Scaffold(
               appBar: AppBar(
                 systemOverlayStyle: SystemUiOverlayStyle.light,
                 title: Text(LocaleKeys.cart_text.tr()),
                 actions: [
-                  (cartState is CartErrorState || cartState is CartLoadingState)
+                  (_cartState is CartErrorState ||
+                          _cartState is CartLoadingState)
                       ? const Icon(Icons.refresh).pOnly(right: 10).onInkTap(() {
                           context
                               .read(cartNotifierProvider.notifier)
@@ -63,8 +67,8 @@ class _MyCartTabState extends State<MyCartTab> {
                       : const SizedBox(),
                 ],
               ),
-              body: cartState is CartLoadedState
-                  ? cartState.cartList!.isEmpty
+              body: _cartState is CartLoadedState
+                  ? _cartState.cartList == null || _cartState.cartList!.isEmpty
                       ? ProviderListener(
                           provider: randomItemScrollNotifierProvider,
                           onChange: (context, state) {
@@ -75,7 +79,7 @@ class _MyCartTabState extends State<MyCartTab> {
                             }
                           },
                           child: SingleChildScrollView(
-                            controller: scrollControllerProvider.controller,
+                            controller: _scrollControllerProvider.controller,
                             child: SizedBox(
                               width: double.infinity,
                               child: Column(
@@ -99,21 +103,21 @@ class _MyCartTabState extends State<MyCartTab> {
                                   Padding(
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 16),
-                                    child:
-                                        randomItemState is RandomItemLoadedState
-                                            ? ProductDetailsCardGridView(
-                                                    title: LocaleKeys
-                                                        .additional_items
-                                                        .tr(),
-                                                    isTitleCentered: true,
-                                                    productList: randomItemState
-                                                        .randomItemList)
-                                                .py(15)
-                                            : randomItemState
-                                                    is RandomItemErrorState
-                                                ? ErrorMessageWidget(
-                                                    randomItemState.message)
-                                                : const ProductLoadingWidget(),
+                                    child: _randomItemState
+                                            is RandomItemLoadedState
+                                        ? ProductDetailsCardGridView(
+                                                title: LocaleKeys
+                                                    .additional_items
+                                                    .tr(),
+                                                isTitleCentered: true,
+                                                productList: _randomItemState
+                                                    .randomItemList)
+                                            .py(15)
+                                        : _randomItemState
+                                                is RandomItemErrorState
+                                            ? ErrorMessageWidget(
+                                                _randomItemState.message)
+                                            : const ProductLoadingWidget(),
                                   )
                                 ],
                               ),
@@ -126,10 +130,46 @@ class _MyCartTabState extends State<MyCartTab> {
                               child: ListView(
                                 padding:
                                     const EdgeInsets.only(top: 8, bottom: 16),
-                                children: cartState.cartList!
+                                children: _cartState.cartList!
                                     .map((e) => CartItemCard(cartItem: e))
                                     .toList(),
                               ),
+                            ),
+                            // Builder(
+                            //   builder: (context) {
+                            //     double _total = 0;
+                            //     _cartState.cartList!.forEach((e) {
+                            //       _total += e.items!.fold(
+                            //           0,
+                            //           (previousValue, element) =>
+                            //               previousValue +
+                            //               double.parse(element.total ?? "0") *
+                            //                   element.quantity!);
+                            //     });
+
+                            //     return Text(
+                            //       LocaleKeys.total.tr() +
+                            //           " " +
+                            //           _total.toStringAsFixed(2),
+                            //       style: Theme.of(context).textTheme.headline6,
+                            //     );
+                            //   },
+                            // ),
+                            _oneCheckoutPluginCheckProvider.when(
+                              data: (value) {
+                                if (value) {
+                                  //TODO: Checkout with onecheckout
+                                  return const Padding(
+                                    padding: EdgeInsets.symmetric(vertical: 24),
+                                    child:
+                                        Text("OneCheckout Plugin is enabled"),
+                                  );
+                                }
+                                return const SizedBox();
+                              },
+                              loading: () => const SizedBox(),
+                              error: (error, stackTrace) =>
+                                  ErrorMessageWidget(error.toString()),
                             ),
                           ],
                         )
@@ -159,32 +199,23 @@ class CartItemCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              GestureDetector(
-                onTap: () {
-                  context
-                      .read(vendorDetailsNotifierProvider.notifier)
-                      .getVendorDetails(cartItem.shop!.slug!);
-                  context
-                      .read(vendorItemsNotifierProvider.notifier)
-                      .getVendorItems(cartItem.shop!.slug!);
-                  context.nextPage(const VendorsDetailsScreen());
-                },
-                child: Text(cartItem.shop!.name!,
-                    style: context.textTheme.headline6!
-                        .copyWith(color: kPrimaryColor)),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(right: 4),
-                child: Text(
-                  '${cartItem.items!.fold(0, (int a, b) => a + b.quantity!)}',
-                  style: context.textTheme.headline6!
-                      .copyWith(fontWeight: FontWeight.bold),
-                ),
-              ),
-            ],
+          GestureDetector(
+            onTap: () {
+              context
+                  .read(vendorDetailsNotifierProvider.notifier)
+                  .getVendorDetails(cartItem.shop!.slug!);
+              context
+                  .read(vendorItemsNotifierProvider.notifier)
+                  .getVendorItems(cartItem.shop!.slug!);
+              context.nextPage(const VendorsDetailsScreen());
+            },
+            child: Text(cartItem.shop!.name!,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: context.textTheme.headline6!.copyWith(
+                    color: kPrimaryColor,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 1.1)),
           ),
           const Divider(height: 16),
           const SizedBox(height: 8),

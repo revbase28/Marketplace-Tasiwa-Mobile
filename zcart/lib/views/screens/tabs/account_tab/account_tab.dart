@@ -1,17 +1,23 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:velocity_x/velocity_x.dart';
+import 'package:zcart/Theme/styles/colors.dart';
 import 'package:zcart/data/controller/blog/blog_controller.dart';
 import 'package:zcart/data/controller/cart/coupon_controller.dart';
 import 'package:zcart/data/controller/cart/coupon_state.dart';
 import 'package:zcart/data/controller/chat/chat_controller.dart';
+import 'package:zcart/data/models/wallet/wallet_transactions_mode.dart';
 import 'package:zcart/helper/get_color_based_on_theme.dart';
 import 'package:zcart/riverpod/providers/dispute_provider.dart';
 import 'package:zcart/riverpod/providers/plugin_provider.dart';
 import 'package:zcart/riverpod/providers/provider.dart';
+import 'package:zcart/riverpod/providers/wallet_provider.dart';
 import 'package:zcart/riverpod/state/dispute/disputes_state.dart';
 import 'package:zcart/riverpod/state/state.dart';
+import 'package:zcart/riverpod/state/wallet_state.dart';
 import 'package:zcart/riverpod/state/wishlist_state.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:zcart/views/screens/bottom_nav_bar/bottom_nav_bar.dart';
@@ -24,10 +30,8 @@ import 'package:zcart/views/screens/tabs/account_tab/coupons/my_coupons_screen.d
 import 'package:zcart/views/screens/tabs/account_tab/disputes/disputes_screen.dart';
 import 'package:zcart/views/screens/tabs/account_tab/messages/messages_screen.dart';
 import 'package:zcart/views/screens/tabs/account_tab/orders/my_order_screen.dart';
-import 'package:velocity_x/velocity_x.dart';
-import 'package:zcart/Theme/styles/colors.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:zcart/views/screens/tabs/account_tab/settings/settings_page.dart';
+import 'package:zcart/views/screens/tabs/account_tab/wallet/wallet_transactions_page.dart';
 
 class AccountTab extends StatelessWidget {
   const AccountTab({Key? key}) : super(key: key);
@@ -458,11 +462,20 @@ class ActionCard extends StatelessWidget {
   }
 }
 
-class WalletCard extends StatelessWidget {
+class WalletCard extends ConsumerWidget {
   const WalletCard({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, watch) {
+    final _walletBalanceProvider = watch(walletBalanceProvider);
+    final _walletTransactionProvider = watch(walletTransactionFutureProvider);
+
+    Widget _zeroBalanceText = Text(
+      "0.00",
+      style: context.textTheme.headline4!.copyWith(
+          color: getColorBasedOnTheme(context, kDarkColor, kDarkPriceColor),
+          fontWeight: FontWeight.bold),
+    );
     return Container(
       color: getColorBasedOnTheme(context, kLightColor, kDarkCardBgColor),
       padding: const EdgeInsets.all(16),
@@ -475,19 +488,35 @@ class WalletCard extends StatelessWidget {
                 color: kPrimaryFadeTextColor, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 16),
-          Text(
-            "\$81265",
-            style: context.textTheme.headline4!.copyWith(
-                color:
-                    getColorBasedOnTheme(context, kDarkColor, kDarkPriceColor),
-                fontWeight: FontWeight.bold),
+          _walletBalanceProvider.when(
+            data: (value) {
+              if (value != null) {
+                return Text(
+                  double.parse(value.wallet.balance).toStringAsFixed(2),
+                  style: context.textTheme.headline4!.copyWith(
+                      color: getColorBasedOnTheme(
+                          context, kDarkColor, kDarkPriceColor),
+                      fontWeight: FontWeight.bold),
+                );
+              } else {
+                return _zeroBalanceText;
+              }
+            },
+            loading: () {
+              return _zeroBalanceText;
+            },
+            error: (error, stackTrace) {
+              return _zeroBalanceText;
+            },
           ),
           const SizedBox(height: 16),
           Row(
             children: [
               Expanded(
                 child: ElevatedButton.icon(
-                  onPressed: () {},
+                  onPressed: () {
+                    //TODO: Add funds to wallet
+                  },
                   label: const Text("Add Funds"),
                   icon: const Icon(CupertinoIcons.plus_circle),
                 ),
@@ -495,73 +524,143 @@ class WalletCard extends StatelessWidget {
               const SizedBox(width: 16),
               Expanded(
                 child: ElevatedButton.icon(
-                  onPressed: () {},
+                  onPressed: () {
+                    //TODO: Withdraw  or transfer funds from wallet
+                  },
                   label: const Text("Transfer"),
                   icon: const Icon(CupertinoIcons.minus_circle),
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 16),
-          const Divider(height: 0),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                "Transactions (17)",
-                style: context.textTheme.subtitle2!.copyWith(
-                    color: kPrimaryFadeTextColor, fontWeight: FontWeight.bold),
-              ),
-              TextButton(
-                onPressed: () {},
-                child: Text(LocaleKeys.view_all.tr()),
-              ),
-            ],
-          ),
-          Column(
-            children: [
-              Card(
-                elevation: 0,
-                color: kLightCardBgColor,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: ListTile(
-                  dense: true,
-                  title: Text("Deposited"),
-                  trailing: Text(
-                    "\$81265",
-                    style: context.textTheme.subtitle2!.copyWith(
-                        color: getColorBasedOnTheme(
-                            context, kPriceColor, kDarkPriceColor),
-                        fontWeight: FontWeight.bold),
+          const Divider(height: 16),
+          _walletTransactionProvider.when(
+            data: (value) {
+              final _walletNotifierProvider = watch(walletNotifierProvider);
+              return Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Transactions (${_walletNotifierProvider is WalletLoadedState ? _walletNotifierProvider.total : 0})",
+                        style: context.textTheme.subtitle2!.copyWith(
+                            color: kPrimaryFadeTextColor,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      _walletNotifierProvider is WalletLoadedState
+                          ? _walletNotifierProvider.total > 2
+                              ? TextButton(
+                                  onPressed: () {
+                                    context.nextPage(
+                                        const WalletTransactionsPage());
+                                  },
+                                  child: Text(LocaleKeys.view_all.tr()),
+                                )
+                              : const SizedBox()
+                          : const SizedBox(),
+                    ],
                   ),
-                  subtitle: Text("Jan 1, 2020"),
-                ),
-              ),
-              Card(
-                elevation: 0,
-                color: kLightCardBgColor,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: ListTile(
-                  title: Text("Withdrawn"),
-                  dense: true,
-                  trailing: Text(
-                    "-\$234",
-                    style: context.textTheme.subtitle2!.copyWith(
-                        color: getColorBasedOnTheme(
-                            context, kPriceColor, kDarkPriceColor),
-                        fontWeight: FontWeight.bold),
+                  Column(
+                    children: _walletNotifierProvider is WalletLoadingState
+                        ? []
+                        : _walletNotifierProvider is WalletErrorState
+                            ? []
+                            : _walletNotifierProvider is WalletLoadedState
+                                ? _walletNotifierProvider.transactions.length >
+                                        2
+                                    ? _walletNotifierProvider.transactions
+                                        .sublist(0, 2)
+                                        .map((transaction) {
+                                        return WalletTransactionTile(
+                                            transaction: transaction);
+                                      }).toList()
+                                    : _walletNotifierProvider
+                                            .transactions.isEmpty
+                                        ? [
+                                            Padding(
+                                              padding: const EdgeInsets.all(16),
+                                              child: Text(
+                                                LocaleKeys.no_item_found.tr(),
+                                                style: context
+                                                    .textTheme.subtitle2!
+                                                    .copyWith(
+                                                        color:
+                                                            kPrimaryFadeTextColor,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                              ),
+                                            )
+                                          ]
+                                        : _walletNotifierProvider.transactions
+                                            .map((transaction) {
+                                            return WalletTransactionTile(
+                                                transaction: transaction);
+                                          }).toList()
+                                : [],
                   ),
-                  subtitle: Text("Jan 1, 2020"),
+                ],
+              );
+            },
+            loading: () {
+              return const SizedBox(height: 16);
+            },
+            error: (error, stackTrace) {
+              return Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Text(
+                    LocaleKeys.something_went_wrong.tr(),
+                    textAlign: TextAlign.center,
+                  ),
                 ),
-              ),
-            ],
+              );
+            },
           ),
         ],
       ),
     ).cornerRadius(10).p(10);
+  }
+}
+
+class WalletTransactionTile extends StatelessWidget {
+  final TransactionData transaction;
+  const WalletTransactionTile({
+    Key? key,
+    required this.transaction,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 0,
+      color: kLightCardBgColor,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: ListTile(
+        dense: true,
+        title: Text(
+          transaction.meta.description ?? LocaleKeys.not_available.tr(),
+          style: context.textTheme.subtitle2!.copyWith(
+              color: getColorBasedOnTheme(
+                  context, kPrimaryDarkTextColor, kPrimaryLightTextColor),
+              fontWeight: FontWeight.bold),
+        ),
+        trailing: Text(
+          transaction.amount.toStringAsFixed(2),
+          style: context.textTheme.subtitle2!.copyWith(
+              color: getColorBasedOnTheme(
+                  context,
+                  transaction.amount.isNegative ? kPriceColor : kGreenColor,
+                  transaction.amount.isNegative
+                      ? kDarkPriceColor
+                      : kGreenColor),
+              fontWeight: FontWeight.bold),
+        ),
+        subtitle:
+            Text(DateFormat("MMM dd, yyyy").format(transaction.createdAt)),
+      ),
+    );
   }
 }

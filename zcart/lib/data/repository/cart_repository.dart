@@ -11,9 +11,7 @@ import 'package:zcart/views/shared_widgets/cart_bottom_sheet.dart';
 class CartRepository implements ICartRepository {
   @override
   Future<List<CartItem>?> fetchCarts() async {
-    var responseBody = await handleResponse(await getRequest(
-      API.carts, /*bearerToken: true*/
-    ));
+    var responseBody = await handleResponse(await getRequest(API.carts));
     if (responseBody.runtimeType == int && responseBody > 206) {
       throw NetworkException();
     }
