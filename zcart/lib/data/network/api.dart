@@ -201,6 +201,7 @@ class API {
   ///Wallet
   static const walletBalance = "wallet";
   static const walletTransactions = "wallet/transactions";
+  static const walletTransfer = "wallet/transfer";
 
   ///Others
   static const aboutUs = 'page/about-us';

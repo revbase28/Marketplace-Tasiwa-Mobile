@@ -114,8 +114,9 @@ class OrderDetailsScreen extends ConsumerWidget {
                                       Expanded(
                                           flex: 3,
                                           child: Text(
-                                              orderDetailsState
-                                                  .orderDetails!.orderStatus!,
+                                              orderDetailsState.orderDetails!
+                                                      .orderStatus ??
+                                                  LocaleKeys.not_available.tr(),
                                               style:
                                                   context.textTheme.subtitle2)),
                                     ],
@@ -135,7 +136,8 @@ class OrderDetailsScreen extends ConsumerWidget {
                                           flex: 3,
                                           child: Text(
                                               orderDetailsState.orderDetails!
-                                                  .shippingAddress!,
+                                                      .shippingAddress ??
+                                                  LocaleKeys.not_available.tr(),
                                               style:
                                                   context.textTheme.subtitle2)),
                                     ],
@@ -155,48 +157,8 @@ class OrderDetailsScreen extends ConsumerWidget {
                                           flex: 3,
                                           child: Text(
                                               orderDetailsState.orderDetails!
-                                                  .billingAddress!,
-                                              style:
-                                                  context.textTheme.subtitle2)),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 9),
-                                  Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Expanded(
-                                          flex: 2,
-                                          child: Text(
-                                              "${LocaleKeys.shipping_cost.tr()}: ")),
-                                      Expanded(
-                                          flex: 3,
-                                          child: Text(
-                                              orderDetailsState
-                                                  .orderDetails!.shipping!,
-                                              style:
-                                                  context.textTheme.subtitle2)),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 9),
-                                  Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Expanded(
-                                          flex: 2,
-                                          child: Text(
-                                              "${LocaleKeys.packaging_cost.tr()}: ")),
-                                      Expanded(
-                                          flex: 3,
-                                          child: Text(
-                                              orderDetailsState.orderDetails!
-                                                      .packaging ??
-                                                  '0',
+                                                      .billingAddress ??
+                                                  LocaleKeys.not_available.tr(),
                                               style:
                                                   context.textTheme.subtitle2)),
                                     ],
@@ -216,7 +178,8 @@ class OrderDetailsScreen extends ConsumerWidget {
                                           flex: 3,
                                           child: Text(
                                               orderDetailsState.orderDetails!
-                                                  .shippingWeight!,
+                                                      .shippingWeight ??
+                                                  LocaleKeys.not_available.tr(),
                                               style:
                                                   context.textTheme.subtitle2)),
                                     ],
@@ -433,6 +396,66 @@ class OrderDetailsScreen extends ConsumerWidget {
                                       Expanded(
                                           flex: 2,
                                           child: Text(
+                                              "${LocaleKeys.packaging.tr()}: ")),
+                                      Expanded(
+                                          flex: 3,
+                                          child: Text(
+                                              orderDetailsState
+                                                  .orderDetails!.packaging!,
+                                              style:
+                                                  context.textTheme.subtitle2)),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 9),
+                                  Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Expanded(
+                                          flex: 2,
+                                          child: Text(
+                                              "${LocaleKeys.handling.tr()}: ")),
+                                      Expanded(
+                                          flex: 3,
+                                          child: Text(
+                                              orderDetailsState
+                                                  .orderDetails!.handling!,
+                                              style:
+                                                  context.textTheme.subtitle2)),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 9),
+                                  Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Expanded(
+                                          flex: 2,
+                                          child: Text(
+                                              "${LocaleKeys.discount.tr()}: ")),
+                                      Expanded(
+                                          flex: 3,
+                                          child: Text(
+                                              orderDetailsState
+                                                  .orderDetails!.discount!,
+                                              style:
+                                                  context.textTheme.subtitle2)),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 9),
+                                  Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Expanded(
+                                          flex: 2,
+                                          child: Text(
                                               "${LocaleKeys.payment_method.tr()}: ")),
                                       Expanded(
                                           flex: 3,
@@ -468,9 +491,9 @@ class OrderDetailsScreen extends ConsumerWidget {
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
                                       Text(
-                                        '${LocaleKeys.total.tr()}: ' +
+                                        '${LocaleKeys.grand_total.tr()}: ' +
                                             orderDetailsState
-                                                .orderDetails!.total!,
+                                                .orderDetails!.grandTotal!,
                                         style: context.textTheme.subtitle2!
                                             .copyWith(
                                           color: getColorBasedOnTheme(context,
@@ -481,6 +504,7 @@ class OrderDetailsScreen extends ConsumerWidget {
                                   ).pOnly(bottom: 10),
                                   _orderDetailsFooter(
                                       context, orderDetailsState),
+                                  const SizedBox(height: 16),
                                 ],
                               )
                             ],

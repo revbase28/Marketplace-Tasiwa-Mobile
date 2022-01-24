@@ -41,130 +41,137 @@ class SignUpScreen extends StatelessWidget {
             toast(state.message, bgColor: kPrimaryColor);
           }
         },
-        child: Scaffold(
-          appBar: AppBar(
-            systemOverlayStyle: SystemUiOverlayStyle.light,
-          ),
-          body: Stack(
-            children: [
-              Center(
-                child: SingleChildScrollView(
-                  child: Center(
-                    child: Form(
-                      key: _formKey,
-                      child: Container(
-                        margin: const EdgeInsets.all(16),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 24),
-                        decoration: BoxDecoration(
-                            color: getColorBasedOnTheme(
-                                context, kLightCardBgColor, kDarkCardBgColor),
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(10))),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(LocaleKeys.sign_up.tr(),
-                                    textAlign: TextAlign.center,
-                                    style: context.textTheme.headline5!
-                                        .copyWith(fontWeight: FontWeight.bold))
-                                .paddingBottom(20),
-                            CustomTextField(
-                              hintText: LocaleKeys.your_full_name.tr(),
-                              title: LocaleKeys.your_full_name.tr(),
-                              onChanged: (value) => _name = value,
-                              validator: (value) => value!.isEmpty
-                                  ? LocaleKeys.field_required.tr()
-                                  : null,
-                            ),
-                            CustomTextField(
-                              hintText: LocaleKeys.your_email.tr(),
-                              title: LocaleKeys.your_email.tr(),
-                              keyboardType: TextInputType.emailAddress,
-                              onChanged: (value) => _email = value,
-                              validator: (value) => value!.isEmpty
-                                  ? LocaleKeys.field_required.tr()
-                                  : !value.contains('@') || !value.contains('.')
-                                      ? LocaleKeys.invalid_email.tr()
-                                      : null,
-                            ),
-                            CustomTextField(
-                              isPassword: true,
-                              hintText: LocaleKeys.your_password.tr(),
-                              title: LocaleKeys.your_password.tr(),
-                              keyboardType: TextInputType.visiblePassword,
-                              onChanged: (value) => _password = value,
-                              validator: (value) => value!.length < 6
-                                  ? LocaleKeys.password_validation.tr()
-                                  : null,
-                            ),
-                            CustomTextField(
-                              isPassword: true,
-                              hintText: LocaleKeys.your_confirm_password.tr(),
-                              keyboardType: TextInputType.visiblePassword,
-                              title: LocaleKeys.your_confirm_password.tr(),
-                              validator: (value) => value != _password
-                                  ? LocaleKeys.dont_match_password.tr()
-                                  : null,
-                            ),
-                            CustomButton(
-                              buttonText: LocaleKeys.sign_up.tr(),
-                              onTap: () async {
-                                if (_formKey.currentState!.validate()) {
-                                  hideKeyboard(context);
-                                  context
-                                      .read(userNotifierProvider.notifier)
-                                      .register(_name.trim(), _email.trim(),
-                                          _password, true, false);
-                                }
-                              },
-                            ).pOnly(top: 10),
-                            Text(
-                              LocaleKeys.accept_terms_policy.tr(),
-                            )
-                                .text
-                                .center
-                                .textStyle(context.textTheme.caption!)
-                                .make()
-                                .w(context.screenWidth * 0.8)
-                                .onInkTap(() => context.nextReplacementPage(
-                                    const TermsAndConditionScreen()))
-                                .pOnly(bottom: 10),
-                            const Divider(
-                              height: 20,
-                            ),
-                            Text(
-                              LocaleKeys.have_account.tr(),
-                            )
-                                .text
-                                .center
-                                .textStyle(context.textTheme.caption!)
-                                .make()
-                                .w(context.screenWidth * 0.8)
-                                .onInkTap(() => context.pop()),
-                          ],
+        child: GestureDetector(
+          onTap: () {
+            FocusScope.of(context).requestFocus(FocusNode());
+          },
+          child: Scaffold(
+            appBar: AppBar(
+              systemOverlayStyle: SystemUiOverlayStyle.light,
+            ),
+            body: Stack(
+              children: [
+                Center(
+                  child: SingleChildScrollView(
+                    child: Center(
+                      child: Form(
+                        key: _formKey,
+                        child: Container(
+                          margin: const EdgeInsets.all(16),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 24),
+                          decoration: BoxDecoration(
+                              color: getColorBasedOnTheme(
+                                  context, kLightCardBgColor, kDarkCardBgColor),
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(10))),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(LocaleKeys.sign_up.tr(),
+                                      textAlign: TextAlign.center,
+                                      style: context.textTheme.headline5!
+                                          .copyWith(
+                                              fontWeight: FontWeight.bold))
+                                  .paddingBottom(20),
+                              CustomTextField(
+                                hintText: LocaleKeys.your_full_name.tr(),
+                                title: LocaleKeys.your_full_name.tr(),
+                                onChanged: (value) => _name = value,
+                                validator: (value) => value!.isEmpty
+                                    ? LocaleKeys.field_required.tr()
+                                    : null,
+                              ),
+                              CustomTextField(
+                                hintText: LocaleKeys.your_email.tr(),
+                                title: LocaleKeys.your_email.tr(),
+                                keyboardType: TextInputType.emailAddress,
+                                onChanged: (value) => _email = value,
+                                validator: (value) => value!.isEmpty
+                                    ? LocaleKeys.field_required.tr()
+                                    : !value.contains('@') ||
+                                            !value.contains('.')
+                                        ? LocaleKeys.invalid_email.tr()
+                                        : null,
+                              ),
+                              CustomTextField(
+                                isPassword: true,
+                                hintText: LocaleKeys.your_password.tr(),
+                                title: LocaleKeys.your_password.tr(),
+                                keyboardType: TextInputType.visiblePassword,
+                                onChanged: (value) => _password = value,
+                                validator: (value) => value!.length < 6
+                                    ? LocaleKeys.password_validation.tr()
+                                    : null,
+                              ),
+                              CustomTextField(
+                                isPassword: true,
+                                hintText: LocaleKeys.your_confirm_password.tr(),
+                                keyboardType: TextInputType.visiblePassword,
+                                title: LocaleKeys.your_confirm_password.tr(),
+                                validator: (value) => value != _password
+                                    ? LocaleKeys.dont_match_password.tr()
+                                    : null,
+                              ),
+                              CustomButton(
+                                buttonText: LocaleKeys.sign_up.tr(),
+                                onTap: () async {
+                                  if (_formKey.currentState!.validate()) {
+                                    hideKeyboard(context);
+                                    context
+                                        .read(userNotifierProvider.notifier)
+                                        .register(_name.trim(), _email.trim(),
+                                            _password, true, false);
+                                  }
+                                },
+                              ).pOnly(top: 10),
+                              Text(
+                                LocaleKeys.accept_terms_policy.tr(),
+                              )
+                                  .text
+                                  .center
+                                  .textStyle(context.textTheme.caption!)
+                                  .make()
+                                  .w(context.screenWidth * 0.8)
+                                  .onInkTap(() => context.nextReplacementPage(
+                                      const TermsAndConditionScreen()))
+                                  .pOnly(bottom: 10),
+                              const Divider(
+                                height: 20,
+                              ),
+                              Text(
+                                LocaleKeys.have_account.tr(),
+                              )
+                                  .text
+                                  .center
+                                  .textStyle(context.textTheme.caption!)
+                                  .make()
+                                  .w(context.screenWidth * 0.8)
+                                  .onInkTap(() => context.pop()),
+                            ],
+                          ),
                         ),
                       ),
                     ),
                   ),
                 ),
-              ),
-              Consumer(
-                builder: (context, watch, _) {
-                  final authState = watch(userNotifierProvider);
-                  return Visibility(
-                    visible: authState is UserLoadingState,
-                    child: Container(
-                      color: getColorBasedOnTheme(
-                          context, kLightColor, kDarkCardBgColor),
-                      child: const LoadingWidget(),
-                    ),
-                  );
-                },
-              )
-            ],
+                Consumer(
+                  builder: (context, watch, _) {
+                    final authState = watch(userNotifierProvider);
+                    return Visibility(
+                      visible: authState is UserLoadingState,
+                      child: Container(
+                        color: getColorBasedOnTheme(
+                            context, kLightColor, kDarkCardBgColor),
+                        child: const LoadingWidget(),
+                      ),
+                    );
+                  },
+                )
+              ],
+            ),
           ),
         ));
   }

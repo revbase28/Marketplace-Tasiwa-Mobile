@@ -31,7 +31,9 @@ import 'package:zcart/views/screens/tabs/account_tab/disputes/disputes_screen.da
 import 'package:zcart/views/screens/tabs/account_tab/messages/messages_screen.dart';
 import 'package:zcart/views/screens/tabs/account_tab/orders/my_order_screen.dart';
 import 'package:zcart/views/screens/tabs/account_tab/settings/settings_page.dart';
+import 'package:zcart/views/screens/tabs/account_tab/wallet/wallet_deposit_page.dart';
 import 'package:zcart/views/screens/tabs/account_tab/wallet/wallet_transactions_page.dart';
+import 'package:zcart/views/screens/tabs/account_tab/wallet/wallet_transfer_page.dart';
 
 class AccountTab extends StatelessWidget {
   const AccountTab({Key? key}) : super(key: key);
@@ -492,7 +494,7 @@ class WalletCard extends ConsumerWidget {
             data: (value) {
               if (value != null) {
                 return Text(
-                  double.parse(value.wallet.balance).toStringAsFixed(2),
+                  value.wallet,
                   style: context.textTheme.headline4!.copyWith(
                       color: getColorBasedOnTheme(
                           context, kDarkColor, kDarkPriceColor),
@@ -515,7 +517,7 @@ class WalletCard extends ConsumerWidget {
               Expanded(
                 child: ElevatedButton.icon(
                   onPressed: () {
-                    //TODO: Add funds to wallet
+                    context.nextPage(const WalletDepositPage());
                   },
                   label: const Text("Add Funds"),
                   icon: const Icon(CupertinoIcons.plus_circle),
@@ -525,7 +527,7 @@ class WalletCard extends ConsumerWidget {
               Expanded(
                 child: ElevatedButton.icon(
                   onPressed: () {
-                    //TODO: Withdraw  or transfer funds from wallet
+                    context.nextPage(const WalletTransferPage());
                   },
                   label: const Text("Transfer"),
                   icon: const Icon(CupertinoIcons.minus_circle),
