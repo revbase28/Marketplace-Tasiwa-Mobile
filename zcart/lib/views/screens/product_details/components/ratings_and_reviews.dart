@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:zcart/Theme/styles/colors.dart';
 import 'package:zcart/data/models/product/product_details_model.dart';
@@ -73,7 +74,7 @@ class RatingAndReviewAllPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        systemOverlayStyle: getOverlayStyleBasedOnTheme(context),
+        systemOverlayStyle: SystemUiOverlayStyle.light,
         title: const Text('Ratings & Reviews'),
       ),
       body: ListView(

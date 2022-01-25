@@ -169,7 +169,7 @@ class _MyCartTabState extends State<MyCartTab> {
                               },
                               loading: () => const SizedBox(),
                               error: (error, stackTrace) =>
-                                  ErrorMessageWidget(error.toString()),
+                                  Text(error.toString()),
                             ),
                           ],
                         )

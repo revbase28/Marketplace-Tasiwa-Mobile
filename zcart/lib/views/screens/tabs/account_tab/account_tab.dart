@@ -9,7 +9,7 @@ import 'package:zcart/data/controller/blog/blog_controller.dart';
 import 'package:zcart/data/controller/cart/coupon_controller.dart';
 import 'package:zcart/data/controller/cart/coupon_state.dart';
 import 'package:zcart/data/controller/chat/chat_controller.dart';
-import 'package:zcart/data/models/wallet/wallet_transactions_mode.dart';
+import 'package:zcart/data/models/wallet/wallet_transactions_model.dart';
 import 'package:zcart/helper/get_color_based_on_theme.dart';
 import 'package:zcart/riverpod/providers/dispute_provider.dart';
 import 'package:zcart/riverpod/providers/plugin_provider.dart';
@@ -471,7 +471,7 @@ class WalletCard extends ConsumerWidget {
   Widget build(BuildContext context, watch) {
     final _walletBalanceProvider = watch(walletBalanceProvider);
     final _walletTransactionProvider = watch(walletTransactionFutureProvider);
-
+    final _userState = watch(userNotifierProvider);
     Widget _zeroBalanceText = Text(
       "0.00",
       style: context.textTheme.headline4!.copyWith(
@@ -494,7 +494,7 @@ class WalletCard extends ConsumerWidget {
             data: (value) {
               if (value != null) {
                 return Text(
-                  value.wallet,
+                  value.data.balance,
                   style: context.textTheme.headline4!.copyWith(
                       color: getColorBasedOnTheme(
                           context, kDarkColor, kDarkPriceColor),
@@ -512,29 +512,32 @@ class WalletCard extends ConsumerWidget {
             },
           ),
           const SizedBox(height: 16),
-          Row(
-            children: [
-              Expanded(
-                child: ElevatedButton.icon(
-                  onPressed: () {
-                    context.nextPage(const WalletDepositPage());
-                  },
-                  label: const Text("Add Funds"),
-                  icon: const Icon(CupertinoIcons.plus_circle),
-                ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: ElevatedButton.icon(
-                  onPressed: () {
-                    context.nextPage(const WalletTransferPage());
-                  },
-                  label: const Text("Transfer"),
-                  icon: const Icon(CupertinoIcons.minus_circle),
-                ),
-              ),
-            ],
-          ),
+          _userState is UserLoadedState
+              ? Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton.icon(
+                        onPressed: () {
+                          context.nextPage(WalletDepositPage(
+                              customEmail: _userState.user?.email ?? ""));
+                        },
+                        label: const Text("Add Funds"),
+                        icon: const Icon(CupertinoIcons.plus_circle),
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: ElevatedButton.icon(
+                        onPressed: () {
+                          context.nextPage(const WalletTransferPage());
+                        },
+                        label: const Text("Transfer"),
+                        icon: const Icon(CupertinoIcons.minus_circle),
+                      ),
+                    ),
+                  ],
+                )
+              : const SizedBox(),
           const Divider(height: 16),
           _walletTransactionProvider.when(
             data: (value) {
@@ -643,25 +646,24 @@ class WalletTransactionTile extends StatelessWidget {
       child: ListTile(
         dense: true,
         title: Text(
-          transaction.meta.description ?? LocaleKeys.not_available.tr(),
+          transaction.description ?? LocaleKeys.not_available.tr(),
           style: context.textTheme.subtitle2!.copyWith(
               color: getColorBasedOnTheme(
                   context, kPrimaryDarkTextColor, kPrimaryLightTextColor),
               fontWeight: FontWeight.bold),
         ),
         trailing: Text(
-          transaction.amount.toStringAsFixed(2),
+          transaction.amount,
           style: context.textTheme.subtitle2!.copyWith(
               color: getColorBasedOnTheme(
                   context,
-                  transaction.amount.isNegative ? kPriceColor : kGreenColor,
-                  transaction.amount.isNegative
+                  transaction.amountRaw.isNegative ? kPriceColor : kGreenColor,
+                  transaction.amountRaw.isNegative
                       ? kDarkPriceColor
                       : kGreenColor),
               fontWeight: FontWeight.bold),
         ),
-        subtitle:
-            Text(DateFormat("MMM dd, yyyy").format(transaction.createdAt)),
+        subtitle: Text(transaction.date),
       ),
     );
   }

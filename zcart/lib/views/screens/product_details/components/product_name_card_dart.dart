@@ -34,7 +34,8 @@ class ProductNameCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          productModel.data!.hasOffer!
+          (productModel.data!.hasOffer ?? false) &&
+                  productModel.data!.offerEnd != null
               ? Container(
                   width: context.screenWidth,
                   padding: const EdgeInsets.symmetric(vertical: 6),

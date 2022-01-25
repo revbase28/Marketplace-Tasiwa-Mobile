@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:zcart/data/interface/i_wallet_repository.dart';
-import 'package:zcart/data/models/wallet/wallet_transactions_mode.dart';
+import 'package:zcart/data/models/wallet/wallet_transactions_model.dart';
 import 'package:zcart/data/network/api.dart';
 import 'package:zcart/data/network/network_exception.dart';
 import 'package:zcart/data/network/network_utils.dart';
@@ -23,7 +23,7 @@ class WalletRepository implements IWalletRepository {
       throw NetworkException();
     }
     walletTransactionsModel = WalletTransactionsModel.fromJson(responseBody);
-    transactionData.addAll(walletTransactionsModel.transactions?.data ?? []);
+    transactionData.addAll(walletTransactionsModel.data);
     return walletTransactionsModel;
   }
 
@@ -33,15 +33,15 @@ class WalletRepository implements IWalletRepository {
     debugPrint(
         "Fetch More WalletTransactions (before): ${transactionData.length}");
 
-    if (walletTransactionsModel.transactions?.nextPageUrl != null) {
+    if (walletTransactionsModel.links.next != null) {
       toast(LocaleKeys.loading.tr());
       responseBody = await handleResponse(await getRequest(
-          walletTransactionsModel.transactions!.nextPageUrl!.split('api/').last,
+          walletTransactionsModel.links.next!.split('api/').last,
           bearerToken: true));
 
       walletTransactionsModel = WalletTransactionsModel.fromJson(responseBody);
 
-      transactionData.addAll(walletTransactionsModel.transactions?.data ?? []);
+      transactionData.addAll(walletTransactionsModel.data);
       debugPrint(
           "Fetch More WalletTransactions (after): ${transactionData.length}");
       return transactionData;
@@ -53,6 +53,6 @@ class WalletRepository implements IWalletRepository {
 
   @override
   int walletTransactionsCount() {
-    return walletTransactionsModel.transactions?.total ?? 0;
+    return walletTransactionsModel.meta.total ?? 0;
   }
 }

@@ -9,11 +9,6 @@ class API {
   //Point the API to the base URL
   static const base = MyConfig.appApiUrl;
 
-  /// Payment Gateway Keys
-
-  static const String paypalTransactionDescription =
-      MyConfig.paypalTransactionDescription;
-
   //
 
   //
@@ -202,6 +197,8 @@ class API {
   static const walletBalance = "wallet";
   static const walletTransactions = "wallet/transactions";
   static const walletTransfer = "wallet/transfer";
+  static const walletPaymentMethods = "wallet/get_payment_methods";
+  static const walletDeposit = "wallet/deposit";
 
   ///Others
   static const aboutUs = 'page/about-us';

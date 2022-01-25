@@ -94,9 +94,6 @@ class MyConfig {
   static const String zcartSecretKey = "MptNHtqeYs6TZlyO3i9JFheb2bCughWk";
   static const String zcartIV = "JjXCJWVeZwtmlfCI";
 
-  /// PAYPAL TRANSACTION DESCRIPTION [Change this description as your own]
-  static const String paypalTransactionDescription = "Payment for ZCart";
-
   ///
   ///
   ///

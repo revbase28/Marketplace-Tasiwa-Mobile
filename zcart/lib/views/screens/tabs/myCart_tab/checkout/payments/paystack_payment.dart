@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_paystack/flutter_paystack.dart';
 import 'package:zcart/helper/app_images.dart';
 import 'package:zcart/riverpod/providers/provider.dart';
+import 'package:zcart/riverpod/providers/wallet_provider.dart';
 
 class PayStackPayment {
   BuildContext context;
@@ -11,12 +12,14 @@ class PayStackPayment {
   String currency;
   String email;
   int price;
+  bool isWalletPayement;
   PayStackPayment({
     required this.context,
     required this.email,
     required this.price,
     required this.currency,
     required this.publicKey,
+    required this.isWalletPayement,
   });
 
   final PaystackPlugin _payStackPlugin = PaystackPlugin();
@@ -54,7 +57,7 @@ class PayStackPayment {
       Charge _charge = Charge()
         ..email = email
         ..currency = currency
-        ..amount = price
+        ..amount = isWalletPayement ? price * 100 : price
         ..reference = _getReference()
         ..card = _getCardFromUI();
 
@@ -83,8 +86,14 @@ class PayStackPayment {
 
         var _checkoutNotifier = context.read(checkoutNotifierProvider.notifier);
 
-        _checkoutNotifier.paymentMeta = _paymentMeta;
-        _checkoutNotifier.paymentStatus = _status;
+        if (isWalletPayement) {
+          context.read(walletDepositProvider).paymentMeta = _paymentMeta;
+          context.read(walletDepositProvider).paymentStatus = _status;
+        } else {
+          _checkoutNotifier.paymentMeta = _paymentMeta;
+          _checkoutNotifier.paymentStatus = _status;
+        }
+
         return true;
       } else {
         debugPrint("Payment Failed");

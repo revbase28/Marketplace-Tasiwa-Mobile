@@ -1,4 +1,4 @@
-import 'package:zcart/data/models/wallet/wallet_transactions_mode.dart';
+import 'package:zcart/data/models/wallet/wallet_transactions_model.dart';
 
 abstract class WalletState {
   const WalletState();

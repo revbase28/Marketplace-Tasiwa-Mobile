@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:zcart/Theme/styles/colors.dart';
 import 'package:zcart/data/models/vendors/vendor_details_model.dart';
@@ -194,7 +195,7 @@ class _RatingAndReviewAllPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        systemOverlayStyle: getOverlayStyleBasedOnTheme(context),
+        systemOverlayStyle: SystemUiOverlayStyle.light,
         title: const Text('Ratings & Reviews'),
       ),
       body: ListView(

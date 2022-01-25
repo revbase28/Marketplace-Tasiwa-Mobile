@@ -41,5 +41,14 @@ final checkOneCheckoutPluginProvider = FutureProvider<bool>((ref) async {
 Future<bool> _pluginCheck(String pluginlsug) async {
   var _responseBody = await handleResponse(
       await getRequest(API.checkPluginAvailability(pluginlsug)));
-  return _responseBody["data"];
+
+  if (_responseBody.isEmpty) {
+    return false;
+  }
+
+  if (_responseBody.runtimeType == int && _responseBody > 206) {
+    return false;
+  }
+
+  return _responseBody["data"] is bool ? _responseBody["data"] : false;
 }

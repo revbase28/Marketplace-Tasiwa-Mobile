@@ -1,46 +1,48 @@
+// To parse this JSON data, do
+//
+//     final walletBalanceModel = walletBalanceModelFromJson(jsonString);
+
 import 'dart:convert';
 
-class WalletBalance {
-  final String wallet;
-  WalletBalance({
-    required this.wallet,
+WalletBalanceModel walletBalanceModelFromJson(String str) =>
+    WalletBalanceModel.fromJson(json.decode(str));
+
+String walletBalanceModelToJson(WalletBalanceModel data) =>
+    json.encode(data.toJson());
+
+class WalletBalanceModel {
+  WalletBalanceModel({
+    required this.data,
   });
 
-  WalletBalance copyWith({
-    String? wallet,
-  }) {
-    return WalletBalance(
-      wallet: wallet ?? this.wallet,
-    );
-  }
+  Data data;
 
-  Map<String, dynamic> toMap() {
-    return {
-      'wallet': wallet,
-    };
-  }
+  factory WalletBalanceModel.fromJson(Map<String, dynamic> json) =>
+      WalletBalanceModel(
+        data: Data.fromJson(json["data"]),
+      );
 
-  factory WalletBalance.fromMap(Map<String, dynamic> map) {
-    return WalletBalance(
-      wallet: map['wallet'] ?? '',
-    );
-  }
+  Map<String, dynamic> toJson() => {
+        "data": data.toJson(),
+      };
+}
 
-  String toJson() => json.encode(toMap());
+class Data {
+  Data({
+    required this.balance,
+    required this.balanceRaw,
+  });
 
-  factory WalletBalance.fromJson(String source) =>
-      WalletBalance.fromMap(json.decode(source));
+  String balance;
+  String balanceRaw;
 
-  @override
-  String toString() => 'WalletBalance(wallet: $wallet)';
+  factory Data.fromJson(Map<String, dynamic> json) => Data(
+        balance: json["balance"],
+        balanceRaw: json["balance_raw"],
+      );
 
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-
-    return other is WalletBalance && other.wallet == wallet;
-  }
-
-  @override
-  int get hashCode => wallet.hashCode;
+  Map<String, dynamic> toJson() => {
+        "balance": balance,
+        "balance_raw": balanceRaw,
+      };
 }

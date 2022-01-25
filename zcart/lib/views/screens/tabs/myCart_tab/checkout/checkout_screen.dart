@@ -22,6 +22,7 @@ import 'package:zcart/helper/get_color_based_on_theme.dart';
 import 'package:zcart/helper/pick_image_helper.dart';
 import 'package:zcart/riverpod/providers/plugin_provider.dart';
 import 'package:zcart/riverpod/providers/provider.dart';
+import 'package:zcart/riverpod/providers/wallet_provider.dart';
 import 'package:zcart/riverpod/state/address/address_state.dart';
 import 'package:zcart/riverpod/state/cart_state.dart';
 import 'package:zcart/riverpod/state/checkout_state.dart';
@@ -897,6 +898,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     setState(() {
                       _isLoading = false;
                     });
+                    if (_paymentMethodCode == zcartWallet) {
+                      context.refresh(walletBalanceProvider);
+                      context.refresh(walletTransactionFutureProvider);
+                    }
                   } else {
                     toast("Payment Failed");
                   }
@@ -935,6 +940,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 setState(() {
                   _isLoading = false;
                 });
+                if (_paymentMethodCode == zcartWallet) {
+                  context.refresh(walletBalanceProvider);
+                  context.refresh(walletTransactionFutureProvider);
+                }
               } else {
                 toast("Payment Failed");
               }
@@ -966,6 +975,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             setState(() {
               _isLoading = false;
             });
+            if (_paymentMethodCode == zcartWallet) {
+              context.refresh(walletBalanceProvider);
+              context.refresh(walletTransactionFutureProvider);
+            }
           } else {
             toast("Payment Failed");
           }

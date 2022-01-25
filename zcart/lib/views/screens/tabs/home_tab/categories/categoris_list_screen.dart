@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:velocity_x/velocity_x.dart';
@@ -25,6 +26,7 @@ class CategoryListScreen extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           title: Text(LocaleKeys.categories.tr()),
+          systemOverlayStyle: SystemUiOverlayStyle.light,
         ),
         body: GridView.builder(
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(

@@ -15,8 +15,7 @@ class WalletNotifier extends StateNotifier<WalletState> {
       final walletTransactionsModel =
           await _iWalletRepository.fetchWalletTransactions();
       final _count = _iWalletRepository.walletTransactionsCount();
-      state = WalletLoadedState(
-          walletTransactionsModel.transactions?.data ?? [], _count);
+      state = WalletLoadedState(walletTransactionsModel.data, _count);
     } on NetworkException {
       state = WalletErrorState(LocaleKeys.something_went_wrong.tr());
     }

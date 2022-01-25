@@ -37,9 +37,11 @@ class CategoryDetailsScreen extends ConsumerWidget {
         }
       },
       child: Scaffold(
-        // appBar: AppBar(
-        //   title: Text(categoryListItem.name!),
-        // ),
+        appBar: AppBar(
+          systemOverlayStyle: getOverlayStyleBasedOnTheme(context),
+          toolbarHeight: 0,
+          backgroundColor: Colors.transparent,
+        ),
         body: SafeArea(
           child: SingleChildScrollView(
             controller: scrollControllerProvider.controller,
