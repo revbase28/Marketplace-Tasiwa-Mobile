@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nb_utils/nb_utils.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:zcart/Theme/styles/colors.dart';
 import 'package:zcart/data/controller/blog/blog_controller.dart';
@@ -10,6 +11,7 @@ import 'package:zcart/data/controller/cart/coupon_controller.dart';
 import 'package:zcart/data/controller/cart/coupon_state.dart';
 import 'package:zcart/data/controller/chat/chat_controller.dart';
 import 'package:zcart/data/models/wallet/wallet_transactions_model.dart';
+import 'package:zcart/data/network/api.dart';
 import 'package:zcart/helper/get_color_based_on_theme.dart';
 import 'package:zcart/riverpod/providers/dispute_provider.dart';
 import 'package:zcart/riverpod/providers/plugin_provider.dart';
@@ -34,6 +36,7 @@ import 'package:zcart/views/screens/tabs/account_tab/settings/settings_page.dart
 import 'package:zcart/views/screens/tabs/account_tab/wallet/wallet_deposit_page.dart';
 import 'package:zcart/views/screens/tabs/account_tab/wallet/wallet_transactions_page.dart';
 import 'package:zcart/views/screens/tabs/account_tab/wallet/wallet_transfer_page.dart';
+import 'package:zcart/views/shared_widgets/pdf_screen.dart';
 
 class AccountTab extends StatelessWidget {
   const AccountTab({Key? key}) : super(key: key);
@@ -644,6 +647,7 @@ class WalletTransactionTile extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
       ),
       child: ListTile(
+        contentPadding: const EdgeInsets.all(16),
         dense: true,
         title: Text(
           transaction.description ?? LocaleKeys.not_available.tr(),
@@ -663,7 +667,33 @@ class WalletTransactionTile extends StatelessWidget {
                       : kGreenColor),
               fontWeight: FontWeight.bold),
         ),
-        subtitle: Text(transaction.date),
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(transaction.date),
+            const SizedBox(height: 8),
+            GestureDetector(
+              onTap: () async {
+                toast("Generating Invoice...");
+                final _result = await generateInvoice(
+                    API.walletInvoice(transaction.id),
+                    transaction.type ?? "wallet_invoice");
+
+                if (_result != null) {
+                  toast("Invoice Generated");
+                  context.nextPage(PDFScreen(path: _result));
+                } else {
+                  toast("Error Generating Invoice");
+                }
+              },
+              child: Text(
+                "Generate Invoice",
+                style: Theme.of(context).textTheme.subtitle2!.copyWith(
+                    color: kPrimaryColor, fontWeight: FontWeight.bold),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

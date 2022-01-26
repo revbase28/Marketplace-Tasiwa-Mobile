@@ -117,7 +117,6 @@ class WalletDepositProvider extends ChangeNotifier {
       if (cvc != null && paymentMethod == stripe) "cvc": cvc,
     };
 
-    print(_requestBody);
     dynamic _responseBody;
     try {
       _responseBody = await handleResponse(await postRequest(

@@ -1,12 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_credit_card/constants.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:zcart/helper/constants.dart';
-import 'package:zcart/helper/get_amount_from_string.dart';
-import 'package:zcart/helper/get_color_based_on_theme.dart';
 import 'package:zcart/riverpod/providers/wallet_provider.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:zcart/views/screens/tabs/myCart_tab/checkout/payments/payment_methods.dart';
@@ -113,7 +110,6 @@ class _WalletDepositPageState extends State<WalletDepositPage> {
                                                   .read(walletDepositProvider)
                                                   .paymentMethod = value;
                                             });
-                                            print(value);
                                           },
                                         )
                                     ],

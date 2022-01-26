@@ -1,8 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:velocity_x/velocity_x.dart';
+import 'package:zcart/Theme/styles/colors.dart';
+import 'package:zcart/data/network/api.dart';
 import 'package:zcart/helper/get_color_based_on_theme.dart';
 import 'package:zcart/helper/get_recently_viewed.dart';
 import 'package:zcart/riverpod/providers/dispute_provider.dart';
@@ -15,12 +19,10 @@ import 'package:zcart/views/screens/product_details/product_details_screen.dart'
 import 'package:zcart/views/screens/tabs/account_tab/disputes/dispute_details_screen.dart';
 import 'package:zcart/views/screens/tabs/account_tab/disputes/open_dispute_screen.dart';
 import 'package:zcart/views/screens/tabs/account_tab/orders/feedback_screen.dart';
-import 'package:zcart/views/shared_widgets/custom_confirm_dialog.dart';
 import 'package:zcart/views/shared_widgets/custom_button.dart';
+import 'package:zcart/views/shared_widgets/custom_confirm_dialog.dart';
 import 'package:zcart/views/shared_widgets/loading_widget.dart';
-import 'package:zcart/Theme/styles/colors.dart';
-import 'package:easy_localization/easy_localization.dart';
-import 'package:velocity_x/velocity_x.dart';
+import 'package:zcart/views/shared_widgets/pdf_screen.dart';
 
 class OrderDetailsScreen extends ConsumerWidget {
   const OrderDetailsScreen({Key? key}) : super(key: key);
@@ -527,6 +529,28 @@ class OrderDetailsScreen extends ConsumerWidget {
           child: Wrap(
             spacing: 3,
             children: [
+              Container(
+                decoration: BoxDecoration(
+                    color: kPrimaryColor,
+                    borderRadius: BorderRadius.circular(5)),
+                child: const Text(
+                  "Generate Invoice",
+                  style: TextStyle(fontSize: 12, color: kLightColor),
+                ).pSymmetric(h: 8, v: 8),
+              ).onInkTap(() async {
+                toast("Generating Invoice...");
+                final _result = await generateInvoice(
+                    API.downloadOrderInvoice(
+                        orderDetailsState.orderDetails!.id!),
+                    orderDetailsState.orderDetails!.orderNumber!);
+
+                if (_result != null) {
+                  toast("Invoice Generated");
+                  context.nextPage(PDFScreen(path: _result));
+                } else {
+                  toast("Error Generating Invoice");
+                }
+              }),
               Container(
                 decoration: BoxDecoration(
                     color: kPrimaryColor,
