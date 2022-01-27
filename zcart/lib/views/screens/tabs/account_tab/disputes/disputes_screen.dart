@@ -45,7 +45,7 @@ class DisputeScreen extends ConsumerWidget {
                   context.read(disputesProvider.notifier).getDisputes();
                 },
                 icon: const Icon(
-                  Icons.refresh,
+                  Icons.sync,
                   color: kLightColor,
                 ),
               ),

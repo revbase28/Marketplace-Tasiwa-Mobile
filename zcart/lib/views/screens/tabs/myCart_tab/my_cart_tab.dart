@@ -59,7 +59,7 @@ class _MyCartTabState extends State<MyCartTab> {
                 actions: [
                   (_cartState is CartErrorState ||
                           _cartState is CartLoadingState)
-                      ? const Icon(Icons.refresh).pOnly(right: 10).onInkTap(() {
+                      ? const Icon(Icons.sync).pOnly(right: 10).onInkTap(() {
                           context
                               .read(cartNotifierProvider.notifier)
                               .getCartList();

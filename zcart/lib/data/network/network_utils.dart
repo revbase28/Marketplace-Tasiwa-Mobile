@@ -18,9 +18,7 @@ bool isSuccessful(int code) {
 }
 
 Future<Response> getRequest(String? endPoint,
-    {bool bearerToken = false,
-    bool noBaseUrl = false,
-    bool isPdf = false}) async {
+    {bool bearerToken = false, bool noBaseUrl = false}) async {
   if (await isNetworkAvailable()) {
     Map<String, String>? headers;
     Response response;
@@ -28,8 +26,7 @@ Future<Response> getRequest(String? endPoint,
 
     if (bearerToken) {
       headers = {
-        HttpHeaders.acceptHeader:
-            'application/${isPdf ? "pdf" : "json"}; charset=utf-8',
+        HttpHeaders.acceptHeader: 'application/json; charset=utf-8',
         "Authorization": "Bearer $accessToken"
       };
     }

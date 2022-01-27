@@ -43,7 +43,7 @@ class DisputeResponseScreen extends StatelessWidget {
                             .getDisputeDetails(
                                 disputeDetailsState.disputeDetails!.id);
                       },
-                      icon: const Icon(Icons.refresh),
+                      icon: const Icon(Icons.sync),
                     )
                   : const SizedBox()
             ],

@@ -41,7 +41,7 @@ class MyOrderScreen extends ConsumerWidget {
         title: Text(LocaleKeys.orders.tr()),
         actions: [
           IconButton(
-            icon: Icon(Icons.refresh,
+            icon: Icon(Icons.sync,
                 color: getColorBasedOnTheme(context, kLightColor, kLightColor)),
             onPressed: () {
               context.read(ordersProvider.notifier).orders();

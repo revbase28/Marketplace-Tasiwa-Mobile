@@ -122,7 +122,8 @@ class API {
 
   static orderReceived(orderId) => 'order/$orderId/goodsReceived';
 
-  static downloadOrderInvoice(int orderId) => "download/invoice/$orderId";
+  static String downloadOrderInvoice(int orderId) =>
+      "download/invoice/$orderId";
 
   /// Wish List
   static const wishList = 'wishlist';
@@ -201,7 +202,7 @@ class API {
   static const walletTransfer = "wallet/transfer";
   static const walletPaymentMethods = "wallet/get_payment_methods";
   static const walletDeposit = "wallet/deposit";
-  static walletInvoice(int transactionId) =>
+  static String walletInvoice(int transactionId) =>
       "wallet/transaction/$transactionId/invoice";
 
   ///Others

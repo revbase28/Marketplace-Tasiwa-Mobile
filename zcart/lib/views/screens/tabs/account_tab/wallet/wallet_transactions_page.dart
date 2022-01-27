@@ -30,7 +30,7 @@ class WalletTransactionsPage extends ConsumerWidget {
                       .read(walletNotifierProvider.notifier)
                       .getMoreTransactions();
                 },
-                icon: const Icon(Icons.refresh)),
+                icon: const Icon(Icons.sync)),
           ],
         ),
         body: _walletNotifireProvider is WalletLoadedState

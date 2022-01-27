@@ -53,7 +53,7 @@ class _OrderChatScreenState extends State<OrderChatScreen> {
                     .read(orderChatProvider.notifier)
                     .orderConversation(widget.orders.id, update: true);
               },
-              icon: Icon(Icons.refresh,
+              icon: Icon(Icons.sync,
                   color:
                       getColorBasedOnTheme(context, kDarkColor, kLightColor)),
             )

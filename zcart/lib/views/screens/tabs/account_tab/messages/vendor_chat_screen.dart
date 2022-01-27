@@ -100,7 +100,7 @@ class _VendorChatScreenState extends State<VendorChatScreen> {
                     .read(productChatProvider.notifier)
                     .productConversation(widget.shopId, update: true);
               },
-              icon: Icon(Icons.refresh,
+              icon: Icon(Icons.sync,
                   color:
                       getColorBasedOnTheme(context, kDarkColor, kLightColor))),
         ],

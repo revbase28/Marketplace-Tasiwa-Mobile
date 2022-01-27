@@ -45,125 +45,123 @@ class _PayPalPaymentState extends State<PayPalPayment> {
     required String clientId,
     required String clientSecret,
     required String currency,
-  }) =>
-      {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (BuildContext context) => UsePaypal(
-                sandboxMode: sandboxMode,
-                clientId: clientId,
-                secretKey: clientSecret,
-                returnURL: "${API.appUrl}/return",
-                cancelURL: "${API.appUrl}/cancel",
-                transactions: [
-                  {
-                    "amount": {
-                      "total": widget.isWalletPayment
-                          ? widget.price.toString()
-                          : (widget.cartItemDetails?.grandTotal ?? "")
-                              .toString(),
-                      "currency": currency,
-                      "details": {
-                        "subtotal": widget.isWalletPayment
-                            ? widget.price.toString()
-                            : getDoubleAmountFromString(
-                                    widget.cartItemDetails?.total ?? "")
-                                .toString(),
-                        "tax": getDoubleAmountFromString(
-                                widget.cartItemDetails?.taxes ?? "")
+  }) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (BuildContext context) => UsePaypal(
+            sandboxMode: sandboxMode,
+            clientId: clientId,
+            secretKey: clientSecret,
+            returnURL: "${API.appUrl}/return",
+            cancelURL: "${API.appUrl}/cancel",
+            transactions: [
+              {
+                "amount": {
+                  "total": widget.isWalletPayment
+                      ? widget.price.toString()
+                      : getDoubleAmountFromString(
+                              widget.cartItemDetails?.grandTotal ?? "")
+                          .toString(),
+                  "currency": currency,
+                  "details": {
+                    "subtotal": widget.isWalletPayment
+                        ? widget.price.toString()
+                        : getDoubleAmountFromString(
+                                widget.cartItemDetails?.total ?? "")
                             .toString(),
-                        "shipping": getDoubleAmountFromString(
-                                widget.cartItemDetails?.shipping ?? "")
-                            .toString(),
-                        "handling_fee": (getDoubleAmountFromString(
-                                    widget.cartItemDetails?.handling ?? "") +
-                                getDoubleAmountFromString(
-                                    widget.cartItemDetails?.packaging ?? ""))
-                            .toString(),
-                        "shipping_discount":
-                            "-${getDoubleAmountFromString(widget.cartItemDetails?.discount ?? "")}",
-                      }
-                    },
-                    "description": widget.isWalletPayment
-                        ? "Wallet Top Up"
-                        : "Payment for order ${widget.cartItemDetails?.id ?? ""}",
-                    // "custom": "EBAY_EMS_90048630045645624435",
-                    "invoice_number":
-                        widget.cartItemDetails?.id.toString() ?? "",
-                    // "soft_descriptor": "ECHI5456456766",
-                    "item_list": widget.isWalletPayment
-                        ? {
-                            "items": [
-                              {
-                                "name": "Wallet Top Up",
-                                "description": "Wallet Top Up",
-                                "quantity": "1",
-                                "price": widget.price.toString(),
-                                "currency": currency,
-                                "sku": "wallet_top_up",
-                              }
-                            ]
-                          }
-                        : {
-                            "items": widget.cartItemDetails?.items!
-                                .map((e) => {
-                                      "name": e.slug.toString(),
-                                      "description": e.description.toString(),
-                                      "quantity": e.quantity.toString(),
-                                      "price": getDoubleAmountFromString(
-                                              e.unitPrice!)
-                                          .toString(),
-                                      "sku": e.id.toString(),
-                                      "currency": currency,
-                                    })
-                                .toList(),
-                            "shipping_address": {
-                              "recipient_name":
-                                  widget.address?.addressTitle!.toString(),
-                              "line1": widget.address?.addressLine1!.toString(),
-                              "line2": widget.address?.addressLine2!.toString(),
-                              "city": widget.address?.city!.toString(),
-                              "country_code": "US",
-                              "postal_code":
-                                  widget.address?.zipCode!.toString(),
-                              "phone": widget.address?.phone!.toString(),
-                            }
-                          }
+                    "tax": getDoubleAmountFromString(
+                            widget.cartItemDetails?.taxes ?? "")
+                        .toString(),
+                    "shipping": getDoubleAmountFromString(
+                            widget.cartItemDetails?.shipping ?? "")
+                        .toString(),
+                    "handling_fee": (getDoubleAmountFromString(
+                                widget.cartItemDetails?.handling ?? "") +
+                            getDoubleAmountFromString(
+                                widget.cartItemDetails?.packaging ?? ""))
+                        .toString(),
+                    "shipping_discount":
+                        "-${getDoubleAmountFromString(widget.cartItemDetails?.discount ?? "")}",
                   }
-                ],
-                note: "Contact us for any questions on your order.",
-                onSuccess: (Map params) async {
-                  debugPrint("onSuccess: $params");
-
-                  _paymentMeta = {
-                    "payerID": params["payerID"],
-                    "paymentId": params["paymentId"],
-                    "token": params["token"],
-                  };
-
-                  _status = "paid";
-
-                  setState(() {
-                    _result = true;
-                  });
                 },
-                onError: (error) {
-                  debugPrint("onError: $error");
-                  toast(error.toString());
-                  setState(() {
-                    _result = false;
-                  });
-                },
-                onCancel: (params) {
-                  debugPrint('cancelled: $params');
-                  toast(params.toString());
-                  setState(() {
-                    _result = false;
-                  });
-                }),
-          ),
-        )
-      };
+                "description": widget.isWalletPayment
+                    ? "Wallet Top Up"
+                    : "Payment for order ${widget.cartItemDetails?.id ?? ""}",
+                // "custom": "EBAY_EMS_90048630045645624435",
+                "invoice_number": widget.cartItemDetails?.id.toString() ?? "",
+                // "soft_descriptor": "ECHI5456456766",
+                "item_list": widget.isWalletPayment
+                    ? {
+                        "items": [
+                          {
+                            "name": "Wallet Top Up",
+                            "description": "Wallet Top Up",
+                            "quantity": "1",
+                            "price": widget.price.toString(),
+                            "currency": currency,
+                            "sku": "wallet_top_up",
+                          }
+                        ]
+                      }
+                    : {
+                        "items": widget.cartItemDetails?.items!
+                            .map((e) => {
+                                  "name": e.slug.toString(),
+                                  "description": e.description.toString(),
+                                  "quantity": e.quantity.toString(),
+                                  "price":
+                                      getDoubleAmountFromString(e.unitPrice!)
+                                          .toString(),
+                                  "sku": e.id.toString(),
+                                  "currency": currency,
+                                })
+                            .toList(),
+                        "shipping_address": {
+                          "recipient_name":
+                              widget.address?.addressTitle!.toString(),
+                          "line1": widget.address?.addressLine1!.toString(),
+                          "line2": widget.address?.addressLine2!.toString(),
+                          "city": widget.address?.city!.toString(),
+                          "country_code": "US",
+                          "postal_code": widget.address?.zipCode!.toString(),
+                          "phone": widget.address?.phone!.toString(),
+                        }
+                      }
+              }
+            ],
+            note: "Contact us for any questions on your order.",
+            onSuccess: (Map params) async {
+              debugPrint("onSuccess: $params");
+
+              _paymentMeta = {
+                "payerID": params["payerID"],
+                "paymentId": params["paymentId"],
+                "token": params["token"],
+              };
+
+              _status = "paid";
+
+              setState(() {
+                _result = true;
+              });
+            },
+            onError: (error) {
+              debugPrint("onError: $error");
+              toast(error.toString());
+              setState(() {
+                _result = false;
+              });
+            },
+            onCancel: (params) {
+              debugPrint('cancelled: $params');
+              toast(params.toString());
+              setState(() {
+                _result = false;
+              });
+            }),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {

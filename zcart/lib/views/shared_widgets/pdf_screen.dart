@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
@@ -18,12 +17,19 @@ class PDFScreen extends StatefulWidget {
 }
 
 class _PDFScreenState extends State<PDFScreen> with WidgetsBindingObserver {
-  final Completer<PDFViewController> _controller =
-      Completer<PDFViewController>();
-  int? pages = 0;
-  int? currentPage = 0;
-  bool isReady = false;
+  late Completer<PDFViewController> _controller;
+
+  int? _currentPage = 0;
+  bool _isReady = false;
   String errorMessage = '';
+  String _path = "";
+
+  @override
+  void initState() {
+    _path = widget.path;
+    _controller = Completer<PDFViewController>();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,26 +37,31 @@ class _PDFScreenState extends State<PDFScreen> with WidgetsBindingObserver {
       appBar: AppBar(
         title: Text(widget.path.split("/").last),
         systemOverlayStyle: SystemUiOverlayStyle.light,
+        actions: const [
+          //ShareButton
+          // IconButton(
+          //     onPressed: () async {
+          //       //await Share.share(widget.link);
+          //     },
+          //     icon: const Icon(Icons.share)),
+        ],
       ),
       body: Stack(
         children: <Widget>[
           Padding(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.only(top: 16),
             child: PDFView(
-              filePath: widget.path,
+              filePath: _path,
               enableSwipe: true,
               swipeHorizontal: true,
               autoSpacing: false,
               pageFling: true,
               pageSnap: true,
-              defaultPage: currentPage!,
-              fitPolicy: FitPolicy.BOTH,
-              preventLinkNavigation:
-                  false, // if set to true the link is handled in flutter
+              defaultPage: _currentPage!,
               onRender: (_pages) {
                 setState(() {
-                  pages = _pages;
-                  isReady = true;
+                  _pages = _pages;
+                  _isReady = true;
                 });
               },
               onError: (error) {
@@ -71,15 +82,15 @@ class _PDFScreenState extends State<PDFScreen> with WidgetsBindingObserver {
               },
               onPageChanged: (int? page, int? total) {
                 setState(() {
-                  currentPage = page;
+                  _currentPage = page;
                 });
               },
             ),
           ),
           errorMessage.isEmpty
-              ? !isReady
+              ? !_isReady
                   ? const Center(
-                      child: CircularProgressIndicator(),
+                      child: CircularProgressIndicator.adaptive(),
                     )
                   : Container()
               : Center(
@@ -92,7 +103,7 @@ class _PDFScreenState extends State<PDFScreen> with WidgetsBindingObserver {
 }
 
 Future<String?> generateInvoice(String api, String name) async {
-  final _response = await getRequest(api, bearerToken: true, isPdf: true);
+  final _response = await getRequest(api, bearerToken: true);
   if (_response.body.isEmpty) {
     return null;
   }
