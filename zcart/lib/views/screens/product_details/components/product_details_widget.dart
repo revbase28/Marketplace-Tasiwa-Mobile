@@ -3,38 +3,36 @@ import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:zcart/Theme/styles/colors.dart';
+import 'package:zcart/data/models/product/product_details_model.dart';
 import 'package:zcart/helper/get_color_based_on_theme.dart';
 import 'package:zcart/helper/url_launcher_helper.dart';
-import 'package:zcart/riverpod/state/product/product_state.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 
 class ProductDetailsWidget extends StatelessWidget {
+  final ProductDetailsModel details;
   const ProductDetailsWidget({
     Key? key,
-    required this.productDetailsState,
+    required this.details,
   }) : super(key: key);
-
-  final ProductLoadedState productDetailsState;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         Container(
-          padding: const EdgeInsets.all(10),
+          padding: const EdgeInsets.all(16),
           color: getColorBasedOnTheme(context, kLightColor, kDarkCardBgColor),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              productDetailsState.productModel.data!.keyFeatures!.isEmpty
+              details.data!.keyFeatures!.isEmpty
                   ? const SizedBox()
                   : Text('${LocaleKeys.key_features.tr()}\n',
                       style: context.textTheme.subtitle2),
               ListView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  itemCount: productDetailsState
-                      .productModel.data!.keyFeatures!.length,
+                  itemCount: details.data!.keyFeatures!.length,
                   itemBuilder: (context, index) {
                     return Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -45,8 +43,7 @@ class ProductDetailsWidget extends StatelessWidget {
                         ).p(8).pOnly(right: 5),
                         Flexible(
                           child: Text(
-                            productDetailsState
-                                .productModel.data!.keyFeatures![index],
+                            details.data!.keyFeatures![index],
                             style: context.textTheme.bodyText2!
                                 .copyWith(fontWeight: FontWeight.w400),
                           ),
@@ -66,8 +63,7 @@ class ProductDetailsWidget extends StatelessWidget {
                       Expanded(
                           flex: 3,
                           child: Text(
-                              productDetailsState
-                                      .productModel.data!.product!.brand ??
+                              details.data!.product!.brand ??
                                   LocaleKeys.not_available.tr(),
                               style: context.textTheme.bodyText2)),
                     ],
@@ -82,8 +78,7 @@ class ProductDetailsWidget extends StatelessWidget {
                       Expanded(
                           flex: 3,
                           child: Text(
-                              productDetailsState.productModel.data!.product!
-                                      .modelNumber ??
+                              details.data!.product!.modelNumber ??
                                   LocaleKeys.not_available.tr(),
                               style: context.textTheme.bodyText2)),
                     ],
@@ -97,8 +92,7 @@ class ProductDetailsWidget extends StatelessWidget {
                       Expanded(
                           flex: 3,
                           child: Text(
-                              productDetailsState
-                                      .productModel.data!.product!.gtin ??
+                              details.data!.product!.gtin ??
                                   LocaleKeys.not_available.tr(),
                               style: context.textTheme.bodyText2)),
                     ],
@@ -112,8 +106,7 @@ class ProductDetailsWidget extends StatelessWidget {
                       Expanded(
                           flex: 3,
                           child: Text(
-                              productDetailsState
-                                      .productModel.data!.product!.mpn ??
+                              details.data!.product!.mpn ??
                                   LocaleKeys.not_available.tr(),
                               style: context.textTheme.bodyText2)),
                     ],
@@ -128,8 +121,7 @@ class ProductDetailsWidget extends StatelessWidget {
                       Expanded(
                           flex: 3,
                           child: Text(
-                              productDetailsState.productModel.data!.sku ??
-                                  LocaleKeys.not_available,
+                              details.data!.sku ?? LocaleKeys.not_available,
                               style: context.textTheme.bodyText2)),
                     ],
                   ),
@@ -143,8 +135,7 @@ class ProductDetailsWidget extends StatelessWidget {
                       Expanded(
                           flex: 3,
                           child: Text(
-                              productDetailsState.productModel.data!.product!
-                                      .manufacturer!.name ??
+                              details.data!.product!.manufacturer!.name ??
                                   LocaleKeys.not_available.tr(),
                               style: context.textTheme.bodyText2)),
                     ],
@@ -158,8 +149,7 @@ class ProductDetailsWidget extends StatelessWidget {
                       Expanded(
                           flex: 3,
                           child: Text(
-                              productDetailsState
-                                      .productModel.data!.product!.origin ??
+                              details.data!.product!.origin ??
                                   LocaleKeys.not_available.tr(),
                               style: context.textTheme.bodyText2)),
                     ],
@@ -174,13 +164,9 @@ class ProductDetailsWidget extends StatelessWidget {
                       Expanded(
                           flex: 3,
                           child: Text(
-                              productDetailsState.productModel.data!
-                                          .minOrderQuantity ==
-                                      null
+                              details.data!.minOrderQuantity == null
                                   ? LocaleKeys.not_available.tr()
-                                  : productDetailsState
-                                      .productModel.data!.minOrderQuantity
-                                      .toString(),
+                                  : details.data!.minOrderQuantity.toString(),
                               style: context.textTheme.bodyText2)),
                     ],
                   ),
@@ -194,8 +180,7 @@ class ProductDetailsWidget extends StatelessWidget {
                       Expanded(
                           flex: 3,
                           child: Text(
-                              productDetailsState
-                                      .productModel.data!.shippingWeight ??
+                              details.data!.shippingWeight ??
                                   LocaleKeys.not_available.tr(),
                               style: context.textTheme.bodyText2)),
                     ],
@@ -210,8 +195,7 @@ class ProductDetailsWidget extends StatelessWidget {
                       Expanded(
                           flex: 3,
                           child: Text(
-                              productDetailsState.productModel.data!.product!
-                                      .availableFrom ??
+                              details.data!.product!.availableFrom ??
                                   LocaleKeys.not_available.tr(),
                               style: context.textTheme.bodyText2)),
                     ],
@@ -221,7 +205,7 @@ class ProductDetailsWidget extends StatelessWidget {
             ],
           ),
         ).cornerRadius(10).pOnly(top: 10, right: 10, left: 10),
-        productDetailsState.productModel.data!.product!.description == null
+        details.data!.product!.description == null
             ? const SizedBox()
             : Container(
                 color: getColorBasedOnTheme(
@@ -234,8 +218,7 @@ class ProductDetailsWidget extends StatelessWidget {
                   collapsedIconColor: kPrimaryColor,
                   children: [
                     HtmlWidget(
-                      productDetailsState
-                          .productModel.data!.product!.description!,
+                      details.data!.product!.description!,
                       enableCaching: true,
                       factoryBuilder: () => WidgetFactory(),
                       onTapUrl: (url) {
@@ -246,7 +229,7 @@ class ProductDetailsWidget extends StatelessWidget {
                   ],
                 ),
               ).cornerRadius(10).p(10),
-        productDetailsState.productModel.data!.description == null
+        details.data!.description == null
             ? const SizedBox()
             : Container(
                 color: getColorBasedOnTheme(
@@ -259,7 +242,7 @@ class ProductDetailsWidget extends StatelessWidget {
                   collapsedIconColor: kPrimaryColor,
                   children: [
                     HtmlWidget(
-                      productDetailsState.productModel.data!.description!,
+                      details.data!.description!,
                       enableCaching: true,
                       onTapUrl: (url) {
                         launchURL(url);

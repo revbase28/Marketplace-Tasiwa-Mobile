@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:photo_view/photo_view.dart';
-import 'package:zcart/helper/get_color_based_on_theme.dart';
 
 class ImageViewerPage extends StatelessWidget {
   final String imageUrl;
@@ -17,8 +17,7 @@ class ImageViewerPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
-          title: Text(title),
-          systemOverlayStyle: getOverlayStyleBasedOnTheme(context)),
+          title: Text(title), systemOverlayStyle: SystemUiOverlayStyle.light),
       body: PhotoView(imageProvider: CachedNetworkImageProvider(imageUrl)),
     );
   }

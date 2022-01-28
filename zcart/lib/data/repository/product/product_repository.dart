@@ -10,37 +10,36 @@ import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 class ProductRepository implements IProductRepository {
-  @override
-  Future<ProductDetailsModel> fetchProductDetails(String? slug) async {
-    dynamic responseBody;
-    responseBody =
-        await handleResponse(await getRequest(API.productDetails(slug)));
-    // responseBody = await handleResponse(await getRequest('https://test.incevio.cloud/api/listing/new-product-for-sale-sku1', noBaseUrl: true));
-    if (responseBody.runtimeType == int && responseBody > 206) {
-      throw NetworkException();
-    }
+  // @override
+  // Future<ProductDetailsModel> fetchProductDetails(String? slug) async {
+  //   dynamic responseBody;
+  //   responseBody =
+  //       await handleResponse(await getRequest(API.productDetails(slug)));
 
-    ProductDetailsModel productModel =
-        ProductDetailsModel.fromJson(responseBody);
+  //   if (responseBody.runtimeType == int && responseBody > 206) {
+  //     throw NetworkException();
+  //   }
 
-    return productModel;
-  }
+  //   ProductDetailsModel productModel =
+  //       ProductDetailsModel.fromJson(responseBody);
 
-  @override
-  Future<ProductVariantDetails?> fetchProductVariantDetails(
-      String? slug, requestBody) async {
-    dynamic responseBody;
-    responseBody = await handleResponse(
-        await postRequest(API.productVariantDetails(slug), requestBody));
-    /*responseBody =
-        await handleResponse(await postRequest('https://test.incevio.cloud/api/variant/new-product-for-sale-sku1', requestBody, noBaseUrl: true));*/
-    if (responseBody.runtimeType == int && responseBody > 206) {
-      throw NetworkException();
-    }
-    ProductVariantDetailsModel productVariantDetailsModel =
-        ProductVariantDetailsModel.fromJson(responseBody);
-    return productVariantDetailsModel.data;
-  }
+  //   return productModel;
+  // }
+
+  // @override
+  // Future<ProductVariantDetails> fetchProductVariantDetails(
+  //     String? slug, requestBody) async {
+  //   dynamic responseBody;
+  //   responseBody = await handleResponse(
+  //       await postRequest(API.productVariantDetails(slug), requestBody));
+
+  //   if (responseBody.runtimeType == int && responseBody > 206) {
+  //     throw NetworkException();
+  //   }
+  //   ProductVariantDetailsModel productVariantDetailsModel =
+  //       ProductVariantDetailsModel.fromJson(responseBody);
+  //   return productVariantDetailsModel.data;
+  // }
 
   /// Product List
   late ProductModel productListModel;

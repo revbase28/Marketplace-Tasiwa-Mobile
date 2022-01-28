@@ -225,15 +225,7 @@ class CartItemCard extends StatelessWidget {
                 children: [
                   ItemCard(cartID: cartItem.id, cartItem: e).onInkTap(() {
                     context
-                        .read(productNotifierProvider.notifier)
-                        .getProductDetails(e.slug)
-                        .then((value) {
-                      getRecentlyViewedItems(context);
-                    });
-                    context
-                        .read(productSlugListProvider.notifier)
-                        .addProductSlug(e.slug);
-                    context.nextPage(const ProductDetailsScreen());
+                        .nextPage(ProductDetailsScreen(productSlug: e.slug!));
                   }),
                   Container(
                     height: 3,

@@ -234,16 +234,8 @@ class DealOfTheDayWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        context
-            .read(productNotifierProvider.notifier)
-            .getProductDetails(dealOfTheDay.data!.slug)
-            .then((value) {
-          getRecentlyViewedItems(context);
-        });
-        context
-            .read(productSlugListProvider.notifier)
-            .addProductSlug(dealOfTheDay.data!.slug);
-        context.nextPage(const ProductDetailsScreen());
+        context.nextPage(
+            ProductDetailsScreen(productSlug: dealOfTheDay.data!.slug!));
       },
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -357,16 +349,8 @@ class DealOfTheDayWidget extends StatelessWidget {
                                   MaterialStateProperty.all(kDarkPriceColor),
                             ),
                             onPressed: () {
-                              context
-                                  .read(productNotifierProvider.notifier)
-                                  .getProductDetails(dealOfTheDay.data!.slug)
-                                  .then((value) {
-                                getRecentlyViewedItems(context);
-                              });
-                              context
-                                  .read(productSlugListProvider.notifier)
-                                  .addProductSlug(dealOfTheDay.data!.slug);
-                              context.nextPage(const ProductDetailsScreen());
+                              context.nextPage(ProductDetailsScreen(
+                                  productSlug: dealOfTheDay.data!.slug!));
                             },
                             child: const Icon(
                               Icons.add_shopping_cart,

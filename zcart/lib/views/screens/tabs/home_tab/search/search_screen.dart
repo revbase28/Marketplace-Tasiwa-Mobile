@@ -91,18 +91,9 @@ class _SearchScreenState extends State<SearchScreen> {
                               searchState.searchedItem![index].title!,
                             ),
                             onTap: () {
-                              context
-                                  .read(productNotifierProvider.notifier)
-                                  .getProductDetails(
-                                      searchState.searchedItem![index].slug)
-                                  .then((value) {
-                                getRecentlyViewedItems(context);
-                              });
-                              context
-                                  .read(productSlugListProvider.notifier)
-                                  .addProductSlug(
-                                      searchState.searchedItem![index].slug);
-                              context.nextPage(const ProductDetailsScreen());
+                              context.nextPage(ProductDetailsScreen(
+                                  productSlug:
+                                      searchState.searchedItem![index].slug!));
                             },
                           ),
                         ).cornerRadius(10).pOnly(bottom: 10);

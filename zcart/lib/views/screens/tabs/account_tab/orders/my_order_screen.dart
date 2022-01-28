@@ -252,16 +252,8 @@ class OrderCard extends StatelessWidget {
                         height: 50,
                         width: 50,
                       ).p(10).onInkTap(() {
-                        context
-                            .read(productNotifierProvider.notifier)
-                            .getProductDetails(order.items![itemsIndex].slug)
-                            .then((value) {
-                          getRecentlyViewedItems(context);
-                        });
-                        context
-                            .read(productSlugListProvider.notifier)
-                            .addProductSlug(order.items![itemsIndex].slug);
-                        context.nextPage(const ProductDetailsScreen());
+                        context.nextPage(ProductDetailsScreen(
+                            productSlug: order.items![itemsIndex].slug!));
                       });
                     }),
               ),

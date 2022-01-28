@@ -6,50 +6,50 @@ import 'package:zcart/helper/set_recently_viewed.dart';
 import 'package:zcart/riverpod/state/product/product_state.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 
-class ProductNotifier extends StateNotifier<ProductState> {
-  final IProductRepository _iProductRepository;
+// class ProductNotifier extends StateNotifier<ProductState> {
+//   final IProductRepository _iProductRepository;
 
-  ProductNotifier(this._iProductRepository)
-      : super(const ProductInitialState());
+//   ProductNotifier(this._iProductRepository)
+//       : super(const ProductInitialState());
 
-  Future<void> getProductDetails(String? slug) async {
-    try {
-      state = const ProductLoadingState();
-      final productDetails =
-          await _iProductRepository.fetchProductDetails(slug);
-      await setRecentlyViewedItems(productDetails.data!.id!);
-      state = ProductLoadedState(productDetails);
-    } on NetworkException {
-      state = ProductErrorState(LocaleKeys.something_went_wrong.tr());
-    }
-  }
+//   Future<void> getProductDetails(String slug) async {
+//     try {
+//       state = const ProductLoadingState();
+//       final productDetails =
+//           await _iProductRepository.fetchProductDetails(slug);
+//       await setRecentlyViewedItems(productDetails.data!.id!);
+//       state = ProductLoadedState(productDetails);
+//     } on NetworkException {
+//       state = ProductErrorState(LocaleKeys.something_went_wrong.tr());
+//     }
+//   }
 
-  updateState(productDetailsModel) {
-    state = ProductLoadedState(productDetailsModel);
-  }
-}
+//   updateState(productDetailsModel) {
+//     state = ProductLoadedState(productDetailsModel);
+//   }
+// }
 
-class ProductVariantNotifier extends StateNotifier<ProductVariantState> {
-  final IProductRepository _iProductRepository;
+// class ProductVariantNotifier extends StateNotifier<ProductVariantState> {
+//   final IProductRepository _iProductRepository;
 
-  ProductVariantNotifier(this._iProductRepository)
-      : super(const ProductVariantInitialState());
+//   ProductVariantNotifier(this._iProductRepository)
+//       : super(const ProductVariantInitialState());
 
-  Future<void> getProductVariantDetails(
-      String? slug, attributeId, attributeValue) async {
-    var requestBody = {
-      'attributes[$attributeId]': attributeValue,
-    };
-    try {
-      state = const ProductVariantLoadingState();
-      final productVariantDetails = await _iProductRepository
-          .fetchProductVariantDetails(slug, requestBody);
-      state = ProductVariantLoadedState(productVariantDetails);
-    } on NetworkException {
-      state = ProductVariantErrorState(LocaleKeys.something_went_wrong.tr());
-    }
-  }
-}
+//   Future<void> getProductVariantDetails(
+//       String slug, attributeId, attributeValue) async {
+//     var requestBody = {
+//       'attributes[$attributeId]': attributeValue,
+//     };
+//     try {
+//       state = const ProductVariantLoadingState();
+//       final productVariantDetails = await _iProductRepository
+//           .fetchProductVariantDetails(slug, requestBody);
+//       state = ProductVariantLoadedState(productVariantDetails);
+//     } on NetworkException {
+//       state = ProductVariantErrorState(LocaleKeys.something_went_wrong.tr());
+//     }
+//   }
+// }
 
 class ProductListNotifier extends StateNotifier<ProductListState> {
   final IProductRepository _iProductRepository;

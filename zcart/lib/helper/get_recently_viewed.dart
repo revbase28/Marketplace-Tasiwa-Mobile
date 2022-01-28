@@ -4,7 +4,8 @@ import 'package:zcart/helper/constants.dart';
 import 'package:zcart/riverpod/providers/recently_viewed_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-void getRecentlyViewedItems(BuildContext context) async {
+void getRecentlyViewedItems(
+    {BuildContext? context, ProviderReference? ref}) async {
   var _box = Hive.box(hiveBox);
   List<String>? _recentlyViewed = _box.get(recentlyReviewedIds);
 
@@ -12,13 +13,25 @@ void getRecentlyViewedItems(BuildContext context) async {
 
   try {
     if (_recentlyViewed == null) {
-      await context
-          .read(recentlyViewedNotifierProvider.notifier)
-          .getRecentlyViwedItems([]);
+      if (context == null) {
+        await ref!
+            .read(recentlyViewedNotifierProvider.notifier)
+            .getRecentlyViwedItems([]);
+      } else {
+        await context
+            .read(recentlyViewedNotifierProvider.notifier)
+            .getRecentlyViwedItems([]);
+      }
     } else {
-      await context
-          .read(recentlyViewedNotifierProvider.notifier)
-          .getRecentlyViwedItems(_recentlyViewed);
+      if (context == null) {
+        await ref!
+            .read(recentlyViewedNotifierProvider.notifier)
+            .getRecentlyViwedItems(_recentlyViewed);
+      } else {
+        await context
+            .read(recentlyViewedNotifierProvider.notifier)
+            .getRecentlyViwedItems(_recentlyViewed);
+      }
     }
   } catch (e) {
     debugPrint("Ancestor warning : $e");

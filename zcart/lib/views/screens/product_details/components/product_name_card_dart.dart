@@ -2,8 +2,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:nb_utils/nb_utils.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:slide_countdown/slide_countdown.dart';
 import 'package:velocity_x/velocity_x.dart';
@@ -11,142 +9,118 @@ import 'package:zcart/Theme/styles/colors.dart';
 import 'package:zcart/data/models/product/product_details_model.dart';
 import 'package:zcart/data/network/api.dart';
 import 'package:zcart/helper/get_color_based_on_theme.dart';
-import 'package:zcart/riverpod/providers/wishlist_provider.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 
 class ProductNameCard extends StatelessWidget {
   final ProductDetailsModel productModel;
-
-  final bool isWishlist;
-
   const ProductNameCard({
     Key? key,
     required this.productModel,
-    required this.isWishlist,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    bool _hasOffer = (productModel.data!.hasOffer ?? false) &&
+        productModel.data!.offerEnd != null;
     return Container(
       padding: const EdgeInsets.all(10),
       color: getColorBasedOnTheme(context, kLightColor, kDarkCardBgColor),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          (productModel.data!.hasOffer ?? false) &&
-                  productModel.data!.offerEnd != null
-              ? Container(
-                  width: context.screenWidth,
-                  padding: const EdgeInsets.symmetric(vertical: 6),
-                  margin: const EdgeInsets.symmetric(vertical: 5),
-                  decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [kGradientColor1, kGradientColor2],
-                      ),
-                      borderRadius: BorderRadius.circular(5)),
-                  child: Center(
-                    child: SlideCountdown(
-                      duration: productModel.data!.offerEnd!
-                          .difference(DateTime.now()),
-                      decoration: const BoxDecoration(
-                        color: Colors.transparent,
-                      ),
-                      textStyle:
-                          Theme.of(context).textTheme.headline6!.copyWith(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                              ),
+          Container(
+            padding: _hasOffer
+                ? const EdgeInsets.symmetric(horizontal: 16, vertical: 8)
+                : null,
+            decoration: _hasOffer
+                ? BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [kGradientColor1, kGradientColor2],
                     ),
-                  ),
-                )
-              : const SizedBox(),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Row(
-                children: [
-                  Text(
-                    productModel.data!.hasOffer!
-                        ? productModel.data!.offerPrice != null
-                            ? productModel.data!.offerPrice!
-                            : productModel.data!.price!
-                        : productModel.data!.price!,
-                    style: context.textTheme.headline6!.copyWith(
-                      color: getColorBasedOnTheme(
-                          context, kPriceColor, kDarkPriceColor),
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Text(
-                    productModel.data!.hasOffer!
-                        ? productModel.data!.offerPrice != null
-                            ? productModel.data!.price!
-                            : ""
-                        : "",
-                    style: context.textTheme.subtitle2!.copyWith(
-                      decoration: TextDecoration.lineThrough,
-                      color: kPrimaryFadeTextColor,
-                      fontStyle: FontStyle.italic,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ).pOnly(left: 10),
-                ],
-              ),
-              Row(
-                children: [
-                  Column(
-                    children: [
-                      const Icon(
-                        CupertinoIcons.share,
-                        size: 18,
+                  )
+                : null,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.baseline,
+                  textBaseline: TextBaseline.alphabetic,
+                  children: [
+                    Text(
+                      productModel.data!.hasOffer!
+                          ? productModel.data!.offerPrice != null
+                              ? productModel.data!.offerPrice!
+                              : productModel.data!.price!
+                          : productModel.data!.price!,
+                      style: context.textTheme.headline6!.copyWith(
+                        color: _hasOffer
+                            ? kLightColor
+                            : getColorBasedOnTheme(
+                                context, kPriceColor, kDarkPriceColor),
+                        fontWeight: FontWeight.w900,
                       ),
-                      Text(LocaleKeys.share.tr(),
-                              style: context.textTheme.overline)
-                          .pOnly(top: 3)
-                    ],
-                  ).px(10).onInkTap(() async {
-                    await Share.share(
-                        '${productModel.data!.title}.\n${API.appUrl}/product/${productModel.data!.slug}');
-                  }),
-                  Column(
-                    children: [
-                      Icon(
-                        isWishlist
-                            ? CupertinoIcons.heart_fill
-                            : CupertinoIcons.heart,
-                        size: 18,
-                        color: isWishlist ? Colors.red : null,
+                    ),
+                    Text(
+                      productModel.data!.hasOffer!
+                          ? productModel.data!.offerPrice != null
+                              ? productModel.data!.price!
+                              : ""
+                          : "",
+                      style: context.textTheme.caption!.copyWith(
+                        decoration: TextDecoration.lineThrough,
+                        color:
+                            _hasOffer ? Colors.white60 : kPrimaryFadeTextColor,
+                        fontStyle: FontStyle.italic,
+                        fontWeight: FontWeight.bold,
                       ),
-                      Text(LocaleKeys.wishlist_text.tr(),
-                              style: context.textTheme.overline)
-                          .pOnly(top: 3),
-                    ],
-                  ).onInkTap(() async {
-                    if (isWishlist) {
-                      toast("Item is already added in the wishlist.");
-                    } else {
-                      toast(LocaleKeys.adding_to_wishlist.tr());
-                      await context
-                          .read(wishListNotifierProvider.notifier)
-                          .addToWishList(productModel.data!.slug, context);
-                    }
-                  })
-                ],
-              )
-            ],
+                    ).pOnly(left: 10),
+                  ],
+                ),
+                _hasOffer
+                    ? SlideCountdown(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 8),
+                        duration: productModel.data!.offerEnd!
+                            .difference(DateTime.now()),
+                        decoration: const BoxDecoration(),
+                        fade: true,
+                        textStyle:
+                            Theme.of(context).textTheme.headline6!.copyWith(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                      )
+                    : const SizedBox()
+              ],
+            ),
           ).py(5),
           Row(
             children: [
-              Flexible(
+              Expanded(
                 child: Text(productModel.data!.title!,
                     softWrap: true, style: context.textTheme.bodyText2),
               ),
+              const SizedBox(width: 8),
+              Column(
+                children: [
+                  const Icon(
+                    CupertinoIcons.share,
+                    size: 18,
+                  ),
+                  Text(LocaleKeys.share.tr(), style: context.textTheme.overline)
+                      .pOnly(top: 3)
+                ],
+              ).px(10).onInkTap(() async {
+                await Share.share(
+                    '${productModel.data!.title}.\n${API.appUrl}/product/${productModel.data!.slug}');
+              }),
             ],
-          ).paddingBottom(10),
+          ),
           productModel.data!.rating == null
               ? const SizedBox()
               : Row(
@@ -173,7 +147,7 @@ class ProductNameCard extends StatelessWidget {
                           .copyWith(fontWeight: FontWeight.bold),
                     ).px(5),
                   ],
-                ).paddingBottom(10),
+                ).py(5),
           SizedBox(
             width:
                 productModel.data!.labels!.isEmpty ? null : context.screenWidth,
@@ -253,7 +227,7 @@ class ProductNameCard extends StatelessWidget {
                         ],
                       );
                     }),
-          ).pOnly(bottom: 5),
+          ),
         ],
       ),
     );

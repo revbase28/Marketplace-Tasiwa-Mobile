@@ -43,4 +43,43 @@ class CheckoutRepository implements ICheckoutRepository {
       throw NetworkException();
     }
   }
+
+  @override
+  Future checkoutAll(requestBody) async {
+    dynamic responseBody;
+    try {
+      responseBody = await handleResponse(await postRequest(
+        API.checkoutAll,
+        requestBody,
+        bearerToken: true,
+      ));
+      if (responseBody.runtimeType == int && responseBody > 206) {
+        throw NetworkException();
+      }
+    } catch (e) {
+      throw NetworkException();
+    }
+  }
+
+  @override
+  Future<String?> guestCheckoutAll(requestBody) async {
+    dynamic responseBody;
+    try {
+      responseBody = await handleResponse(await postRequest(
+        API.checkoutAll,
+        requestBody,
+        bearerToken: false,
+      ));
+      if (responseBody.runtimeType == int && responseBody > 206) {
+        throw NetworkException();
+      }
+
+      debugPrint(
+          "Response Data : \n${responseBody["order"]["customer"]["api_token"]}");
+
+      return responseBody["order"]["customer"]["api_token"];
+    } catch (e) {
+      throw NetworkException();
+    }
+  }
 }

@@ -114,6 +114,7 @@ class API {
 
   /// Checkout
   static checkout(cartId) => 'cart/$cartId/checkout';
+  static const checkoutAll = "cart/checkout_all";
 
   /// Order
   static const orders = 'orders';

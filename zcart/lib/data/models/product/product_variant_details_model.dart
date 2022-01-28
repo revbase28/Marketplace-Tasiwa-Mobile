@@ -1,22 +1,17 @@
-import 'dart:convert';
-
-ProductVariantDetailsModel productVariantDetailsModelFromJson(String str) => ProductVariantDetailsModel.fromJson(json.decode(str));
-
-String productVariantDetailsModelToJson(ProductVariantDetailsModel data) => json.encode(data.toJson());
-
 class ProductVariantDetailsModel {
   ProductVariantDetailsModel({
-    this.data,
+    required this.data,
   });
 
-  ProductVariantDetails? data;
+  ProductVariantDetails data;
 
-  factory ProductVariantDetailsModel.fromJson(Map<String, dynamic> json) => ProductVariantDetailsModel(
+  factory ProductVariantDetailsModel.fromJson(Map<String, dynamic> json) =>
+      ProductVariantDetailsModel(
         data: ProductVariantDetails.fromJson(json["data"]),
       );
 
   Map<String, dynamic> toJson() => {
-        "data": data!.toJson(),
+        "data": data.toJson(),
       };
 }
 
@@ -61,7 +56,8 @@ class ProductVariantDetails {
   int? imageId;
   List<Attribute>? attributes;
 
-  factory ProductVariantDetails.fromJson(Map<String, dynamic> json) => ProductVariantDetails(
+  factory ProductVariantDetails.fromJson(Map<String, dynamic> json) =>
+      ProductVariantDetails(
         id: json["id"],
         slug: json["slug"],
         title: json["title"],
@@ -79,7 +75,8 @@ class ProductVariantDetails {
         minOrderQuantity: json["min_order_quantity"],
         rating: json["rating"],
         imageId: json["image_id"],
-        attributes: List<Attribute>.from(json["attributes"].map((x) => Attribute.fromJson(x))),
+        attributes: List<Attribute>.from(
+            json["attributes"].map((x) => Attribute.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {

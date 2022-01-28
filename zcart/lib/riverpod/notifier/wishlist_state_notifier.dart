@@ -33,17 +33,17 @@ class WishListNotifier extends StateNotifier<WishListState> {
   Future<void> addToWishList(String? slug, BuildContext context) async {
     try {
       await _iWishListRepository.addToWishList(slug, context);
-      getWishList();
+      await getWishList();
     } on NetworkException {
       state = WishListErrorState(LocaleKeys.something_went_wrong.tr());
-      getWishList();
+      await getWishList();
     }
   }
 
   Future<void> removeFromWishList(int? id) async {
     try {
       await _iWishListRepository.removeFromWishList(id);
-      getWishList();
+      await getWishList();
     } on NetworkException {
       state = WishListErrorState(LocaleKeys.something_went_wrong.tr());
     }

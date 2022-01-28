@@ -264,23 +264,11 @@ class OrderDetailsScreen extends ConsumerWidget {
                                 itemBuilder: (context, index) {
                                   return ListTile(
                                     onTap: () {
-                                      context
-                                          .read(
-                                              productNotifierProvider.notifier)
-                                          .getProductDetails(orderDetailsState
-                                              .orderDetails!.items![index].slug)
-                                          .then((value) {
-                                        getRecentlyViewedItems(context);
-                                      });
-                                      context
-                                          .read(
-                                              productSlugListProvider.notifier)
-                                          .addProductSlug(orderDetailsState
+                                      context.nextPage(ProductDetailsScreen(
+                                          productSlug: orderDetailsState
                                               .orderDetails!
                                               .items![index]
-                                              .slug);
-                                      context.nextPage(
-                                          const ProductDetailsScreen());
+                                              .slug!));
                                     },
                                     leading: CachedNetworkImage(
                                       imageUrl: orderDetailsState
@@ -342,7 +330,8 @@ class OrderDetailsScreen extends ConsumerWidget {
                                           flex: 3,
                                           child: Text(
                                               orderDetailsState
-                                                  .orderDetails!.total!,
+                                                      .orderDetails!.total ??
+                                                  LocaleKeys.not_available.tr(),
                                               style:
                                                   context.textTheme.subtitle2)),
                                     ],
@@ -363,7 +352,7 @@ class OrderDetailsScreen extends ConsumerWidget {
                                           child: Text(
                                               orderDetailsState
                                                       .orderDetails!.taxes ??
-                                                  '0',
+                                                  LocaleKeys.not_available.tr(),
                                               style:
                                                   context.textTheme.subtitle2)),
                                     ],
@@ -383,7 +372,8 @@ class OrderDetailsScreen extends ConsumerWidget {
                                           flex: 3,
                                           child: Text(
                                               orderDetailsState
-                                                  .orderDetails!.shipping!,
+                                                      .orderDetails!.shipping ??
+                                                  LocaleKeys.not_available.tr(),
                                               style:
                                                   context.textTheme.subtitle2)),
                                     ],
@@ -402,8 +392,9 @@ class OrderDetailsScreen extends ConsumerWidget {
                                       Expanded(
                                           flex: 3,
                                           child: Text(
-                                              orderDetailsState
-                                                  .orderDetails!.packaging!,
+                                              orderDetailsState.orderDetails!
+                                                      .packaging ??
+                                                  LocaleKeys.not_available.tr(),
                                               style:
                                                   context.textTheme.subtitle2)),
                                     ],
@@ -423,7 +414,8 @@ class OrderDetailsScreen extends ConsumerWidget {
                                           flex: 3,
                                           child: Text(
                                               orderDetailsState
-                                                  .orderDetails!.handling!,
+                                                      .orderDetails!.handling ??
+                                                  LocaleKeys.not_available.tr(),
                                               style:
                                                   context.textTheme.subtitle2)),
                                     ],
@@ -443,7 +435,8 @@ class OrderDetailsScreen extends ConsumerWidget {
                                           flex: 3,
                                           child: Text(
                                               orderDetailsState
-                                                  .orderDetails!.discount!,
+                                                      .orderDetails!.discount ??
+                                                  LocaleKeys.not_available.tr(),
                                               style:
                                                   context.textTheme.subtitle2)),
                                     ],

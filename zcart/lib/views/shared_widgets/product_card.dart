@@ -97,16 +97,8 @@ class ProductCard extends StatelessWidget {
                       ],
                     ),
                   ).onInkTap(() {
-                    context
-                        .read(productNotifierProvider.notifier)
-                        .getProductDetails(productList![index].slug)
-                        .then((value) {
-                      getRecentlyViewedItems(context);
-                    });
-                    context
-                        .read(productSlugListProvider.notifier)
-                        .addProductSlug(productList![index].slug);
-                    context.nextPage(const ProductDetailsScreen());
+                    context.nextPage(ProductDetailsScreen(
+                        productSlug: productList![index].slug));
                   });
                 }).p(10),
           ).cornerRadius(10),

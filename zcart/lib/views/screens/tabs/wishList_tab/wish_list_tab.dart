@@ -332,18 +332,9 @@ class WishListTab extends ConsumerWidget {
                               ],
                             ),
                           ).onInkTap(() {
-                            context
-                                .read(productNotifierProvider.notifier)
-                                .getProductDetails(
-                                    wishListState.wishList[index].slug)
-                                .then((value) {
-                              getRecentlyViewedItems(context);
-                            });
-                            context
-                                .read(productSlugListProvider.notifier)
-                                .addProductSlug(
-                                    wishListState.wishList[index].slug);
-                            context.nextPage(const ProductDetailsScreen());
+                            context.nextPage(ProductDetailsScreen(
+                                productSlug:
+                                    wishListState.wishList[index].slug!));
                           });
                         }),
                   )

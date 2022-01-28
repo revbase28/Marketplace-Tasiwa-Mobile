@@ -101,16 +101,7 @@ class ProductDetailsCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        context
-            .read(productNotifierProvider.notifier)
-            .getProductDetails(product.slug)
-            .then((value) {
-          getRecentlyViewedItems(context);
-        });
-        context
-            .read(productSlugListProvider.notifier)
-            .addProductSlug(product.slug);
-        context.nextPage(const ProductDetailsScreen());
+        context.nextPage(ProductDetailsScreen(productSlug: product.slug));
       },
       child: Card(
         elevation: 0,

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:zcart/Theme/styles/colors.dart';
+import 'package:zcart/data/models/product/product_details_model.dart';
 import 'package:zcart/helper/get_color_based_on_theme.dart';
 import 'package:zcart/riverpod/providers/brand_provider.dart';
 import 'package:zcart/riverpod/state/product/product_state.dart';
@@ -10,25 +11,23 @@ import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:zcart/views/screens/brand/brand_profile.dart';
 
 class ProductBrandCard extends StatelessWidget {
-  final ProductLoadedState productDetailsState;
+  final ProductDetailsModel details;
   const ProductBrandCard({
     Key? key,
-    required this.productDetailsState,
+    required this.details,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: productDetailsState
-                  .productModel.data!.product!.manufacturer!.slug ==
-              null
+      child: details.data!.product!.manufacturer!.slug == null
           ? const SizedBox()
           : Container(
               color:
                   getColorBasedOnTheme(context, kLightColor, kDarkCardBgColor),
               child: ListTile(
                 title: Text(
-                  "${LocaleKeys.brand.tr()}  :  ${productDetailsState.productModel.data!.product!.manufacturer!.name}",
+                  "${LocaleKeys.brand.tr()}  :  ${details.data!.product!.manufacturer!.name}",
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: context.textTheme.subtitle2!,
@@ -38,13 +37,13 @@ class ProductBrandCard extends StatelessWidget {
                   context.nextPage(const BrandProfileScreen());
                   await context
                       .read(brandProfileNotifierProvider.notifier)
-                      .getBrandProfile(productDetailsState
-                          .productModel.data!.product!.manufacturer!.slug);
+                      .getBrandProfile(
+                          details.data!.product!.manufacturer!.slug);
 
                   await context
                       .read(brandItemsListNotifierProvider.notifier)
-                      .getBrandItemsList(productDetailsState
-                          .productModel.data!.product!.manufacturer!.slug);
+                      .getBrandItemsList(
+                          details.data!.product!.manufacturer!.slug);
                 },
               ),
             ),

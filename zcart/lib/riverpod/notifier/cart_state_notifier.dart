@@ -23,7 +23,7 @@ class CartNotifier extends StateNotifier<CartState> {
 
   Future<void> addToCart(
     BuildContext context,
-    String? slug,
+    String slug,
     int? quantity,
     int? shipTo,
     int? shippingOptionId,
