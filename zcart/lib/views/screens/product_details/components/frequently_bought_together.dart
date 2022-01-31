@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:zcart/Theme/styles/colors.dart';
 import 'package:zcart/data/models/product/product_details_model.dart';
-import 'package:zcart/riverpod/state/product/product_state.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:zcart/views/shared_widgets/shared_widgets.dart';
 

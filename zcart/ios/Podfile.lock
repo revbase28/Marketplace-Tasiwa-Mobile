@@ -184,7 +184,7 @@ SPEC CHECKSUMS:
   sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
   url_launcher_ios: 02f1989d4e14e998335b02b67a7590fa34f971af
-  video_player: ecd305f42e9044793efd34846e1ce64c31ea6fcb
+  video_player: 7e9dad9437c238a97648819f6dd443c8854cf0c7
   wakelock: d0fc7c864128eac40eba1617cb5264d9c940b46f
   webview_flutter_wkwebview: 005fbd90c888a42c5690919a1527ecc6649e1162
 

@@ -8,7 +8,6 @@ import 'package:velocity_x/velocity_x.dart';
 import 'package:zcart/Theme/styles/colors.dart';
 import 'package:zcart/data/models/deals/deal_of_the_day_model.dart' as deal;
 import 'package:zcart/helper/get_color_based_on_theme.dart';
-import 'package:zcart/helper/get_recently_viewed.dart';
 import 'package:zcart/riverpod/providers/deals_provider.dart';
 import 'package:zcart/riverpod/providers/plugin_provider.dart';
 import 'package:zcart/riverpod/providers/provider.dart';

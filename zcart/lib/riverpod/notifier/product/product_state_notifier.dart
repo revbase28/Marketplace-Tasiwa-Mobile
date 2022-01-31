@@ -2,7 +2,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zcart/data/interface/i_product_repository.dart';
 import 'package:zcart/data/network/network_exception.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:zcart/helper/set_recently_viewed.dart';
 import 'package:zcart/riverpod/state/product/product_state.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 

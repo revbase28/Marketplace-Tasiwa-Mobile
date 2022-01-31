@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:zcart/helper/get_color_based_on_theme.dart';
-import 'package:zcart/helper/get_recently_viewed.dart';
 import 'package:zcart/riverpod/providers/provider.dart';
 import 'package:zcart/riverpod/state/product/random_item_state.dart';
 import 'package:zcart/riverpod/state/scroll_state.dart';

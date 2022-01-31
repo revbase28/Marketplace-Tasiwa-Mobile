@@ -11,7 +11,6 @@ import 'package:zcart/Theme/styles/colors.dart';
 import 'package:zcart/data/controller/chat/chat_controller.dart';
 import 'package:zcart/data/models/orders/orders_model.dart';
 import 'package:zcart/helper/get_color_based_on_theme.dart';
-import 'package:zcart/helper/get_recently_viewed.dart';
 import 'package:zcart/riverpod/providers/dispute_provider.dart';
 import 'package:zcart/riverpod/providers/provider.dart';
 import 'package:zcart/riverpod/state/order_state.dart';

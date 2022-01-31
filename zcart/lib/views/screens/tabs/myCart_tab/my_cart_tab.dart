@@ -10,7 +10,6 @@ import 'package:zcart/Theme/styles/colors.dart';
 import 'package:zcart/data/models/cart/cart_model.dart';
 import 'package:zcart/data/network/network_utils.dart';
 import 'package:zcart/helper/get_color_based_on_theme.dart';
-import 'package:zcart/helper/get_recently_viewed.dart';
 import 'package:zcart/riverpod/providers/plugin_provider.dart';
 import 'package:zcart/riverpod/providers/provider.dart';
 import 'package:zcart/riverpod/state/state.dart';
@@ -199,23 +198,38 @@ class CartItemCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          GestureDetector(
-            onTap: () {
-              context
-                  .read(vendorDetailsNotifierProvider.notifier)
-                  .getVendorDetails(cartItem.shop!.slug!);
-              context
-                  .read(vendorItemsNotifierProvider.notifier)
-                  .getVendorItems(cartItem.shop!.slug!);
-              context.nextPage(const VendorsDetailsScreen());
-            },
-            child: Text(cartItem.shop!.name!,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: context.textTheme.headline6!.copyWith(
-                    color: kPrimaryColor,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 1.1)),
+          Row(
+            children: [
+              Expanded(
+                child: GestureDetector(
+                  onTap: () {
+                    context
+                        .read(vendorDetailsNotifierProvider.notifier)
+                        .getVendorDetails(cartItem.shop!.slug!);
+                    context
+                        .read(vendorItemsNotifierProvider.notifier)
+                        .getVendorItems(cartItem.shop!.slug!);
+                    context.nextPage(const VendorsDetailsScreen());
+                  },
+                  child: Row(
+                    children: [
+                      const Icon(Icons.store_outlined),
+                      const SizedBox(width: 4),
+                      Text(cartItem.shop!.name!,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: context.textTheme.headline6!.copyWith(
+                              color: getColorBasedOnTheme(
+                                  context, kDarkColor, kLightColor),
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 1.1)),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(width: 8),
+              //Text(cartItem.shippingZoneId.toString()),
+            ],
           ),
           const Divider(height: 16),
           const SizedBox(height: 8),
@@ -227,16 +241,10 @@ class CartItemCard extends StatelessWidget {
                     context
                         .nextPage(ProductDetailsScreen(productSlug: e.slug!));
                   }),
-                  Container(
-                    height: 3,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: kLightCardBgColor),
-                  )
-                      .pOnly(bottom: 8)
-                      .visible(cartItem.items!.length != 1)
-                      .visible(cartItem.items!.indexOf(e) !=
-                          cartItem.items!.length - 1),
+                  const Divider(
+                    height: 40,
+                  ).visible(cartItem.items!.length != 1).visible(
+                      cartItem.items!.indexOf(e) != cartItem.items!.length - 1),
                 ],
               );
             }).toList(),
@@ -329,65 +337,86 @@ class _ItemCardState extends State<ItemCard> {
     return Slidable(
       actionPane: const SlidableStrechActionPane(),
       actionExtentRatio: 0.25,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              CachedNetworkImage(
-                imageUrl: widget.cartItem.image!,
-                height: 50,
-                width: 50,
-                errorWidget: (context, url, error) => const SizedBox(),
-                progressIndicatorBuilder: (context, url, progress) => Center(
-                  child: CircularProgressIndicator(value: progress.progress),
-                ),
-              ).px(10),
-              Expanded(
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Flexible(
-                      fit: FlexFit.tight,
-                      child: Text(widget.cartItem.description!,
-                              maxLines: 3,
-                              softWrap: true,
-                              overflow: TextOverflow.ellipsis,
-                              style: context.textTheme.subtitle2!)
-                          .pOnly(right: 10),
-                    ),
-                    Text(
-                      widget.cartItem.unitPrice!,
-                      style: context.textTheme.bodyText2!.copyWith(
-                          color: getColorBasedOnTheme(
-                              context, kPriceColor, kDarkPriceColor),
-                          fontWeight: FontWeight.bold),
-                    ).pOnly(right: 5),
-                  ],
-                ),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: CachedNetworkImage(
+              imageUrl: widget.cartItem.image!,
+              width: 80,
+              fit: BoxFit.cover,
+              errorWidget: (context, url, error) => const SizedBox(),
+              progressIndicatorBuilder: (context, url, progress) => Center(
+                child: CircularProgressIndicator(value: progress.progress),
               ),
-            ],
+            ),
+          ).pOnly(right: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(widget.cartItem.description!,
+                    maxLines: 3,
+                    softWrap: true,
+                    overflow: TextOverflow.ellipsis,
+                    style: context.textTheme.subtitle2!.copyWith(
+                      fontWeight: FontWeight.bold,
+                    )).pOnly(right: 10),
+                const SizedBox(height: 4),
+                Text(
+                  widget.cartItem.unitPrice!,
+                  style: context.textTheme.bodyText2!.copyWith(
+                      color: getColorBasedOnTheme(
+                          context, kPriceColor, kDarkPriceColor),
+                      fontWeight: FontWeight.bold),
+                ).pOnly(right: 5),
+              ],
+            ),
           ),
-          ButtonBar(
-            mainAxisSize: MainAxisSize.min,
-            buttonPadding: const EdgeInsets.symmetric(horizontal: 5),
-            buttonMinWidth:
-                30, // this will take space as minimum as posible(to center)
-            children: <Widget>[
-              OutlinedButton(
-                  child: const Icon(Icons.remove),
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(
-                      getColorBasedOnTheme(
-                          context, kLightBgColor, kDarkBgColor),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 4),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ProductDetailsPageIconButton(
+                    isNoWidth: true,
+                    isNoHeight: true,
+                    icon: Icon(
+                      Icons.add,
+                      color: getColorBasedOnTheme(
+                          context, kDarkColor, kLightColor),
                     ),
-                    foregroundColor: MaterialStateProperty.all(
-                        getColorBasedOnTheme(context, kPrimaryDarkTextColor,
-                            kPrimaryLightTextColor)),
-                    shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10))),
+                    onPressed: () {
+                      toast(LocaleKeys.please_wait.tr());
+                      setState(() {
+                        widget.cartItem.quantity =
+                            widget.cartItem.quantity! + 1;
+                      });
+                      context.read(cartNotifierProvider.notifier).updateCart(
+                            widget.cartID,
+                            listingID: widget.cartItem.id,
+                            quantity: widget.cartItem.quantity,
+                          );
+                    }),
+                const SizedBox(height: 8),
+                Text(
+                  widget.cartItem.quantity.toString(),
+                  style: context.textTheme.headline6!.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                ProductDetailsPageIconButton(
+                  isNoWidth: true,
+                  isNoHeight: true,
+                  icon: Icon(
+                    Icons.remove,
+                    color:
+                        getColorBasedOnTheme(context, kDarkColor, kLightColor),
                   ),
                   onPressed: widget.cartItem.quantity == 1
                       ? () {
@@ -417,39 +446,11 @@ class _ItemCardState extends State<ItemCard> {
                               .updateCart(widget.cartID,
                                   listingID: widget.cartItem.id,
                                   quantity: widget.cartItem.quantity);
-                        }),
-              OutlinedButton(
-                onPressed: null,
-                child: Text(
-                  widget.cartItem.quantity.toString(),
-                  style: context.textTheme.subtitle2,
+                        },
                 ),
-              ),
-              OutlinedButton(
-                  child: const Icon(Icons.add),
-                  style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(
-                        getColorBasedOnTheme(
-                            context, kLightBgColor, kDarkBgColor),
-                      ),
-                      foregroundColor: MaterialStateProperty.all(
-                          getColorBasedOnTheme(context, kPrimaryDarkTextColor,
-                              kPrimaryLightTextColor)),
-                      shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)))),
-                  onPressed: () {
-                    toast(LocaleKeys.please_wait.tr());
-                    setState(() {
-                      widget.cartItem.quantity = widget.cartItem.quantity! + 1;
-                    });
-                    context.read(cartNotifierProvider.notifier).updateCart(
-                          widget.cartID,
-                          listingID: widget.cartItem.id,
-                          quantity: widget.cartItem.quantity,
-                        );
-                  }),
-            ],
-          )
+              ],
+            ),
+          ),
         ],
       ),
       secondaryActions: <Widget>[

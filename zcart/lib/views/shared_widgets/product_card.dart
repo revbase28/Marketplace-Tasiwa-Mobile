@@ -1,15 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:zcart/helper/get_color_based_on_theme.dart';
-import 'package:zcart/helper/get_recently_viewed.dart';
-import 'package:zcart/riverpod/providers/product_slug_list_provider.dart';
-import 'package:zcart/riverpod/providers/product_provider.dart';
 import 'package:zcart/views/screens/product_details/product_details_screen.dart';
 import 'package:zcart/Theme/styles/colors.dart';
 
 import 'package:velocity_x/velocity_x.dart';
 import 'package:nb_utils/nb_utils.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ProductCard extends StatelessWidget {
   const ProductCard(

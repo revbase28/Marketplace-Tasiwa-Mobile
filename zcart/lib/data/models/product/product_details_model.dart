@@ -205,12 +205,12 @@ class Data {
 
 class Attribute {
   Attribute({
-    this.id,
-    this.value,
+    required this.id,
+    required this.value,
   });
 
-  int? id;
-  int? value;
+  int id;
+  int value;
 
   factory Attribute.fromRawJson(String str) =>
       Attribute.fromJson(json.decode(str));
@@ -541,12 +541,12 @@ class Variants {
 
 class AttributeValue {
   AttributeValue({
-    this.name,
-    this.value,
+    required this.name,
+    required this.value,
   });
 
-  String? name;
-  Map<String, String>? value;
+  String name;
+  Map<String, String> value;
 
   factory AttributeValue.fromRawJson(String str) =>
       AttributeValue.fromJson(json.decode(str));
@@ -561,8 +561,7 @@ class AttributeValue {
 
   Map<String, dynamic> toJson() => {
         "name": name,
-        "value":
-            Map.from(value!).map((k, v) => MapEntry<String, dynamic>(k, v)),
+        "value": Map.from(value).map((k, v) => MapEntry<String, String>(k, v)),
       };
 }
 

@@ -7,6 +7,7 @@ import 'package:zcart/data/models/product/product_details_model.dart';
 import 'package:zcart/helper/get_color_based_on_theme.dart';
 import 'package:zcart/helper/url_launcher_helper.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
+import 'package:zcart/views/screens/product_details/product_details_screen.dart';
 
 class ProductDetailsWidget extends StatelessWidget {
   final ProductDetailsModel details;
@@ -19,9 +20,8 @@ class ProductDetailsWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Container(
-          padding: const EdgeInsets.all(16),
-          color: getColorBasedOnTheme(context, kLightColor, kDarkCardBgColor),
+        ProductPageDefaultContainer(
+          isFullPadding: true,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -29,28 +29,29 @@ class ProductDetailsWidget extends StatelessWidget {
                   ? const SizedBox()
                   : Text('${LocaleKeys.key_features.tr()}\n',
                       style: context.textTheme.subtitle2),
-              ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: details.data!.keyFeatures!.length,
-                  itemBuilder: (context, index) {
-                    return Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Icon(
-                          Icons.circle_rounded,
-                          size: 10,
-                        ).p(8).pOnly(right: 5),
-                        Flexible(
-                          child: Text(
-                            details.data!.keyFeatures![index],
-                            style: context.textTheme.bodyText2!
-                                .copyWith(fontWeight: FontWeight.w400),
-                          ),
-                        ),
-                      ],
-                    ).pSymmetric(v: 2);
-                  }),
+              details.data!.keyFeatures != null
+                  ? Column(
+                      children: details.data!.keyFeatures!
+                          .map((e) => Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Icon(
+                                    Icons.circle_rounded,
+                                    size: 10,
+                                  ).p(8).pOnly(right: 5),
+                                  Flexible(
+                                    child: Text(
+                                      e,
+                                      style: context.textTheme.bodyText2!
+                                          .copyWith(
+                                              fontWeight: FontWeight.w400),
+                                    ),
+                                  ),
+                                ],
+                              ).pSymmetric(v: 2))
+                          .toList(),
+                    )
+                  : const SizedBox(),
               Text('\n${LocaleKeys.technical_details.tr()}\n',
                   style: context.textTheme.subtitle2),
               Column(
@@ -204,54 +205,65 @@ class ProductDetailsWidget extends StatelessWidget {
               )
             ],
           ),
-        ).cornerRadius(10).pOnly(top: 10, right: 10, left: 10),
+        ),
+        const SizedBox(height: 10),
         details.data!.product!.description == null
             ? const SizedBox()
-            : Container(
-                color: getColorBasedOnTheme(
-                    context, kLightColor, kDarkCardBgColor),
-                child: ExpansionTile(
-                  title: Text(LocaleKeys.product_desc.tr(),
-                      style: context.textTheme.subtitle2),
-                  iconColor:
-                      getColorBasedOnTheme(context, kDarkColor, kLightColor),
-                  collapsedIconColor: kPrimaryColor,
-                  children: [
-                    HtmlWidget(
-                      details.data!.product!.description!,
-                      enableCaching: true,
-                      factoryBuilder: () => WidgetFactory(),
-                      onTapUrl: (url) {
-                        launchURL(url);
-                        return true;
-                      },
-                    ).px(10).py(5),
-                  ],
-                ),
-              ).cornerRadius(10).p(10),
+            : Column(
+                children: [
+                  ProductPageDefaultContainer(
+                    child: ExpansionTile(
+                      childrenPadding: EdgeInsets.zero,
+                      tilePadding: EdgeInsets.zero,
+                      title: Text(LocaleKeys.product_desc.tr(),
+                          style: context.textTheme.subtitle2),
+                      iconColor: getColorBasedOnTheme(
+                          context, kDarkColor, kLightColor),
+                      collapsedIconColor: kPrimaryColor,
+                      children: [
+                        HtmlWidget(
+                          details.data!.product!.description!,
+                          enableCaching: true,
+                          factoryBuilder: () => WidgetFactory(),
+                          onTapUrl: (url) {
+                            launchURL(url);
+                            return true;
+                          },
+                        ).px(10).py(5),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                ],
+              ),
         details.data!.description == null
             ? const SizedBox()
-            : Container(
-                color: getColorBasedOnTheme(
-                    context, kLightColor, kDarkCardBgColor),
-                child: ExpansionTile(
-                  title: Text(LocaleKeys.seller_spec.tr(),
-                      style: context.textTheme.subtitle2),
-                  iconColor:
-                      getColorBasedOnTheme(context, kLightColor, kDarkColor),
-                  collapsedIconColor: kPrimaryColor,
-                  children: [
-                    HtmlWidget(
-                      details.data!.description!,
-                      enableCaching: true,
-                      onTapUrl: (url) {
-                        launchURL(url);
-                        return true;
-                      },
-                    ).px(10).py(5),
-                  ],
-                ),
-              ).cornerRadius(10).px(10),
+            : Column(
+                children: [
+                  ProductPageDefaultContainer(
+                    child: ExpansionTile(
+                      childrenPadding: EdgeInsets.zero,
+                      tilePadding: EdgeInsets.zero,
+                      title: Text(LocaleKeys.seller_spec.tr(),
+                          style: context.textTheme.subtitle2),
+                      iconColor: getColorBasedOnTheme(
+                          context, kLightColor, kDarkColor),
+                      collapsedIconColor: kPrimaryColor,
+                      children: [
+                        HtmlWidget(
+                          details.data!.description!,
+                          enableCaching: true,
+                          onTapUrl: (url) {
+                            launchURL(url);
+                            return true;
+                          },
+                        ).px(10).py(5),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                ],
+              ),
       ],
     );
   }

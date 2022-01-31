@@ -152,7 +152,7 @@ class API {
   /// Shipping options
   static shipping(shopId, zoneId) => 'shipping/$shopId?zone=$zoneId';
 
-  static shippingOptions(id) => 'listing/$id/shipTo';
+  static shippingOptions(int id) => 'listing/$id/shipTo';
 
   /// Payment options
   static paymentOptions(cartId) => 'cart/$cartId/paymentOptions';

@@ -6,8 +6,6 @@ import 'package:nb_utils/nb_utils.dart';
 import 'package:zcart/data/controller/search/search_controller.dart';
 import 'package:zcart/data/controller/search/search_state.dart';
 import 'package:zcart/helper/get_color_based_on_theme.dart';
-import 'package:zcart/helper/get_recently_viewed.dart';
-import 'package:zcart/riverpod/providers/provider.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:zcart/views/screens/product_details/product_details_screen.dart';
 import 'package:zcart/views/screens/product_list/recently_viewed.dart';

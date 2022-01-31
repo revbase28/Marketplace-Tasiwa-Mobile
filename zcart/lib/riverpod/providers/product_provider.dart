@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zcart/data/interface/i_product_repository.dart';
 import 'package:zcart/data/models/product/product_variant_details_model.dart';
@@ -36,8 +37,10 @@ final productDetailsFutureProvider =
   final _product = await GetProductDetailsModel.getProductDetails(slug);
   if (_product?.data?.id != null) {
     await setRecentlyViewedItems(_product!.data!.id!);
+    debugPrint("Saving product to recently viewed");
     getRecentlyViewedItems(ref: ref);
   }
+  //  print("Saving product to recently viewed");
   return _product;
 });
 
@@ -71,5 +74,34 @@ class GetProductDetailsModel {
     ProductVariantDetailsModel productVariantDetailsModel =
         ProductVariantDetailsModel.fromJson(_responseBody);
     return productVariantDetailsModel;
+  }
+
+  Future<List<ShippingOption>?> getProductShippingOptions({
+    required int countryId,
+    required int listingId,
+    int? stateId,
+  }) async {
+    dynamic _responseBody;
+    var requestBody = {
+      'ship_to': countryId.toString(),
+      if (stateId != null) 'state_id': stateId
+    };
+    List<ShippingOption> _shippingOptions;
+    try {
+      _responseBody = await handleResponse(
+          await postRequest(API.shippingOptions(listingId), requestBody));
+      _shippingOptions = List<ShippingOption>.from(
+          _responseBody["shipping_options"]
+              .map((x) => ShippingOption.fromJson(x)));
+    } catch (e) {
+      return null;
+    }
+    if (_responseBody.runtimeType == int) {
+      if (_responseBody > 206) {
+        return null;
+      }
+    }
+
+    return _shippingOptions;
   }
 }

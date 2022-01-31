@@ -143,7 +143,7 @@ class Listing {
         offerStart: json["offer_start"],
         offerEnd: json["offer_end"],
         image: json["image"],
-        rating: json["rating"],
+        rating: int.tryParse(json["rating"] ?? ""),
         stuffPick: json["stuff_pick"],
         freeShipping: json["free_shipping"],
         hotItem: json["hot_item"],

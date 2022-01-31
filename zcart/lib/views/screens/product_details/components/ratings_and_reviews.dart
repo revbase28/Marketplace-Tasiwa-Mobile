@@ -19,7 +19,6 @@ class ProductRatingsAndReview extends StatelessWidget {
     final _feedbacks =
         feedbacks.length < 3 ? feedbacks : feedbacks.sublist(0, 3);
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
       color: getColorBasedOnTheme(context, kLightColor, kDarkCardBgColor),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
