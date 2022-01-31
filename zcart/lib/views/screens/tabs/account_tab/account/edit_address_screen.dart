@@ -86,9 +86,7 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
                   await context
                       .read(addressRepositoryProvider)
                       .deleteAddress(widget.address.id);
-                  await context
-                      .read(countryNotifierProvider.notifier)
-                      .getCountries();
+
                   await context
                       .read(addressNotifierProvider.notifier)
                       .fetchAddress();

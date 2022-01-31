@@ -60,6 +60,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
     context.read(dealOfThedayNotifierProvider.notifier).getDealOfTheDay();
     context.read(featuredBrandsNotifierProvider.notifier).getFeaturedBrands();
     context.read(cartNotifierProvider.notifier).getCartList();
+    context.read(countryNotifierProvider.notifier).getCountries();
     getRecentlyViewedItems(context: context);
 
     if (accessAllowed) {

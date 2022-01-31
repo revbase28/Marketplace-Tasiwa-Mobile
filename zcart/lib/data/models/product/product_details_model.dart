@@ -5,15 +5,19 @@ class ProductDetailsModel {
     this.data,
     this.variants,
     this.shippingCountryId,
+    this.shippingStateId,
     this.shippingOptions,
     this.countries,
+    this.states,
   });
 
   Data? data;
   Variants? variants;
   int? shippingCountryId;
+  int? shippingStateId;
   List<ShippingOption>? shippingOptions;
   Map<String, String>? countries;
+  Map<String, String>? states;
 
   factory ProductDetailsModel.fromRawJson(String str) =>
       ProductDetailsModel.fromJson(json.decode(str));
@@ -26,23 +30,29 @@ class ProductDetailsModel {
         variants: json["variants"] == null
             ? null
             : Variants.fromJson(json["variants"]),
-        shippingCountryId: json["shipping_country_id"],
+        shippingCountryId: json["ship_to_country_id"],
+        shippingStateId: json["ship_to_state_id"],
         shippingOptions: json["shipping_options"] == null
             ? null
             : List<ShippingOption>.from(json["shipping_options"]
                 .map((x) => ShippingOption.fromJson(x))),
         countries: Map.from(json["countries"])
             .map((k, v) => MapEntry<String, String>(k, v)),
+        states: Map.from(json["states"])
+            .map((k, v) => MapEntry<String, String>(k, v)),
       );
 
   Map<String, dynamic> toJson() => {
         "data": data!.toJson(),
         "variants": variants!.toJson(),
-        "shipping_country_id": shippingCountryId,
+        "ship_to_country_id": shippingCountryId,
+        "ship_to_state_id": shippingStateId,
         "shipping_options":
             List<dynamic>.from(shippingOptions!.map((x) => x.toJson())),
         "countries":
             Map.from(countries!).map((k, v) => MapEntry<String, dynamic>(k, v)),
+        "states":
+            Map.from(states!).map((k, v) => MapEntry<String, dynamic>(k, v)),
       };
 }
 

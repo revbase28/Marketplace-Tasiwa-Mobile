@@ -7,6 +7,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:zcart/Theme/styles/colors.dart';
+import 'package:zcart/data/models/address/packaging_model.dart';
 import 'package:zcart/data/models/cart/cart_model.dart';
 import 'package:zcart/data/network/network_utils.dart';
 import 'package:zcart/helper/get_color_based_on_theme.dart';
@@ -134,26 +135,6 @@ class _MyCartTabState extends State<MyCartTab> {
                                     .toList(),
                               ),
                             ),
-                            // Builder(
-                            //   builder: (context) {
-                            //     double _total = 0;
-                            //     _cartState.cartList!.forEach((e) {
-                            //       _total += e.items!.fold(
-                            //           0,
-                            //           (previousValue, element) =>
-                            //               previousValue +
-                            //               double.parse(element.total ?? "0") *
-                            //                   element.quantity!);
-                            //     });
-
-                            //     return Text(
-                            //       LocaleKeys.total.tr() +
-                            //           " " +
-                            //           _total.toStringAsFixed(2),
-                            //       style: Theme.of(context).textTheme.headline6,
-                            //     );
-                            //   },
-                            // ),
                             _oneCheckoutPluginCheckProvider.when(
                               data: (value) {
                                 if (value) {
@@ -179,7 +160,7 @@ class _MyCartTabState extends State<MyCartTab> {
   }
 }
 
-class CartItemCard extends StatelessWidget {
+class CartItemCard extends ConsumerWidget {
   final CartItem cartItem;
 
   const CartItemCard({
@@ -188,7 +169,9 @@ class CartItemCard extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, watch) {
+    final _countryState = watch(countryNotifierProvider);
+
     return Container(
       decoration: BoxDecoration(
           color: getColorBasedOnTheme(context, kLightColor, kDarkCardBgColor),
@@ -199,36 +182,111 @@ class CartItemCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Expanded(
-                child: GestureDetector(
-                  onTap: () {
-                    context
-                        .read(vendorDetailsNotifierProvider.notifier)
-                        .getVendorDetails(cartItem.shop!.slug!);
-                    context
-                        .read(vendorItemsNotifierProvider.notifier)
-                        .getVendorItems(cartItem.shop!.slug!);
-                    context.nextPage(const VendorsDetailsScreen());
-                  },
-                  child: Row(
-                    children: [
-                      const Icon(Icons.store_outlined),
-                      const SizedBox(width: 4),
-                      Text(cartItem.shop!.name!,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: context.textTheme.headline6!.copyWith(
+              GestureDetector(
+                onTap: () {
+                  context
+                      .read(vendorDetailsNotifierProvider.notifier)
+                      .getVendorDetails(cartItem.shop!.slug!);
+                  context
+                      .read(vendorItemsNotifierProvider.notifier)
+                      .getVendorItems(cartItem.shop!.slug!);
+                  context.nextPage(const VendorsDetailsScreen());
+                },
+                child: Row(
+                  children: [
+                    const Icon(Icons.store_outlined),
+                    const SizedBox(width: 4),
+                    Text(cartItem.shop!.name!,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: context.textTheme.headline6!.copyWith(
+                          color: getColorBasedOnTheme(
+                              context, kDarkColor, kLightColor),
+                          fontWeight: FontWeight.bold,
+                        )),
+                  ],
+                ),
+              ).pOnly(right: 4),
+              _countryState is CountryLoadedState &&
+                      _countryState.countryList != null &&
+                      _countryState.countryList!.isNotEmpty
+                  ? GestureDetector(
+                      onTap: () {
+                        showModalBottomSheet(
+                          context: context,
+                          backgroundColor: Colors.transparent,
+                          isScrollControlled: true,
+                          builder: (context) {
+                            return SizedBox(
+                              height: context.screenHeight * 0.7,
+                              child: ProductPageDefaultContainer(
+                                isFullPadding: true,
+                                child: Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
+                                  children: [
+                                    Text(
+                                      "Select Shipping Country",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headline6!
+                                          .copyWith(
+                                              fontWeight: FontWeight.bold),
+                                    ),
+                                    const SizedBox(height: 10),
+                                    Expanded(
+                                      child: ListView(
+                                        children: _countryState.countryList!
+                                            .map(
+                                              (e) => RadioListTile<int>(
+                                                  value: e.id!,
+                                                  groupValue: cartItem.shipTo,
+                                                  title: Text(e.name!),
+                                                  onChanged: (value) async {
+                                                    Navigator.of(context).pop();
+                                                    context
+                                                        .read(
+                                                            cartNotifierProvider
+                                                                .notifier)
+                                                        .updateCart(cartItem.id,
+                                                            countryId: e.id);
+                                                  }),
+                                            )
+                                            .toList(),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      },
+                      child: Row(
+                        children: [
+                          Text(
+                            _countryState.countryList!.any(
+                                    (element) => element.id == cartItem.shipTo)
+                                ? _countryState.countryList!
+                                    .firstWhere((e) => e.id == cartItem.shipTo)
+                                    .name!
+                                : "Unknown",
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: context.textTheme.headline6!.copyWith(
                               color: getColorBasedOnTheme(
                                   context, kDarkColor, kLightColor),
                               fontWeight: FontWeight.bold,
-                              letterSpacing: 1.1)),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(width: 8),
-              //Text(cartItem.shippingZoneId.toString()),
+                            ),
+                          ),
+                          const SizedBox(width: 4),
+                          const Icon(Icons.location_on),
+                        ],
+                      ),
+                    ).pOnly(left: 4)
+                  : const SizedBox(),
             ],
           ),
           const Divider(height: 16),
@@ -249,6 +307,10 @@ class CartItemCard extends StatelessWidget {
               );
             }).toList(),
           ).pOnly(bottom: 10),
+          Container(
+            decoration: BoxDecoration(),
+            child: CartOtherDetails(cartItem: cartItem),
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -273,20 +335,20 @@ class CartItemCard extends StatelessWidget {
 
                   return ElevatedButton(
                       onPressed: () async {
-                        String? customerEmail;
+                        String? _customerEmail;
 
                         if (accessAllowed) {
                           context
                               .read(addressNotifierProvider.notifier)
                               .fetchAddress();
                           if (userState is UserLoadedState) {
-                            customerEmail = userState.user!.email!;
+                            _customerEmail = userState.user!.email!;
                           }
                         }
 
-                        context
-                            .read(packagingNotifierProvider.notifier)
-                            .fetchPackagingInfo(cartItem.shop!.slug);
+                        // context
+                        //     .read(packagingNotifierProvider.notifier)
+                        //     .fetchPackagingInfo(cartItem.shop!.slug);
                         context
                             .read(paymentOptionsNotifierProvider.notifier)
                             .fetchPaymentMethod(
@@ -295,16 +357,13 @@ class CartItemCard extends StatelessWidget {
                             .read(cartItemDetailsNotifierProvider.notifier)
                             .getCartItemDetails(cartItem.id);
                         context
-                            .read(countryNotifierProvider.notifier)
-                            .getCountries();
-                        context
                             .read(shippingNotifierProvider.notifier)
                             .fetchShippingInfo(
                                 shopId: cartItem.shop!.id.toString(),
                                 zoneId: cartItem.shippingZoneId.toString());
 
-                        context.nextPage(
-                            CheckoutScreen(customerEmail: customerEmail));
+                        // context.nextPage(
+                        //     CheckoutScreen(customerEmail: customerEmail));
                       },
                       child: Text(LocaleKeys.checkout.tr()));
                 },
@@ -338,7 +397,7 @@ class _ItemCardState extends State<ItemCard> {
       actionPane: const SlidableStrechActionPane(),
       actionExtentRatio: 0.25,
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           ClipRRect(
@@ -360,15 +419,14 @@ class _ItemCardState extends State<ItemCard> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(widget.cartItem.description!,
-                    maxLines: 3,
-                    softWrap: true,
-                    overflow: TextOverflow.ellipsis,
-                    style: context.textTheme.subtitle2!.copyWith(
-                      fontWeight: FontWeight.bold,
-                    )).pOnly(right: 10),
+                        maxLines: 3,
+                        softWrap: true,
+                        overflow: TextOverflow.ellipsis,
+                        style: context.textTheme.subtitle2!.copyWith())
+                    .pOnly(right: 10),
                 const SizedBox(height: 4),
                 Text(
-                  widget.cartItem.unitPrice!,
+                  widget.cartItem.total!,
                   style: context.textTheme.bodyText2!.copyWith(
                       color: getColorBasedOnTheme(
                           context, kPriceColor, kDarkPriceColor),
@@ -466,6 +524,124 @@ class _ItemCardState extends State<ItemCard> {
                 );
           },
         ),
+      ],
+    );
+  }
+}
+
+class CartOtherDetails extends ConsumerWidget {
+  final CartItem cartItem;
+  const CartOtherDetails({
+    Key? key,
+    required this.cartItem,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, watch) {
+    final _shopPackage =
+        watch(shopPackagingFutureProvider(cartItem.shop!.slug!));
+    return Column(
+      children: [
+        _shopPackage.when(
+          data: (value) {
+            if (value == null || value.isEmpty) {
+              return const SizedBox();
+            } else {
+              PackagingModel? packagingModel;
+              if (value.any((element) => element.id == cartItem.packagingId)) {
+                packagingModel = value.firstWhere(
+                  (element) => element.id == cartItem.packagingId,
+                );
+              }
+              return ListTile(
+                onTap: () {
+                  showModalBottomSheet(
+                    context: context,
+                    backgroundColor: Colors.transparent,
+                    isScrollControlled: true,
+                    builder: (context) {
+                      return SizedBox(
+                        height: context.screenHeight * 0.7,
+                        child: ProductPageDefaultContainer(
+                          isFullPadding: true,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Text(
+                                "Select Packaging",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headline6!
+                                    .copyWith(fontWeight: FontWeight.bold),
+                              ),
+                              const SizedBox(height: 10),
+                              Expanded(
+                                child: ListView(
+                                  children: value
+                                      .map(
+                                        (e) => RadioListTile<int>(
+                                            value: e.id!,
+                                            groupValue: packagingModel?.id,
+                                            title: Text(e.name!),
+                                            secondary: Text(
+                                              e.cost ?? "0",
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyText2!
+                                                  .copyWith(
+                                                    color: getColorBasedOnTheme(
+                                                        context,
+                                                        kPriceColor,
+                                                        kDarkPriceColor),
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                            ),
+                                            onChanged: (value) async {
+                                              Navigator.of(context).pop();
+                                              context
+                                                  .read(cartNotifierProvider
+                                                      .notifier)
+                                                  .updateCart(cartItem.id,
+                                                      packagingId: e.id);
+                                            }),
+                                      )
+                                      .toList(),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
+                dense: true,
+                title: Text(
+                  LocaleKeys.packaging.tr() + ':',
+                  style: context.textTheme.caption!.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: kPrimaryFadeTextColor),
+                ),
+                trailing: Text(
+                  packagingModel?.cost ?? '0',
+                  style: context.textTheme.subtitle2!.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: getColorBasedOnTheme(
+                          context, kPriceColor, kDarkPriceColor)),
+                ),
+                subtitle: Text(
+                  packagingModel?.name ?? '',
+                  style: context.textTheme.subtitle2!.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              );
+            }
+          },
+          loading: () => const SizedBox(),
+          error: (error, stackTrace) => const SizedBox(),
+        ),
+        const Divider(height: 10),
       ],
     );
   }

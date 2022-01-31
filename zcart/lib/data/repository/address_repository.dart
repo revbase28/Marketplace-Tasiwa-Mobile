@@ -157,27 +157,6 @@ class AddressRepository implements IAddressRepository {
   }
 
   @override
-  Future<List<PackagingModel>> fetchPackagingInfo(String? shopSlug) async {
-    dynamic responseBody;
-    List<PackagingModel> packagingModelList;
-    try {
-      responseBody =
-          await handleResponse(await getRequest(API.packaging(shopSlug)));
-
-      packagingModelList = (responseBody as List<dynamic>)
-          .map((e) => PackagingModel.fromJson(e))
-          .toList();
-    } catch (e) {
-      throw NetworkException();
-    }
-
-    if (responseBody.runtimeType == int) {
-      if ((responseBody as int) > 206) throw NetworkException();
-    }
-    return packagingModelList;
-  }
-
-  @override
   Future<List<PaymentOptions>?> fetchPaymentMethods(
       {required String cartId}) async {
     dynamic responseBody;

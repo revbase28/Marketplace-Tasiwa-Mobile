@@ -135,8 +135,10 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
   late int _quantity;
   late ProductDetailsModel _details;
   late int _countryId;
+  int? _stateId;
   late String? _selectedShippingOption;
   final List<_ProductCountry> _countries = [];
+  final List<_ProductCountry> _states = [];
   final List<ShippingOption> _shippingOptions = [];
   final List<Attribute> _selectedAttributes = [];
   Map<String, AttributeValue>? _allAttributes;
@@ -158,12 +160,21 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
     _details = widget.details;
     _countryId = _details.shippingCountryId ?? 0;
     _quantity = _details.data!.minOrderQuantity ?? 1;
+    _stateId = _details.shippingStateId;
 
     if (_details.countries != null) {
       for (var key in _details.countries!.keys) {
         _countries.add(_ProductCountry(
           id: key.toInt(),
           name: _details.countries![key]!,
+        ));
+      }
+    }
+    if (_details.states != null) {
+      for (var key in _details.states!.keys) {
+        _states.add(_ProductCountry(
+          id: key.toInt(),
+          name: _details.states![key]!,
         ));
       }
     }
@@ -685,24 +696,36 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const Divider(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Flexible(
-                    child: Text(
-                        "${_option?.name ?? "Unknown"} by ${_option?.carrierName ?? "Unknown"}",
-                        style: Theme.of(context).textTheme.subtitle2!.copyWith(
-                              fontWeight: FontWeight.bold,
-                            )).pOnly(right: 8),
-                  ),
-                  Text(_option?.cost ?? "0",
-                      style: Theme.of(context).textTheme.subtitle2!.copyWith(
+              _selectedShippingOption == null
+                  ? Text(
+                      "This seller does not deliver to your selected Country/Region. Change the shipping address or find other sellers who ship to your area.",
+                      style: Theme.of(context).textTheme.caption!.copyWith(
                             fontWeight: FontWeight.bold,
-                            color: getColorBasedOnTheme(
-                                context, kPriceColor, kDarkPriceColor),
-                          )),
-                ],
-              ),
+                          ))
+                  : Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Flexible(
+                          child: Text(
+                              "${_option?.name ?? "Unknown"} by ${_option?.carrierName ?? "Unknown"}",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .subtitle2!
+                                  .copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  )).pOnly(right: 8),
+                        ),
+                        Text(_option?.cost ?? "0",
+                            style: Theme.of(context)
+                                .textTheme
+                                .subtitle2!
+                                .copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: getColorBasedOnTheme(
+                                      context, kPriceColor, kDarkPriceColor),
+                                )),
+                      ],
+                    ),
               const SizedBox(height: 4),
               Text(
                 _option?.deliveryTakes ?? "",
@@ -713,22 +736,30 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
         ),
         title: GestureDetector(
           onTap: () async {
-            final _selectedCountry = await _selectShippingCountry();
-            if (_selectedCountry != null) {
+            final _selectedValues = await _selectShippingCountry();
+            if (_selectedValues?.first != null) {
               setState(() {
-                _countryId = _selectedCountry;
+                _countryId = _selectedValues!.first!;
+                _stateId = _selectedValues.last;
               });
               final _newShippingOptions = await context
                   .read(getProductDetailsModelProvider)
                   .getProductShippingOptions(
-                      countryId: _selectedCountry,
-                      listingId: _details.data!.id!);
+                    countryId: _selectedValues!.first!,
+                    listingId: _details.data!.id!,
+                    stateId: _selectedValues.last,
+                  );
               if (_newShippingOptions != null &&
                   _newShippingOptions.isNotEmpty) {
                 _shippingOptions.clear();
                 setState(() {
                   _shippingOptions.addAll(_newShippingOptions);
                   _selectedShippingOption = _shippingOptions.first.name!;
+                });
+              } else {
+                _shippingOptions.clear();
+                setState(() {
+                  _selectedShippingOption = null;
                 });
               }
             }
@@ -755,8 +786,8 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
     );
   }
 
-  Future<int?> _selectShippingCountry() async {
-    final _result = await showModalBottomSheet(
+  Future<List<int?>?> _selectShippingCountry() async {
+    final _coutntry = await showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
@@ -798,7 +829,7 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
       },
     );
 
-    return _result is int ? _result : null;
+    return _coutntry is int ? [_coutntry, null] : null;
   }
 
   void _selectShippingOption() async {

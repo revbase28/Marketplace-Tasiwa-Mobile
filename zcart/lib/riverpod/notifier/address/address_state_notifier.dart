@@ -154,25 +154,6 @@ class AddressNotifier extends StateNotifier<AddressState> {
   }
 }
 
-class PackagingNotifier extends StateNotifier<PackagingState> {
-  final IAddressRepository _iAddressRepository;
-
-  PackagingNotifier(this._iAddressRepository)
-      : super(const PackagingInitialState());
-
-  Future fetchPackagingInfo(shopSlug) async {
-    try {
-      state = const PackagingLoadingState();
-      final packagingList =
-          await _iAddressRepository.fetchPackagingInfo(shopSlug);
-
-      state = PackagingLoadedState(packagingList);
-    } on NetworkException {
-      state = PackagingErrorState(LocaleKeys.something_went_wrong.tr());
-    }
-  }
-}
-
 class ShippingNotifier extends StateNotifier<ShippingState> {
   final IAddressRepository _iAddressRepository;
 

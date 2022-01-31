@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zcart/data/interface/i_product_repository.dart';
+import 'package:zcart/data/models/address/packaging_model.dart';
 import 'package:zcart/data/models/product/product_variant_details_model.dart';
 import 'package:zcart/data/network/api.dart';
 import 'package:zcart/data/network/network_utils.dart';
@@ -44,6 +45,30 @@ final productDetailsFutureProvider =
   return _product;
 });
 
+final shopPackagingFutureProvider =
+    FutureProvider.family<List<PackagingModel>?, String>((ref, shopSlug) async {
+  @override
+  dynamic responseBody;
+  List<PackagingModel> packagingModelList;
+  try {
+    responseBody =
+        await handleResponse(await getRequest(API.packaging(shopSlug)));
+
+    packagingModelList = (responseBody as List<dynamic>)
+        .map((e) => PackagingModel.fromJson(e))
+        .toList();
+  } catch (e) {
+    return null;
+  }
+
+  if (responseBody.runtimeType == int) {
+    if ((responseBody as int) > 206) {
+      return null;
+    }
+  }
+  return packagingModelList;
+});
+
 final getProductDetailsModelProvider = Provider<GetProductDetailsModel>((ref) {
   return GetProductDetailsModel();
 });
@@ -83,8 +108,8 @@ class GetProductDetailsModel {
   }) async {
     dynamic _responseBody;
     var requestBody = {
-      'ship_to': countryId.toString(),
-      if (stateId != null) 'state_id': stateId
+      'ship_to_acountry_id': countryId.toString(),
+      'ship_to_state_id': stateId.toString()
     };
     List<ShippingOption> _shippingOptions;
     try {

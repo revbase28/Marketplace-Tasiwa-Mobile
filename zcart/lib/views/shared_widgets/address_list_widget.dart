@@ -135,9 +135,6 @@ class _AddressListBuilderState extends State<AddressListBuilder> {
                           )
                     : IconButton(
                         onPressed: () {
-                          context
-                              .read(countryNotifierProvider.notifier)
-                              .getCountries();
                           if (widget.addressesList![index].country?.id !=
                               null) {
                             debugPrint(widget.addressesList![index].country?.id

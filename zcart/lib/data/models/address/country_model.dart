@@ -6,7 +6,8 @@ class CountryModel {
   List<Countries>? data;
 
   factory CountryModel.fromJson(Map<String, dynamic> json) => CountryModel(
-        data: List<Countries>.from(json["data"].map((x) => Countries.fromJson(x))),
+        data: List<Countries>.from(
+            json["data"].map((x) => Countries.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {

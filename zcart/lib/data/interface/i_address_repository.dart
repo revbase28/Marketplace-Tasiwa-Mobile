@@ -47,7 +47,7 @@ abstract class IAddressRepository {
 
   Future<List<ShippingOption>?> fetchShippingOptions(id, countryId, stateId);
 
-  Future<List<PackagingModel>> fetchPackagingInfo(String? shopSlug);
+  // Future<List<PackagingModel>> fetchPackagingInfo(String? shopSlug);
 
   Future<List<PaymentOptions>?> fetchPaymentMethods({required String cartId});
 }

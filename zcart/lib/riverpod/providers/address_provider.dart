@@ -24,9 +24,9 @@ final statesNotifierProvider =
     StateNotifierProvider<StatesNotifier, StatesState>(
         (ref) => StatesNotifier(ref.watch(addressRepositoryProvider)));
 
-final packagingNotifierProvider =
-    StateNotifierProvider<PackagingNotifier, PackagingState>(
-        (ref) => PackagingNotifier(ref.watch(addressRepositoryProvider)));
+// final packagingNotifierProvider =
+//     StateNotifierProvider<PackagingNotifier, PackagingState>(
+//         (ref) => PackagingNotifier(ref.watch(addressRepositoryProvider)));
 
 final shippingNotifierProvider =
     StateNotifierProvider<ShippingNotifier, ShippingState>(
