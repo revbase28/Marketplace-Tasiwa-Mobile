@@ -12,7 +12,8 @@ class CartModel {
   List<CartItem>? data;
 
   factory CartModel.fromJson(Map<String, dynamic> json) => CartModel(
-        data: List<CartItem>.from(json["data"].map((x) => CartItem.fromJson(x))),
+        data:
+            List<CartItem>.from(json["data"].map((x) => CartItem.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -26,6 +27,8 @@ class CartItem {
     this.customerId,
     this.ipAddress,
     this.shipTo,
+    this.countryId,
+    this.stateId,
     this.shippingZoneId,
     this.shippingOptionId,
     this.shippingAddress,
@@ -50,6 +53,8 @@ class CartItem {
   dynamic customerId;
   String? ipAddress;
   dynamic shipTo;
+  int? countryId;
+  int? stateId;
   dynamic shippingZoneId;
   dynamic shippingOptionId;
   String? shippingAddress;
@@ -74,6 +79,8 @@ class CartItem {
         customerId: json["customer_id"],
         ipAddress: json["ip_address"],
         shipTo: json["ship_to"],
+        countryId: json["ship_to_country_id"],
+        stateId: json["ship_to_state_id"],
         shippingZoneId: json["shipping_zone_id"],
         shippingOptionId: json["shipping_option_id"],
         shippingAddress: json["shipping_address"],
@@ -99,6 +106,8 @@ class CartItem {
         "customer_id": customerId,
         "ip_address": ipAddress,
         "ship_to": shipTo,
+        "ship_to_country_id": countryId,
+        "ship_to_state_id": stateId,
         "shipping_zone_id": shippingZoneId,
         "shipping_option_id": shippingOptionId,
         "shipping_address": shippingAddress,

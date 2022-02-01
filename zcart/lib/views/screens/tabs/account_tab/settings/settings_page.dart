@@ -140,9 +140,9 @@ class _SettingsPageState extends State<SettingsPage> {
                             setState(() {
                               _isLoading = true;
                             });
-                            await context
-                                .read(addressNotifierProvider.notifier)
-                                .clearAddresses();
+                            // await context
+                            //     .read(addressNotifierProvider.notifier)
+                            //     .clearAddresses();
                             await FacebookAuth.instance.logOut();
                             await GoogleSignIn().signOut();
                             await context

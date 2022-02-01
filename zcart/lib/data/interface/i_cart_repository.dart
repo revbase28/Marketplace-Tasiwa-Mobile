@@ -8,15 +8,19 @@ abstract class ICartRepository {
     required String? slug,
     int? quantity = 1,
     int? shipTo,
+    int? countryId,
+    int? stateId,
     int? shippingOptionId,
     int? shippingZoneId,
   });
 
   Future updateCart({
-    required int? item,
+    required int item,
     int? listingID,
-    int? quantity = 1,
+    int? quantity,
+    int? shipTo,
     int? countryId,
+    int? stateId,
     int? shippingZoneId,
     int? shippingOptionId,
     int? packagingId,

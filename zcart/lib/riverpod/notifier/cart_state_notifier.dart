@@ -23,12 +23,14 @@ class CartNotifier extends StateNotifier<CartState> {
 
   Future<void> addToCart(
     BuildContext context,
-    String slug,
+    String slug, {
     int? quantity,
     int? shipTo,
+    int? countryId,
+    int? stateId,
     int? shippingOptionId,
     int? shippingZoneId,
-  ) async {
+  }) async {
     try {
       await _iCartRepository.addToCart(
         context,
@@ -37,6 +39,8 @@ class CartNotifier extends StateNotifier<CartState> {
         shipTo: shipTo,
         shippingOptionId: shippingOptionId,
         shippingZoneId: shippingZoneId,
+        countryId: countryId,
+        stateId: stateId,
       );
     } on NetworkException {
       state = CartErrorState(LocaleKeys.something_went_wrong.tr());
@@ -46,10 +50,12 @@ class CartNotifier extends StateNotifier<CartState> {
   }
 
   Future<void> updateCart(
-    int? item, {
+    int item, {
     int? listingID,
     int? quantity,
+    int? shipTo,
     int? countryId,
+    int? stateId,
     int? shippingZoneId,
     int? shippingOptionId,
     int? packagingId,
@@ -60,6 +66,8 @@ class CartNotifier extends StateNotifier<CartState> {
           listingID: listingID,
           quantity: quantity,
           countryId: countryId,
+          stateId: stateId,
+          shipTo: shipTo,
           shippingZoneId: shippingZoneId,
           shippingOptionId: shippingOptionId,
           packagingId: packagingId);
@@ -98,10 +106,12 @@ class CartItemDetailsNotifier extends StateNotifier<CartItemDetailsState> {
   }
 
   Future<void> updateCart(
-    int? item, {
+    int item, {
     int? listingID,
     int? quantity,
+    int? shipTo,
     int? countryId,
+    int? stateId,
     int? shippingZoneId,
     int? shippingOptionId,
     int? packagingId,
@@ -112,6 +122,8 @@ class CartItemDetailsNotifier extends StateNotifier<CartItemDetailsState> {
           listingID: listingID,
           quantity: quantity,
           countryId: countryId,
+          shipTo: shipTo,
+          stateId: stateId,
           shippingZoneId: shippingZoneId,
           shippingOptionId: shippingOptionId,
           packagingId: packagingId);

@@ -148,7 +148,8 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
                               ? null
                               : statesState.statesList![0].id;
                         }
-                        return statesState is StatesLoadedState
+                        return statesState is StatesLoadedState &&
+                                statesState.statesList!.isNotEmpty
                             ? CustomDropDownField(
                                 title: LocaleKeys.states.tr(),
                                 optionsList: statesState.statesList!.isEmpty
@@ -162,7 +163,9 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
                                 isCallback: true,
                                 callbackFunction: (int stateId) {
                                   selectedStateID =
-                                      statesState.statesList![stateId].id;
+                                      statesState.statesList!.isEmpty
+                                          ? null
+                                          : statesState.statesList![stateId].id;
                                 },
                                 validator: (text) {
                                   if (text == null || text.isEmpty) {
@@ -229,13 +232,13 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         ElevatedButton(
-                            onPressed: () {
+                            onPressed: () async {
                               if (_formKey.currentState!.validate()) {
                                 toast(
                                   LocaleKeys.please_wait.tr(),
                                 );
-                                context
-                                    .read(addressNotifierProvider.notifier)
+                                await context
+                                    .read(addressProvider)
                                     .createAddress(
                                       addressType: addressTypeController
                                                   .text.isEmpty ||
@@ -253,6 +256,7 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
                                       addressLine2: addressLine2Controller.text,
                                       zipCode: zipCodeController.text,
                                     );
+                                await context.refresh(getAddressFutureProvider);
                                 context.pop();
                               }
                             },

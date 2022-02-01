@@ -420,7 +420,7 @@ class ActionCard extends StatelessWidget {
                   )
                 ],
               ).onInkTap(() {
-                context.read(addressNotifierProvider.notifier).fetchAddress();
+                // context.read(addressNotifierProvider.notifier).fetchAddress();
                 context.nextPage(const AddressList());
               }),
             ),

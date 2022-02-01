@@ -20,44 +20,13 @@ class CartRepository implements ICartRepository {
   }
 
   @override
-  Future addToCart(
-    BuildContext context, {
-    String? slug,
-    int? quantity = 1,
-    int? shipTo,
-    int? shippingOptionId,
-    int? shippingZoneId,
-  }) async {
-    var requestBody = {
-      'quantity': quantity.toString(),
-      if (shipTo != null) 'ship_to': shipTo.toString(),
-      if (shippingOptionId != null)
-        'shipping_option_id': shippingOptionId.toString(),
-      if (shippingZoneId != null) 'shipping_zone_id': shippingZoneId.toString()
-    };
-    dynamic responseBody;
-    try {
-      responseBody = await handleResponse(await postRequest(
-          API.addToCart(slug), requestBody,
-          bearerToken: false));
-
-      if (responseBody.runtimeType != int) {
-        addToCartBottomSheet(context, responseBody);
-      }
-    } catch (e) {
-      throw NetworkException();
-    }
-    if (responseBody.runtimeType == int && responseBody > 206) {
-      throw NetworkException();
-    }
-  }
-
-  @override
   Future updateCart({
     int? item,
     int? listingID,
     int? quantity = 1,
+    int? shipTo,
     int? countryId,
+    int? stateId,
     int? shippingZoneId,
     int? shippingOptionId,
     int? packagingId,
@@ -65,7 +34,9 @@ class CartRepository implements ICartRepository {
     var requestBody = {
       if (listingID != null) 'item': listingID.toString(),
       if (quantity != null) 'quantity': quantity.toString(),
-      if (countryId != null) 'ship_to': countryId.toString(),
+      if (shipTo != null) 'ship_to': shipTo.toString(),
+      if (countryId != null) 'ship_to_country_id': countryId.toString(),
+      if (stateId != null) 'ship_to_state_id': stateId.toString(),
       if (shippingZoneId != null) 'shipping_zone_id': shippingZoneId.toString(),
       if (shippingOptionId != null)
         'shipping_option_id': shippingOptionId.toString(),
@@ -119,5 +90,42 @@ class CartRepository implements ICartRepository {
     CartItemDetailsModel cartItemDetailsModel =
         CartItemDetailsModel.fromJson(responseBody);
     return cartItemDetailsModel;
+  }
+
+  @override
+  Future addToCart(
+    BuildContext context, {
+    required String? slug,
+    int? quantity = 1,
+    int? shipTo,
+    int? countryId,
+    int? stateId,
+    int? shippingOptionId,
+    int? shippingZoneId,
+  }) async {
+    var requestBody = {
+      'quantity': quantity.toString(),
+      if (shipTo != null) 'ship_to': shipTo.toString(),
+      if (countryId != null) 'ship_to_country_id': countryId.toString(),
+      if (stateId != null) 'ship_to_state_id': stateId.toString(),
+      if (shippingOptionId != null)
+        'shipping_option_id': shippingOptionId.toString(),
+      if (shippingZoneId != null) 'shipping_zone_id': shippingZoneId.toString()
+    };
+    dynamic responseBody;
+    try {
+      responseBody = await handleResponse(await postRequest(
+          API.addToCart(slug), requestBody,
+          bearerToken: false));
+
+      if (responseBody.runtimeType != int) {
+        addToCartBottomSheet(context, responseBody);
+      }
+    } catch (e) {
+      throw NetworkException();
+    }
+    if (responseBody.runtimeType == int && responseBody > 206) {
+      throw NetworkException();
+    }
   }
 }

@@ -34,6 +34,7 @@ class SignUpScreen extends StatelessWidget {
             context.read(wishListNotifierProvider.notifier).getWishList();
             context.refresh(walletBalanceProvider);
             context.refresh(walletTransactionFutureProvider);
+            context.refresh(getAddressFutureProvider);
             context
                 .nextAndRemoveUntilPage(const BottomNavBar(selectedIndex: 0));
           }

@@ -62,6 +62,7 @@ class _LoginScreenState extends State<LoginScreen> {
           context.read(couponsProvider.notifier).coupons();
           context.refresh(walletBalanceProvider);
           context.refresh(walletTransactionFutureProvider);
+          context.refresh(getAddressFutureProvider);
 
           context.nextAndRemoveUntilPage(const BottomNavBar(selectedIndex: 0));
         }

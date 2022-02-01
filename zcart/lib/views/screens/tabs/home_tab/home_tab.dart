@@ -60,6 +60,9 @@ class HomeTab extends ConsumerWidget {
           ),
           body: SingleChildScrollView(
             controller: scrollControllerProvider.controller,
+            physics: const AlwaysScrollableScrollPhysics(
+              parent: ClampingScrollPhysics(),
+            ),
             child: Column(
               children: [
                 /// Slider

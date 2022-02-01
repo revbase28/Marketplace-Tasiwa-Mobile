@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zcart/data/interface/i_product_repository.dart';
 import 'package:zcart/data/models/address/packaging_model.dart';
+import 'package:zcart/data/models/address/states_model.dart';
 import 'package:zcart/data/models/product/product_variant_details_model.dart';
 import 'package:zcart/data/network/api.dart';
 import 'package:zcart/data/network/network_utils.dart';
@@ -69,6 +70,28 @@ final shopPackagingFutureProvider =
   return packagingModelList;
 });
 
+final cartShippingOptionsFutureProvider =
+    FutureProvider.family<List<ShippingOption>?, String>((ref, url) async {
+  @override
+  dynamic _responseBody;
+
+  List<ShippingOption> _shippingOptions;
+  try {
+    _responseBody = await handleResponse(await getRequest(url));
+    _shippingOptions = List<ShippingOption>.from(
+        _responseBody["data"].map((x) => ShippingOption.fromJson(x)));
+  } catch (e) {
+    return null;
+  }
+  if (_responseBody.runtimeType == int) {
+    if (_responseBody > 206) {
+      return null;
+    }
+  }
+
+  return _shippingOptions;
+});
+
 final getProductDetailsModelProvider = Provider<GetProductDetailsModel>((ref) {
   return GetProductDetailsModel();
 });
@@ -108,8 +131,8 @@ class GetProductDetailsModel {
   }) async {
     dynamic _responseBody;
     var requestBody = {
-      'ship_to_acountry_id': countryId.toString(),
-      'ship_to_state_id': stateId.toString()
+      'country_id': countryId.toString(),
+      'state_id': stateId.toString()
     };
     List<ShippingOption> _shippingOptions;
     try {
@@ -128,5 +151,21 @@ class GetProductDetailsModel {
     }
 
     return _shippingOptions;
+  }
+
+  Future<List<States>?> getStatesFromSelectedCountry(int countryID) async {
+    dynamic responseBody;
+    StatesModel statesModel;
+    try {
+      responseBody = await handleResponse(
+          await getRequest(API.states(countryID), bearerToken: true));
+      statesModel = StatesModel.fromJson(responseBody);
+    } catch (e) {
+      return null;
+    }
+    if (responseBody.runtimeType == int && responseBody > 206) {
+      return null;
+    }
+    return statesModel.data;
   }
 }

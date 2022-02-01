@@ -84,12 +84,9 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
                     _isLoading = true;
                   });
                   await context
-                      .read(addressRepositoryProvider)
+                      .read(addressProvider)
                       .deleteAddress(widget.address.id);
-
-                  await context
-                      .read(addressNotifierProvider.notifier)
-                      .fetchAddress();
+                  await context.refresh(getAddressFutureProvider);
                   setState(() {
                     _isLoading = false;
                   });
@@ -207,7 +204,8 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
                                         ? null
                                         : statesState.statesList![0].id;
                               }
-                              return statesState is StatesLoadedState
+                              return statesState is StatesLoadedState &&
+                                      statesState.statesList!.isNotEmpty
                                   ? CustomDropDownField(
                                       title: LocaleKeys.states.tr(),
                                       optionsList:
@@ -309,14 +307,13 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               ElevatedButton(
-                                  onPressed: () {
+                                  onPressed: () async {
                                     if (_formKey.currentState!.validate()) {
                                       toast(
                                         LocaleKeys.please_wait.tr(),
                                       );
-                                      context
-                                          .read(
-                                              addressNotifierProvider.notifier)
+                                      await context
+                                          .read(addressProvider)
                                           .editAddress(
                                             addressId: widget.address.id,
                                             addressType:
@@ -329,12 +326,8 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
                                                 ? widget.address.country!.id
                                                     .toString()
                                                 : selectedCountryID.toString(),
-                                            stateId: selectedStateID == null
-                                                ? widget.address.state == null
-                                                    ? null
-                                                    : widget.address.state!.id
-                                                        .toString()
-                                                : selectedStateID.toString(),
+                                            stateId:
+                                                selectedStateID?.toString(),
                                             cityId: _cityController.text,
                                             addressLine1:
                                                 _addressLine1Controller.text,
@@ -342,9 +335,8 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
                                                 _addressLine2Controller.text,
                                             zipCode: _zipCodeController.text,
                                           );
-                                      context
-                                          .read(addressRepositoryProvider)
-                                          .fetchAddresses();
+                                      await context
+                                          .refresh(getAddressFutureProvider);
                                       context.pop();
                                     }
                                   },

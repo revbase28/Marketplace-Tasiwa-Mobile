@@ -1,23 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:velocity_x/velocity_x.dart';
+import 'package:zcart/Theme/styles/colors.dart';
 import 'package:zcart/data/models/address/address_model.dart';
 import 'package:zcart/data/models/cart/cart_item_details_model.dart';
 import 'package:zcart/data/network/network_utils.dart';
 import 'package:zcart/helper/get_color_based_on_theme.dart';
 import 'package:zcart/riverpod/providers/provider.dart';
 import 'package:zcart/views/screens/tabs/account_tab/account/edit_address_screen.dart';
-import 'package:zcart/Theme/styles/colors.dart';
-
-import 'package:velocity_x/velocity_x.dart';
 
 class AddressListBuilder extends StatefulWidget {
   final List<Addresses>? addressesList;
   final CartItemDetails? cartItem;
   final Function(int)? onPressedCheckBox;
-
-  const AddressListBuilder(
-      {this.addressesList, this.cartItem, this.onPressedCheckBox, Key? key})
-      : super(key: key);
+  const AddressListBuilder({
+    Key? key,
+    this.addressesList,
+    this.cartItem,
+    this.onPressedCheckBox,
+  }) : super(key: key);
 
   @override
   _AddressListBuilderState createState() => _AddressListBuilderState();
@@ -48,7 +49,7 @@ class _AddressListBuilderState extends State<AddressListBuilder> {
                       widget.onPressedCheckBox!(index);
                       context
                           .read(cartItemDetailsNotifierProvider.notifier)
-                          .updateCart(widget.cartItem!.id,
+                          .updateCart(widget.cartItem!.id!,
                               countryId:
                                   widget.addressesList![index].country!.id);
 
@@ -59,7 +60,7 @@ class _AddressListBuilderState extends State<AddressListBuilder> {
                       context
                           .read(cartItemDetailsNotifierProvider.notifier)
                           .updateCart(
-                            widget.cartItem!.id,
+                            widget.cartItem!.id!,
                             countryId: widget.addressesList![index].countryId,
                           );
 

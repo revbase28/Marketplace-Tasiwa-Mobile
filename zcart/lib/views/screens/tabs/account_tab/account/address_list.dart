@@ -3,18 +3,18 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:zcart/riverpod/providers/provider.dart';
-import 'package:zcart/riverpod/state/state.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:zcart/views/shared_widgets/address_list_widget.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:zcart/views/shared_widgets/loading_widget.dart';
 import 'add_address_screen.dart';
 
-class AddressList extends StatelessWidget {
+class AddressList extends ConsumerWidget {
   const AddressList({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, watch) {
+    final _addressProvider = watch(getAddressFutureProvider);
     return Scaffold(
       appBar: AppBar(
         systemOverlayStyle: SystemUiOverlayStyle.light,
@@ -30,30 +30,19 @@ class AddressList extends StatelessWidget {
         ],
       ),
       resizeToAvoidBottomInset: true,
-      body: Consumer(
-        builder: (context, watch, _) {
-          final addressState = watch(addressNotifierProvider);
-          final cartItemDetailsState = watch(cartItemDetailsNotifierProvider);
-
-          return addressState is AddressLoadedState
-              ? addressState.addresses == null
-                  ? Center(
-                      child: Text(LocaleKeys.no_item_found.tr()),
-                    )
-                  : addressState.addresses!.isEmpty
-                      ? Center(
-                          child: Text(LocaleKeys.no_item_found.tr()),
-                        )
-                      : cartItemDetailsState is CartItemDetailsLoadedState
-                          ? AddressListBuilder(
-                              addressesList: addressState.addresses)
-                          : AddressListBuilder(
-                              addressesList: addressState.addresses)
-              : addressState is AddressLoadingState
-                  ? const LoadingWidget().py(100)
-                  : const SizedBox();
+      body: _addressProvider.when(
+        data: (value) {
+          if (value == null || value.isEmpty) {
+            return Center(
+              child: Text(LocaleKeys.no_item_found.tr()),
+            );
+          } else {
+            return AddressListBuilder(addressesList: value);
+          }
         },
-      ).p(10),
+        loading: () => const Center(child: LoadingWidget()),
+        error: (error, stackTrace) => const SizedBox(),
+      ),
     );
   }
 }

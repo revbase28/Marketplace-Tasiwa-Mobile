@@ -7,8 +7,12 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:zcart/Theme/styles/colors.dart';
+import 'package:zcart/data/models/address/country_model.dart';
 import 'package:zcart/data/models/address/packaging_model.dart';
+import 'package:zcart/data/models/address/states_model.dart';
 import 'package:zcart/data/models/cart/cart_model.dart';
+import 'package:zcart/data/models/product/product_details_model.dart';
+import 'package:zcart/data/network/api.dart';
 import 'package:zcart/data/network/network_utils.dart';
 import 'package:zcart/helper/get_color_based_on_theme.dart';
 import 'package:zcart/riverpod/providers/plugin_provider.dart';
@@ -19,7 +23,6 @@ import 'package:zcart/views/screens/bottom_nav_bar/bottom_nav_bar.dart';
 import 'package:zcart/views/screens/product_details/product_details_screen.dart';
 import 'package:zcart/views/screens/product_list/recently_viewed.dart';
 import 'package:zcart/views/screens/tabs/home_tab/components/error_widget.dart';
-import 'package:zcart/views/screens/tabs/myCart_tab/checkout/checkout_screen.dart';
 import 'package:zcart/views/screens/tabs/vendors_tab/vendors_details.dart';
 import 'package:zcart/views/shared_widgets/custom_confirm_dialog.dart';
 import 'package:zcart/views/shared_widgets/product_details_card.dart';
@@ -172,204 +175,257 @@ class CartItemCard extends ConsumerWidget {
   Widget build(BuildContext context, watch) {
     final _countryState = watch(countryNotifierProvider);
 
+    Future<int?> _getCountry(List<Countries> coutries) async {
+      final _result = await showModalBottomSheet(
+        context: context,
+        backgroundColor: Colors.transparent,
+        isScrollControlled: true,
+        builder: (context) {
+          return SizedBox(
+            height: context.screenHeight * 0.7,
+            child: ProductPageDefaultContainer(
+              isFullPadding: true,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(
+                    "Select Shipping Country",
+                    style: Theme.of(context)
+                        .textTheme
+                        .headline6!
+                        .copyWith(fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 10),
+                  Expanded(
+                    child: ListView(
+                      children: coutries.map(
+                        (e) {
+                          return ListTile(
+                            onTap: () {
+                              Navigator.pop(context, e.id);
+                            },
+                            title: Text(
+                              e.name ?? "Unknown",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .subtitle2!
+                                  .copyWith(fontWeight: FontWeight.bold),
+                            ),
+                            trailing: e.id! == cartItem.countryId
+                                ? const Icon(Icons.check_circle)
+                                : const Icon(Icons.circle_outlined),
+                          );
+                        },
+                      ).toList(),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      );
+
+      return _result;
+    }
+
+    Future<int?> _selectShippingState(List<States> states) async {
+      final int? _state = await showModalBottomSheet(
+        context: context,
+        backgroundColor: Colors.transparent,
+        isScrollControlled: true,
+        enableDrag: false,
+        isDismissible: false,
+        builder: (context) {
+          return SizedBox(
+            height: context.screenHeight * 0.7,
+            child: ProductPageDefaultContainer(
+              isFullPadding: true,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(
+                    "Select State",
+                    style: Theme.of(context)
+                        .textTheme
+                        .headline6!
+                        .copyWith(fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 10),
+                  Expanded(
+                    child: ListView(
+                      children: states.map(
+                        (e) {
+                          return ListTile(
+                            onTap: () {
+                              Navigator.pop(context, e.id);
+                            },
+                            title: Text(
+                              e.name ?? "Unknown",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .subtitle2!
+                                  .copyWith(fontWeight: FontWeight.bold),
+                            ),
+                            trailing: e.id == cartItem.stateId
+                                ? const Icon(Icons.check_circle)
+                                : const Icon(Icons.circle_outlined),
+                          );
+                        },
+                      ).toList(),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      );
+
+      return _state;
+    }
+
     return Container(
       decoration: BoxDecoration(
           color: getColorBasedOnTheme(context, kLightColor, kDarkCardBgColor),
-          borderRadius: BorderRadius.circular(10)),
-      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      padding: const EdgeInsets.all(12),
+          borderRadius: BorderRadius.circular(10),
+          boxShadow: [
+            BoxShadow(
+              color:
+                  getColorBasedOnTheme(context, Colors.black12, Colors.black54),
+              blurRadius: 10,
+              offset: const Offset(0, 0),
+              spreadRadius: 2,
+            ),
+          ]),
+      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              GestureDetector(
-                onTap: () {
-                  context
-                      .read(vendorDetailsNotifierProvider.notifier)
-                      .getVendorDetails(cartItem.shop!.slug!);
-                  context
-                      .read(vendorItemsNotifierProvider.notifier)
-                      .getVendorItems(cartItem.shop!.slug!);
-                  context.nextPage(const VendorsDetailsScreen());
-                },
-                child: Row(
-                  children: [
-                    const Icon(Icons.store_outlined),
-                    const SizedBox(width: 4),
-                    Text(cartItem.shop!.name!,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: context.textTheme.headline6!.copyWith(
-                          color: getColorBasedOnTheme(
-                              context, kDarkColor, kLightColor),
-                          fontWeight: FontWeight.bold,
-                        )),
-                  ],
-                ),
-              ).pOnly(right: 4),
-              _countryState is CountryLoadedState &&
-                      _countryState.countryList != null &&
-                      _countryState.countryList!.isNotEmpty
-                  ? GestureDetector(
-                      onTap: () {
-                        showModalBottomSheet(
-                          context: context,
-                          backgroundColor: Colors.transparent,
-                          isScrollControlled: true,
-                          builder: (context) {
-                            return SizedBox(
-                              height: context.screenHeight * 0.7,
-                              child: ProductPageDefaultContainer(
-                                isFullPadding: true,
-                                child: Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.stretch,
-                                  children: [
-                                    Text(
-                                      "Select Shipping Country",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headline6!
-                                          .copyWith(
-                                              fontWeight: FontWeight.bold),
-                                    ),
-                                    const SizedBox(height: 10),
-                                    Expanded(
-                                      child: ListView(
-                                        children: _countryState.countryList!
-                                            .map(
-                                              (e) => RadioListTile<int>(
-                                                  value: e.id!,
-                                                  groupValue: cartItem.shipTo,
-                                                  title: Text(e.name!),
-                                                  onChanged: (value) async {
-                                                    Navigator.of(context).pop();
-                                                    context
-                                                        .read(
-                                                            cartNotifierProvider
-                                                                .notifier)
-                                                        .updateCart(cartItem.id,
-                                                            countryId: e.id);
-                                                  }),
-                                            )
-                                            .toList(),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          },
-                        );
-                      },
-                      child: Row(
-                        children: [
-                          Text(
-                            _countryState.countryList!.any(
-                                    (element) => element.id == cartItem.shipTo)
-                                ? _countryState.countryList!
-                                    .firstWhere((e) => e.id == cartItem.shipTo)
-                                    .name!
-                                : "Unknown",
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: context.textTheme.headline6!.copyWith(
-                              color: getColorBasedOnTheme(
-                                  context, kDarkColor, kLightColor),
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(width: 4),
-                          const Icon(Icons.location_on),
-                        ],
-                      ),
-                    ).pOnly(left: 4)
-                  : const SizedBox(),
-            ],
-          ),
-          const Divider(height: 16),
-          const SizedBox(height: 8),
-          Column(
-            children: cartItem.items!.map((e) {
-              return Column(
-                children: [
-                  ItemCard(cartID: cartItem.id, cartItem: e).onInkTap(() {
+          const SizedBox(height: 10),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                GestureDetector(
+                  onTap: () {
                     context
-                        .nextPage(ProductDetailsScreen(productSlug: e.slug!));
-                  }),
-                  const Divider(
-                    height: 40,
-                  ).visible(cartItem.items!.length != 1).visible(
-                      cartItem.items!.indexOf(e) != cartItem.items!.length - 1),
-                ],
-              );
-            }).toList(),
-          ).pOnly(bottom: 10),
-          Container(
-            decoration: BoxDecoration(),
-            child: CartOtherDetails(cartItem: cartItem),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    LocaleKeys.grand_total.tr(),
-                    style: context.textTheme.subtitle2!
-                        .copyWith(fontWeight: FontWeight.bold),
+                        .read(vendorDetailsNotifierProvider.notifier)
+                        .getVendorDetails(cartItem.shop!.slug!);
+                    context
+                        .read(vendorItemsNotifierProvider.notifier)
+                        .getVendorItems(cartItem.shop!.slug!);
+                    context.nextPage(const VendorsDetailsScreen());
+                  },
+                  child: Row(
+                    children: [
+                      const Icon(Icons.store_outlined),
+                      const SizedBox(width: 4),
+                      Text(cartItem.shop!.name!,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: context.textTheme.headline6!.copyWith(
+                            color: getColorBasedOnTheme(
+                                context, kDarkColor, kLightColor),
+                            fontWeight: FontWeight.bold,
+                          )),
+                    ],
                   ),
-                  Text(cartItem.grandTotal!,
-                      style: context.textTheme.bodyText2!.copyWith(
-                          color: getColorBasedOnTheme(
-                              context, kPriceColor, kDarkPriceColor),
-                          fontWeight: FontWeight.bold)),
-                ],
-              ),
-              Consumer(
-                builder: (context, watch, child) {
-                  final userState = watch(userNotifierProvider);
+                ).pOnly(right: 4),
+                _countryState is CountryLoadedState &&
+                        _countryState.countryList != null &&
+                        _countryState.countryList!.isNotEmpty
+                    ? GestureDetector(
+                        onTap: () async {
+                          final int? _selectedCountry =
+                              await _getCountry(_countryState.countryList!);
 
-                  return ElevatedButton(
-                      onPressed: () async {
-                        String? _customerEmail;
+                          if (_selectedCountry != null) {
+                            final _getStatesForCurrentCountry = await context
+                                .read(getProductDetailsModelProvider)
+                                .getStatesFromSelectedCountry(_selectedCountry);
 
-                        if (accessAllowed) {
-                          context
-                              .read(addressNotifierProvider.notifier)
-                              .fetchAddress();
-                          if (userState is UserLoadedState) {
-                            _customerEmail = userState.user!.email!;
+                            int? _selectedStateId;
+
+                            if (_getStatesForCurrentCountry != null &&
+                                _getStatesForCurrentCountry.isNotEmpty) {
+                              _selectedStateId = await _selectShippingState(
+                                  _getStatesForCurrentCountry);
+                            }
+
+                            await context
+                                .read(cartNotifierProvider.notifier)
+                                .updateCart(
+                                  cartItem.id!,
+                                  countryId: _selectedCountry,
+                                  stateId: _selectedStateId,
+                                );
                           }
-                        }
-
-                        // context
-                        //     .read(packagingNotifierProvider.notifier)
-                        //     .fetchPackagingInfo(cartItem.shop!.slug);
-                        context
-                            .read(paymentOptionsNotifierProvider.notifier)
-                            .fetchPaymentMethod(
-                                cartId: cartItem.id!.toString());
-                        context
-                            .read(cartItemDetailsNotifierProvider.notifier)
-                            .getCartItemDetails(cartItem.id);
-                        context
-                            .read(shippingNotifierProvider.notifier)
-                            .fetchShippingInfo(
-                                shopId: cartItem.shop!.id.toString(),
-                                zoneId: cartItem.shippingZoneId.toString());
-
-                        // context.nextPage(
-                        //     CheckoutScreen(customerEmail: customerEmail));
-                      },
-                      child: Text(LocaleKeys.checkout.tr()));
-                },
-              )
-            ],
-          )
+                        },
+                        child: Row(
+                          children: [
+                            Text(
+                              _countryState.countryList!.any((element) =>
+                                      element.id == cartItem.countryId)
+                                  ? _countryState.countryList!
+                                      .firstWhere(
+                                          (e) => e.id == cartItem.countryId)
+                                      .name!
+                                  : "Unknown",
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: context.textTheme.headline6!.copyWith(
+                                color: getColorBasedOnTheme(
+                                    context, kDarkColor, kLightColor),
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(width: 4),
+                            const Icon(Icons.location_on),
+                          ],
+                        ),
+                      ).pOnly(left: 4)
+                    : const SizedBox(),
+              ],
+            ),
+          ),
+          const SizedBox(height: 10),
+          const Divider(height: 0),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+            child: Column(
+              children: cartItem.items!.map((e) {
+                return Column(
+                  children: [
+                    ItemCard(cartID: cartItem.id!, item: e).onInkTap(() {
+                      context
+                          .nextPage(ProductDetailsScreen(productSlug: e.slug!));
+                    }),
+                    const Divider(
+                      height: 32,
+                    ).visible(cartItem.items!.length != 1).visible(
+                        cartItem.items!.indexOf(e) !=
+                            cartItem.items!.length - 1),
+                  ],
+                );
+              }).toList(),
+            ),
+          ),
+          Container(
+            decoration: BoxDecoration(
+              color: getColorBasedOnTheme(context, kLightBgColor, kDarkBgColor),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                PackagingDetails(cartItem: cartItem),
+                const Divider(height: 0),
+                ShippingDetails(cartItem: cartItem),
+              ],
+            ),
+          ),
         ],
       ),
     );
@@ -379,12 +435,12 @@ class CartItemCard extends ConsumerWidget {
 class ItemCard extends StatefulWidget {
   const ItemCard({
     Key? key,
-    this.cartID,
-    required this.cartItem,
+    required this.cartID,
+    required this.item,
   }) : super(key: key);
 
-  final int? cartID;
-  final Item cartItem;
+  final int cartID;
+  final Item item;
 
   @override
   _ItemCardState createState() => _ItemCardState();
@@ -403,7 +459,7 @@ class _ItemCardState extends State<ItemCard> {
           ClipRRect(
             borderRadius: BorderRadius.circular(10),
             child: CachedNetworkImage(
-              imageUrl: widget.cartItem.image!,
+              imageUrl: widget.item.image!,
               width: 80,
               fit: BoxFit.cover,
               errorWidget: (context, url, error) => const SizedBox(),
@@ -418,7 +474,7 @@ class _ItemCardState extends State<ItemCard> {
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(widget.cartItem.description!,
+                Text(widget.item.description!,
                         maxLines: 3,
                         softWrap: true,
                         overflow: TextOverflow.ellipsis,
@@ -426,7 +482,7 @@ class _ItemCardState extends State<ItemCard> {
                     .pOnly(right: 10),
                 const SizedBox(height: 4),
                 Text(
-                  widget.cartItem.total!,
+                  widget.item.total!,
                   style: context.textTheme.bodyText2!.copyWith(
                       color: getColorBasedOnTheme(
                           context, kPriceColor, kDarkPriceColor),
@@ -443,6 +499,8 @@ class _ItemCardState extends State<ItemCard> {
                 ProductDetailsPageIconButton(
                     isNoWidth: true,
                     isNoHeight: true,
+                    backgroundColor: getColorBasedOnTheme(
+                        context, kLightColor, kDarkBgColor),
                     icon: Icon(
                       Icons.add,
                       color: getColorBasedOnTheme(
@@ -451,18 +509,17 @@ class _ItemCardState extends State<ItemCard> {
                     onPressed: () {
                       toast(LocaleKeys.please_wait.tr());
                       setState(() {
-                        widget.cartItem.quantity =
-                            widget.cartItem.quantity! + 1;
+                        widget.item.quantity = widget.item.quantity! + 1;
                       });
                       context.read(cartNotifierProvider.notifier).updateCart(
                             widget.cartID,
-                            listingID: widget.cartItem.id,
-                            quantity: widget.cartItem.quantity,
+                            listingID: widget.item.id,
+                            quantity: widget.item.quantity,
                           );
                     }),
                 const SizedBox(height: 8),
                 Text(
-                  widget.cartItem.quantity.toString(),
+                  widget.item.quantity.toString(),
                   style: context.textTheme.headline6!.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
@@ -471,12 +528,14 @@ class _ItemCardState extends State<ItemCard> {
                 ProductDetailsPageIconButton(
                   isNoWidth: true,
                   isNoHeight: true,
+                  backgroundColor:
+                      getColorBasedOnTheme(context, kLightColor, kDarkBgColor),
                   icon: Icon(
                     Icons.remove,
                     color:
                         getColorBasedOnTheme(context, kDarkColor, kLightColor),
                   ),
-                  onPressed: widget.cartItem.quantity == 1
+                  onPressed: widget.item.quantity == 1
                       ? () {
                           showCustomConfirmDialog(
                             context,
@@ -488,7 +547,7 @@ class _ItemCardState extends State<ItemCard> {
                                   .read(cartNotifierProvider.notifier)
                                   .removeFromCart(
                                     widget.cartID,
-                                    widget.cartItem.id,
+                                    widget.item.id,
                                   );
                             },
                           );
@@ -496,14 +555,13 @@ class _ItemCardState extends State<ItemCard> {
                       : () {
                           toast(LocaleKeys.please_wait.tr());
                           setState(() {
-                            widget.cartItem.quantity =
-                                widget.cartItem.quantity! - 1;
+                            widget.item.quantity = widget.item.quantity! - 1;
                           });
                           context
                               .read(cartNotifierProvider.notifier)
                               .updateCart(widget.cartID,
-                                  listingID: widget.cartItem.id,
-                                  quantity: widget.cartItem.quantity);
+                                  listingID: widget.item.id,
+                                  quantity: widget.item.quantity);
                         },
                 ),
               ],
@@ -520,7 +578,7 @@ class _ItemCardState extends State<ItemCard> {
             toast(LocaleKeys.please_wait.tr());
             context.read(cartNotifierProvider.notifier).removeFromCart(
                   widget.cartID,
-                  widget.cartItem.id,
+                  widget.item.id,
                 );
           },
         ),
@@ -529,9 +587,9 @@ class _ItemCardState extends State<ItemCard> {
   }
 }
 
-class CartOtherDetails extends ConsumerWidget {
+class PackagingDetails extends ConsumerWidget {
   final CartItem cartItem;
-  const CartOtherDetails({
+  const PackagingDetails({
     Key? key,
     required this.cartItem,
   }) : super(key: key);
@@ -540,20 +598,190 @@ class CartOtherDetails extends ConsumerWidget {
   Widget build(BuildContext context, watch) {
     final _shopPackage =
         watch(shopPackagingFutureProvider(cartItem.shop!.slug!));
-    return Column(
-      children: [
-        _shopPackage.when(
-          data: (value) {
-            if (value == null || value.isEmpty) {
-              return const SizedBox();
-            } else {
-              PackagingModel? packagingModel;
-              if (value.any((element) => element.id == cartItem.packagingId)) {
-                packagingModel = value.firstWhere(
-                  (element) => element.id == cartItem.packagingId,
-                );
-              }
-              return ListTile(
+    // final _shippingOptions = watch(cartShippingOptionsFutureProvider(
+    //     [cartItem.id!, cartItem.countryId, cartItem.stateId]));
+
+    return _shopPackage.when(
+      data: (value) {
+        if (value == null || value.isEmpty) {
+          return const SizedBox();
+        } else {
+          PackagingModel? packagingModel;
+          if (value.any((element) => element.id == cartItem.packagingId)) {
+            packagingModel = value.firstWhere(
+              (element) => element.id == cartItem.packagingId,
+            );
+          }
+          return ListTile(
+            onTap: () {
+              showModalBottomSheet(
+                context: context,
+                backgroundColor: Colors.transparent,
+                isScrollControlled: true,
+                builder: (context) {
+                  return SizedBox(
+                    height: context.screenHeight * 0.7,
+                    child: ProductPageDefaultContainer(
+                      isFullPadding: true,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Text(
+                            "Select Packaging",
+                            style: Theme.of(context)
+                                .textTheme
+                                .headline6!
+                                .copyWith(fontWeight: FontWeight.bold),
+                          ),
+                          const SizedBox(height: 10),
+                          Expanded(
+                            child: ListView(
+                              children: value
+                                  .map(
+                                    (e) => RadioListTile<int?>(
+                                        value: e.id,
+                                        groupValue: packagingModel?.id,
+                                        title: Text(
+                                          e.name ?? "Unknown",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .subtitle2!
+                                              .copyWith(
+                                                  fontWeight: FontWeight.bold),
+                                        ),
+                                        secondary: Text(
+                                          e.cost ?? "0",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyText2!
+                                              .copyWith(
+                                                color: getColorBasedOnTheme(
+                                                    context,
+                                                    kPriceColor,
+                                                    kDarkPriceColor),
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                        ),
+                                        onChanged: (value) async {
+                                          Navigator.of(context).pop();
+                                          context
+                                              .read(
+                                                  cartNotifierProvider.notifier)
+                                              .updateCart(cartItem.id!,
+                                                  packagingId: e.id);
+                                        }),
+                                  )
+                                  .toList(),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              );
+            },
+            dense: true,
+            contentPadding:
+                const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
+            title: Text(
+              LocaleKeys.packaging.tr() + ':',
+              style: context.textTheme.caption!.copyWith(
+                  fontWeight: FontWeight.bold, color: kPrimaryFadeTextColor),
+            ),
+            trailing: Text(
+              packagingModel?.cost ?? '0',
+              style: context.textTheme.subtitle2!.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: getColorBasedOnTheme(
+                      context, kPriceColor, kDarkPriceColor)),
+            ),
+            subtitle: Text(
+              packagingModel?.name ?? '',
+              style: context.textTheme.subtitle2!.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          );
+        }
+      },
+      loading: () => const SizedBox(),
+      error: (error, stackTrace) => const SizedBox(),
+    );
+  }
+}
+
+class ShippingDetails extends ConsumerWidget {
+  final CartItem cartItem;
+
+  const ShippingDetails({
+    Key? key,
+    required this.cartItem,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, watch) {
+    final userState = watch(userNotifierProvider);
+    var params = {
+      'ship_to_acountry_id': cartItem.countryId,
+      'ship_to_state_id': cartItem.stateId,
+    };
+
+    String _url = API.shippingOptionsForCart(cartItem.id!) +
+        "?" +
+        params.entries.map((e) => e.key + "=" + e.value.toString()).join("&");
+    final _shippingOptions = watch(cartShippingOptionsFutureProvider(_url));
+
+    print("cartItem.shippingId: ${cartItem.shippingOptionId}");
+
+    return _shippingOptions.when(
+      data: (value) {
+        if (value == null || value.isEmpty) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                ListTile(
+                  dense: true,
+                  contentPadding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
+                  title: Text(
+                    LocaleKeys.shipping.tr() + ':',
+                    style: context.textTheme.caption!.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: kPrimaryFadeTextColor),
+                  ),
+                  subtitle: Text(
+                    "This seller does not deliver to your selected Country/Region. Change the shipping address or find other sellers who ship to your area.",
+                    style: Theme.of(context).textTheme.caption!.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
+                ),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  child: CartGrandTotalPart(cartItem: cartItem),
+                ),
+              ],
+            ),
+          );
+        } else {
+          ShippingOption? _shippingOption;
+          if (value.any((element) => element.id == cartItem.shippingOptionId)) {
+            _shippingOption = value.firstWhere(
+              (element) => element.id == cartItem.shippingOptionId,
+            );
+          } else {
+            _shippingOption = value.first;
+          }
+
+          print("shippingOption: ${_shippingOption.name}");
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              ListTile(
                 onTap: () {
                   showModalBottomSheet(
                     context: context,
@@ -568,7 +796,7 @@ class CartOtherDetails extends ConsumerWidget {
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
                               Text(
-                                "Select Packaging",
+                                "Select Shipping",
                                 style: Theme.of(context)
                                     .textTheme
                                     .headline6!
@@ -579,10 +807,26 @@ class CartOtherDetails extends ConsumerWidget {
                                 child: ListView(
                                   children: value
                                       .map(
-                                        (e) => RadioListTile<int>(
-                                            value: e.id!,
-                                            groupValue: packagingModel?.id,
-                                            title: Text(e.name!),
+                                        (e) => RadioListTile<int?>(
+                                            value: e.id,
+                                            groupValue: _shippingOption?.id,
+                                            title: Text(
+                                              (e.name ?? "Unknown") +
+                                                  " by " +
+                                                  (e.carrierName ?? "Unknown"),
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .subtitle2!
+                                                  .copyWith(
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                            ),
+                                            subtitle: Text(
+                                              e.deliveryTakes ?? "",
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .caption!,
+                                            ),
                                             secondary: Text(
                                               e.cost ?? "0",
                                               style: Theme.of(context)
@@ -601,8 +845,12 @@ class CartOtherDetails extends ConsumerWidget {
                                               context
                                                   .read(cartNotifierProvider
                                                       .notifier)
-                                                  .updateCart(cartItem.id,
-                                                      packagingId: e.id);
+                                                  .updateCart(
+                                                    cartItem.id!,
+                                                    shippingOptionId: e.id,
+                                                    shippingZoneId:
+                                                        e.shippingZoneId,
+                                                  );
                                             }),
                                       )
                                       .toList(),
@@ -616,33 +864,129 @@ class CartOtherDetails extends ConsumerWidget {
                   );
                 },
                 dense: true,
+                contentPadding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
                 title: Text(
-                  LocaleKeys.packaging.tr() + ':',
+                  LocaleKeys.shipping.tr() + ':',
                   style: context.textTheme.caption!.copyWith(
                       fontWeight: FontWeight.bold,
                       color: kPrimaryFadeTextColor),
                 ),
                 trailing: Text(
-                  packagingModel?.cost ?? '0',
+                  _shippingOption.cost ?? '0',
                   style: context.textTheme.subtitle2!.copyWith(
                       fontWeight: FontWeight.bold,
                       color: getColorBasedOnTheme(
                           context, kPriceColor, kDarkPriceColor)),
                 ),
                 subtitle: Text(
-                  packagingModel?.name ?? '',
+                  (_shippingOption.name ?? 'Unknown') +
+                      " by " +
+                      (_shippingOption.carrierName ?? 'Unknown'),
                   style: context.textTheme.subtitle2!.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-              );
-            }
-          },
-          loading: () => const SizedBox(),
-          error: (error, stackTrace) => const SizedBox(),
+              ),
+              const Divider(height: 0),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    CartGrandTotalPart(cartItem: cartItem),
+                    ElevatedButton(
+                        onPressed: () {
+                          toast("Not implemented yet");
+                        },
+                        // onPressed: () async {
+                        //   String? _customerEmail;
+
+                        //   if (accessAllowed) {
+                        //     if (userState is UserLoadedState) {
+                        //       _customerEmail = userState.user!.email!;
+                        //     }
+                        //   }
+
+                        //   context
+                        //       .read(paymentOptionsNotifierProvider.notifier)
+                        //       .fetchPaymentMethod(
+                        //           cartId: cartItem.id!.toString());
+                        //   context
+                        //       .read(cartItemDetailsNotifierProvider.notifier)
+                        //       .getCartItemDetails(cartItem.id);
+
+                        //   // context.nextPage(
+                        //   //     CheckoutScreen(customerEmail: customerEmail));
+                        // },
+                        child: Text(LocaleKeys.checkout.tr()))
+                  ],
+                ),
+              ),
+            ],
+          );
+        }
+      },
+      loading: () => const SizedBox(),
+      error: (error, stackTrace) => const SizedBox(),
+    );
+  }
+}
+
+class CartGrandTotalPart extends StatelessWidget {
+  const CartGrandTotalPart({
+    Key? key,
+    required this.cartItem,
+  }) : super(key: key);
+
+  final CartItem cartItem;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          LocaleKeys.grand_total.tr(),
+          style: context.textTheme.caption!.copyWith(
+              fontWeight: FontWeight.bold, color: kPrimaryFadeTextColor),
         ),
-        const Divider(height: 10),
+        Text(cartItem.grandTotal!,
+            style: context.textTheme.bodyText2!.copyWith(
+                color:
+                    getColorBasedOnTheme(context, kPriceColor, kDarkPriceColor),
+                fontWeight: FontWeight.bold)),
       ],
     );
   }
 }
+
+
+
+
+
+
+// ElevatedButton(
+//                             onPressed: () async {
+//                               String? _customerEmail;
+
+//                               if (accessAllowed) {
+//                                 if (userState is UserLoadedState) {
+//                                   _customerEmail = userState.user!.email!;
+//                                 }
+//                               }
+
+//                               context
+//                                   .read(paymentOptionsNotifierProvider.notifier)
+//                                   .fetchPaymentMethod(
+//                                       cartId: cartItem.id!.toString());
+//                               context
+//                                   .read(
+//                                       cartItemDetailsNotifierProvider.notifier)
+//                                   .getCartItemDetails(cartItem.id);
+
+//                               // context.nextPage(
+//                               //     CheckoutScreen(customerEmail: customerEmail));
+//                             },
+//                             child: Text(LocaleKeys.checkout.tr()))

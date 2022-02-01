@@ -7,6 +7,7 @@ import 'package:nb_utils/nb_utils.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:zcart/Theme/styles/colors.dart';
 import 'package:zcart/data/controller/chat/chat_controller.dart';
+import 'package:zcart/data/models/address/states_model.dart';
 import 'package:zcart/data/models/product/product_details_model.dart';
 import 'package:zcart/data/network/network_utils.dart';
 import 'package:zcart/helper/get_color_based_on_theme.dart';
@@ -254,7 +255,12 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
                         top: 8,
                         left: 8,
                         child: ProductDetailsPageIconButton(
-                          icon: const Icon(Icons.chevron_left, size: 35),
+                          icon: const Icon(
+                            Icons.chevron_left,
+                            size: 35,
+                          ),
+                          backgroundColor: getColorBasedOnTheme(
+                              context, kLightColor, kDarkBgColor),
                           onPressed: () {
                             Navigator.of(context).pop();
                           },
@@ -264,6 +270,8 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
                         top: 8,
                         right: 70,
                         child: ProductDetailsPageIconButton(
+                          backgroundColor: getColorBasedOnTheme(
+                              context, kLightColor, kDarkBgColor),
                           icon: Icon(
                             widget.isWishlist
                                 ? CupertinoIcons.heart_fill
@@ -287,11 +295,13 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
                         top: 8,
                         right: 8,
                         child: ProductDetailsPageIconButton(
+                          backgroundColor: kPrimaryColor,
                           icon: Padding(
                             padding: const EdgeInsets.all(10),
                             child: VxBadge(
                               position: VxBadgePosition.rightBottom,
-                              child: const Icon(CupertinoIcons.cart),
+                              child: const Icon(CupertinoIcons.cart,
+                                  color: kLightColor),
                               size: 16,
                               count: widget.cartItemsCount,
                               textStyle: Theme.of(context)
@@ -468,7 +478,9 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
                   Tooltip(
                     message: LocaleKeys.contact_seller.tr(),
                     child: ProductDetailsPageIconButton(
-                      icon: const Icon(CupertinoIcons.chat_bubble_2),
+                      icon: const Icon(CupertinoIcons.chat_bubble_2_fill),
+                      backgroundColor: getColorBasedOnTheme(
+                          context, kLightColor, kDarkBgColor),
                       onPressed: () {
                         if (accessAllowed) {
                           context
@@ -496,7 +508,9 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
                   Tooltip(
                     message: LocaleKeys.vendor_details.tr(),
                     child: ProductDetailsPageIconButton(
-                      icon: const Icon(Icons.store_outlined),
+                      icon: const Icon(Icons.store),
+                      backgroundColor: getColorBasedOnTheme(
+                          context, kLightColor, kDarkBgColor),
                       onPressed: () {
                         context
                             .read(vendorDetailsNotifierProvider.notifier)
@@ -510,45 +524,54 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
                   ),
                   const Spacer(),
                   ProductDetailsPageIconButton(
+                    backgroundColor: kPrimaryColor,
                     isNoWidth: true,
-                    onPressed: () async {
-                      if (_details.data!.stockQuantity == null ||
-                          _details.data!.stockQuantity! < 0) {
-                        toast("Out of stock");
-                        return;
-                      } else {
-                        toast(LocaleKeys.please_wait.tr());
-                        await context
-                            .read(cartNotifierProvider.notifier)
-                            .addToCart(
-                              context,
-                              _details.data!.slug!,
-                              _quantity,
-                              _countryId,
-                              _shippingId,
-                              _shippingZoneId,
-                            );
-                      }
-                    },
+                    onPressed: _selectedShippingOption == null
+                        ? () {
+                            toast("Please select shipping option!");
+                          }
+                        : () async {
+                            if (_details.data!.stockQuantity == null ||
+                                _details.data!.stockQuantity! < 0) {
+                              toast("Out of stock");
+                              return;
+                            } else {
+                              toast(LocaleKeys.please_wait.tr());
+                              await context
+                                  .read(cartNotifierProvider.notifier)
+                                  .addToCart(context, _details.data!.slug!,
+                                      countryId: _countryId,
+                                      quantity: _quantity,
+                                      shippingOptionId: _shippingId,
+                                      stateId: _stateId,
+                                      shippingZoneId: _shippingZoneId);
+                            }
+                          },
                     icon: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          const Icon(CupertinoIcons.cart_badge_plus)
-                              .pOnly(right: 8),
+                          const Icon(
+                            CupertinoIcons.cart_fill_badge_plus,
+                            color: kLightColor,
+                          ).pOnly(right: 8),
                           Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(LocaleKeys.add_to_cart.tr(),
-                                  style: context.textTheme.subtitle2!
-                                      .copyWith(fontWeight: FontWeight.bold)),
+                                  style: context.textTheme.subtitle2!.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    color: kLightColor,
+                                  )),
                               Text(
                                 "${LocaleKeys.total.tr()} - ${_details.data!.currencySymbol!}${_totalPrice.toDoubleStringAsPrecised(length: 2)}",
-                                style: context.textTheme.overline!
-                                    .copyWith(fontWeight: FontWeight.bold),
+                                style: context.textTheme.overline!.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: kLightColor,
+                                ),
                               )
                             ],
                           ),
@@ -685,6 +708,10 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
       _countryName =
           _countries.firstWhere((element) => element.id == _countryId).name;
     }
+    String? _stateName;
+    if (_states.any((element) => element.id == _stateId)) {
+      _stateName = _states.firstWhere((element) => element.id == _stateId).name;
+    }
     return ProductPageDefaultContainer(
       child: ListTile(
         leading: const Icon(Icons.delivery_dining),
@@ -736,18 +763,44 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
         ),
         title: GestureDetector(
           onTap: () async {
-            final _selectedValues = await _selectShippingCountry();
-            if (_selectedValues?.first != null) {
+            final _selectedCountryId = await _selectShippingCountry();
+
+            if (_selectedCountryId != null) {
               setState(() {
-                _countryId = _selectedValues!.first!;
-                _stateId = _selectedValues.last;
+                _countryId = _selectedCountryId;
               });
+
+              final _getStatesForCurrentCountry = await context
+                  .read(getProductDetailsModelProvider)
+                  .getStatesFromSelectedCountry(_selectedCountryId);
+
+              int? _selectedStateId;
+              if (_getStatesForCurrentCountry != null &&
+                  _getStatesForCurrentCountry.isNotEmpty) {
+                _selectedStateId =
+                    await _selectShippingState(_getStatesForCurrentCountry);
+
+                setState(() {
+                  _states.clear();
+                  for (var element in _getStatesForCurrentCountry) {
+                    _states.add(_ProductCountry(
+                        id: element.id!, name: element.name ?? "Unknown"));
+                  }
+                  _stateId = _selectedStateId;
+                });
+              } else {
+                setState(() {
+                  _states.clear();
+                  _stateId = null;
+                });
+              }
+
               final _newShippingOptions = await context
                   .read(getProductDetailsModelProvider)
                   .getProductShippingOptions(
-                    countryId: _selectedValues!.first!,
+                    countryId: _selectedCountryId,
                     listingId: _details.data!.id!,
-                    stateId: _selectedValues.last,
+                    stateId: _selectedStateId,
                   );
               if (_newShippingOptions != null &&
                   _newShippingOptions.isNotEmpty) {
@@ -764,20 +817,23 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
               }
             }
           },
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                "Shipping Zone",
-                style: Theme.of(context).textTheme.caption!.copyWith(
-                    fontWeight: FontWeight.bold, color: kPrimaryFadeTextColor),
+              Flexible(
+                child: Text(
+                  LocaleKeys.ship_to.tr() +
+                      " " +
+                      (_stateName ?? _countryName ?? "Unknown"),
+                  style: Theme.of(context).textTheme.headline6!.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
               ),
-              const SizedBox(height: 4),
               Text(
-                _countryName ?? "Unknown",
-                style: Theme.of(context).textTheme.headline6!.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                "Change",
+                style: Theme.of(context).textTheme.caption!.copyWith(
+                    fontWeight: FontWeight.bold, color: kPrimaryColor),
               ),
             ],
           ),
@@ -786,8 +842,8 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
     );
   }
 
-  Future<List<int?>?> _selectShippingCountry() async {
-    final _coutntry = await showModalBottomSheet(
+  Future<int?> _selectShippingCountry() async {
+    final int? _country = await showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
@@ -809,17 +865,25 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
                 const SizedBox(height: 10),
                 Expanded(
                   child: ListView(
-                    children: _countries
-                        .map(
-                          (e) => RadioListTile<int>(
-                              value: e.id,
-                              groupValue: _countryId,
-                              title: Text(e.name),
-                              onChanged: (value) async {
-                                Navigator.of(context).pop(value);
-                              }),
-                        )
-                        .toList(),
+                    children: _countries.map(
+                      (e) {
+                        return ListTile(
+                          onTap: () {
+                            Navigator.pop(context, e.id);
+                          },
+                          title: Text(
+                            e.name,
+                            style: Theme.of(context)
+                                .textTheme
+                                .subtitle2!
+                                .copyWith(fontWeight: FontWeight.bold),
+                          ),
+                          trailing: e.id == _countryId
+                              ? const Icon(Icons.check_circle)
+                              : const Icon(Icons.circle_outlined),
+                        );
+                      },
+                    ).toList(),
                   ),
                 ),
               ],
@@ -829,7 +893,63 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
       },
     );
 
-    return _coutntry is int ? [_coutntry, null] : null;
+    return _country;
+  }
+
+  Future<int?> _selectShippingState(List<States> states) async {
+    final int? _state = await showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      enableDrag: false,
+      isDismissible: false,
+      builder: (context) {
+        return SizedBox(
+          height: context.screenHeight * 0.7,
+          child: ProductPageDefaultContainer(
+            isFullPadding: true,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(
+                  "Select State",
+                  style: Theme.of(context)
+                      .textTheme
+                      .headline6!
+                      .copyWith(fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 10),
+                Expanded(
+                  child: ListView(
+                    children: states.map(
+                      (e) {
+                        return ListTile(
+                          onTap: () {
+                            Navigator.pop(context, e.id);
+                          },
+                          title: Text(
+                            e.name ?? "Unknown",
+                            style: Theme.of(context)
+                                .textTheme
+                                .subtitle2!
+                                .copyWith(fontWeight: FontWeight.bold),
+                          ),
+                          trailing: e.id == _stateId
+                              ? const Icon(Icons.check_circle)
+                              : const Icon(Icons.circle_outlined),
+                        );
+                      },
+                    ).toList(),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+
+    return _state;
   }
 
   void _selectShippingOption() async {
@@ -1101,12 +1221,14 @@ class ProductDetailsPageIconButton extends StatelessWidget {
   final VoidCallback onPressed;
   final bool isNoWidth;
   final bool isNoHeight;
+  final Color backgroundColor;
   const ProductDetailsPageIconButton({
     Key? key,
     required this.icon,
     required this.onPressed,
     this.isNoWidth = false,
     this.isNoHeight = false,
+    this.backgroundColor = kPrimaryFadeTextColor,
   }) : super(key: key);
 
   @override
@@ -1118,11 +1240,11 @@ class ProductDetailsPageIconButton extends StatelessWidget {
         height: isNoHeight ? null : 50,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          color: getColorBasedOnTheme(context, kLightBgColor, kDarkCardBgColor),
+          color: backgroundColor,
           boxShadow: [
             BoxShadow(
-              color: getColorBasedOnTheme(
-                  context, Colors.black12, Colors.transparent),
+              color:
+                  getColorBasedOnTheme(context, Colors.black12, Colors.black54),
               blurRadius: 10,
               offset: const Offset(0, 0),
             ),
