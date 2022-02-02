@@ -12,12 +12,15 @@ import 'package:zcart/views/screens/tabs/account_tab/account/edit_address_screen
 class AddressListBuilder extends StatefulWidget {
   final List<Addresses>? addressesList;
   final CartItemDetails? cartItem;
-  final Function(int)? onPressedCheckBox;
+  final Function(int)? onAddressSelected;
+  final int? selectedAddressIndex;
+
   const AddressListBuilder({
     Key? key,
     this.addressesList,
     this.cartItem,
-    this.onPressedCheckBox,
+    this.onAddressSelected,
+    this.selectedAddressIndex,
   }) : super(key: key);
 
   @override
@@ -25,13 +28,18 @@ class AddressListBuilder extends StatefulWidget {
 }
 
 class _AddressListBuilderState extends State<AddressListBuilder> {
-  int? selectedIndex;
+  int? _selectedIndex;
+
+  @override
+  void initState() {
+    _selectedIndex = widget.selectedAddressIndex;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final _checkoutProvider = context.read(checkoutNotifierProvider.notifier);
     return ListView.builder(
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
         padding: const EdgeInsets.only(top: 5),
         itemCount: widget.addressesList!.length,
         itemBuilder: (context, index) {
@@ -46,59 +54,55 @@ class _AddressListBuilderState extends State<AddressListBuilder> {
                 onTap: () {
                   if (widget.cartItem != null) {
                     if (accessAllowed) {
-                      widget.onPressedCheckBox!(index);
+                      if (widget.onAddressSelected != null) {
+                        widget.onAddressSelected!(index);
+                      }
                       context
                           .read(cartItemDetailsNotifierProvider.notifier)
-                          .updateCart(widget.cartItem!.id!,
-                              countryId:
-                                  widget.addressesList![index].country!.id);
+                          .updateCart(
+                            widget.cartItem!.id!,
+                            countryId: widget.addressesList![index].country!.id,
+                            stateId: widget.addressesList![index].state?.id,
+                            shipTo: widget.addressesList![index].id,
+                          );
 
-                      context.read(checkoutNotifierProvider.notifier).shipTo =
+                      _checkoutProvider.shipTo =
                           widget.addressesList![index].id;
                     } else {
-                      widget.onPressedCheckBox!(index);
+                      if (widget.onAddressSelected != null) {
+                        widget.onAddressSelected!(index);
+                      }
                       context
                           .read(cartItemDetailsNotifierProvider.notifier)
                           .updateCart(
                             widget.cartItem!.id!,
                             countryId: widget.addressesList![index].countryId,
+                            stateId: widget.addressesList![index].stateId,
                           );
 
-                      context
-                              .read(checkoutNotifierProvider.notifier)
-                              .addressTitle =
+                      _checkoutProvider.addressTitle =
                           widget.addressesList![index].addressTitle;
-                      context
-                              .read(checkoutNotifierProvider.notifier)
-                              .addressLine1 =
+                      _checkoutProvider.addressLine1 =
                           widget.addressesList![index].addressLine1;
 
-                      context
-                              .read(checkoutNotifierProvider.notifier)
-                              .addressLine2 =
+                      _checkoutProvider.addressLine2 =
                           widget.addressesList![index].addressLine2;
 
-                      context
-                          .read(checkoutNotifierProvider.notifier)
-                          .countryId = widget.addressesList![index].countryId;
+                      _checkoutProvider.countryId =
+                          widget.addressesList![index].countryId;
 
-                      context.read(checkoutNotifierProvider.notifier).stateId =
+                      _checkoutProvider.stateId =
                           widget.addressesList![index].stateId;
-
-                      context.read(checkoutNotifierProvider.notifier).city =
+                      _checkoutProvider.city =
                           widget.addressesList![index].city;
-
-                      context.read(checkoutNotifierProvider.notifier).zipCode =
+                      _checkoutProvider.zipCode =
                           widget.addressesList![index].zipCode;
-
-                      context.read(checkoutNotifierProvider.notifier).phone =
+                      _checkoutProvider.phone =
                           widget.addressesList![index].phone;
                     }
 
-                    debugPrint(selectedIndex.toString());
-                    debugPrint(index.toString());
                     setState(() {
-                      selectedIndex = index;
+                      _selectedIndex = index;
                     });
                   }
                 },
@@ -127,7 +131,7 @@ class _AddressListBuilderState extends State<AddressListBuilder> {
                   ],
                 ),
                 trailing: widget.cartItem != null
-                    ? index == selectedIndex
+                    ? index == _selectedIndex
                         ? Icon(Icons.check_circle, color: kPrimaryColor)
                         : Icon(
                             Icons.radio_button_unchecked,

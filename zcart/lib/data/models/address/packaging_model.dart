@@ -3,6 +3,7 @@ class PackagingModel {
     this.id,
     this.name,
     this.cost,
+    this.costRaw,
     this.height,
     this.width,
     this.depth,
@@ -12,6 +13,7 @@ class PackagingModel {
   int? id;
   String? name;
   String? cost;
+  String? costRaw;
   String? height;
   String? width;
   String? depth;
@@ -21,6 +23,7 @@ class PackagingModel {
         id: json["id"],
         name: json["name"],
         cost: json["cost"],
+        costRaw: json["cost_raw"],
         height: json["height"],
         width: json["width"],
         depth: json["depth"],
@@ -31,6 +34,7 @@ class PackagingModel {
         "id": id,
         "name": name,
         "cost": cost,
+        "cost_raw": costRaw,
         "height": height,
         "width": width,
         "depth": depth,

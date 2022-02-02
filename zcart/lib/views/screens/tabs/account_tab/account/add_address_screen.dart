@@ -2,6 +2,7 @@ import 'package:flutter/services.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:zcart/Theme/styles/colors.dart';
+import 'package:zcart/data/models/address/address_model.dart';
 import 'package:zcart/helper/get_color_based_on_theme.dart';
 import 'package:zcart/riverpod/providers/address_provider.dart';
 import 'package:zcart/riverpod/state/address/country_state.dart';
@@ -237,27 +238,50 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
                                 toast(
                                   LocaleKeys.please_wait.tr(),
                                 );
-                                await context
-                                    .read(addressProvider)
-                                    .createAddress(
-                                      addressType: addressTypeController
-                                                  .text.isEmpty ||
-                                              addressTypeController.text == ""
-                                          ? "Shipping"
-                                          : addressTypeController.text,
-                                      contactPerson:
-                                          contactPersonController.text,
-                                      contactNumber:
-                                          contactNumberController.text,
-                                      countryId: selectedCountryID ?? 4,
-                                      stateId: selectedStateID,
-                                      cityId: cityController.text,
-                                      addressLine1: addressLine1Controller.text,
-                                      addressLine2: addressLine2Controller.text,
-                                      zipCode: zipCodeController.text,
-                                    );
-                                await context.refresh(getAddressFutureProvider);
-                                context.pop();
+                                if (widget.isAccessed) {
+                                  await context
+                                      .read(addressProvider)
+                                      .createAddress(
+                                        addressType: addressTypeController
+                                                    .text.isEmpty ||
+                                                addressTypeController.text == ""
+                                            ? "Shipping"
+                                            : addressTypeController.text,
+                                        contactPerson:
+                                            contactPersonController.text,
+                                        contactNumber:
+                                            contactNumberController.text,
+                                        countryId: selectedCountryID ?? 4,
+                                        stateId: selectedStateID,
+                                        cityId: cityController.text,
+                                        addressLine1:
+                                            addressLine1Controller.text,
+                                        addressLine2:
+                                            addressLine2Controller.text,
+                                        zipCode: zipCodeController.text,
+                                      );
+                                  await context
+                                      .refresh(getAddressFutureProvider);
+                                  context.pop();
+                                } else {
+                                  Addresses _newAddress = Addresses(
+                                    addressType:
+                                        addressTypeController.text.isEmpty ||
+                                                addressTypeController.text == ""
+                                            ? "Shipping"
+                                            : addressTypeController.text,
+                                    addressTitle: contactPersonController.text,
+                                    phone: contactNumberController.text,
+                                    countryId: selectedCountryID ?? 4,
+                                    stateId: selectedStateID,
+                                    city: cityController.text,
+                                    addressLine1: addressLine1Controller.text,
+                                    addressLine2: addressLine2Controller.text,
+                                    zipCode: zipCodeController.text,
+                                    id: DateTime.now().millisecondsSinceEpoch,
+                                  );
+                                  Navigator.pop(context, _newAddress);
+                                }
                               }
                             },
                             child: Text(LocaleKeys.add_address.tr())),

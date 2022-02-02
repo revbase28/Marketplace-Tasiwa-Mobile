@@ -25,6 +25,8 @@ class CartItemDetails {
     this.customerId,
     this.ipAddress,
     this.shipTo,
+    this.countryId,
+    this.stateId,
     this.shippingZoneId,
     this.shippingOptionId,
     this.shippingAddress,
@@ -49,6 +51,8 @@ class CartItemDetails {
   int? customerId;
   String? ipAddress;
   int? shipTo;
+  int? countryId;
+  int? stateId;
   int? shippingZoneId;
   int? shippingOptionId;
   String? shippingAddress;
@@ -74,6 +78,8 @@ class CartItemDetails {
         customerId: json["customer_id"],
         ipAddress: json["ip_address"],
         shipTo: json["ship_to"],
+        countryId: json["ship_to_country_id"],
+        stateId: json["ship_to_state_id"],
         shippingZoneId: json["shipping_zone_id"],
         shippingOptionId: json["shipping_option_id"],
         shippingAddress: json["shipping_address"],
@@ -99,6 +105,8 @@ class CartItemDetails {
         "customer_id": customerId,
         "ip_address": ipAddress,
         "ship_to": shipTo,
+        "ship_to_country_id": countryId,
+        "ship_to_state_id": stateId,
         "shipping_zone_id": shippingZoneId,
         "shipping_option_id": shippingOptionId,
         "shipping_address": shippingAddress,

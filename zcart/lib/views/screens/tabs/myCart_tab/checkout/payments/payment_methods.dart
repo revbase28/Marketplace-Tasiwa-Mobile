@@ -22,7 +22,7 @@ class PaymentMethods {
     CartItemDetails? cartItemDetails,
     CartMeta? cartMeta,
     int? shippingId,
-    List<Addresses>? addresses,
+    Addresses? address,
     bool isWalletDeposit = false,
   }) async {
     var _checkoutNotifier = context.read(checkoutNotifierProvider.notifier);
@@ -98,7 +98,7 @@ class PaymentMethods {
           MaterialPageRoute(
             builder: (BuildContext context) => PayPalPayment(
               cartItemDetails: cartItemDetails,
-              address: addresses != null ? addresses[shippingId ?? 0] : null,
+              address: address,
               cartMeta: cartMeta,
               isWalletPayment: isWalletDeposit,
               price: price,
@@ -134,13 +134,13 @@ class PaymentMethods {
           (_paymentResult["api_key"] || _paymentResult["secret"])) {
         return false;
       } else {
-        if (cartItemDetails != null && addresses != null) {
+        if (cartItemDetails != null && address != null) {
           Map<String, dynamic>? _result = await Navigator.of(context).push(
             MaterialPageRoute(
               builder: (BuildContext context) => RazorpayPayment(
                 email: email,
                 cartItemDetails: cartItemDetails,
-                address: addresses[shippingId!],
+                address: address,
                 currency: cartMeta?.currency ?? "",
                 apiKey: _paymentResult["api_key"],
                 secretKey: _paymentResult["secret"],

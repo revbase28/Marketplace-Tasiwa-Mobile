@@ -51,11 +51,11 @@ class _CustomDateTimeFieldState extends State<CustomDateTimeField> {
           contentPadding:
               const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(10),
             borderSide: const BorderSide(width: 2),
           ),
           focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(10),
             borderSide: BorderSide(
                 color: getColorBasedOnTheme(context,
                     kDarkColor.withOpacity(0.8), kLightColor.withOpacity(0.8)),

@@ -36,17 +36,22 @@ class CouponRepository extends StateNotifier<CouponState> {
 class ApplyCouponRepository extends StateNotifier<ApplyCouponState> {
   ApplyCouponRepository() : super(const ApplyCouponInitialState());
 
-  Future applyCoupon(cartId, coupon) async {
+  Future<bool> applyCoupon(cartId, coupon) async {
     state = const ApplyCouponLoadingState();
     dynamic responseBody;
     try {
       responseBody = await handleResponse(await postRequest(
           API.applyCoupon(cartId, coupon), {},
           bearerToken: true));
-      if (responseBody is int) if (responseBody > 206) throw NetworkException();
+      if (responseBody is int && responseBody > 206) {
+        throw NetworkException();
+      }
       state = const ApplyCouponLoadedState();
+
+      return responseBody["cart"] != null ? true : false;
     } on NetworkException {
       state = const ApplyCouponErrorState("Failed to apply coupon!");
+      return false;
     }
   }
 }

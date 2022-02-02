@@ -327,6 +327,15 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
                       child: ProductNameCard(productModel: _details)),
                   const SizedBox(height: 10),
 
+                  _countries.isEmpty
+                      ? const SizedBox()
+                      : Column(
+                          children: [
+                            _shippingZoneSelection(context),
+                            const SizedBox(height: 10),
+                          ],
+                        ),
+
                   ProductPageDefaultContainer(
                     isFullPadding: true,
                     child: Column(
@@ -427,15 +436,6 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
 
                   const SizedBox(height: 10),
 
-                  _countries.isEmpty
-                      ? const SizedBox()
-                      : Column(
-                          children: [
-                            _shippingZoneSelection(context),
-                            const SizedBox(height: 10),
-                          ],
-                        ),
-
                   _details.data!.feedbacks.isEmpty
                       ? const SizedBox()
                       : Column(
@@ -473,7 +473,7 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                // mainAxisAlignment: MainAxisAlignment.,
                 children: [
                   Tooltip(
                     message: LocaleKeys.contact_seller.tr(),
@@ -522,60 +522,63 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
                       },
                     ),
                   ),
-                  const Spacer(),
-                  ProductDetailsPageIconButton(
-                    backgroundColor: kPrimaryColor,
-                    isNoWidth: true,
-                    onPressed: _selectedShippingOption == null
-                        ? () {
-                            toast("Please select shipping option!");
-                          }
-                        : () async {
-                            if (_details.data!.stockQuantity == null ||
-                                _details.data!.stockQuantity! < 0) {
-                              toast("Out of stock");
-                              return;
-                            } else {
-                              toast(LocaleKeys.please_wait.tr());
-                              await context
-                                  .read(cartNotifierProvider.notifier)
-                                  .addToCart(context, _details.data!.slug!,
-                                      countryId: _countryId,
-                                      quantity: _quantity,
-                                      shippingOptionId: _shippingId,
-                                      stateId: _stateId,
-                                      shippingZoneId: _shippingZoneId);
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: ProductDetailsPageIconButton(
+                      backgroundColor: kPrimaryColor,
+                      isNoWidth: true,
+                      onPressed: _selectedShippingOption == null
+                          ? () {
+                              toast("Please select shipping option!");
                             }
-                          },
-                    icon: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          const Icon(
-                            CupertinoIcons.cart_fill_badge_plus,
-                            color: kLightColor,
-                          ).pOnly(right: 8),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(LocaleKeys.add_to_cart.tr(),
-                                  style: context.textTheme.subtitle2!.copyWith(
+                          : () async {
+                              if (_details.data!.stockQuantity == null ||
+                                  _details.data!.stockQuantity! < 0) {
+                                toast("Out of stock");
+                                return;
+                              } else {
+                                toast(LocaleKeys.please_wait.tr());
+                                await context
+                                    .read(cartNotifierProvider.notifier)
+                                    .addToCart(context, _details.data!.slug!,
+                                        countryId: _countryId,
+                                        quantity: _quantity,
+                                        shippingOptionId: _shippingId,
+                                        stateId: _stateId,
+                                        shippingZoneId: _shippingZoneId);
+                              }
+                            },
+                      icon: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            const Icon(
+                              CupertinoIcons.cart_fill_badge_plus,
+                              color: kLightColor,
+                            ).pOnly(right: 8),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(LocaleKeys.add_to_cart.tr(),
+                                    style:
+                                        context.textTheme.subtitle2!.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      color: kLightColor,
+                                    )),
+                                Text(
+                                  "${LocaleKeys.total.tr()} - ${_details.data!.currencySymbol!}${_totalPrice.toDoubleStringAsPrecised(length: 2)}",
+                                  style: context.textTheme.overline!.copyWith(
                                     fontWeight: FontWeight.bold,
                                     color: kLightColor,
-                                  )),
-                              Text(
-                                "${LocaleKeys.total.tr()} - ${_details.data!.currencySymbol!}${_totalPrice.toDoubleStringAsPrecised(length: 2)}",
-                                style: context.textTheme.overline!.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                  color: kLightColor,
-                                ),
-                              )
-                            ],
-                          ),
-                        ],
+                                  ),
+                                )
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -712,6 +715,7 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
     if (_states.any((element) => element.id == _stateId)) {
       _stateName = _states.firstWhere((element) => element.id == _stateId).name;
     }
+
     return ProductPageDefaultContainer(
       child: ListTile(
         leading: const Icon(Icons.delivery_dining),
@@ -742,7 +746,10 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
                                     fontWeight: FontWeight.bold,
                                   )).pOnly(right: 8),
                         ),
-                        Text(_option?.cost ?? "0",
+                        Text(
+                            double.parse(_option!.costRaw ?? "0") <= 0.0
+                                ? ""
+                                : (_option.cost ?? "0"),
                             style: Theme.of(context)
                                 .textTheme
                                 .subtitle2!

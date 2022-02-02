@@ -37,7 +37,10 @@ class AddressList extends ConsumerWidget {
               child: Text(LocaleKeys.no_item_found.tr()),
             );
           } else {
-            return AddressListBuilder(addressesList: value);
+            return Padding(
+              padding: const EdgeInsets.all(12),
+              child: AddressListBuilder(addressesList: value),
+            );
           }
         },
         loading: () => const Center(child: LoadingWidget()),

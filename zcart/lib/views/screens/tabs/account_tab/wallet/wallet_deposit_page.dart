@@ -10,10 +10,10 @@ import 'package:zcart/views/screens/tabs/myCart_tab/checkout/payments/payment_me
 import 'package:zcart/views/shared_widgets/shared_widgets.dart';
 
 class WalletDepositPage extends StatefulWidget {
-  final String customEmail;
+  final String customerEmail;
   const WalletDepositPage({
     Key? key,
-    required this.customEmail,
+    required this.customerEmail,
   }) : super(key: key);
 
   @override
@@ -145,7 +145,7 @@ class _WalletDepositPageState extends State<WalletDepositPage> {
                             context,
                             _selectedpaymentMethod,
                             isWalletDeposit: true,
-                            email: widget.customEmail,
+                            email: widget.customerEmail,
                             price: int.parse(_amountController.text.trim()),
                           ).then((value) async {
                             if (value) {

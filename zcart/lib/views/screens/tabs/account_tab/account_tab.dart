@@ -522,7 +522,7 @@ class WalletCard extends ConsumerWidget {
                       child: ElevatedButton.icon(
                         onPressed: () {
                           context.nextPage(WalletDepositPage(
-                              customEmail: _userState.user?.email ?? ""));
+                              customerEmail: _userState.user?.email ?? ""));
                         },
                         label: const Text("Add Funds"),
                         icon: const Icon(CupertinoIcons.plus_circle),

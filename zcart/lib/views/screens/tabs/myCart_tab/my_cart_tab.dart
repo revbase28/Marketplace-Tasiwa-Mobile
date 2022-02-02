@@ -23,6 +23,7 @@ import 'package:zcart/views/screens/bottom_nav_bar/bottom_nav_bar.dart';
 import 'package:zcart/views/screens/product_details/product_details_screen.dart';
 import 'package:zcart/views/screens/product_list/recently_viewed.dart';
 import 'package:zcart/views/screens/tabs/home_tab/components/error_widget.dart';
+import 'package:zcart/views/screens/tabs/myCart_tab/checkout/checkout_screen.dart';
 import 'package:zcart/views/screens/tabs/vendors_tab/vendors_details.dart';
 import 'package:zcart/views/shared_widgets/custom_confirm_dialog.dart';
 import 'package:zcart/views/shared_widgets/product_details_card.dart';
@@ -308,84 +309,92 @@ class CartItemCard extends ConsumerWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                GestureDetector(
-                  onTap: () {
-                    context
-                        .read(vendorDetailsNotifierProvider.notifier)
-                        .getVendorDetails(cartItem.shop!.slug!);
-                    context
-                        .read(vendorItemsNotifierProvider.notifier)
-                        .getVendorItems(cartItem.shop!.slug!);
-                    context.nextPage(const VendorsDetailsScreen());
-                  },
-                  child: Row(
-                    children: [
-                      const Icon(Icons.store_outlined),
-                      const SizedBox(width: 4),
-                      Text(cartItem.shop!.name!,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: context.textTheme.headline6!.copyWith(
-                            color: getColorBasedOnTheme(
-                                context, kDarkColor, kLightColor),
-                            fontWeight: FontWeight.bold,
-                          )),
-                    ],
-                  ),
-                ).pOnly(right: 4),
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () {
+                      context
+                          .read(vendorDetailsNotifierProvider.notifier)
+                          .getVendorDetails(cartItem.shop!.slug!);
+                      context
+                          .read(vendorItemsNotifierProvider.notifier)
+                          .getVendorItems(cartItem.shop!.slug!);
+                      context.nextPage(const VendorsDetailsScreen());
+                    },
+                    child: Row(
+                      children: [
+                        const Icon(Icons.store_outlined),
+                        const SizedBox(width: 4),
+                        Text(cartItem.shop!.name!,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: context.textTheme.headline6!.copyWith(
+                              color: getColorBasedOnTheme(
+                                  context, kDarkColor, kLightColor),
+                              fontWeight: FontWeight.bold,
+                            )),
+                      ],
+                    ),
+                  ).pOnly(right: 4),
+                ),
                 _countryState is CountryLoadedState &&
                         _countryState.countryList != null &&
                         _countryState.countryList!.isNotEmpty
-                    ? GestureDetector(
-                        onTap: () async {
-                          final int? _selectedCountry =
-                              await _getCountry(_countryState.countryList!);
+                    ? Expanded(
+                        child: GestureDetector(
+                          onTap: () async {
+                            final int? _selectedCountry =
+                                await _getCountry(_countryState.countryList!);
 
-                          if (_selectedCountry != null) {
-                            final _getStatesForCurrentCountry = await context
-                                .read(getProductDetailsModelProvider)
-                                .getStatesFromSelectedCountry(_selectedCountry);
+                            if (_selectedCountry != null) {
+                              final _getStatesForCurrentCountry = await context
+                                  .read(getProductDetailsModelProvider)
+                                  .getStatesFromSelectedCountry(
+                                      _selectedCountry);
 
-                            int? _selectedStateId;
+                              int? _selectedStateId;
 
-                            if (_getStatesForCurrentCountry != null &&
-                                _getStatesForCurrentCountry.isNotEmpty) {
-                              _selectedStateId = await _selectShippingState(
-                                  _getStatesForCurrentCountry);
+                              if (_getStatesForCurrentCountry != null &&
+                                  _getStatesForCurrentCountry.isNotEmpty) {
+                                _selectedStateId = await _selectShippingState(
+                                    _getStatesForCurrentCountry);
+                              }
+
+                              await context
+                                  .read(cartNotifierProvider.notifier)
+                                  .updateCart(
+                                    cartItem.id!,
+                                    countryId: _selectedCountry,
+                                    stateId: _selectedStateId,
+                                  );
                             }
-
-                            await context
-                                .read(cartNotifierProvider.notifier)
-                                .updateCart(
-                                  cartItem.id!,
-                                  countryId: _selectedCountry,
-                                  stateId: _selectedStateId,
-                                );
-                          }
-                        },
-                        child: Row(
-                          children: [
-                            Text(
-                              _countryState.countryList!.any((element) =>
-                                      element.id == cartItem.countryId)
-                                  ? _countryState.countryList!
-                                      .firstWhere(
-                                          (e) => e.id == cartItem.countryId)
-                                      .name!
-                                  : "Unknown",
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: context.textTheme.headline6!.copyWith(
-                                color: getColorBasedOnTheme(
-                                    context, kDarkColor, kLightColor),
-                                fontWeight: FontWeight.bold,
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Flexible(
+                                child: Text(
+                                  _countryState.countryList!.any((element) =>
+                                          element.id == cartItem.countryId)
+                                      ? _countryState.countryList!
+                                          .firstWhere(
+                                              (e) => e.id == cartItem.countryId)
+                                          .name!
+                                      : "Unknown",
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: context.textTheme.headline6!.copyWith(
+                                    color: getColorBasedOnTheme(
+                                        context, kDarkColor, kLightColor),
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
                               ),
-                            ),
-                            const SizedBox(width: 4),
-                            const Icon(Icons.location_on),
-                          ],
-                        ),
-                      ).pOnly(left: 4)
+                              const SizedBox(width: 4),
+                              const Icon(Icons.location_on),
+                            ],
+                          ),
+                        ).pOnly(left: 4),
+                      )
                     : const SizedBox(),
               ],
             ),
@@ -690,7 +699,9 @@ class PackagingDetails extends ConsumerWidget {
                   fontWeight: FontWeight.bold, color: kPrimaryFadeTextColor),
             ),
             trailing: Text(
-              packagingModel?.cost ?? '0',
+              double.parse(packagingModel?.costRaw ?? "0") <= 0.0
+                  ? ""
+                  : (packagingModel?.cost ?? "0"),
               style: context.textTheme.subtitle2!.copyWith(
                   fontWeight: FontWeight.bold,
                   color: getColorBasedOnTheme(
@@ -721,7 +732,7 @@ class ShippingDetails extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, watch) {
-    final userState = watch(userNotifierProvider);
+    final _userState = watch(userNotifierProvider);
     var params = {
       'ship_to_acountry_id': cartItem.countryId,
       'ship_to_state_id': cartItem.stateId,
@@ -732,40 +743,36 @@ class ShippingDetails extends ConsumerWidget {
         params.entries.map((e) => e.key + "=" + e.value.toString()).join("&");
     final _shippingOptions = watch(cartShippingOptionsFutureProvider(_url));
 
-    print("cartItem.shippingId: ${cartItem.shippingOptionId}");
-
     return _shippingOptions.when(
       data: (value) {
         if (value == null || value.isEmpty) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                ListTile(
-                  dense: true,
-                  contentPadding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
-                  title: Text(
-                    LocaleKeys.shipping.tr() + ':',
-                    style: context.textTheme.caption!.copyWith(
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              ListTile(
+                dense: true,
+                contentPadding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
+                title: Text(
+                  LocaleKeys.shipping.tr() + ':',
+                  style: context.textTheme.caption!.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: kPrimaryFadeTextColor),
+                ),
+                subtitle: Text(
+                  "This seller does not deliver to your selected Country/Region. Change the shipping address or find other sellers who ship to your area.",
+                  style: Theme.of(context).textTheme.caption!.copyWith(
                         fontWeight: FontWeight.bold,
-                        color: kPrimaryFadeTextColor),
-                  ),
-                  subtitle: Text(
-                    "This seller does not deliver to your selected Country/Region. Change the shipping address or find other sellers who ship to your area.",
-                    style: Theme.of(context).textTheme.caption!.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                  ),
+                      ),
                 ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                  child: CartGrandTotalPart(cartItem: cartItem),
-                ),
-              ],
-            ),
+              ),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                child: CartGrandTotalPart(cartItem: cartItem),
+              ),
+              const SizedBox(height: 8),
+            ],
           );
         } else {
           ShippingOption? _shippingOption;
@@ -777,7 +784,6 @@ class ShippingDetails extends ConsumerWidget {
             _shippingOption = value.first;
           }
 
-          print("shippingOption: ${_shippingOption.name}");
           return Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -873,7 +879,9 @@ class ShippingDetails extends ConsumerWidget {
                       color: kPrimaryFadeTextColor),
                 ),
                 trailing: Text(
-                  _shippingOption.cost ?? '0',
+                  double.parse(_shippingOption.costRaw ?? "0") <= 0.0
+                      ? ""
+                      : (_shippingOption.cost ?? "0"),
                   style: context.textTheme.subtitle2!.copyWith(
                       fontWeight: FontWeight.bold,
                       color: getColorBasedOnTheme(
@@ -897,29 +905,27 @@ class ShippingDetails extends ConsumerWidget {
                   children: [
                     CartGrandTotalPart(cartItem: cartItem),
                     ElevatedButton(
-                        onPressed: () {
-                          toast("Not implemented yet");
+                        onPressed: () async {
+                          String? _customerEmail;
+
+                          if (accessAllowed) {
+                            if (_userState is UserLoadedState) {
+                              _customerEmail = _userState.user!.email!;
+                            }
+                          }
+
+                          context
+                              .read(paymentOptionsNotifierProvider.notifier)
+                              .fetchPaymentMethod(
+                                  cartId: cartItem.id!.toString());
+
+                          context
+                              .read(cartItemDetailsNotifierProvider.notifier)
+                              .getCartItemDetails(cartItem.id);
+
+                          context.nextPage(
+                              CheckoutScreen(customerEmail: _customerEmail));
                         },
-                        // onPressed: () async {
-                        //   String? _customerEmail;
-
-                        //   if (accessAllowed) {
-                        //     if (userState is UserLoadedState) {
-                        //       _customerEmail = userState.user!.email!;
-                        //     }
-                        //   }
-
-                        //   context
-                        //       .read(paymentOptionsNotifierProvider.notifier)
-                        //       .fetchPaymentMethod(
-                        //           cartId: cartItem.id!.toString());
-                        //   context
-                        //       .read(cartItemDetailsNotifierProvider.notifier)
-                        //       .getCartItemDetails(cartItem.id);
-
-                        //   // context.nextPage(
-                        //   //     CheckoutScreen(customerEmail: customerEmail));
-                        // },
                         child: Text(LocaleKeys.checkout.tr()))
                   ],
                 ),
