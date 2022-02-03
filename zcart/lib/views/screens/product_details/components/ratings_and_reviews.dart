@@ -28,7 +28,10 @@ class ProductRatingsAndReview extends StatelessWidget {
             children: [
               Text(
                 'Ratings & Reviews (${feedbacks.length})',
-                style: Theme.of(context).textTheme.subtitle2,
+                style: Theme.of(context)
+                    .textTheme
+                    .subtitle2!
+                    .copyWith(fontWeight: FontWeight.bold),
               ),
               TextButton(
                   style: TextButton.styleFrom(padding: EdgeInsets.zero),
@@ -143,7 +146,7 @@ class RatingAndReviewSection extends StatelessWidget {
               itemSize: 12,
               unratedColor: kFadeColor,
               itemBuilder: (context, _) =>
-                  Icon(Icons.star, color: kPrimaryColor),
+                  const Icon(Icons.star, color: kDarkPriceColor),
               onRatingUpdate: (rating) => debugPrint(rating.toString()),
             ),
           ],

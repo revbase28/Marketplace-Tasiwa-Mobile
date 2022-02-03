@@ -30,14 +30,14 @@ class OffersScreen extends ConsumerWidget {
             : offersState is OffersLoadedState
                 ? Column(
                     children: [
-                      const SizedBox(height: 10),
                       Container(
                         color: getColorBasedOnTheme(
                             context, kLightColor, kDarkBgColor),
-                        padding: const EdgeInsets.all(10),
+                        padding: const EdgeInsets.all(16),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            const SizedBox(height: 10),
                             Center(
                               child: CachedNetworkImage(
                                 imageUrl: offersState.offersModel.data!.image!,
@@ -72,7 +72,7 @@ class OffersScreen extends ConsumerWidget {
                                 style: context.textTheme.subtitle2!),
                           ],
                         ),
-                      ).px(10),
+                      ),
                       ProductDetailsCardGridView(
                               productList:
                                   offersState.offersModel.data!.listings!)

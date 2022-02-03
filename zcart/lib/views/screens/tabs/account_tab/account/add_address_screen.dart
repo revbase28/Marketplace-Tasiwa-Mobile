@@ -2,7 +2,6 @@ import 'package:flutter/services.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:zcart/Theme/styles/colors.dart';
-import 'package:zcart/data/models/address/address_model.dart';
 import 'package:zcart/helper/get_color_based_on_theme.dart';
 import 'package:zcart/riverpod/providers/address_provider.dart';
 import 'package:zcart/riverpod/state/address/country_state.dart';
@@ -16,10 +15,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AddNewAddressScreen extends StatefulWidget {
-  final bool isAccessed;
   const AddNewAddressScreen({
     Key? key,
-    this.isAccessed = true,
   }) : super(key: key);
   @override
   _AddNewAddressScreenState createState() => _AddNewAddressScreenState();
@@ -45,6 +42,8 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
 
   int? selectedStateID;
 
+  final List<String> _addressTypes = ["Primary", "Billing", "Shipping"];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,25 +64,18 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    widget.isAccessed
-                        ? CustomDropDownField(
-                            title: LocaleKeys.address_type.tr(),
-                            optionsList: const [
-                              "Primary",
-                              "Billing",
-                              "Shipping"
-                            ],
-                            hintText: LocaleKeys.address_type.tr(),
-                            value: "Primary",
-                            controller: addressTypeController,
-                            validator: (text) {
-                              if (text == null || text.isEmpty || text == "") {
-                                return LocaleKeys.field_required.tr();
-                              }
-                              return null;
-                            },
-                          )
-                        : const SizedBox(),
+                    CustomDropDownField(
+                      title: LocaleKeys.address_type.tr(),
+                      optionsList: _addressTypes,
+                      hintText: LocaleKeys.address_type.tr(),
+                      controller: addressTypeController,
+                      validator: (text) {
+                        if (text == null || text.isEmpty || text == "") {
+                          return LocaleKeys.field_required.tr();
+                        }
+                        return null;
+                      },
+                    ),
                     CustomTextField(
                       title: LocaleKeys.contact_person_name.tr(),
                       hintText: LocaleKeys.contact_person_name.tr(),
@@ -117,17 +109,16 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
                                 optionsList: countryState.countryList!
                                     .map((e) => e.name)
                                     .toList(),
-                                //value: "Select",
                                 controller: countryController,
                                 hintText: LocaleKeys.country.tr(),
                                 isCallback: true,
-                                callbackFunction: (int countryId) {
+                                callbackFunction: (int index) {
                                   selectedCountryID =
-                                      countryState.countryList![countryId].id;
+                                      countryState.countryList![index].id;
                                   context
                                       .read(statesNotifierProvider.notifier)
-                                      .getState(countryState
-                                          .countryList![countryId].id);
+                                      .getState(
+                                          countryState.countryList![index].id);
                                 },
                                 validator: (text) {
                                   if (text == null || text.isEmpty) {
@@ -158,15 +149,14 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
                                     : statesState.statesList!
                                         .map((e) => e.name)
                                         .toList(),
-                                //value: "Select",
                                 controller: statesController,
                                 hintText: LocaleKeys.states.tr(),
                                 isCallback: true,
-                                callbackFunction: (int stateId) {
+                                callbackFunction: (int index) {
                                   selectedStateID =
                                       statesState.statesList!.isEmpty
                                           ? null
-                                          : statesState.statesList![stateId].id;
+                                          : statesState.statesList![index].id;
                                 },
                                 validator: (text) {
                                   if (text == null || text.isEmpty) {
@@ -238,50 +228,24 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
                                 toast(
                                   LocaleKeys.please_wait.tr(),
                                 );
-                                if (widget.isAccessed) {
-                                  await context
-                                      .read(addressProvider)
-                                      .createAddress(
-                                        addressType: addressTypeController
-                                                    .text.isEmpty ||
-                                                addressTypeController.text == ""
-                                            ? "Shipping"
-                                            : addressTypeController.text,
-                                        contactPerson:
-                                            contactPersonController.text,
-                                        contactNumber:
-                                            contactNumberController.text,
-                                        countryId: selectedCountryID ?? 4,
-                                        stateId: selectedStateID,
-                                        cityId: cityController.text,
-                                        addressLine1:
-                                            addressLine1Controller.text,
-                                        addressLine2:
-                                            addressLine2Controller.text,
-                                        zipCode: zipCodeController.text,
-                                      );
-                                  await context
-                                      .refresh(getAddressFutureProvider);
-                                  context.pop();
-                                } else {
-                                  Addresses _newAddress = Addresses(
-                                    addressType:
-                                        addressTypeController.text.isEmpty ||
-                                                addressTypeController.text == ""
-                                            ? "Shipping"
-                                            : addressTypeController.text,
-                                    addressTitle: contactPersonController.text,
-                                    phone: contactNumberController.text,
-                                    countryId: selectedCountryID ?? 4,
-                                    stateId: selectedStateID,
-                                    city: cityController.text,
-                                    addressLine1: addressLine1Controller.text,
-                                    addressLine2: addressLine2Controller.text,
-                                    zipCode: zipCodeController.text,
-                                    id: DateTime.now().millisecondsSinceEpoch,
-                                  );
-                                  Navigator.pop(context, _newAddress);
-                                }
+
+                                await context
+                                    .read(addressProvider)
+                                    .createAddress(
+                                      addressType: addressTypeController.text,
+                                      contactPerson:
+                                          contactPersonController.text,
+                                      contactNumber:
+                                          contactNumberController.text,
+                                      countryId: selectedCountryID ?? 4,
+                                      stateId: selectedStateID,
+                                      cityId: cityController.text,
+                                      addressLine1: addressLine1Controller.text,
+                                      addressLine2: addressLine2Controller.text,
+                                      zipCode: zipCodeController.text,
+                                    );
+                                await context.refresh(getAddressFutureProvider);
+                                context.pop();
                               }
                             },
                             child: Text(LocaleKeys.add_address.tr())),

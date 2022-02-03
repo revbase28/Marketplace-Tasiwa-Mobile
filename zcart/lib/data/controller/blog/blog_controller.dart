@@ -30,7 +30,7 @@ class BlogsRepository extends StateNotifier<BlogsState> {
 
       state = BlogsLoadedState(blogsModel.data);
     } on NetworkException {
-      state = const BlogsErrorState("Failed to fetch coupon data!");
+      state = const BlogsErrorState("Failed to fetch blog data!");
     }
   }
 }
@@ -49,7 +49,7 @@ class BlogRepository extends StateNotifier<BlogState> {
 
       state = BlogLoadedState(blogModel.data);
     } on NetworkException {
-      state = const BlogErrorState("Failed to fetch coupon data!");
+      state = const BlogErrorState("Failed to fetch blog data!");
     }
   }
 }

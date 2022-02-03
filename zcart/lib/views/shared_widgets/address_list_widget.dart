@@ -66,39 +66,15 @@ class _AddressListBuilderState extends State<AddressListBuilder> {
                             shipTo: widget.addressesList![index].id,
                           );
 
-                      _checkoutProvider.shipTo =
-                          widget.addressesList![index].id;
-                    } else {
-                      if (widget.onAddressSelected != null) {
-                        widget.onAddressSelected!(index);
-                      }
-                      context
-                          .read(cartItemDetailsNotifierProvider.notifier)
-                          .updateCart(
+                      context.read(cartNotifierProvider.notifier).updateCart(
                             widget.cartItem!.id!,
-                            countryId: widget.addressesList![index].countryId,
-                            stateId: widget.addressesList![index].stateId,
+                            countryId: widget.addressesList![index].country!.id,
+                            stateId: widget.addressesList![index].state?.id,
+                            shipTo: widget.addressesList![index].id,
                           );
 
-                      _checkoutProvider.addressTitle =
-                          widget.addressesList![index].addressTitle;
-                      _checkoutProvider.addressLine1 =
-                          widget.addressesList![index].addressLine1;
-
-                      _checkoutProvider.addressLine2 =
-                          widget.addressesList![index].addressLine2;
-
-                      _checkoutProvider.countryId =
-                          widget.addressesList![index].countryId;
-
-                      _checkoutProvider.stateId =
-                          widget.addressesList![index].stateId;
-                      _checkoutProvider.city =
-                          widget.addressesList![index].city;
-                      _checkoutProvider.zipCode =
-                          widget.addressesList![index].zipCode;
-                      _checkoutProvider.phone =
-                          widget.addressesList![index].phone;
+                      _checkoutProvider.shipTo =
+                          widget.addressesList![index].id;
                     }
 
                     setState(() {

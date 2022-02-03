@@ -25,181 +25,99 @@ class ProductDetailsWidget extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              details.data!.keyFeatures!.isEmpty
+              details.data!.keyFeatures != null &&
+                      details.data!.keyFeatures!.isEmpty
                   ? const SizedBox()
                   : Text('${LocaleKeys.key_features.tr()}\n',
-                      style: context.textTheme.subtitle2),
+                      style: context.textTheme.subtitle2!
+                          .copyWith(fontWeight: FontWeight.bold)),
               details.data!.keyFeatures != null
                   ? Column(
-                      children: details.data!.keyFeatures!
-                          .map((e) => Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const Icon(
-                                    Icons.circle_rounded,
-                                    size: 10,
-                                  ).p(8).pOnly(right: 5),
-                                  Flexible(
-                                    child: Text(
-                                      e,
-                                      style: context.textTheme.bodyText2!
-                                          .copyWith(
-                                              fontWeight: FontWeight.w400),
-                                    ),
+                      children: details.data!.keyFeatures!.map(
+                        (e) {
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 4),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Icon(Icons.check_circle,
+                                    size: 14,
+                                    color: Theme.of(context).disabledColor),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Text(
+                                    e,
+                                    style: context.textTheme.subtitle2,
                                   ),
-                                ],
-                              ).pSymmetric(v: 2))
-                          .toList(),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ).toList(),
                     )
                   : const SizedBox(),
               Text('\n${LocaleKeys.technical_details.tr()}\n',
-                  style: context.textTheme.subtitle2),
+                  style: context.textTheme.subtitle2!
+                      .copyWith(fontWeight: FontWeight.bold)),
               Column(
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                          flex: 2, child: Text("${LocaleKeys.brand.tr()}: ")),
-                      Expanded(
-                          flex: 3,
-                          child: Text(
-                              details.data!.product!.brand ??
-                                  LocaleKeys.not_available.tr(),
-                              style: context.textTheme.bodyText2)),
-                    ],
+                  TechnicalDetailsItem(
+                    title: "${LocaleKeys.brand.tr()}: ",
+                    value: details.data!.product!.brand ??
+                        LocaleKeys.not_available.tr(),
                   ),
-                  const SizedBox(height: 9),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                          flex: 2,
-                          child: Text("${LocaleKeys.model_no.tr()}: ")),
-                      Expanded(
-                          flex: 3,
-                          child: Text(
-                              details.data!.product!.modelNumber ??
-                                  LocaleKeys.not_available.tr(),
-                              style: context.textTheme.bodyText2)),
-                    ],
+                  TechnicalDetailsItem(
+                    title: "${LocaleKeys.model_no.tr()}: ",
+                    value: details.data!.product!.modelNumber ??
+                        LocaleKeys.not_available.tr(),
                   ),
-                  const SizedBox(height: 9),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                          flex: 2, child: Text("${LocaleKeys.isbn.tr()}: ")),
-                      Expanded(
-                          flex: 3,
-                          child: Text(
-                              details.data!.product!.gtin ??
-                                  LocaleKeys.not_available.tr(),
-                              style: context.textTheme.bodyText2)),
-                    ],
+                  TechnicalDetailsItem(
+                    title: "${details.data!.product!.gtinType}: ",
+                    value: details.data!.product!.gtin ??
+                        LocaleKeys.not_available.tr(),
                   ),
-                  const SizedBox(height: 9),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                          flex: 2, child: Text("${LocaleKeys.part_no.tr()}: ")),
-                      Expanded(
-                          flex: 3,
-                          child: Text(
-                              details.data!.product!.mpn ??
-                                  LocaleKeys.not_available.tr(),
-                              style: context.textTheme.bodyText2)),
-                    ],
+                  TechnicalDetailsItem(
+                    title: "${LocaleKeys.part_no.tr()}: ",
+                    value: details.data!.product!.mpn ??
+                        LocaleKeys.not_available.tr(),
                   ),
-                  const SizedBox(height: 9),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                          flex: 2,
-                          child: Text("${LocaleKeys.seller_sku.tr()}: ")),
-                      Expanded(
-                          flex: 3,
-                          child: Text(
-                              details.data!.sku ?? LocaleKeys.not_available,
-                              style: context.textTheme.bodyText2)),
-                    ],
+                  TechnicalDetailsItem(
+                    title: "${LocaleKeys.seller_sku.tr()}: ",
+                    value: details.data!.sku ?? LocaleKeys.not_available.tr(),
                   ),
-                  const SizedBox(height: 9),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                          flex: 2,
-                          child: Text("${LocaleKeys.manufacturer.tr()}: ")),
-                      Expanded(
-                          flex: 3,
-                          child: Text(
-                              details.data!.product!.manufacturer!.name ??
-                                  LocaleKeys.not_available.tr(),
-                              style: context.textTheme.bodyText2)),
-                    ],
+                  TechnicalDetailsItem(
+                    title: "Condition: ",
+                    value: details.data!.condition ??
+                        LocaleKeys.not_available.tr(),
                   ),
-                  const SizedBox(height: 9),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                          flex: 2, child: Text("${LocaleKeys.origin.tr()}: ")),
-                      Expanded(
-                          flex: 3,
-                          child: Text(
-                              details.data!.product!.origin ??
-                                  LocaleKeys.not_available.tr(),
-                              style: context.textTheme.bodyText2)),
-                    ],
+                  TechnicalDetailsItem(
+                    title: "${LocaleKeys.manufacturer.tr()}: ",
+                    value: details.data!.product!.manufacturer!.name ??
+                        LocaleKeys.not_available.tr(),
                   ),
-                  const SizedBox(height: 9),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                          flex: 2,
-                          child: Text("${LocaleKeys.min_quantity.tr()}: ")),
-                      Expanded(
-                          flex: 3,
-                          child: Text(
-                              details.data!.minOrderQuantity == null
-                                  ? LocaleKeys.not_available.tr()
-                                  : details.data!.minOrderQuantity.toString(),
-                              style: context.textTheme.bodyText2)),
-                    ],
+                  TechnicalDetailsItem(
+                    title: "${LocaleKeys.origin.tr()}: ",
+                    value: details.data!.product!.origin ??
+                        LocaleKeys.not_available.tr(),
                   ),
-                  const SizedBox(height: 9),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                          flex: 2,
-                          child: Text("${LocaleKeys.shipping_weight.tr()}: ")),
-                      Expanded(
-                          flex: 3,
-                          child: Text(
-                              details.data!.shippingWeight ??
-                                  LocaleKeys.not_available.tr(),
-                              style: context.textTheme.bodyText2)),
-                    ],
+                  TechnicalDetailsItem(
+                    title: "${LocaleKeys.min_quantity.tr()}: ",
+                    value: details.data!.minOrderQuantity == null
+                        ? LocaleKeys.not_available.tr()
+                        : details.data!.minOrderQuantity.toString(),
                   ),
-                  const SizedBox(height: 9),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                          flex: 2,
-                          child: Text("${LocaleKeys.added_on.tr()}: ")),
-                      Expanded(
-                          flex: 3,
-                          child: Text(
-                              details.data!.product!.availableFrom ??
-                                  LocaleKeys.not_available.tr(),
-                              style: context.textTheme.bodyText2)),
-                    ],
+                  TechnicalDetailsItem(
+                    title: "${LocaleKeys.shipping_weight.tr()}: ",
+                    value: details.data!.shippingWeight ??
+                        LocaleKeys.not_available.tr(),
+                  ),
+                  TechnicalDetailsItem(
+                    title: "${LocaleKeys.added_on.tr()}: ",
+                    value: details.data!.product!.availableFrom ??
+                        LocaleKeys.not_available.tr(),
                   ),
                 ],
               )
@@ -265,6 +183,46 @@ class ProductDetailsWidget extends StatelessWidget {
                 ],
               ),
       ],
+    );
+  }
+}
+
+class TechnicalDetailsItem extends StatelessWidget {
+  final String title;
+  final String value;
+  const TechnicalDetailsItem({
+    Key? key,
+    required this.title,
+    required this.value,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            flex: 35,
+            child: Text(
+              title,
+              textAlign: TextAlign.end,
+              style: context.textTheme.subtitle2!.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).disabledColor),
+            ),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            flex: 65,
+            child: Text(value,
+                textAlign: TextAlign.start,
+                style: context.textTheme.bodyText2!),
+          ),
+        ],
+      ),
     );
   }
 }

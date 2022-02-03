@@ -648,7 +648,7 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
       backgroundColor: Colors.transparent,
       builder: (context) {
         return SizedBox(
-          height: context.screenHeight * 0.7,
+          height: context.screenHeight * 0.85,
           child: ProductPageDefaultContainer(
             isFullPadding: true,
             padding: 24,
@@ -850,57 +850,23 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
   }
 
   Future<int?> _selectShippingCountry() async {
-    final int? _country = await showModalBottomSheet(
+    final int? _newCountryId = await showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
       builder: (context) {
-        return SizedBox(
-          height: context.screenHeight * 0.7,
-          child: ProductPageDefaultContainer(
-            isFullPadding: true,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text(
-                  "Select Shipping Country",
-                  style: Theme.of(context)
-                      .textTheme
-                      .headline6!
-                      .copyWith(fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 10),
-                Expanded(
-                  child: ListView(
-                    children: _countries.map(
-                      (e) {
-                        return ListTile(
-                          onTap: () {
-                            Navigator.pop(context, e.id);
-                          },
-                          title: Text(
-                            e.name,
-                            style: Theme.of(context)
-                                .textTheme
-                                .subtitle2!
-                                .copyWith(fontWeight: FontWeight.bold),
-                          ),
-                          trailing: e.id == _countryId
-                              ? const Icon(Icons.check_circle)
-                              : const Icon(Icons.circle_outlined),
-                        );
-                      },
-                    ).toList(),
-                  ),
-                ),
-              ],
-            ),
-          ),
+        return _SelectSippingCountryPage(
+          title: "Select Shipping Country",
+          items: _countries,
+          onCountrySelected: (country) {
+            Navigator.pop(context, country.id);
+          },
+          selected: _countryId,
         );
       },
     );
 
-    return _country;
+    return _newCountryId;
   }
 
   Future<int?> _selectShippingState(List<States> states) async {
@@ -911,48 +877,56 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
       enableDrag: false,
       isDismissible: false,
       builder: (context) {
-        return SizedBox(
-          height: context.screenHeight * 0.7,
-          child: ProductPageDefaultContainer(
-            isFullPadding: true,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text(
-                  "Select State",
-                  style: Theme.of(context)
-                      .textTheme
-                      .headline6!
-                      .copyWith(fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 10),
-                Expanded(
-                  child: ListView(
-                    children: states.map(
-                      (e) {
-                        return ListTile(
-                          onTap: () {
-                            Navigator.pop(context, e.id);
-                          },
-                          title: Text(
-                            e.name ?? "Unknown",
-                            style: Theme.of(context)
-                                .textTheme
-                                .subtitle2!
-                                .copyWith(fontWeight: FontWeight.bold),
-                          ),
-                          trailing: e.id == _stateId
-                              ? const Icon(Icons.check_circle)
-                              : const Icon(Icons.circle_outlined),
-                        );
-                      },
-                    ).toList(),
-                  ),
-                ),
-              ],
-            ),
-          ),
+        return _SelectSippingStatePage(
+          title: "Select Shipping State",
+          items: states,
+          onCountrySelected: (state) {
+            Navigator.pop(context, state.id);
+          },
+          selected: _stateId,
         );
+        // return SizedBox(
+        //   height: context.screenHeight * 0.85,
+        //   child: ProductPageDefaultContainer(
+        //     isFullPadding: true,
+        //     child: Column(
+        //       crossAxisAlignment: CrossAxisAlignment.stretch,
+        //       children: [
+        //         Text(
+        //           "Select State",
+        //           style: Theme.of(context)
+        //               .textTheme
+        //               .headline6!
+        //               .copyWith(fontWeight: FontWeight.bold),
+        //         ),
+        //         const SizedBox(height: 10),
+        //         Expanded(
+        //           child: ListView(
+        //             children: states.map(
+        //               (e) {
+        //                 return ListTile(
+        //                   onTap: () {
+        //                     Navigator.pop(context, e.id);
+        //                   },
+        //                   title: Text(
+        //                     e.name ?? "Unknown",
+        //                     style: Theme.of(context)
+        //                         .textTheme
+        //                         .subtitle2!
+        //                         .copyWith(fontWeight: FontWeight.bold),
+        //                   ),
+        //                   trailing: e.id == _stateId
+        //                       ? const Icon(Icons.check_circle)
+        //                       : const Icon(Icons.circle_outlined),
+        //                 );
+        //               },
+        //             ).toList(),
+        //           ),
+        //         ),
+        //       ],
+        //     ),
+        //   ),
+        // );
       },
     );
 
@@ -969,6 +943,7 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
           height: context.screenHeight * 0.7,
           child: ProductPageDefaultContainer(
             isFullPadding: true,
+            padding: 24,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -984,41 +959,44 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
                   child: ListView(
                     children: _shippingOptions
                         .map(
-                          (e) => RadioListTile<String>(
-                              value: e.name!,
-                              groupValue: _selectedShippingOption,
-                              title: Text(
-                                (e.name ?? "Unknown") +
-                                    " by " +
-                                    (e.carrierName ?? "Unknown"),
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .subtitle2!
-                                    .copyWith(
+                          (e) => ListTile(
+                            title: Text(
+                              (e.name ?? "Unknown") +
+                                  " by " +
+                                  (e.carrierName ?? "Unknown"),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .subtitle2!
+                                  .copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                            ),
+                            trailing: Text(
+                              e.cost ?? "0",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .subtitle2!
+                                  .copyWith(
                                       fontWeight: FontWeight.bold,
-                                    ),
-                              ),
-                              secondary: Text(
-                                e.cost ?? "0",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .subtitle2!
-                                    .copyWith(
-                                        fontWeight: FontWeight.bold,
-                                        color: getColorBasedOnTheme(context,
-                                            kPriceColor, kDarkPriceColor)),
-                              ),
-                              subtitle: Text(
-                                e.deliveryTakes ??
-                                    LocaleKeys.not_available.tr(),
-                                style: Theme.of(context).textTheme.caption!,
-                              ),
-                              onChanged: (value) {
-                                setState(() {
-                                  _selectedShippingOption = value!;
-                                });
-                                Navigator.of(context).pop();
-                              }),
+                                      color: getColorBasedOnTheme(context,
+                                          kPriceColor, kDarkPriceColor)),
+                            ),
+                            subtitle: Text(
+                              e.deliveryTakes ?? LocaleKeys.not_available.tr(),
+                              style: Theme.of(context).textTheme.caption!,
+                            ),
+                            onTap: () {
+                              setState(() {
+                                _selectedShippingOption = e.name;
+                              });
+                              Navigator.of(context).pop();
+                            },
+                            minLeadingWidth: 0,
+                            leading: _selectedShippingOption == e.name
+                                ? const Icon(Icons.check_circle)
+                                : const Icon(Icons.circle_outlined),
+                            contentPadding: EdgeInsets.zero,
+                          ),
                         )
                         .toList(),
                   ),
@@ -1270,4 +1248,203 @@ class _ProductCountry {
     required this.id,
     required this.name,
   });
+}
+
+class _SelectSippingCountryPage extends StatefulWidget {
+  final String title;
+  final List<_ProductCountry> items;
+  final int? selected;
+  final Function(_ProductCountry) onCountrySelected;
+  const _SelectSippingCountryPage({
+    Key? key,
+    required this.title,
+    required this.items,
+    required this.selected,
+    required this.onCountrySelected,
+  }) : super(key: key);
+
+  @override
+  _SelectSippingCountryPageState createState() =>
+      _SelectSippingCountryPageState();
+}
+
+class _SelectSippingCountryPageState extends State<_SelectSippingCountryPage> {
+  final _scrollController = ScrollController();
+  final _searchController = TextEditingController();
+  final List<_ProductCountry> _filteredItems = [];
+
+  @override
+  void initState() {
+    _filteredItems.addAll(widget.items);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _filteredItems.clear();
+    _searchController.dispose();
+    _scrollController.dispose();
+    debugPrint("dispose");
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: context.screenHeight * 0.85,
+      child: ProductPageDefaultContainer(
+        isFullPadding: true,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              widget.title,
+              style: Theme.of(context)
+                  .textTheme
+                  .headline6!
+                  .copyWith(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            CustomTextField(
+              controller: _searchController,
+              hintText: "Search",
+              onChanged: (value) {
+                setState(() {
+                  _filteredItems.clear();
+                  _filteredItems.addAll(widget.items.where((element) => element
+                      .name
+                      .toLowerCase()
+                      .contains(value.toLowerCase())));
+                });
+              },
+            ),
+            const SizedBox(height: 10),
+            Expanded(
+              child: ListView(
+                controller: _scrollController,
+                children: _filteredItems.map(
+                  (e) {
+                    return ListTile(
+                      onTap: () {
+                        widget.onCountrySelected(e);
+                      },
+                      title: Text(
+                        e.name,
+                        style: Theme.of(context)
+                            .textTheme
+                            .subtitle2!
+                            .copyWith(fontWeight: FontWeight.bold),
+                      ),
+                      trailing: e.id == widget.selected
+                          ? const Icon(Icons.check_circle)
+                          : const Icon(Icons.circle_outlined),
+                    );
+                  },
+                ).toList(),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _SelectSippingStatePage extends StatefulWidget {
+  final String title;
+  final List<States> items;
+  final int? selected;
+  final Function(States) onCountrySelected;
+  const _SelectSippingStatePage({
+    Key? key,
+    required this.title,
+    required this.items,
+    required this.selected,
+    required this.onCountrySelected,
+  }) : super(key: key);
+
+  @override
+  _SelectSippingStatePageState createState() => _SelectSippingStatePageState();
+}
+
+class _SelectSippingStatePageState extends State<_SelectSippingStatePage> {
+  final _scrollController = ScrollController();
+  final _searchController = TextEditingController();
+  final List<States> _filteredItems = [];
+
+  @override
+  void initState() {
+    _filteredItems.addAll(widget.items);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _filteredItems.clear();
+    _searchController.dispose();
+    _scrollController.dispose();
+    debugPrint("dispose");
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: context.screenHeight * 0.85,
+      child: ProductPageDefaultContainer(
+        isFullPadding: true,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              widget.title,
+              style: Theme.of(context)
+                  .textTheme
+                  .headline6!
+                  .copyWith(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            CustomTextField(
+              controller: _searchController,
+              hintText: "Search",
+              onChanged: (value) {
+                setState(() {
+                  _filteredItems.clear();
+                  _filteredItems.addAll(widget.items.where((element) =>
+                      (element.name ?? "Unknown")
+                          .toLowerCase()
+                          .contains(value.toLowerCase())));
+                });
+              },
+            ),
+            const SizedBox(height: 10),
+            Expanded(
+              child: ListView(
+                controller: _scrollController,
+                children: _filteredItems.map(
+                  (e) {
+                    return ListTile(
+                      onTap: () {
+                        widget.onCountrySelected(e);
+                      },
+                      title: Text(
+                        e.name ?? "Unknown",
+                        style: Theme.of(context)
+                            .textTheme
+                            .subtitle2!
+                            .copyWith(fontWeight: FontWeight.bold),
+                      ),
+                      trailing: e.id == widget.selected
+                          ? const Icon(Icons.check_circle)
+                          : const Icon(Icons.circle_outlined),
+                    );
+                  },
+                ).toList(),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }

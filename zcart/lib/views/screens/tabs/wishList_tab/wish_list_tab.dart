@@ -53,11 +53,17 @@ class WishListTab extends ConsumerWidget {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const SizedBox(height: 100),
+                          const SizedBox(height: 70),
                           const Icon(Icons.info_outline),
-                          Text(LocaleKeys.no_item_found.tr()),
+                          Text(
+                            LocaleKeys.no_item_found.tr(),
+                            style: Theme.of(context)
+                                .textTheme
+                                .subtitle2!
+                                .copyWith(fontWeight: FontWeight.bold),
+                          ),
 
-                          const SizedBox(height: 100),
+                          const SizedBox(height: 50),
 
                           const RecentlyViewed().p(10),
 

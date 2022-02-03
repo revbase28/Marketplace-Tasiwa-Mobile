@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zcart/data/interface/i_address_repository.dart';
 import 'package:zcart/data/models/address/address_model.dart';
@@ -27,26 +26,6 @@ final statesNotifierProvider =
 final paymentOptionsNotifierProvider =
     StateNotifierProvider<PaymentOptionsNotifier, PaymentOptionsState>(
         (ref) => PaymentOptionsNotifier(ref.watch(addressRepositoryProvider)));
-
-final guestAddressesProvider = ChangeNotifierProvider<GuestAddresses>((ref) {
-  return GuestAddresses();
-});
-
-class GuestAddresses extends ChangeNotifier {
-  List<Addresses> _addresses = [];
-  List<Addresses> get addresses => _addresses;
-
-  void addAddress(Addresses address) {
-    _addresses = [..._addresses, address];
-    notifyListeners();
-  }
-
-  void removeAddress(Addresses address) {
-    _addresses =
-        _addresses.where((element) => element.id != address.id).toList();
-    notifyListeners();
-  }
-}
 
 final getAddressFutureProvider = FutureProvider<List<Addresses>?>((ref) async {
   dynamic responseBody;

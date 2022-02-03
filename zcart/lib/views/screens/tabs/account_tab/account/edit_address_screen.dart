@@ -62,6 +62,8 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
 
   bool _isLoading = false;
 
+  final List<String> _addressTypes = ["Primary", "Billing", "Shipping"];
+
   @override
   Widget build(BuildContext context) {
     //debugPrint(widget.address.country!.id);
@@ -116,11 +118,7 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
                         children: [
                           CustomDropDownField(
                             title: LocaleKeys.address_type.tr(),
-                            optionsList: const [
-                              "Primary",
-                              "Billing",
-                              "Shipping"
-                            ],
+                            optionsList: _addressTypes,
                             value: widget.address.addressType,
                             controller: _addressTypeController,
                             validator: (text) {

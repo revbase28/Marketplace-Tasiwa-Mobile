@@ -253,7 +253,7 @@ class _RatingAndReviewSection extends StatelessWidget {
               itemSize: 12,
               unratedColor: kFadeColor,
               itemBuilder: (context, _) =>
-                  Icon(Icons.star, color: kPrimaryColor),
+                  const Icon(Icons.star, color: kDarkPriceColor),
               onRatingUpdate: (rating) => debugPrint(rating.toString()),
             ),
           ],

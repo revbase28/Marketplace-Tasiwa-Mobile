@@ -10,8 +10,7 @@ Future<dynamic> addToCartBottomSheet(BuildContext context, responseBody) async {
     context: context,
     builder: (context) {
       return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 24),
-        height: 180,
+        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 32),
         decoration: BoxDecoration(
             color: kDarkColor.withOpacity(0.8),
             borderRadius: const BorderRadius.only(
@@ -20,6 +19,7 @@ Future<dynamic> addToCartBottomSheet(BuildContext context, responseBody) async {
             )),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisSize: MainAxisSize.min,
           children: [
             Text(
               responseBody["message"],
@@ -33,12 +33,19 @@ Future<dynamic> addToCartBottomSheet(BuildContext context, responseBody) async {
               height: 10,
             ),
             ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                ),
                 onPressed: () {
                   context.nextAndRemoveUntilPage(
                       const BottomNavBar(selectedIndex: 4));
                 },
                 child: Text(LocaleKeys.view_cart.tr())),
+            const SizedBox(height: 16),
             ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                ),
                 onPressed: () {
                   context.pop();
                   context.pop();

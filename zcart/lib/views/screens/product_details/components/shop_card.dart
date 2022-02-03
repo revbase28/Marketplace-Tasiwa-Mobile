@@ -61,7 +61,8 @@ class ShopCard extends StatelessWidget {
             itemCount: 5,
             itemSize: 12,
             itemPadding: const EdgeInsets.symmetric(horizontal: 0.0),
-            itemBuilder: (context, _) => Icon(Icons.star, color: kPrimaryColor),
+            itemBuilder: (context, _) =>
+                const Icon(Icons.star, color: kDarkPriceColor),
             onRatingUpdate: (rating) => debugPrint(rating.toString()),
           ),
           Text(

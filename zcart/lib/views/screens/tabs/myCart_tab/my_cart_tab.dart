@@ -26,6 +26,7 @@ import 'package:zcart/views/screens/tabs/home_tab/components/error_widget.dart';
 import 'package:zcart/views/screens/tabs/myCart_tab/checkout/checkout_screen.dart';
 import 'package:zcart/views/screens/tabs/vendors_tab/vendors_details.dart';
 import 'package:zcart/views/shared_widgets/custom_confirm_dialog.dart';
+import 'package:zcart/views/shared_widgets/custom_textfield.dart';
 import 'package:zcart/views/shared_widgets/product_details_card.dart';
 import 'package:zcart/views/shared_widgets/product_loading_widget.dart';
 
@@ -89,17 +90,24 @@ class _MyCartTabState extends State<MyCartTab> {
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  const SizedBox(height: 100),
-                                  const Icon(Icons.info_outline),
-                                  Text(LocaleKeys.no_item_found.tr()),
-                                  TextButton(
+                                  const SizedBox(height: 60),
+
+                                  Text(
+                                    "Empty Cart!",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .subtitle2!
+                                        .copyWith(fontWeight: FontWeight.bold),
+                                  ),
+                                  const SizedBox(height: 8),
+                                  ElevatedButton(
                                       onPressed: () {
                                         context.nextReplacementPage(
                                             const BottomNavBar(
                                                 selectedIndex: 0));
                                       },
                                       child: Text(LocaleKeys.go_shopping.tr())),
-                                  const SizedBox(height: 100),
+                                  const SizedBox(height: 50),
 
                                   const RecentlyViewed().p(10),
 
@@ -177,52 +185,18 @@ class CartItemCard extends ConsumerWidget {
     final _countryState = watch(countryNotifierProvider);
 
     Future<int?> _getCountry(List<Countries> coutries) async {
-      final _result = await showModalBottomSheet(
+      final int? _result = await showModalBottomSheet(
         context: context,
         backgroundColor: Colors.transparent,
         isScrollControlled: true,
         builder: (context) {
-          return SizedBox(
-            height: context.screenHeight * 0.7,
-            child: ProductPageDefaultContainer(
-              isFullPadding: true,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Text(
-                    "Select Shipping Country",
-                    style: Theme.of(context)
-                        .textTheme
-                        .headline6!
-                        .copyWith(fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 10),
-                  Expanded(
-                    child: ListView(
-                      children: coutries.map(
-                        (e) {
-                          return ListTile(
-                            onTap: () {
-                              Navigator.pop(context, e.id);
-                            },
-                            title: Text(
-                              e.name ?? "Unknown",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .subtitle2!
-                                  .copyWith(fontWeight: FontWeight.bold),
-                            ),
-                            trailing: e.id! == cartItem.countryId
-                                ? const Icon(Icons.check_circle)
-                                : const Icon(Icons.circle_outlined),
-                          );
-                        },
-                      ).toList(),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+          return _SelectSippingCountryPage(
+            title: "Select Shipping Country",
+            items: coutries,
+            selected: cartItem.countryId,
+            onCountrySelected: (p0) {
+              Navigator.pop(context, p0.id);
+            },
           );
         },
       );
@@ -238,47 +212,13 @@ class CartItemCard extends ConsumerWidget {
         enableDrag: false,
         isDismissible: false,
         builder: (context) {
-          return SizedBox(
-            height: context.screenHeight * 0.7,
-            child: ProductPageDefaultContainer(
-              isFullPadding: true,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Text(
-                    "Select State",
-                    style: Theme.of(context)
-                        .textTheme
-                        .headline6!
-                        .copyWith(fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 10),
-                  Expanded(
-                    child: ListView(
-                      children: states.map(
-                        (e) {
-                          return ListTile(
-                            onTap: () {
-                              Navigator.pop(context, e.id);
-                            },
-                            title: Text(
-                              e.name ?? "Unknown",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .subtitle2!
-                                  .copyWith(fontWeight: FontWeight.bold),
-                            ),
-                            trailing: e.id == cartItem.stateId
-                                ? const Icon(Icons.check_circle)
-                                : const Icon(Icons.circle_outlined),
-                          );
-                        },
-                      ).toList(),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+          return _SelectSippingStatePage(
+            title: "Select State",
+            items: states,
+            selected: cartItem.stateId,
+            onCountrySelected: (p0) {
+              Navigator.pop(context, p0.id);
+            },
           );
         },
       );
@@ -621,99 +561,111 @@ class PackagingDetails extends ConsumerWidget {
               (element) => element.id == cartItem.packagingId,
             );
           }
-          return ListTile(
-            onTap: () {
-              showModalBottomSheet(
-                context: context,
-                backgroundColor: Colors.transparent,
-                isScrollControlled: true,
-                builder: (context) {
-                  return SizedBox(
-                    height: context.screenHeight * 0.7,
-                    child: ProductPageDefaultContainer(
-                      isFullPadding: true,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Text(
-                            "Select Packaging",
-                            style: Theme.of(context)
-                                .textTheme
-                                .headline6!
-                                .copyWith(fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(height: 10),
-                          Expanded(
-                            child: ListView(
-                              children: value
-                                  .map(
-                                    (e) => RadioListTile<int?>(
-                                        value: e.id,
-                                        groupValue: packagingModel?.id,
-                                        title: Text(
-                                          e.name ?? "Unknown",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .subtitle2!
-                                              .copyWith(
-                                                  fontWeight: FontWeight.bold),
-                                        ),
-                                        secondary: Text(
-                                          e.cost ?? "0",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyText2!
-                                              .copyWith(
-                                                color: getColorBasedOnTheme(
-                                                    context,
-                                                    kPriceColor,
-                                                    kDarkPriceColor),
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                        ),
-                                        onChanged: (value) async {
-                                          Navigator.of(context).pop();
-                                          context
-                                              .read(
-                                                  cartNotifierProvider.notifier)
-                                              .updateCart(cartItem.id!,
-                                                  packagingId: e.id);
-                                        }),
-                                  )
-                                  .toList(),
+          return value.length == 1
+              ? const SizedBox()
+              : ListTile(
+                  onTap: () {
+                    showModalBottomSheet(
+                      context: context,
+                      backgroundColor: Colors.transparent,
+                      isScrollControlled: true,
+                      builder: (context) {
+                        return SizedBox(
+                          height: context.screenHeight * 0.7,
+                          child: ProductPageDefaultContainer(
+                            isFullPadding: true,
+                            padding: 24,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  "Select Packaging",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline6!
+                                      .copyWith(fontWeight: FontWeight.bold),
+                                ),
+                                const SizedBox(height: 10),
+                                Expanded(
+                                  child: ListView(
+                                    shrinkWrap: true,
+                                    children: value
+                                        .map(
+                                          (e) => ListTile(
+                                            title: Text(
+                                              e.name ?? "Unknown",
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .subtitle2!
+                                                  .copyWith(
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                            ),
+                                            trailing: Text(
+                                              e.cost ?? "0",
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyText2!
+                                                  .copyWith(
+                                                    color: getColorBasedOnTheme(
+                                                        context,
+                                                        kPriceColor,
+                                                        kDarkPriceColor),
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                            ),
+                                            onTap: () async {
+                                              Navigator.of(context).pop();
+                                              context
+                                                  .read(cartNotifierProvider
+                                                      .notifier)
+                                                  .updateCart(cartItem.id!,
+                                                      packagingId: e.id);
+                                            },
+                                            minLeadingWidth: 0,
+                                            leading: packagingModel?.id == e.id
+                                                ? const Icon(Icons.check_circle)
+                                                : const Icon(
+                                                    Icons.circle_outlined),
+                                            contentPadding: EdgeInsets.zero,
+                                          ),
+                                        )
+                                        .toList(),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                        ],
-                      ),
+                        );
+                      },
+                    );
+                  },
+                  dense: true,
+                  contentPadding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
+                  title: Text(
+                    LocaleKeys.packaging.tr() + ':',
+                    style: context.textTheme.caption!.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: kPrimaryFadeTextColor),
+                  ),
+                  trailing: Text(
+                    double.parse(packagingModel?.costRaw ?? "0") <= 0.0
+                        ? ""
+                        : (packagingModel?.cost ?? "0"),
+                    style: context.textTheme.subtitle2!.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: getColorBasedOnTheme(
+                            context, kPriceColor, kDarkPriceColor)),
+                  ),
+                  subtitle: Text(
+                    packagingModel?.name ?? '',
+                    style: context.textTheme.subtitle2!.copyWith(
+                      fontWeight: FontWeight.bold,
                     ),
-                  );
-                },
-              );
-            },
-            dense: true,
-            contentPadding:
-                const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
-            title: Text(
-              LocaleKeys.packaging.tr() + ':',
-              style: context.textTheme.caption!.copyWith(
-                  fontWeight: FontWeight.bold, color: kPrimaryFadeTextColor),
-            ),
-            trailing: Text(
-              double.parse(packagingModel?.costRaw ?? "0") <= 0.0
-                  ? ""
-                  : (packagingModel?.cost ?? "0"),
-              style: context.textTheme.subtitle2!.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: getColorBasedOnTheme(
-                      context, kPriceColor, kDarkPriceColor)),
-            ),
-            subtitle: Text(
-              packagingModel?.name ?? '',
-              style: context.textTheme.subtitle2!.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          );
+                  ),
+                );
         }
       },
       loading: () => const SizedBox(),
@@ -798,6 +750,7 @@ class ShippingDetails extends ConsumerWidget {
                         height: context.screenHeight * 0.7,
                         child: ProductPageDefaultContainer(
                           isFullPadding: true,
+                          padding: 24,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
@@ -813,51 +766,56 @@ class ShippingDetails extends ConsumerWidget {
                                 child: ListView(
                                   children: value
                                       .map(
-                                        (e) => RadioListTile<int?>(
-                                            value: e.id,
-                                            groupValue: _shippingOption?.id,
-                                            title: Text(
-                                              (e.name ?? "Unknown") +
-                                                  " by " +
-                                                  (e.carrierName ?? "Unknown"),
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .subtitle2!
-                                                  .copyWith(
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                            ),
-                                            subtitle: Text(
-                                              e.deliveryTakes ?? "",
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .caption!,
-                                            ),
-                                            secondary: Text(
-                                              e.cost ?? "0",
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyText2!
-                                                  .copyWith(
-                                                    color: getColorBasedOnTheme(
-                                                        context,
-                                                        kPriceColor,
-                                                        kDarkPriceColor),
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                            ),
-                                            onChanged: (value) async {
-                                              Navigator.of(context).pop();
-                                              context
-                                                  .read(cartNotifierProvider
-                                                      .notifier)
-                                                  .updateCart(
-                                                    cartItem.id!,
-                                                    shippingOptionId: e.id,
-                                                    shippingZoneId:
-                                                        e.shippingZoneId,
-                                                  );
-                                            }),
+                                        (e) => ListTile(
+                                          title: Text(
+                                            (e.name ?? "Unknown") +
+                                                " by " +
+                                                (e.carrierName ?? "Unknown"),
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .subtitle2!
+                                                .copyWith(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                          ),
+                                          subtitle: Text(
+                                            e.deliveryTakes ?? "",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .caption!,
+                                          ),
+                                          trailing: Text(
+                                            e.cost ?? "0",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyText2!
+                                                .copyWith(
+                                                  color: getColorBasedOnTheme(
+                                                      context,
+                                                      kPriceColor,
+                                                      kDarkPriceColor),
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                          ),
+                                          onTap: () async {
+                                            Navigator.of(context).pop();
+                                            context
+                                                .read(cartNotifierProvider
+                                                    .notifier)
+                                                .updateCart(
+                                                  cartItem.id!,
+                                                  shippingOptionId: e.id,
+                                                  shippingZoneId:
+                                                      e.shippingZoneId,
+                                                );
+                                          },
+                                          leading: _shippingOption?.id == e.id
+                                              ? const Icon(Icons.check_circle)
+                                              : const Icon(
+                                                  Icons.circle_outlined),
+                                          contentPadding: EdgeInsets.zero,
+                                          minLeadingWidth: 0,
+                                        ),
                                       )
                                       .toList(),
                                 ),
@@ -968,31 +926,201 @@ class CartGrandTotalPart extends StatelessWidget {
   }
 }
 
+class _SelectSippingCountryPage extends StatefulWidget {
+  final String title;
+  final List<Countries> items;
+  final int? selected;
+  final Function(Countries) onCountrySelected;
+  const _SelectSippingCountryPage({
+    Key? key,
+    required this.title,
+    required this.items,
+    required this.selected,
+    required this.onCountrySelected,
+  }) : super(key: key);
 
+  @override
+  _SelectSippingCountryPageState createState() =>
+      _SelectSippingCountryPageState();
+}
 
+class _SelectSippingCountryPageState extends State<_SelectSippingCountryPage> {
+  final _scrollController = ScrollController();
+  final _searchController = TextEditingController();
+  final List<Countries> _filteredItems = [];
 
+  @override
+  void initState() {
+    _filteredItems.addAll(widget.items);
+    super.initState();
+  }
 
+  @override
+  void dispose() {
+    _filteredItems.clear();
+    _searchController.dispose();
+    _scrollController.dispose();
+    debugPrint("dispose");
+    super.dispose();
+  }
 
-// ElevatedButton(
-//                             onPressed: () async {
-//                               String? _customerEmail;
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: context.screenHeight * 0.85,
+      child: ProductPageDefaultContainer(
+        isFullPadding: true,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              widget.title,
+              style: Theme.of(context)
+                  .textTheme
+                  .headline6!
+                  .copyWith(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            CustomTextField(
+              controller: _searchController,
+              hintText: "Search",
+              onChanged: (value) {
+                setState(() {
+                  _filteredItems.clear();
+                  _filteredItems.addAll(widget.items.where((element) =>
+                      (element.name ?? "Unknown")
+                          .toLowerCase()
+                          .contains(value.toLowerCase())));
+                });
+              },
+            ),
+            const SizedBox(height: 10),
+            Expanded(
+              child: ListView(
+                controller: _scrollController,
+                children: _filteredItems.map(
+                  (e) {
+                    return ListTile(
+                      onTap: () {
+                        widget.onCountrySelected(e);
+                      },
+                      title: Text(
+                        e.name ?? "Unknown",
+                        style: Theme.of(context)
+                            .textTheme
+                            .subtitle2!
+                            .copyWith(fontWeight: FontWeight.bold),
+                      ),
+                      trailing: e.id == widget.selected
+                          ? const Icon(Icons.check_circle)
+                          : const Icon(Icons.circle_outlined),
+                    );
+                  },
+                ).toList(),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
 
-//                               if (accessAllowed) {
-//                                 if (userState is UserLoadedState) {
-//                                   _customerEmail = userState.user!.email!;
-//                                 }
-//                               }
+class _SelectSippingStatePage extends StatefulWidget {
+  final String title;
+  final List<States> items;
+  final int? selected;
+  final Function(States) onCountrySelected;
+  const _SelectSippingStatePage({
+    Key? key,
+    required this.title,
+    required this.items,
+    required this.selected,
+    required this.onCountrySelected,
+  }) : super(key: key);
 
-//                               context
-//                                   .read(paymentOptionsNotifierProvider.notifier)
-//                                   .fetchPaymentMethod(
-//                                       cartId: cartItem.id!.toString());
-//                               context
-//                                   .read(
-//                                       cartItemDetailsNotifierProvider.notifier)
-//                                   .getCartItemDetails(cartItem.id);
+  @override
+  _SelectSippingStatePageState createState() => _SelectSippingStatePageState();
+}
 
-//                               // context.nextPage(
-//                               //     CheckoutScreen(customerEmail: customerEmail));
-//                             },
-//                             child: Text(LocaleKeys.checkout.tr()))
+class _SelectSippingStatePageState extends State<_SelectSippingStatePage> {
+  final _scrollController = ScrollController();
+  final _searchController = TextEditingController();
+  final List<States> _filteredItems = [];
+
+  @override
+  void initState() {
+    _filteredItems.addAll(widget.items);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _filteredItems.clear();
+    _searchController.dispose();
+    _scrollController.dispose();
+    debugPrint("dispose");
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: context.screenHeight * 0.85,
+      child: ProductPageDefaultContainer(
+        isFullPadding: true,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              widget.title,
+              style: Theme.of(context)
+                  .textTheme
+                  .headline6!
+                  .copyWith(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            CustomTextField(
+              controller: _searchController,
+              hintText: "Search",
+              onChanged: (value) {
+                setState(() {
+                  _filteredItems.clear();
+                  _filteredItems.addAll(widget.items.where((element) =>
+                      (element.name ?? "Unknown")
+                          .toLowerCase()
+                          .contains(value.toLowerCase())));
+                });
+              },
+            ),
+            const SizedBox(height: 10),
+            Expanded(
+              child: ListView(
+                controller: _scrollController,
+                children: _filteredItems.map(
+                  (e) {
+                    return ListTile(
+                      onTap: () {
+                        widget.onCountrySelected(e);
+                      },
+                      title: Text(
+                        e.name ?? "Unknown",
+                        style: Theme.of(context)
+                            .textTheme
+                            .subtitle2!
+                            .copyWith(fontWeight: FontWeight.bold),
+                      ),
+                      trailing: e.id == widget.selected
+                          ? const Icon(Icons.check_circle)
+                          : const Icon(Icons.circle_outlined),
+                    );
+                  },
+                ).toList(),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

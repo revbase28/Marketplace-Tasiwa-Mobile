@@ -18,18 +18,26 @@ class CheckoutNotifier extends StateNotifier<CheckoutState> {
   final DeviceInfoPlugin _deviceInfo = DeviceInfoPlugin();
 
   int? cartId;
+  //Customer address ID
   int? shipTo;
+  //Payment method ID
   dynamic paymentMethod;
+  //Shipping method ID
   dynamic shippingOptionId;
+  //Packaging method ID
   dynamic packagingId;
+  //Buyer note
   dynamic buyerNote;
   dynamic deviceId;
+
+  //Guest checkout
   String? email;
   bool? agreeToTerms;
   bool? createAccount;
-
   String? password;
   String? passwordConfirm;
+
+  //Guest Address
   String? addressTitle;
   String? addressLine1;
   String? addressLine2;

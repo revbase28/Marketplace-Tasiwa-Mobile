@@ -208,8 +208,9 @@ class OrderCard extends StatelessWidget {
                                 itemSize: 12,
                                 itemPadding:
                                     const EdgeInsets.symmetric(horizontal: 0.0),
-                                itemBuilder: (context, _) =>
-                                    const Icon(Icons.star, color: Colors.amber),
+                                itemBuilder: (context, _) => const Icon(
+                                    Icons.star,
+                                    color: kDarkPriceColor),
                                 onRatingUpdate: (rating) =>
                                     debugPrint(rating.toString()),
                               ).pOnly(top: 5),
