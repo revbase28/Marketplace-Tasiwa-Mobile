@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'dart:ffi';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
@@ -39,7 +37,6 @@ import 'package:zcart/views/screens/tabs/account_tab/others/terms_and_conditions
 import 'package:zcart/views/screens/tabs/myCart_tab/checkout/payments/payment_methods.dart';
 import 'package:zcart/views/shared_widgets/address_list_widget.dart';
 import 'package:zcart/views/shared_widgets/dropdown_field_loading_widget.dart';
-import 'package:zcart/views/shared_widgets/keybord_visibility_builder.dart';
 import 'package:zcart/views/shared_widgets/shared_widgets.dart';
 
 class CheckoutScreen extends StatefulWidget {
@@ -62,7 +59,7 @@ class _CheckoutScreenState extends State<CheckoutScreen>
 
   Addresses? _selectedAddress;
 
-  bool _keyboardVisible = true;
+  bool _keyboardVisible = false;
 
   @override
   void initState() {
