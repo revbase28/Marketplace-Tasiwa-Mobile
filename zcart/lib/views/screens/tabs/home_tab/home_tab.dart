@@ -127,10 +127,14 @@ class HomeTab extends ConsumerWidget {
                 bannerState is BannerLoadedState
                     ? bannerState.bannerList == null
                         ? const SizedBox()
-                        : bannerState.bannerList!.length < 3
+                        : bannerState.bannerList!.length <= 3
                             ? const SizedBox()
                             : BannerWidget(
-                                bannerState.bannerList!.sublist(3, 5),
+                                bannerState.bannerList!.sublist(
+                                    3,
+                                    bannerState.bannerList!.length <= 5
+                                        ? bannerState.bannerList!.length
+                                        : 5),
                                 isReverse: false,
                               )
                     : bannerState is BannerErrorState
@@ -175,10 +179,13 @@ class HomeTab extends ConsumerWidget {
                 bannerState is BannerLoadedState
                     ? bannerState.bannerList == null
                         ? const SizedBox()
-                        : bannerState.bannerList!.length < 5
+                        : bannerState.bannerList!.length <= 5
                             ? const SizedBox()
-                            : BannerWidget(
-                                bannerState.bannerList!.sublist(5, 7))
+                            : BannerWidget(bannerState.bannerList!.sublist(
+                                5,
+                                bannerState.bannerList!.length <= 7
+                                    ? bannerState.bannerList!.length
+                                    : 7))
                     : bannerState is BannerErrorState
                         ? ErrorMessageWidget(bannerState.message)
                         : const SizedBox(),
@@ -197,7 +204,7 @@ class HomeTab extends ConsumerWidget {
                 bannerState is BannerLoadedState
                     ? bannerState.bannerList == null
                         ? const SizedBox()
-                        : bannerState.bannerList!.length < 7
+                        : bannerState.bannerList!.length <= 7
                             ? const SizedBox()
                             : BannerWidget(
                                 bannerState.bannerList!.sublist(7),

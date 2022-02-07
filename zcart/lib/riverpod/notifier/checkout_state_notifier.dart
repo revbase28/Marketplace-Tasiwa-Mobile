@@ -74,7 +74,7 @@ class CheckoutNotifier extends StateNotifier<CheckoutState> {
     }
   }
 
-  Future checkout({bool isAllCheckout = false}) async {
+  Future checkout({bool isOneCheckout = false}) async {
     deviceId = await _getDeviceId();
     var requestBody = {
       "ship_to": shipTo.toString(),
@@ -105,7 +105,7 @@ class CheckoutNotifier extends StateNotifier<CheckoutState> {
       // ignore: prefer_const_constructors
       state = CheckoutLoadingState();
       toast(LocaleKeys.please_wait.tr());
-      if (isAllCheckout) {
+      if (isOneCheckout) {
         await _iCheckoutRepository.checkoutAll(requestBody);
       } else {
         await _iCheckoutRepository.checkout(cartId!, requestBody);
@@ -117,7 +117,7 @@ class CheckoutNotifier extends StateNotifier<CheckoutState> {
     }
   }
 
-  Future<void> guestCheckout({bool isAllCheckout = false}) async {
+  Future<void> guestCheckout({bool isOneCheckout = false}) async {
     deviceId = await _getDeviceId();
     var requestBody = {
       "payment_method": paymentMethod.toString(),
@@ -168,7 +168,7 @@ class CheckoutNotifier extends StateNotifier<CheckoutState> {
 
       String? _accessToken;
 
-      if (isAllCheckout) {
+      if (isOneCheckout) {
         _accessToken = await _iCheckoutRepository.guestCheckoutAll(requestBody);
       } else {
         _accessToken =

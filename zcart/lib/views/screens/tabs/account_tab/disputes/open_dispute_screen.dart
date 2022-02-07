@@ -294,6 +294,7 @@ class _OpenDisputeScreenState extends State<OpenDisputeScreen> {
                                       } else if (value.isEmpty) {
                                         return LocaleKeys.field_required.tr();
                                       }
+                                      return null;
                                     },
                                     onChanged: (value) {
                                       context

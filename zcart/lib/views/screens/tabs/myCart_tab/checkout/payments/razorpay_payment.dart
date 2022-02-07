@@ -6,27 +6,30 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:zcart/data/models/address/address_model.dart';
-import 'package:zcart/data/models/cart/cart_item_details_model.dart';
-import 'package:zcart/helper/get_amount_from_string.dart';
 import 'package:zcart/helper/app_images.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
+import 'package:zcart/views/screens/tabs/myCart_tab/checkout/payments/payment_methods.dart';
 import 'package:zcart/views/shared_widgets/shared_widgets.dart';
 
 class RazorpayPayment extends StatefulWidget {
-  final CartItemDetails cartItemDetails;
   final Addresses address;
   final String email;
+  final String? cartId;
   final String apiKey;
   final String secretKey;
   final String currency;
+  final int grandTotal;
+  final List<CartItemForPayment> cartItems;
   const RazorpayPayment({
     Key? key,
-    required this.cartItemDetails,
     required this.address,
     required this.email,
+    this.cartId,
     required this.apiKey,
     required this.secretKey,
     required this.currency,
+    required this.grandTotal,
+    required this.cartItems,
   }) : super(key: key);
 
   @override
@@ -76,7 +79,7 @@ class _RazorpayPaymentState extends State<RazorpayPayment> {
                     ),
                     const SizedBox(height: 20),
                     Text(
-                      widget.cartItemDetails.grandTotal!.toString(),
+                      widget.grandTotal.toString(),
                       style: Theme.of(context).textTheme.headline4!.copyWith(
                             fontWeight: FontWeight.bold,
                           ),
@@ -136,9 +139,9 @@ class _RazorpayPaymentState extends State<RazorpayPayment> {
     final _response = await post(
       Uri.parse("https://api.razorpay.com/v1/orders"),
       body: json.encode({
-        "amount": getAmountFromString(widget.cartItemDetails.grandTotal!),
+        "amount": widget.grandTotal,
         "currency": widget.currency,
-        "receipt": widget.cartItemDetails.id.toString(),
+        "receipt": widget.cartId.toString(),
       }),
       headers: {
         HttpHeaders.contentTypeHeader: 'application/json; charset=utf-8',
@@ -148,16 +151,12 @@ class _RazorpayPaymentState extends State<RazorpayPayment> {
 
     final _result = json.decode(_response.body);
 
-    debugPrint(
-        getAmountFromString(widget.cartItemDetails.grandTotal!).toString());
-
     var options = {
       'key': widget.apiKey,
-      'amount': getAmountFromString(widget
-          .cartItemDetails.grandTotal!), //in the smallest currency sub-unit.
+      'amount': widget.grandTotal, //in the smallest currency sub-unit.
       'name': widget.address.addressTitle!,
       'order_id': _result['id'],
-      'description': widget.cartItemDetails.items!.first.description,
+      'description': widget.cartItems.first.description,
       'timeout': 240, // in seconds
       'prefill': {'contact': widget.address.phone!, 'email': widget.email},
     };

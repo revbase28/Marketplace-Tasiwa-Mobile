@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -12,7 +13,6 @@ import 'package:zcart/data/models/address/packaging_model.dart';
 import 'package:zcart/data/models/address/states_model.dart';
 import 'package:zcart/data/models/cart/cart_model.dart';
 import 'package:zcart/data/models/product/product_details_model.dart';
-import 'package:zcart/data/network/api.dart';
 import 'package:zcart/data/network/network_utils.dart';
 import 'package:zcart/helper/get_color_based_on_theme.dart';
 import 'package:zcart/riverpod/providers/plugin_provider.dart';
@@ -38,6 +38,19 @@ class MyCartTab extends StatefulWidget {
 }
 
 class _MyCartTabState extends State<MyCartTab> {
+  void _onOneCheckOut(int cartId, String? userEmail) {
+    context
+        .read(paymentOptionsNotifierProvider.notifier)
+        .fetchPaymentMethod(cartId: cartId.toString());
+
+    context
+        .read(cartItemDetailsNotifierProvider.notifier)
+        .getCartItemDetails(cartId);
+
+    context.nextPage(
+        CheckoutScreen(customerEmail: userEmail, isOneCheckout: true));
+  }
+
   @override
   Widget build(BuildContext context) {
     return ProviderListener<CheckoutState>(
@@ -56,6 +69,7 @@ class _MyCartTabState extends State<MyCartTab> {
               watch(randomItemScrollNotifierProvider.notifier);
           final _oneCheckoutPluginCheckProvider =
               watch(checkOneCheckoutPluginProvider);
+          final _userState = watch(userNotifierProvider);
 
           return Scaffold(
               appBar: AppBar(
@@ -150,12 +164,84 @@ class _MyCartTabState extends State<MyCartTab> {
                             _oneCheckoutPluginCheckProvider.when(
                               data: (value) {
                                 if (value) {
-                                  //TODO: Checkout with onecheckout
-                                  return const Padding(
-                                    padding: EdgeInsets.symmetric(vertical: 24),
-                                    child:
-                                        Text("OneCheckout Plugin is enabled"),
-                                  );
+                                  bool _canOneCheckout = false;
+
+                                  if (_cartState.cartList != null &&
+                                      _cartState.cartList!.isNotEmpty &&
+                                      _cartState.cartList!.length > 1) {
+                                    if (_cartState.cartList!.every((element) =>
+                                        element.shipToCountryId ==
+                                            _cartState.cartList!.first
+                                                .shipToCountryId &&
+                                        element.shipToStateId ==
+                                            _cartState.cartList!.first
+                                                .shipToStateId)) {
+                                      _canOneCheckout = true;
+                                    }
+                                  }
+
+                                  if (_canOneCheckout) {
+                                    return Container(
+                                      width: double.infinity,
+                                      decoration: BoxDecoration(
+                                        color: getColorBasedOnTheme(
+                                            context, kLightColor, kDarkColor),
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 16, vertical: 8),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            const Flexible(
+                                              child: Text(
+                                                  "You can checkout for all items with one click."),
+                                            ),
+                                            const SizedBox(width: 16),
+                                            ElevatedButton.icon(
+                                              style: ElevatedButton.styleFrom(
+                                                primary: Colors.black,
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 12,
+                                                        vertical: 16),
+                                              ),
+                                              onPressed: () {
+                                                String? _customerEmail;
+
+                                                if (accessAllowed) {
+                                                  if (_userState
+                                                      is UserLoadedState) {
+                                                    _customerEmail =
+                                                        _userState.user!.email!;
+                                                  }
+                                                }
+                                                _onOneCheckOut(
+                                                    _cartState
+                                                        .cartList!.first.id!,
+                                                    _customerEmail);
+                                              },
+                                              icon: const Icon(
+                                                  CupertinoIcons.cart_fill),
+                                              label: Text(
+                                                "Checkout All",
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .headline6!
+                                                    .copyWith(
+                                                        color: Colors.white,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  } else {
+                                    return const SizedBox();
+                                  }
                                 }
                                 return const SizedBox();
                               },
@@ -193,7 +279,7 @@ class CartItemCard extends ConsumerWidget {
           return _SelectSippingCountryPage(
             title: "Select Shipping Country",
             items: coutries,
-            selected: cartItem.countryId,
+            selected: cartItem.shipToCountryId,
             onCountrySelected: (p0) {
               Navigator.pop(context, p0.id);
             },
@@ -215,7 +301,7 @@ class CartItemCard extends ConsumerWidget {
           return _SelectSippingStatePage(
             title: "Select State",
             items: states,
-            selected: cartItem.stateId,
+            selected: cartItem.shipToStateId,
             onCountrySelected: (p0) {
               Navigator.pop(context, p0.id);
             },
@@ -299,13 +385,30 @@ class CartItemCard extends ConsumerWidget {
                                     _getStatesForCurrentCountry);
                               }
 
+                              String _url = cartUrl(cartItem.id!,
+                                  _selectedCountry, _selectedStateId);
+
+                              final _shipOptions = await GetProductDetailsModel
+                                  .getCartShippingOptions(_url);
+
                               await context
                                   .read(cartNotifierProvider.notifier)
                                   .updateCart(
                                     cartItem.id!,
                                     countryId: _selectedCountry,
                                     stateId: _selectedStateId,
+                                    shippingOptionId: _shipOptions != null &&
+                                            _shipOptions.isNotEmpty
+                                        ? _shipOptions.first.id
+                                        : null,
+                                    shippingZoneId: _shipOptions != null &&
+                                            _shipOptions.isNotEmpty
+                                        ? _shipOptions.first.shippingZoneId
+                                        : null,
                                   );
+
+                              // context.refresh(
+                              //     cartShippingOptionsFutureProvider(_url));
                             }
                           },
                           child: Row(
@@ -314,10 +417,11 @@ class CartItemCard extends ConsumerWidget {
                               Flexible(
                                 child: Text(
                                   _countryState.countryList!.any((element) =>
-                                          element.id == cartItem.countryId)
+                                          element.id ==
+                                          cartItem.shipToCountryId)
                                       ? _countryState.countryList!
-                                          .firstWhere(
-                                              (e) => e.id == cartItem.countryId)
+                                          .firstWhere((e) =>
+                                              e.id == cartItem.shipToCountryId)
                                           .name!
                                       : "Unknown",
                                   maxLines: 1,
@@ -685,14 +789,9 @@ class ShippingDetails extends ConsumerWidget {
   @override
   Widget build(BuildContext context, watch) {
     final _userState = watch(userNotifierProvider);
-    var params = {
-      'ship_to_acountry_id': cartItem.countryId,
-      'ship_to_state_id': cartItem.stateId,
-    };
 
-    String _url = API.shippingOptionsForCart(cartItem.id!) +
-        "?" +
-        params.entries.map((e) => e.key + "=" + e.value.toString()).join("&");
+    String _url =
+        cartUrl(cartItem.id!, cartItem.shipToCountryId, cartItem.shipToStateId);
     final _shippingOptions = watch(cartShippingOptionsFutureProvider(_url));
 
     return _shippingOptions.when(

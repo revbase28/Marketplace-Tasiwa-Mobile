@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zcart/data/models/address/address_model.dart';
-import 'package:zcart/data/models/cart/cart_item_details_model.dart';
 import 'package:zcart/helper/constants.dart';
 import 'package:zcart/helper/get_payment_method_creds.dart';
 import 'package:zcart/riverpod/providers/provider.dart';
 import 'package:zcart/riverpod/providers/wallet_provider.dart';
 import 'package:zcart/views/screens/tabs/myCart_tab/checkout/custom_payment_card_screen.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zcart/views/screens/tabs/myCart_tab/checkout/payments/paypal_payment.dart';
 import 'package:zcart/views/screens/tabs/myCart_tab/checkout/payments/paystack_payment.dart';
 import 'package:zcart/views/screens/tabs/myCart_tab/checkout/payments/razorpay_payment.dart';
@@ -18,9 +17,16 @@ class PaymentMethods {
     BuildContext context,
     String paymentMethodCode, {
     required String email,
-    required int price,
-    CartItemDetails? cartItemDetails,
-    CartMeta? cartMeta,
+    required int grandTotal,
+    required String subtotal,
+    required String taxes,
+    required String shipping,
+    required String handling,
+    required String discount,
+    required String packaging,
+    required List<CartItemForPayment> cartItems,
+    int? cartId,
+    String? currency,
     int? shippingId,
     Addresses? address,
     bool isWalletDeposit = false,
@@ -32,7 +38,7 @@ class PaymentMethods {
           context,
           MaterialPageRoute(
               builder: (context) => CustomPaymentCardScreen(
-                    amount: cartItemDetails?.grandTotal ?? price.toString(),
+                    amount: (grandTotal / 100).toString(),
                     payMentMethod: stripe,
                     cardHolderName: _checkoutNotifier.cardHolderName ?? "",
                     cardNumber: _checkoutNotifier.cardNumber ?? "",
@@ -65,9 +71,7 @@ class PaymentMethods {
     } else if (paymentMethodCode == paystack) {
       final _result = await getPaymentMethodCreds(
         paystack,
-        requestBody: cartItemDetails != null
-            ? {"cart_id": cartItemDetails.id!.toString()}
-            : null,
+        requestBody: cartId != null ? {"cart_id": cartId.toString()} : null,
       );
 
       if (_result == null || _result["public_key"] == null) {
@@ -77,17 +81,15 @@ class PaymentMethods {
           context: context,
           isWalletPayement: isWalletDeposit,
           email: email,
-          price: price,
-          currency: cartMeta?.currency ?? "ZAR",
+          price: grandTotal,
+          currency: currency ?? "ZAR",
           publicKey: _result["public_key"],
         ).chargeCardAndMakePayment().then((value) => value);
       }
     } else if (paymentMethodCode == paypal) {
       final _paymentGatewayResult = await getPaymentMethodCreds(
         paypal,
-        requestBody: cartItemDetails != null
-            ? {"cart_id": cartItemDetails.id!.toString()}
-            : null,
+        requestBody: cartId != null ? {"cart_id": cartId.toString()} : null,
       );
       if (_paymentGatewayResult == null ||
           (_paymentGatewayResult!["client_id"] == null ||
@@ -97,14 +99,22 @@ class PaymentMethods {
         Map<String, dynamic>? _result = await Navigator.of(context).push(
           MaterialPageRoute(
             builder: (BuildContext context) => PayPalPayment(
-              cartItemDetails: cartItemDetails,
               address: address,
-              cartMeta: cartMeta,
               isWalletPayment: isWalletDeposit,
-              price: price,
               clientId: _paymentGatewayResult!["client_id"],
               clientSecret: _paymentGatewayResult!["secret"],
               isSandbox: _paymentGatewayResult!["sandbox"],
+              currency: currency ?? "USD",
+              discount: discount,
+              email: email,
+              grandTotal: grandTotal / 100,
+              handling: handling,
+              packaging: packaging,
+              shipping: shipping,
+              subtotal: (double.parse(subtotal) / 100).toString(),
+              taxes: taxes,
+              cartId: cartId,
+              cartItems: cartItems,
             ),
           ),
         );
@@ -126,24 +136,24 @@ class PaymentMethods {
     } else if (paymentMethodCode == razorpay) {
       final _paymentResult = await getPaymentMethodCreds(
         razorpay,
-        requestBody: cartItemDetails != null
-            ? {"cart_id": cartItemDetails.id!.toString()}
-            : null,
+        requestBody: cartId != null ? {"cart_id": cartId.toString()} : null,
       );
       if (_paymentResult == null ||
           (_paymentResult["api_key"] || _paymentResult["secret"])) {
         return false;
       } else {
-        if (cartItemDetails != null && address != null) {
+        if (cartId != null && address != null) {
           Map<String, dynamic>? _result = await Navigator.of(context).push(
             MaterialPageRoute(
               builder: (BuildContext context) => RazorpayPayment(
                 email: email,
-                cartItemDetails: cartItemDetails,
                 address: address,
-                currency: cartMeta?.currency ?? "",
                 apiKey: _paymentResult["api_key"],
                 secretKey: _paymentResult["secret"],
+                cartItems: cartItems,
+                currency: currency ?? "INR",
+                grandTotal: grandTotal,
+                cartId: cartId.toString(),
               ),
             ),
           );
@@ -164,4 +174,19 @@ class PaymentMethods {
     }
     return false;
   }
+}
+
+class CartItemForPayment {
+  String name;
+  String description;
+  int quantity;
+  String price;
+  String sku;
+  CartItemForPayment({
+    required this.name,
+    required this.description,
+    required this.quantity,
+    required this.price,
+    required this.sku,
+  });
 }

@@ -66,8 +66,6 @@ ThemeData lightTheme = ThemeData.light().copyWith(
   colorScheme: ColorScheme.light(
     primary: _lightPrimaryColor,
     secondary: _lightPrimaryColor,
-    primaryVariant: kDarkColor,
-    // secondary: _lightSecondaryColor,
   ),
   switchTheme: SwitchThemeData(
     overlayColor: MaterialStateProperty.all(kPrimaryColor),

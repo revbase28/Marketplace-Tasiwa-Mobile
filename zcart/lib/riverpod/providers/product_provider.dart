@@ -72,24 +72,7 @@ final shopPackagingFutureProvider =
 
 final cartShippingOptionsFutureProvider =
     FutureProvider.family<List<ShippingOption>?, String>((ref, url) async {
-  @override
-  dynamic _responseBody;
-
-  List<ShippingOption> _shippingOptions;
-  try {
-    _responseBody = await handleResponse(await getRequest(url));
-    _shippingOptions = List<ShippingOption>.from(
-        _responseBody["data"].map((x) => ShippingOption.fromJson(x)));
-  } catch (e) {
-    return null;
-  }
-  if (_responseBody.runtimeType == int) {
-    if (_responseBody > 206) {
-      return null;
-    }
-  }
-
-  return _shippingOptions;
+  return await GetProductDetailsModel.getCartShippingOptions(url);
 });
 
 final getProductDetailsModelProvider = Provider<GetProductDetailsModel>((ref) {
@@ -168,4 +151,37 @@ class GetProductDetailsModel {
     }
     return statesModel.data;
   }
+
+  static Future<List<ShippingOption>?> getCartShippingOptions(url) async {
+    dynamic _responseBody;
+
+    List<ShippingOption> _shippingOptions;
+    try {
+      _responseBody = await handleResponse(await getRequest(url));
+      _shippingOptions = List<ShippingOption>.from(
+          _responseBody["data"].map((x) => ShippingOption.fromJson(x)));
+    } catch (e) {
+      return null;
+    }
+    if (_responseBody.runtimeType == int) {
+      if (_responseBody > 206) {
+        return null;
+      }
+    }
+
+    return _shippingOptions;
+  }
+}
+
+String cartUrl(int cartId, int? countryId, int? stateId) {
+  var params = {
+    'ship_to_acountry_id': countryId.toString(),
+    'ship_to_state_id': stateId.toString(),
+  };
+
+  String _url = API.shippingOptionsForCart(cartId) +
+      "?" +
+      params.entries.map((e) => e.key + "=" + e.value.toString()).join("&");
+
+  return _url;
 }

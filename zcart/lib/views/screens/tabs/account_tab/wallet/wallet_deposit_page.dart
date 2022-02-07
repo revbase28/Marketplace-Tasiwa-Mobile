@@ -75,46 +75,62 @@ class _WalletDepositPageState extends State<WalletDepositPage> {
                                   child: Text(
                                       LocaleKeys.something_went_wrong.tr()),
                                 )
-                              : Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const SizedBox(height: 16),
-                                    Text(
-                                      LocaleKeys.payment_method.tr(),
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headline6!
-                                          .copyWith(
-                                              fontWeight: FontWeight.bold),
-                                    ),
-                                    const SizedBox(height: 16),
-                                    ...[
-                                      for (var method in value.data.where(
-                                          (element) => paymentMethods
-                                              .contains(element.code)))
-                                        RadioListTile<String>(
-                                          controlAffinity:
-                                              ListTileControlAffinity.trailing,
-                                          contentPadding: EdgeInsets.zero,
-                                          activeColor: Theme.of(context)
+                              : value.data.isNotEmpty
+                                  ? Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        const SizedBox(height: 16),
+                                        Text(
+                                          LocaleKeys.payment_method.tr(),
+                                          style: Theme.of(context)
                                               .textTheme
                                               .headline6!
-                                              .color,
-                                          title: Text(method.name),
-                                          value: method.code,
-                                          groupValue: _selectedpaymentMethod,
-                                          onChanged: (value) {
-                                            setState(() {
-                                              _selectedpaymentMethod = value!;
-                                              context
-                                                  .read(walletDepositProvider)
-                                                  .paymentMethod = value;
-                                            });
-                                          },
-                                        )
-                                    ],
-                                  ],
-                                );
+                                              .copyWith(
+                                                  fontWeight: FontWeight.bold),
+                                        ),
+                                        const SizedBox(height: 16),
+                                        ...[
+                                          for (var method in value.data.where(
+                                              (element) => paymentMethods
+                                                  .contains(element.code)))
+                                            RadioListTile<String>(
+                                              controlAffinity:
+                                                  ListTileControlAffinity
+                                                      .trailing,
+                                              contentPadding: EdgeInsets.zero,
+                                              activeColor: Theme.of(context)
+                                                  .textTheme
+                                                  .headline6!
+                                                  .color,
+                                              title: Text(method.name),
+                                              value: method.code,
+                                              groupValue:
+                                                  _selectedpaymentMethod,
+                                              onChanged: (value) {
+                                                setState(() {
+                                                  _selectedpaymentMethod =
+                                                      value!;
+                                                  context
+                                                      .read(
+                                                          walletDepositProvider)
+                                                      .paymentMethod = value;
+                                                });
+                                              },
+                                            )
+                                        ],
+                                      ],
+                                    )
+                                  : const Padding(
+                                      padding:
+                                          EdgeInsets.symmetric(vertical: 32),
+                                      child: Center(
+                                        child: Text(
+                                          "No payment methods available",
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                    );
                         },
                         loading: () {
                           return const SizedBox(
@@ -146,7 +162,15 @@ class _WalletDepositPageState extends State<WalletDepositPage> {
                             _selectedpaymentMethod,
                             isWalletDeposit: true,
                             email: widget.customerEmail,
-                            price: int.parse(_amountController.text.trim()),
+                            cartItems: [],
+                            discount: "",
+                            handling: "",
+                            shipping: "",
+                            subtotal: "",
+                            taxes: "",
+                            packaging: "",
+                            grandTotal:
+                                int.parse(_amountController.text.trim()),
                           ).then((value) async {
                             if (value) {
                               setState(() {

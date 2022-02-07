@@ -66,7 +66,6 @@ ThemeData darkTheme = ThemeData.dark().copyWith(
     colorScheme: ColorScheme.dark(
       primary: _lightPrimaryColor,
       secondary: _lightPrimaryColor,
-      primaryVariant: kLightColor,
     ),
     snackBarTheme: const SnackBarThemeData(
         backgroundColor: kDarkColor, actionTextColor: kPrimaryLightTextColor),

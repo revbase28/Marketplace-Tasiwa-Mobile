@@ -55,9 +55,9 @@ class BannerWidget extends StatelessWidget {
                             .pOnly(top: 20, left: 20),
                         BannerTextWidget(item.description, "description")
                             .visible(item.description!.isNotBlank)
-                            .pOnly(top: 10, left: 20),
+                            .pOnly(top: 8, left: 20),
                         BannerTextWidget(item.linkLabel, "label")
-                            .pOnly(top: 5, left: 20),
+                            .pOnly(top: 2, left: 20),
                       ],
                     )
                   ],
@@ -87,13 +87,15 @@ class BannerTextWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: context.screenWidth * .60,
+    return Padding(
+      padding: const EdgeInsets.only(right: 32),
       child: Row(
         children: [
           Flexible(
             child: type == "title"
                 ? Text(text!,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                     style: context.textTheme.overline!.copyWith(
                       color: kPrimaryLightTextColor,
                       fontWeight: FontWeight.bold,

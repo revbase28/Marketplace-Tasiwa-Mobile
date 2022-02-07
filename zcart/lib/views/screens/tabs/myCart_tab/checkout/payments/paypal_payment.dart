@@ -4,31 +4,48 @@ import 'package:flutter/services.dart';
 import 'package:flutter_paypal/flutter_paypal.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:zcart/data/models/address/address_model.dart';
-import 'package:zcart/data/models/cart/cart_item_details_model.dart';
 import 'package:zcart/data/network/api.dart';
 import 'package:zcart/helper/get_amount_from_string.dart';
+import 'package:zcart/views/screens/tabs/myCart_tab/checkout/payments/payment_methods.dart';
 import 'package:zcart/views/shared_widgets/shared_widgets.dart';
 
 class PayPalPayment extends StatefulWidget {
-  final CartItemDetails? cartItemDetails;
-  final CartMeta? cartMeta;
   final bool isSandbox;
+  final String currency;
   final String clientId;
   final String clientSecret;
   final Addresses? address;
   final bool isWalletPayment;
-  final int price;
+  final int? cartId;
+
+  final String email;
+  final double grandTotal;
+  final String subtotal;
+  final String taxes;
+  final String shipping;
+  final String handling;
+  final String discount;
+  final String packaging;
+  final List<CartItemForPayment> cartItems;
 
   const PayPalPayment({
     Key? key,
-    required this.cartItemDetails,
-    required this.cartMeta,
     required this.isSandbox,
     required this.clientId,
+    required this.currency,
     required this.clientSecret,
     required this.address,
     required this.isWalletPayment,
-    required this.price,
+    this.cartId,
+    required this.email,
+    required this.grandTotal,
+    required this.subtotal,
+    required this.taxes,
+    required this.shipping,
+    required this.handling,
+    required this.discount,
+    required this.packaging,
+    required this.cartItems,
   }) : super(key: key);
 
   @override
@@ -45,6 +62,7 @@ class _PayPalPaymentState extends State<PayPalPayment> {
     required String clientId,
     required String clientSecret,
     required String currency,
+    required List<dynamic> transaction,
   }) {
     Navigator.of(context).push(
       MaterialPageRoute(
@@ -54,81 +72,7 @@ class _PayPalPaymentState extends State<PayPalPayment> {
             secretKey: clientSecret,
             returnURL: "${API.appUrl}/return",
             cancelURL: "${API.appUrl}/cancel",
-            transactions: [
-              {
-                "amount": {
-                  "total": widget.isWalletPayment
-                      ? widget.price.toString()
-                      : getDoubleAmountFromString(
-                              widget.cartItemDetails?.grandTotal ?? "")
-                          .toString(),
-                  "currency": currency,
-                  "details": {
-                    "subtotal": widget.isWalletPayment
-                        ? widget.price.toString()
-                        : getDoubleAmountFromString(
-                                widget.cartItemDetails?.total ?? "")
-                            .toString(),
-                    "tax": getDoubleAmountFromString(
-                            widget.cartItemDetails?.taxes ?? "")
-                        .toString(),
-                    "shipping": getDoubleAmountFromString(
-                            widget.cartItemDetails?.shipping ?? "")
-                        .toString(),
-                    "handling_fee": (getDoubleAmountFromString(
-                                widget.cartItemDetails?.handling ?? "") +
-                            getDoubleAmountFromString(
-                                widget.cartItemDetails?.packaging ?? ""))
-                        .toString(),
-                    "shipping_discount":
-                        "-${getDoubleAmountFromString(widget.cartItemDetails?.discount ?? "")}",
-                  }
-                },
-                "description": widget.isWalletPayment
-                    ? "Wallet Top Up"
-                    : "Payment for order ${widget.cartItemDetails?.id ?? ""}",
-                // "custom": "EBAY_EMS_90048630045645624435",
-                "invoice_number": widget.cartItemDetails?.id.toString() ?? "",
-                // "soft_descriptor": "ECHI5456456766",
-                "item_list": widget.isWalletPayment
-                    ? {
-                        "items": [
-                          {
-                            "name": "Wallet Top Up",
-                            "description": "Wallet Top Up",
-                            "quantity": "1",
-                            "price": widget.price.toString(),
-                            "currency": currency,
-                            "sku": "wallet_top_up",
-                          }
-                        ]
-                      }
-                    : {
-                        "items": widget.cartItemDetails?.items!
-                            .map((e) => {
-                                  "name": e.slug.toString(),
-                                  "description": e.description.toString(),
-                                  "quantity": e.quantity.toString(),
-                                  "price":
-                                      getDoubleAmountFromString(e.unitPrice!)
-                                          .toString(),
-                                  "sku": e.id.toString(),
-                                  "currency": currency,
-                                })
-                            .toList(),
-                        "shipping_address": {
-                          "recipient_name":
-                              widget.address?.addressTitle!.toString(),
-                          "line1": widget.address?.addressLine1!.toString(),
-                          "line2": widget.address?.addressLine2!.toString(),
-                          "city": widget.address?.city!.toString(),
-                          "country_code": "US",
-                          "postal_code": widget.address?.zipCode!.toString(),
-                          "phone": widget.address?.phone!.toString(),
-                        }
-                      }
-              }
-            ],
+            transactions: transaction,
             note: "Contact us for any questions on your order.",
             onSuccess: (Map params) async {
               debugPrint("onSuccess: $params");
@@ -165,6 +109,69 @@ class _PayPalPaymentState extends State<PayPalPayment> {
 
   @override
   Widget build(BuildContext context) {
+    var _transaction = [
+      {
+        "amount": {
+          "total": widget.grandTotal.toString(),
+          "currency": widget.currency,
+          "details": {
+            "subtotal": widget.isWalletPayment
+                ? widget.grandTotal.toString()
+                : widget.subtotal,
+            "tax": widget.taxes,
+            "shipping": widget.shipping,
+            "handling_fee":
+                (double.parse(widget.handling) + double.parse(widget.packaging))
+                    .toString(),
+            "shipping_discount": widget.discount,
+          }
+        },
+        "description": widget.isWalletPayment
+            ? "Wallet Top Up"
+            : "Payment for order ${widget.cartId ?? ""}",
+        // "custom": "EBAY_EMS_90048630045645624435",
+        "invoice_number": widget.cartId.toString(),
+        // "soft_descriptor": "ECHI5456456766",
+        "item_list": widget.isWalletPayment
+            ? {
+                "items": [
+                  {
+                    "name": "Wallet Top Up",
+                    "description": "Wallet Top Up",
+                    "quantity": "1",
+                    "price": widget.grandTotal.toString(),
+                    "currency": widget.currency,
+                    "sku": "wallet_top_up",
+                  }
+                ]
+              }
+            : {
+                "items": widget.cartItems
+                    .map((e) => {
+                          "name": e.name.toString(),
+                          "description": e.description.toString(),
+                          "quantity": e.quantity.toString(),
+                          "price": (getDoubleAmountFromString(e.price) / 100)
+                              .toString(),
+                          "sku": e.sku.toString(),
+                          "currency": widget.currency,
+                        })
+                    .toList(),
+                "shipping_address": {
+                  "recipient_name": widget.address?.addressTitle!.toString(),
+                  "line1": widget.address?.addressLine1!.toString(),
+                  "line2": widget.address?.addressLine2!.toString(),
+                  "city": widget.address?.city!.toString(),
+                  "country_code": "US",
+                  "postal_code": widget.address?.zipCode!.toString(),
+                  "phone": widget.address?.phone!.toString(),
+                }
+              }
+      }
+    ];
+
+    print("_transaction: $_transaction");
+
     return Scaffold(
       appBar: AppBar(
         systemOverlayStyle: SystemUiOverlayStyle.light,
@@ -201,8 +208,7 @@ class _PayPalPaymentState extends State<PayPalPayment> {
                     ),
                     const SizedBox(height: 20),
                     Text(
-                      widget.cartItemDetails?.grandTotal?.toString() ??
-                          widget.price.toString(),
+                      widget.grandTotal.toString(),
                       style: Theme.of(context).textTheme.headline4!.copyWith(
                             fontWeight: FontWeight.bold,
                           ),
@@ -224,11 +230,11 @@ class _PayPalPaymentState extends State<PayPalPayment> {
                 onTap: _result == null
                     ? () {
                         _pay(
-                          sandboxMode: widget.isSandbox,
-                          clientId: widget.clientId,
-                          clientSecret: widget.clientSecret,
-                          currency: widget.cartMeta?.currency ?? "USD",
-                        );
+                            sandboxMode: widget.isSandbox,
+                            clientId: widget.clientId,
+                            clientSecret: widget.clientSecret,
+                            currency: widget.currency,
+                            transaction: _transaction);
                       }
                     : _result!
                         ? () {
@@ -240,11 +246,11 @@ class _PayPalPaymentState extends State<PayPalPayment> {
                           }
                         : () {
                             _pay(
-                              sandboxMode: widget.isSandbox,
-                              clientId: widget.clientId,
-                              clientSecret: widget.clientSecret,
-                              currency: widget.cartMeta?.currency ?? "USD",
-                            );
+                                sandboxMode: widget.isSandbox,
+                                clientId: widget.clientId,
+                                clientSecret: widget.clientSecret,
+                                currency: widget.currency,
+                                transaction: _transaction);
                           },
                 buttonText: _result == null
                     ? "Make Payment"

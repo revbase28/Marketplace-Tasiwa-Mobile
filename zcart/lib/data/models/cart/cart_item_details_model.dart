@@ -1,3 +1,15 @@
+// To parse this JSON data, do
+//
+//     final cartItemDetailsModel = cartItemDetailsModelFromJson(jsonString);
+
+import 'dart:convert';
+
+CartItemDetailsModel cartItemDetailsModelFromJson(String str) =>
+    CartItemDetailsModel.fromJson(json.decode(str));
+
+String cartItemDetailsModelToJson(CartItemDetailsModel data) =>
+    json.encode(data.toJson());
+
 class CartItemDetailsModel {
   CartItemDetailsModel({
     this.data,
@@ -14,8 +26,8 @@ class CartItemDetailsModel {
       );
 
   Map<String, dynamic> toJson() => {
-        "data": data!.toJson(),
-        "meta": meta!.toJson(),
+        "data": data == null ? null : data!.toJson(),
+        "meta": meta == null ? null : meta!.toJson(),
       };
 }
 
@@ -25,8 +37,8 @@ class CartItemDetails {
     this.customerId,
     this.ipAddress,
     this.shipTo,
-    this.countryId,
-    this.stateId,
+    this.shipToCountryId,
+    this.shipToStateId,
     this.shippingZoneId,
     this.shippingOptionId,
     this.shippingAddress,
@@ -35,25 +47,32 @@ class CartItemDetails {
     this.packagingId,
     this.coupon,
     this.total,
+    this.totalRaw,
     this.shipping,
+    this.shippingRaw,
     this.packaging,
+    this.packagingRaw,
     this.handling,
+    this.handlingRaw,
     this.taxrate,
     this.taxes,
+    this.taxesRaw,
     this.discount,
+    this.discountRaw,
     this.grandTotal,
+    this.grandTotalRaw,
     this.label,
     this.shop,
     this.items,
   });
 
   int? id;
-  int? customerId;
+  dynamic customerId;
   String? ipAddress;
   int? shipTo;
-  int? countryId;
-  int? stateId;
-  int? shippingZoneId;
+  int? shipToCountryId;
+  int? shipToStateId;
+  dynamic shippingZoneId;
   int? shippingOptionId;
   String? shippingAddress;
   String? billingAddress;
@@ -61,13 +80,20 @@ class CartItemDetails {
   int? packagingId;
   dynamic coupon;
   String? total;
+  String? totalRaw;
   String? shipping;
+  String? shippingRaw;
   String? packaging;
+  String? packagingRaw;
   String? handling;
+  String? handlingRaw;
   String? taxrate;
   String? taxes;
+  String? taxesRaw;
   String? discount;
+  String? discountRaw;
   String? grandTotal;
+  String? grandTotalRaw;
   String? label;
   Shop? shop;
   List<Item>? items;
@@ -78,8 +104,8 @@ class CartItemDetails {
         customerId: json["customer_id"],
         ipAddress: json["ip_address"],
         shipTo: json["ship_to"],
-        countryId: json["ship_to_country_id"],
-        stateId: json["ship_to_state_id"],
+        shipToCountryId: json["ship_to_country_id"],
+        shipToStateId: json["ship_to_state_id"],
         shippingZoneId: json["shipping_zone_id"],
         shippingOptionId: json["shipping_option_id"],
         shippingAddress: json["shipping_address"],
@@ -88,13 +114,20 @@ class CartItemDetails {
         packagingId: json["packaging_id"],
         coupon: json["coupon"],
         total: json["total"],
+        totalRaw: json["total_raw"],
         shipping: json["shipping"],
+        shippingRaw: json["shipping_raw"],
         packaging: json["packaging"],
+        packagingRaw: json["packaging_raw"],
         handling: json["handling"],
+        handlingRaw: json["handling_raw"],
         taxrate: json["taxrate"],
         taxes: json["taxes"],
+        taxesRaw: json["taxes_raw"],
         discount: json["discount"],
+        discountRaw: json["discount_raw"],
         grandTotal: json["grand_total"],
+        grandTotalRaw: json["grand_total_raw"],
         label: json["label"],
         shop: Shop.fromJson(json["shop"]),
         items: List<Item>.from(json["items"].map((x) => Item.fromJson(x))),
@@ -105,8 +138,8 @@ class CartItemDetails {
         "customer_id": customerId,
         "ip_address": ipAddress,
         "ship_to": shipTo,
-        "ship_to_country_id": countryId,
-        "ship_to_state_id": stateId,
+        "ship_to_country_id": shipToCountryId,
+        "ship_to_state_id": shipToStateId,
         "shipping_zone_id": shippingZoneId,
         "shipping_option_id": shippingOptionId,
         "shipping_address": shippingAddress,
@@ -115,16 +148,25 @@ class CartItemDetails {
         "packaging_id": packagingId,
         "coupon": coupon,
         "total": total,
+        "total_raw": totalRaw,
         "shipping": shipping,
+        "shipping_raw": shippingRaw,
         "packaging": packaging,
+        "packaging_raw": packagingRaw,
         "handling": handling,
+        "handling_raw": handlingRaw,
         "taxrate": taxrate,
         "taxes": taxes,
+        "taxes_raw": taxesRaw,
         "discount": discount,
+        "discount_raw": discountRaw,
         "grand_total": grandTotal,
+        "grand_total_raw": grandTotalRaw,
         "label": label,
-        "shop": shop!.toJson(),
-        "items": List<dynamic>.from(items!.map((x) => x.toJson())),
+        "shop": shop == null ? null : shop!.toJson(),
+        "items": items == null
+            ? null
+            : List<Item>.from(items!.map((x) => x.toJson())),
       };
 }
 
@@ -177,6 +219,7 @@ class Shop {
     this.verifiedText,
     this.rating,
     this.image,
+    this.contactNumber,
   });
 
   int? id;
@@ -184,8 +227,9 @@ class Shop {
   String? slug;
   bool? verified;
   String? verifiedText;
-  dynamic rating;
+  String? rating;
   String? image;
+  dynamic contactNumber;
 
   factory Shop.fromJson(Map<String, dynamic> json) => Shop(
         id: json["id"],
@@ -195,6 +239,7 @@ class Shop {
         verifiedText: json["verified_text"],
         rating: json["rating"],
         image: json["image"],
+        contactNumber: json["contact_number"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -205,6 +250,7 @@ class Shop {
         "verified_text": verifiedText,
         "rating": rating,
         "image": image,
+        "contact_number": contactNumber,
       };
 }
 

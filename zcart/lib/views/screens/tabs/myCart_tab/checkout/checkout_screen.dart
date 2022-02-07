@@ -14,10 +14,8 @@ import 'package:zcart/data/models/address/payment_options_model.dart';
 import 'package:zcart/data/models/cart/cart_item_details_model.dart'
     as cart_item_details_model;
 import 'package:zcart/data/models/product/product_details_model.dart';
-import 'package:zcart/data/network/api.dart';
 import 'package:zcart/data/network/network_utils.dart';
 import 'package:zcart/helper/constants.dart';
-import 'package:zcart/helper/get_amount_from_string.dart';
 import 'package:zcart/helper/get_color_based_on_theme.dart';
 import 'package:zcart/helper/pick_image_helper.dart';
 import 'package:zcart/riverpod/providers/plugin_provider.dart';
@@ -137,13 +135,13 @@ class _CheckoutScreenState extends State<CheckoutScreen>
               context.read(checkoutNotifierProvider.notifier).packagingId =
                   state.cartItemDetails!.data!.packagingId;
               context.read(checkoutNotifierProvider.notifier).countryId =
-                  state.cartItemDetails!.data!.countryId;
+                  state.cartItemDetails!.data!.shipToCountryId;
               context.read(checkoutNotifierProvider.notifier).stateId =
-                  state.cartItemDetails!.data!.stateId;
+                  state.cartItemDetails!.data!.shipToStateId;
 
               context
                   .read(statesNotifierProvider.notifier)
-                  .getState(state.cartItemDetails!.data!.countryId);
+                  .getState(state.cartItemDetails!.data!.shipToCountryId);
             }
           },
           child: GestureDetector(
@@ -186,11 +184,11 @@ class _CheckoutScreenState extends State<CheckoutScreen>
                                                 countryId: _cartDetailsProvider
                                                     .cartItemDetails!
                                                     .data!
-                                                    .countryId!,
+                                                    .shipToCountryId!,
                                                 stateId: _cartDetailsProvider
                                                     .cartItemDetails!
                                                     .data!
-                                                    .stateId,
+                                                    .shipToStateId,
                                                 formKey: _guestAddressFormKey,
                                                 cartId: _cartDetailsProvider
                                                     .cartItemDetails!.data!.id!,
@@ -200,6 +198,7 @@ class _CheckoutScreenState extends State<CheckoutScreen>
                                         ShippingDetails(
                                           cartItem: _cartDetailsProvider
                                               .cartItemDetails!.data!,
+                                          isOneCheckout: widget.isOneCheckout,
                                           onPressedNext: accessAllowed
                                               ? () {
                                                   if (_selectedAddress !=
@@ -252,6 +251,7 @@ class _CheckoutScreenState extends State<CheckoutScreen>
                                   CheckoutPaymentPage(
                                     isKeyboardVisible: _keyboardVisible,
                                     customerEmail: widget.customerEmail,
+                                    isOneCheckout: widget.isOneCheckout,
                                     cartItemDetails:
                                         _cartDetailsProvider.cartItemDetails,
                                     address: _selectedAddress,
@@ -333,6 +333,7 @@ class CheckoutLoggedInAddressScreen extends StatelessWidget {
                         } else {
                           return AddressListBuilder(
                             addressesList: value,
+                            isOneCheckout: isOneCheckout,
                             cartItem:
                                 _cartDetailsProvider.cartItemDetails?.data,
                             onAddressSelected: (index) {
@@ -479,7 +480,7 @@ class _CheckOutGuestAddressFormState extends State<CheckOutGuestAddressForm> {
                                   .firstWhere((e) => e.id == widget.countryId)
                                   .name,
                               isCallback: true,
-                              callbackFunction: (int countryId) {
+                              callbackFunction: (int countryId) async {
                                 setState(() {
                                   _selectedCountryID =
                                       countryState.countryList![countryId].id;
@@ -488,18 +489,44 @@ class _CheckOutGuestAddressFormState extends State<CheckOutGuestAddressForm> {
                                     .read(statesNotifierProvider.notifier)
                                     .getState(countryState
                                         .countryList![countryId].id);
+
+                                String _url = cartUrl(
+                                    widget.cartId,
+                                    countryState.countryList![countryId].id,
+                                    null);
+
+                                final _shipOptions =
+                                    await GetProductDetailsModel
+                                        .getCartShippingOptions(_url);
+
                                 context
                                     .read(cartItemDetailsNotifierProvider
                                         .notifier)
                                     .updateCart(
                                       widget.cartId,
                                       countryId: _selectedCountryID,
+                                      shippingOptionId: _shipOptions != null &&
+                                              _shipOptions.isNotEmpty
+                                          ? _shipOptions.first.id
+                                          : null,
+                                      shippingZoneId: _shipOptions != null &&
+                                              _shipOptions.isNotEmpty
+                                          ? _shipOptions.first.shippingZoneId
+                                          : null,
                                     );
                                 context
                                     .read(cartNotifierProvider.notifier)
                                     .updateCart(
                                       widget.cartId,
                                       countryId: _selectedCountryID,
+                                      shippingOptionId: _shipOptions != null &&
+                                              _shipOptions.isNotEmpty
+                                          ? _shipOptions.first.id
+                                          : null,
+                                      shippingZoneId: _shipOptions != null &&
+                                              _shipOptions.isNotEmpty
+                                          ? _shipOptions.first.shippingZoneId
+                                          : null,
                                     );
                               },
                               validator: (text) {
@@ -542,7 +569,15 @@ class _CheckOutGuestAddressFormState extends State<CheckOutGuestAddressForm> {
                               isCallback: true,
                               callbackFunction: statesState
                                       .statesList!.isNotEmpty
-                                  ? (int index) {
+                                  ? (int index) async {
+                                      String _url = cartUrl(
+                                          widget.cartId,
+                                          _selectedCountryID,
+                                          statesState.statesList![index].id);
+
+                                      final _shipOptions =
+                                          await GetProductDetailsModel
+                                              .getCartShippingOptions(_url);
                                       context
                                           .read(cartItemDetailsNotifierProvider
                                               .notifier)
@@ -551,6 +586,17 @@ class _CheckOutGuestAddressFormState extends State<CheckOutGuestAddressForm> {
                                             countryId: _selectedCountryID,
                                             stateId: statesState
                                                 .statesList![index].id,
+                                            shippingOptionId:
+                                                _shipOptions != null &&
+                                                        _shipOptions.isNotEmpty
+                                                    ? _shipOptions.first.id
+                                                    : null,
+                                            shippingZoneId:
+                                                _shipOptions != null &&
+                                                        _shipOptions.isNotEmpty
+                                                    ? _shipOptions
+                                                        .first.shippingZoneId
+                                                    : null,
                                           );
 
                                       context
@@ -560,6 +606,17 @@ class _CheckOutGuestAddressFormState extends State<CheckOutGuestAddressForm> {
                                             countryId: _selectedCountryID,
                                             stateId: statesState
                                                 .statesList![index].id,
+                                            shippingOptionId:
+                                                _shipOptions != null &&
+                                                        _shipOptions.isNotEmpty
+                                                    ? _shipOptions.first.id
+                                                    : null,
+                                            shippingZoneId:
+                                                _shipOptions != null &&
+                                                        _shipOptions.isNotEmpty
+                                                    ? _shipOptions
+                                                        .first.shippingZoneId
+                                                    : null,
                                           );
                                     }
                                   : null,
@@ -649,47 +706,47 @@ class _CheckOutGuestAddressFormState extends State<CheckOutGuestAddressForm> {
 class ShippingDetails extends ConsumerWidget {
   final cart_item_details_model.CartItemDetails cartItem;
   final VoidCallback onPressedNext;
+  final bool isOneCheckout;
 
   const ShippingDetails({
     Key? key,
     required this.cartItem,
     required this.onPressedNext,
+    this.isOneCheckout = false,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context, watch) {
-    var params = {
-      'ship_to_acountry_id': cartItem.countryId,
-      'ship_to_state_id': cartItem.stateId,
-    };
-
-    String _url = API.shippingOptionsForCart(cartItem.id!) +
-        "?" +
-        params.entries.map((e) => e.key + "=" + e.value.toString()).join("&");
+    String _url =
+        cartUrl(cartItem.id!, cartItem.shipToCountryId, cartItem.shipToStateId);
     final _shippingOptions = watch(cartShippingOptionsFutureProvider(_url));
 
     return _shippingOptions.when(
       data: (value) {
         if (value == null || value.isEmpty) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
-            child: ListTile(
-              dense: true,
-              contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
-              title: Text(
-                LocaleKeys.shipping.tr() + ':',
-                style: context.textTheme.caption!.copyWith(
-                    fontWeight: FontWeight.bold, color: kPrimaryFadeTextColor),
-              ),
-              subtitle: Text(
-                "This seller does not deliver to your selected Country/Region. Change the shipping address or find other sellers who ship to your area.",
-                style: Theme.of(context).textTheme.caption!.copyWith(
-                      fontWeight: FontWeight.bold,
+          return isOneCheckout
+              ? const SizedBox()
+              : Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+                  child: ListTile(
+                    dense: true,
+                    contentPadding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
+                    title: Text(
+                      LocaleKeys.shipping.tr() + ':',
+                      style: context.textTheme.caption!.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: kPrimaryFadeTextColor),
                     ),
-              ),
-            ),
-          );
+                    subtitle: Text(
+                      "This seller does not deliver to your selected Country/Region. Change the shipping address or find other sellers who ship to your area.",
+                      style: Theme.of(context).textTheme.caption!.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                    ),
+                  ),
+                );
         } else {
           ShippingOption? _shippingOption;
           if (value.any((element) => element.id == cartItem.shippingOptionId)) {
@@ -703,136 +760,150 @@ class ShippingDetails extends ConsumerWidget {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const Divider(height: 0),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                child: ListTile(
-                  onTap: () {
-                    showModalBottomSheet(
-                      context: context,
-                      backgroundColor: Colors.transparent,
-                      isScrollControlled: true,
-                      builder: (context) {
-                        return SizedBox(
-                          height: context.screenHeight * 0.7,
-                          child: ProductPageDefaultContainer(
-                            padding: 24,
-                            isFullPadding: true,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                Text(
-                                  "Select Shipping",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headline6!
-                                      .copyWith(fontWeight: FontWeight.bold),
-                                ),
-                                const SizedBox(height: 10),
-                                Expanded(
-                                  child: ListView(
-                                    children: value
-                                        .map(
-                                          (e) => ListTile(
-                                            title: Text(
-                                              (e.name ?? "Unknown") +
-                                                  " by " +
-                                                  (e.carrierName ?? "Unknown"),
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .subtitle2!
-                                                  .copyWith(
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                            ),
-                                            subtitle: Text(
-                                              e.deliveryTakes ?? "",
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .caption!,
-                                            ),
-                                            trailing: Text(
-                                              e.cost ?? "0",
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyText2!
-                                                  .copyWith(
-                                                    color: getColorBasedOnTheme(
-                                                        context,
-                                                        kPriceColor,
-                                                        kDarkPriceColor),
-                                                    fontWeight: FontWeight.bold,
+              isOneCheckout ? const SizedBox() : const Divider(height: 0),
+              isOneCheckout
+                  ? const SizedBox()
+                  : Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      child: ListTile(
+                        onTap: () {
+                          showModalBottomSheet(
+                            context: context,
+                            backgroundColor: Colors.transparent,
+                            isScrollControlled: true,
+                            builder: (context) {
+                              return SizedBox(
+                                height: context.screenHeight * 0.7,
+                                child: ProductPageDefaultContainer(
+                                  padding: 24,
+                                  isFullPadding: true,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.stretch,
+                                    children: [
+                                      Text(
+                                        "Select Shipping",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headline6!
+                                            .copyWith(
+                                                fontWeight: FontWeight.bold),
+                                      ),
+                                      const SizedBox(height: 10),
+                                      Expanded(
+                                        child: ListView(
+                                          children: value
+                                              .map(
+                                                (e) => ListTile(
+                                                  title: Text(
+                                                    (e.name ?? "Unknown") +
+                                                        " by " +
+                                                        (e.carrierName ??
+                                                            "Unknown"),
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .subtitle2!
+                                                        .copyWith(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
                                                   ),
-                                            ),
-                                            onTap: () async {
-                                              Navigator.of(context).pop();
-                                              context
-                                                  .read(cartNotifierProvider
-                                                      .notifier)
-                                                  .updateCart(
-                                                    cartItem.id!,
-                                                    shippingOptionId: e.id,
-                                                    shippingZoneId:
-                                                        e.shippingZoneId,
-                                                  );
-                                              context
-                                                  .read(
-                                                      cartItemDetailsNotifierProvider
-                                                          .notifier)
-                                                  .updateCart(
-                                                    cartItem.id!,
-                                                    shippingOptionId: e.id,
-                                                    shippingZoneId:
-                                                        e.shippingZoneId,
-                                                  );
-                                            },
-                                            minLeadingWidth: 0,
-                                            contentPadding: EdgeInsets.zero,
-                                            leading: _shippingOption?.id == e.id
-                                                ? const Icon(Icons.check_circle)
-                                                : const Icon(
-                                                    Icons.circle_outlined),
-                                          ),
-                                        )
-                                        .toList(),
+                                                  subtitle: Text(
+                                                    e.deliveryTakes ?? "",
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .caption!,
+                                                  ),
+                                                  trailing: Text(
+                                                    e.cost ?? "0",
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .bodyText2!
+                                                        .copyWith(
+                                                          color: getColorBasedOnTheme(
+                                                              context,
+                                                              kPriceColor,
+                                                              kDarkPriceColor),
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                                  ),
+                                                  onTap: () async {
+                                                    Navigator.of(context).pop();
+                                                    context
+                                                        .read(
+                                                            cartNotifierProvider
+                                                                .notifier)
+                                                        .updateCart(
+                                                          cartItem.id!,
+                                                          shippingOptionId:
+                                                              e.id,
+                                                          shippingZoneId:
+                                                              e.shippingZoneId,
+                                                        );
+                                                    context
+                                                        .read(
+                                                            cartItemDetailsNotifierProvider
+                                                                .notifier)
+                                                        .updateCart(
+                                                          cartItem.id!,
+                                                          shippingOptionId:
+                                                              e.id,
+                                                          shippingZoneId:
+                                                              e.shippingZoneId,
+                                                        );
+                                                  },
+                                                  minLeadingWidth: 0,
+                                                  contentPadding:
+                                                      EdgeInsets.zero,
+                                                  leading: _shippingOption
+                                                              ?.id ==
+                                                          e.id
+                                                      ? const Icon(
+                                                          Icons.check_circle)
+                                                      : const Icon(Icons
+                                                          .circle_outlined),
+                                                ),
+                                              )
+                                              .toList(),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                              ],
-                            ),
+                              );
+                            },
+                          );
+                        },
+                        dense: true,
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 0),
+                        title: Text(
+                          LocaleKeys.shipping.tr() + ':',
+                          style: context.textTheme.caption!.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: kPrimaryFadeTextColor),
+                        ),
+                        trailing: Text(
+                          double.parse(_shippingOption.costRaw ?? "0") <= 0.0
+                              ? ""
+                              : (_shippingOption.cost ?? "0"),
+                          style: context.textTheme.subtitle2!.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: getColorBasedOnTheme(
+                                  context, kPriceColor, kDarkPriceColor)),
+                        ),
+                        subtitle: Text(
+                          (_shippingOption.name ?? 'Unknown') +
+                              " by " +
+                              (_shippingOption.carrierName ?? 'Unknown'),
+                          style: context.textTheme.subtitle2!.copyWith(
+                            fontWeight: FontWeight.bold,
                           ),
-                        );
-                      },
-                    );
-                  },
-                  dense: true,
-                  contentPadding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
-                  title: Text(
-                    LocaleKeys.shipping.tr() + ':',
-                    style: context.textTheme.caption!.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: kPrimaryFadeTextColor),
-                  ),
-                  trailing: Text(
-                    double.parse(_shippingOption.costRaw ?? "0") <= 0.0
-                        ? ""
-                        : (_shippingOption.cost ?? "0"),
-                    style: context.textTheme.subtitle2!.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: getColorBasedOnTheme(
-                            context, kPriceColor, kDarkPriceColor)),
-                  ),
-                  subtitle: Text(
-                    (_shippingOption.name ?? 'Unknown') +
-                        " by " +
-                        (_shippingOption.carrierName ?? 'Unknown'),
-                    style: context.textTheme.subtitle2!.copyWith(
-                      fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-              ),
-              const Divider(height: 8),
+              isOneCheckout ? const SizedBox() : const Divider(height: 8),
               Padding(
                 padding: const EdgeInsets.only(bottom: 16, right: 16, left: 16),
                 child: ElevatedButton(
@@ -868,14 +939,164 @@ class CheckOutItemDetailsPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, watch) {
     final _cartDetailsProvider = watch(cartItemDetailsNotifierProvider);
-    // final _allCartsProvider = watch(cartNotifierProvider);
+    final _allCartsProvider = watch(cartNotifierProvider);
 
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).requestFocus(FocusNode());
       },
       child: isOneCheckout
-          ? const Center(child: Text("One Checkout is not available yet"))
+          ? _allCartsProvider is CartLoadedState
+              ? Column(
+                  children: [
+                    Expanded(
+                      child: SingleChildScrollView(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Text(
+                              "Sold By:",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline6!
+                                  .copyWith(fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(height: 10),
+
+                            SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: _allCartsProvider.cartList!.map((e) {
+                                  return e.shop!.image != null
+                                      ? Container(
+                                          margin:
+                                              const EdgeInsets.only(right: 6),
+                                          width: context.screenWidth * 0.15,
+                                          height: context.screenWidth * 0.10,
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 4),
+                                          child: Tooltip(
+                                            message: e.shop!.name,
+                                            child: CachedNetworkImage(
+                                              imageUrl: e.shop!.image!,
+                                              fit: BoxFit.contain,
+                                              errorWidget:
+                                                  (context, url, error) =>
+                                                      const SizedBox(),
+                                              progressIndicatorBuilder:
+                                                  (context, url, progress) =>
+                                                      Center(
+                                                child:
+                                                    CircularProgressIndicator(
+                                                        value:
+                                                            progress.progress),
+                                              ),
+                                            ),
+                                          ),
+                                        )
+                                      : const SizedBox();
+                                }).toList(),
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            const Divider(height: 8),
+                            // CheckOutPageShopCard(
+                            //   image: _cartDetailsProvider
+                            //       .cartItemDetails!.data!.shop!.image,
+                            //   title: _cartDetailsProvider
+                            //           .cartItemDetails!.data!.shop!.name ??
+                            //       "Unknown",
+                            //   verifiedText: _cartDetailsProvider
+                            //           .cartItemDetails!
+                            //           .data!
+                            //           .shop!
+                            //           .verifiedText ??
+                            //       "",
+                            // ),
+
+                            // CheckoutDetailsSingleCartItemCard(
+                            //     cartItems: _cartDetailsProvider
+                            //         .cartItemDetails!.data!.items!),
+                            // CheckOutDetailsPriceWidget(
+                            //     title: LocaleKeys.sub_total.tr(),
+                            //     price: _cartDetailsProvider
+                            //             .cartItemDetails!.data!.total ??
+                            //         "0"),
+                            // CheckOutDetailsPriceWidget(
+                            //     title: LocaleKeys.shipping.tr(),
+                            //     price: _cartDetailsProvider
+                            //             .cartItemDetails!.data!.shipping ??
+                            //         "0"),
+                            // CheckOutDetailsPriceWidget(
+                            //     title: LocaleKeys.packaging.tr(),
+                            //     price: _cartDetailsProvider
+                            //             .cartItemDetails!.data!.packaging ??
+                            //         "0"),
+                            // CheckOutDetailsPriceWidget(
+                            //     title: LocaleKeys.handling.tr(),
+                            //     price: _cartDetailsProvider
+                            //             .cartItemDetails!.data!.handling ??
+                            //         "0"),
+                            // CheckOutDetailsPriceWidget(
+                            //     title: LocaleKeys.taxes.tr(),
+                            //     price: _cartDetailsProvider
+                            //             .cartItemDetails!.data!.taxes ??
+                            //         "0"),
+                            // CheckOutDetailsPriceWidget(
+                            //     title: LocaleKeys.discount.tr(),
+                            //     price: "- " +
+                            //         (_cartDetailsProvider
+                            //                 .cartItemDetails!.data!.discount ??
+                            //             "0")),
+                            // const Divider(),
+                            // //Grand Total
+                            // CheckOutDetailsPriceWidget(
+                            //     isGrandTotal: true,
+                            //     title: LocaleKeys.grand_total.tr(),
+                            //     price: _cartDetailsProvider
+                            //             .cartItemDetails!.data!.grandTotal ??
+                            //         "0"),
+                          ],
+                        ),
+                      ),
+                    ),
+                    if (!isKeyboardVisible)
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          left: 16,
+                          right: 16,
+                          bottom: 16,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 16)),
+                                onPressed: onPressedBack,
+                                child: const Text("Back"),
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 16)),
+                                onPressed: onPressedNext,
+                                child: const Text("Next"),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                  ],
+                )
+              : const SizedBox()
           : _cartDetailsProvider is CartItemDetailsLoadedState
               ? Column(
                   children: [
@@ -1228,12 +1449,14 @@ class CheckoutPaymentPage extends StatefulWidget {
   final cart_item_details_model.CartItemDetailsModel? cartItemDetails;
   final Addresses? address;
   final bool isKeyboardVisible;
+  final bool isOneCheckout;
   const CheckoutPaymentPage({
     Key? key,
     this.customerEmail,
     this.cartItemDetails,
     required this.address,
     required this.isKeyboardVisible,
+    this.isOneCheckout = false,
   }) : super(key: key);
 
   @override
@@ -1257,9 +1480,6 @@ class _CheckoutPaymentPageState extends State<CheckoutPaymentPage> {
   bool _isLoading = false;
   @override
   Widget build(BuildContext context) {
-    int _grandTotal =
-        getAmountFromString(widget.cartItemDetails?.data?.grandTotal ?? "0");
-
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -1268,6 +1488,94 @@ class _CheckoutPaymentPageState extends State<CheckoutPaymentPage> {
         builder: (context, watch, _) {
           final _paymentOptionsState = watch(paymentOptionsNotifierProvider);
           final _pharmacyCheckProvider = watch(checkPharmacyPluginProvider);
+          int _grandTotal = 0;
+          final List<CartItemForPayment> _cartItems = [];
+          String _packaging = "";
+          String _shipping = "";
+          String _handling = "";
+          String _subtotal = "";
+          String _tax = "";
+          String _discount = "";
+
+          final _cartProvider = watch(cartNotifierProvider);
+
+          if (_cartProvider is CartLoadedState) {
+            String _total = _cartProvider.cartList!
+                .fold(
+                    0.0,
+                    (double previousValue, element) =>
+                        previousValue +
+                        double.parse(element.grandTotalRaw ?? " 0.0"))
+                .toStringAsFixed(2);
+
+            _grandTotal = (double.parse(_total) * 100).toInt();
+
+            _packaging = _cartProvider.cartList!
+                .fold(
+                    0.0,
+                    (double previousValue, element) =>
+                        previousValue +
+                        double.parse(element.packagingRaw ?? " 0.0"))
+                .toStringAsFixed(2);
+            _shipping = _cartProvider.cartList!
+                .fold(
+                    0.0,
+                    (double previousValue, element) =>
+                        previousValue +
+                        double.parse(element.shippingRaw ?? " 0.0"))
+                .toStringAsFixed(2);
+            _handling = _cartProvider.cartList!
+                .fold(
+                    0.0,
+                    (double previousValue, element) =>
+                        previousValue +
+                        double.parse(element.handlingRaw ?? " 0.0"))
+                .toStringAsFixed(2);
+            double _sub = _cartProvider.cartList!.fold(
+                    0.0,
+                    (double previousValue, element) =>
+                        previousValue +
+                        double.parse(element.totalRaw ?? " 0.0")) *
+                100;
+            _subtotal = _sub.toInt().toString();
+
+            _tax = _cartProvider.cartList!
+                .fold(
+                    0.0,
+                    (double previousValue, element) =>
+                        previousValue +
+                        double.parse(element.taxesRaw ?? " 0.0"))
+                .toStringAsFixed(2);
+            _discount = "-" +
+                _cartProvider.cartList!
+                    .fold(
+                        0.0,
+                        (double previousValue, element) =>
+                            previousValue +
+                            double.parse(element.discountRaw ?? " 0.0"))
+                    .toStringAsFixed(2);
+            for (var element in _cartProvider.cartList!) {
+              for (var item in element.items!) {
+                var _cartItem = CartItemForPayment(
+                  name: item.slug ?? " ",
+                  description: item.description ?? " ",
+                  quantity: item.quantity ?? 1,
+                  price: item.unitPrice ?? "0.0",
+                  sku: item.id.toString(),
+                );
+                _cartItems.add(_cartItem);
+              }
+            }
+          }
+
+          print("Grand Total: " + _grandTotal.toString());
+          print("Packaging: " + _packaging);
+          print("Shipping: " + _shipping);
+          print("Handling: " + _handling);
+          print("Subtotal: " + _subtotal);
+          print("Tax: " + _tax);
+          print("Discount: " + _discount);
+          print("Cart Items: " + _cartItems.length.toString());
 
           if (_paymentOptionsState is PaymentOptionsLoadedState) {
             List<PaymentOptions>? _paymentOptions =
@@ -1512,6 +1820,7 @@ class _CheckoutPaymentPageState extends State<CheckoutPaymentPage> {
                                                     .tr();
                                               }
                                             }
+                                            return null;
                                           },
                                           onChanged: (value) {
                                             context
@@ -1564,6 +1873,7 @@ class _CheckoutPaymentPageState extends State<CheckoutPaymentPage> {
                                                           .tr();
                                                     }
                                                   }
+                                                  return null;
                                                 },
                                                 onChanged: (value) {
                                                   context
@@ -1602,6 +1912,7 @@ class _CheckoutPaymentPageState extends State<CheckoutPaymentPage> {
                                                       }
                                                     }
                                                   }
+                                                  return null;
                                                 },
                                                 onChanged: (value) {
                                                   context
@@ -1676,14 +1987,21 @@ class _CheckoutPaymentPageState extends State<CheckoutPaymentPage> {
                                             context,
                                             _selectedPaymentMethod,
                                             email: _emailController.text.trim(),
-                                            price: _grandTotal,
+                                            grandTotal: _grandTotal,
                                             shippingId: widget.cartItemDetails!
                                                 .data!.shippingOptionId,
                                             address: widget.address,
-                                            cartItemDetails:
-                                                widget.cartItemDetails?.data,
-                                            cartMeta:
-                                                widget.cartItemDetails?.meta,
+                                            cartId: widget
+                                                .cartItemDetails!.data!.id,
+                                            currency: widget.cartItemDetails!
+                                                .meta!.currency,
+                                            cartItems: _cartItems,
+                                            discount: _discount,
+                                            handling: _handling,
+                                            packaging: _packaging,
+                                            shipping: _shipping,
+                                            subtotal: _subtotal,
+                                            taxes: _tax,
                                           ).then((value) async {
                                             if (value) {
                                               setState(() {
@@ -1692,7 +2010,9 @@ class _CheckoutPaymentPageState extends State<CheckoutPaymentPage> {
                                               await context
                                                   .read(checkoutNotifierProvider
                                                       .notifier)
-                                                  .guestCheckout();
+                                                  .guestCheckout(
+                                                      isOneCheckout:
+                                                          widget.isOneCheckout);
                                               setState(() {
                                                 _isLoading = false;
                                               });
@@ -1720,13 +2040,21 @@ class _CheckoutPaymentPageState extends State<CheckoutPaymentPage> {
                                         context,
                                         _selectedPaymentMethod,
                                         email: _emailController.text.trim(),
-                                        price: _grandTotal,
+                                        grandTotal: _grandTotal,
                                         shippingId: widget.cartItemDetails!
                                             .data!.shippingOptionId,
                                         address: widget.address,
-                                        cartItemDetails:
-                                            widget.cartItemDetails?.data,
-                                        cartMeta: widget.cartItemDetails?.meta,
+                                        cartId:
+                                            widget.cartItemDetails!.data!.id,
+                                        currency: widget
+                                            .cartItemDetails!.meta!.currency,
+                                        cartItems: _cartItems,
+                                        discount: _discount,
+                                        handling: _handling,
+                                        packaging: _packaging,
+                                        shipping: _shipping,
+                                        subtotal: _subtotal,
+                                        taxes: _tax,
                                       ).then((value) async {
                                         if (value) {
                                           setState(() {
@@ -1735,7 +2063,9 @@ class _CheckoutPaymentPageState extends State<CheckoutPaymentPage> {
                                           await context
                                               .read(checkoutNotifierProvider
                                                   .notifier)
-                                              .guestCheckout();
+                                              .guestCheckout(
+                                                  isOneCheckout:
+                                                      widget.isOneCheckout);
                                           setState(() {
                                             _isLoading = false;
                                           });
@@ -1757,13 +2087,20 @@ class _CheckoutPaymentPageState extends State<CheckoutPaymentPage> {
                                     context,
                                     _selectedPaymentMethod,
                                     email: widget.customerEmail!,
-                                    price: _grandTotal,
+                                    grandTotal: _grandTotal,
                                     shippingId: widget.cartItemDetails!.data!
                                         .shippingOptionId,
                                     address: widget.address,
-                                    cartItemDetails:
-                                        widget.cartItemDetails?.data,
-                                    cartMeta: widget.cartItemDetails?.meta,
+                                    cartId: widget.cartItemDetails!.data!.id,
+                                    currency:
+                                        widget.cartItemDetails!.meta!.currency,
+                                    cartItems: _cartItems,
+                                    discount: _discount,
+                                    handling: _handling,
+                                    packaging: _packaging,
+                                    shipping: _shipping,
+                                    subtotal: _subtotal,
+                                    taxes: _tax,
                                   ).then((value) async {
                                     if (value) {
                                       setState(() {
@@ -1772,7 +2109,9 @@ class _CheckoutPaymentPageState extends State<CheckoutPaymentPage> {
                                       await context
                                           .read(
                                               checkoutNotifierProvider.notifier)
-                                          .checkout();
+                                          .checkout(
+                                              isOneCheckout:
+                                                  widget.isOneCheckout);
                                       setState(() {
                                         _isLoading = false;
                                       });
