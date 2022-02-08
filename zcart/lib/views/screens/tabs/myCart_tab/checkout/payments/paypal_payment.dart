@@ -27,6 +27,7 @@ class PayPalPayment extends StatefulWidget {
   final String discount;
   final String packaging;
   final List<CartItemForPayment> cartItems;
+  final String invoiceNumber;
 
   const PayPalPayment({
     Key? key,
@@ -46,6 +47,7 @@ class PayPalPayment extends StatefulWidget {
     required this.discount,
     required this.packaging,
     required this.cartItems,
+    required this.invoiceNumber,
   }) : super(key: key);
 
   @override
@@ -130,7 +132,7 @@ class _PayPalPaymentState extends State<PayPalPayment> {
             ? "Wallet Top Up"
             : "Payment for order ${widget.cartId ?? ""}",
         // "custom": "EBAY_EMS_90048630045645624435",
-        "invoice_number": widget.cartId.toString(),
+        "invoice_number": widget.invoiceNumber.toString(),
         // "soft_descriptor": "ECHI5456456766",
         "item_list": widget.isWalletPayment
             ? {

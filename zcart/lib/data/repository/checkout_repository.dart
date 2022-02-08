@@ -36,9 +36,9 @@ class CheckoutRepository implements ICheckoutRepository {
       }
 
       debugPrint(
-          "Response Data : \n${responseBody["order"]["customer"]["api_token"]}");
+          "Response Data : ${responseBody["order"]?["customer"]?["api_token"]}");
 
-      return responseBody["order"]["customer"]["api_token"];
+      return responseBody["order"]?["customer"]?["api_token"];
     } catch (e) {
       throw NetworkException();
     }
@@ -75,9 +75,9 @@ class CheckoutRepository implements ICheckoutRepository {
       }
 
       debugPrint(
-          "Response Data : \n${responseBody["order"]["customer"]["api_token"]}");
+          "Response Data : ${responseBody["order"]?["customer"]?["api_token"]}");
 
-      return responseBody["order"]["customer"]["api_token"];
+      return responseBody["order"]?["customer"]?["api_token"];
     } catch (e) {
       throw NetworkException();
     }

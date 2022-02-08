@@ -25,22 +25,24 @@ class AddNewAddressScreen extends StatefulWidget {
 class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
   final _formKey = GlobalKey<FormState>();
 
-  final TextEditingController addressTypeController = TextEditingController();
-  final TextEditingController contactPersonController = TextEditingController();
-  final TextEditingController contactNumberController = TextEditingController();
+  final TextEditingController _addressTypeController = TextEditingController();
+  final TextEditingController _contactPersonController =
+      TextEditingController();
+  final TextEditingController _contactNumberController =
+      TextEditingController();
   final TextEditingController countryController = TextEditingController();
-  final TextEditingController zipCodeController = TextEditingController();
-  final TextEditingController addressLine1Controller = TextEditingController();
-  final TextEditingController addressLine2Controller = TextEditingController();
-  final TextEditingController cityController = TextEditingController();
+  final TextEditingController _zipCodeController = TextEditingController();
+  final TextEditingController _addressLine1Controller = TextEditingController();
+  final TextEditingController _addressLine2Controller = TextEditingController();
+  final TextEditingController _cityController = TextEditingController();
   final TextEditingController statesController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmPasswordController =
       TextEditingController();
 
-  int? selectedCountryID;
+  int? _selectedCountryID;
 
-  int? selectedStateID;
+  int? _selectedStateID;
 
   final List<String> _addressTypes = ["Primary", "Billing", "Shipping"];
 
@@ -68,7 +70,7 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
                       title: LocaleKeys.address_type.tr(),
                       optionsList: _addressTypes,
                       hintText: LocaleKeys.address_type.tr(),
-                      controller: addressTypeController,
+                      controller: _addressTypeController,
                       validator: (text) {
                         if (text == null || text.isEmpty || text == "") {
                           return LocaleKeys.field_required.tr();
@@ -79,7 +81,7 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
                     CustomTextField(
                       title: LocaleKeys.contact_person_name.tr(),
                       hintText: LocaleKeys.contact_person_name.tr(),
-                      controller: contactPersonController,
+                      controller: _contactPersonController,
                       validator: (text) {
                         if (text == null || text.isEmpty) {
                           return LocaleKeys.field_required.tr();
@@ -91,7 +93,7 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
                       title: LocaleKeys.contact_number.tr(),
                       hintText: LocaleKeys.contact_number.tr(),
                       keyboardType: TextInputType.number,
-                      controller: contactNumberController,
+                      controller: _contactNumberController,
                       validator: (text) {
                         if (text == null || text.isEmpty) {
                           return LocaleKeys.field_required.tr();
@@ -113,8 +115,9 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
                                 hintText: LocaleKeys.country.tr(),
                                 isCallback: true,
                                 callbackFunction: (int index) {
-                                  selectedCountryID =
+                                  _selectedCountryID =
                                       countryState.countryList![index].id;
+
                                   context
                                       .read(statesNotifierProvider.notifier)
                                       .getState(
@@ -135,11 +138,7 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
                     Consumer(
                       builder: (context, watch, _) {
                         final statesState = watch(statesNotifierProvider);
-                        if (statesState is StatesLoadedState) {
-                          selectedStateID = statesState.statesList!.isEmpty
-                              ? null
-                              : statesState.statesList![0].id;
-                        }
+
                         return statesState is StatesLoadedState &&
                                 statesState.statesList!.isNotEmpty
                             ? CustomDropDownField(
@@ -152,12 +151,13 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
                                 controller: statesController,
                                 hintText: LocaleKeys.states.tr(),
                                 isCallback: true,
-                                callbackFunction: (int index) {
-                                  selectedStateID =
-                                      statesState.statesList!.isEmpty
-                                          ? null
-                                          : statesState.statesList![index].id;
-                                },
+                                callbackFunction: statesState
+                                        .statesList!.isNotEmpty
+                                    ? (int index) {
+                                        _selectedStateID =
+                                            statesState.statesList![index].id;
+                                      }
+                                    : null,
                                 validator: (text) {
                                   if (text == null || text.isEmpty) {
                                     return 'Please select a state';
@@ -174,7 +174,7 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
                       title: LocaleKeys.zip_code.tr(),
                       hintText: LocaleKeys.zip_code.tr(),
                       keyboardType: TextInputType.number,
-                      controller: zipCodeController,
+                      controller: _zipCodeController,
                       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                       validator: (text) {
                         if (text == null || text.isEmpty) {
@@ -186,10 +186,10 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
                     CustomTextField(
                         title: LocaleKeys.address_line_1.tr(),
                         hintText: LocaleKeys.address_line_1.tr(),
-                        controller: addressLine1Controller,
+                        controller: _addressLine1Controller,
                         validator: (text) {
                           if (text == null || text.isEmpty) {
-                            if (addressLine1Controller.text.isEmpty) {
+                            if (_addressLine1Controller.text.isEmpty) {
                               return LocaleKeys.field_required.tr();
                             }
                           }
@@ -198,9 +198,9 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
                     CustomTextField(
                       title: LocaleKeys.address_line_2.tr(),
                       hintText: LocaleKeys.address_line_2.tr(),
-                      controller: addressLine2Controller,
+                      controller: _addressLine2Controller,
                       validator: (text) {
-                        if (addressLine2Controller.text.isEmpty) {
+                        if (_addressLine2Controller.text.isEmpty) {
                           if (text == null || text.isEmpty) {
                             return LocaleKeys.field_required.tr();
                           }
@@ -211,7 +211,7 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
                     CustomTextField(
                       title: LocaleKeys.city.tr(),
                       hintText: LocaleKeys.city.tr(),
-                      controller: cityController,
+                      controller: _cityController,
                       validator: (text) {
                         if (text == null || text.isEmpty) {
                           return LocaleKeys.field_required.tr();
@@ -232,17 +232,19 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
                                 await context
                                     .read(addressProvider)
                                     .createAddress(
-                                      addressType: addressTypeController.text,
+                                      addressType: _addressTypeController.text,
                                       contactPerson:
-                                          contactPersonController.text,
+                                          _contactPersonController.text,
                                       contactNumber:
-                                          contactNumberController.text,
-                                      countryId: selectedCountryID ?? 4,
-                                      stateId: selectedStateID,
-                                      cityId: cityController.text,
-                                      addressLine1: addressLine1Controller.text,
-                                      addressLine2: addressLine2Controller.text,
-                                      zipCode: zipCodeController.text,
+                                          _contactNumberController.text,
+                                      countryId: _selectedCountryID ?? 4,
+                                      stateId: _selectedStateID,
+                                      cityId: _cityController.text,
+                                      addressLine1:
+                                          _addressLine1Controller.text,
+                                      addressLine2:
+                                          _addressLine2Controller.text,
+                                      zipCode: _zipCodeController.text,
                                     );
                                 await context.refresh(getAddressFutureProvider);
                                 context.pop();

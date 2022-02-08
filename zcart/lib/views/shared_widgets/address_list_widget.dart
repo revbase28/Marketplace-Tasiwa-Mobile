@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nb_utils/nb_utils.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:zcart/Theme/styles/colors.dart';
 import 'package:zcart/data/models/address/address_model.dart';
@@ -39,18 +40,9 @@ class _AddressListBuilderState extends State<AddressListBuilder> {
     _selectedIndex = widget.selectedAddressIndex;
 
     _isOneCheckout = widget.isOneCheckout;
-    if (_isOneCheckout) {
-      for (var i = 0; i < widget.addressesList!.length; i++) {
-        if (widget.addressesList![i].country?.id ==
-                widget.cartItem!.shipToCountryId &&
-            widget.addressesList![i].state?.id ==
-                widget.cartItem!.shipToStateId) {
-          _addressesList.add(widget.addressesList![i]);
-        }
-      }
-    } else {
-      _addressesList.addAll(widget.addressesList!);
-    }
+
+    _addressesList.addAll(widget.addressesList!);
+
     super.initState();
   }
 
@@ -88,12 +80,7 @@ class _AddressListBuilderState extends State<AddressListBuilder> {
                     onTap: () async {
                       if (widget.cartItem != null) {
                         if (accessAllowed) {
-                          if (widget.onAddressSelected != null) {
-                            widget
-                                .onAddressSelected!(_addressesList.indexOf(e));
-                          }
-
-                          if (widget.isOneCheckout == false) {
+                          if (_isOneCheckout == false) {
                             String _url = cartUrl(widget.cartItem!.id!,
                                 e.country!.id, e.state?.id);
                             final _shipOptions = await GetProductDetailsModel
@@ -131,14 +118,34 @@ class _AddressListBuilderState extends State<AddressListBuilder> {
                                       ? _shipOptions.first.shippingZoneId
                                       : null,
                                 );
+
+                            _checkoutProvider.shipTo = e.id;
+                            if (widget.onAddressSelected != null) {
+                              widget.onAddressSelected!(
+                                  _addressesList.indexOf(e));
+                            }
+
+                            setState(() {
+                              _selectedIndex = _addressesList.indexOf(e);
+                            });
+                          } else {
+                            if (e.country!.id ==
+                                    widget.cartItem!.shipToCountryId &&
+                                e.state?.id == widget.cartItem!.shipToStateId) {
+                              _checkoutProvider.shipTo = e.id;
+                              if (widget.onAddressSelected != null) {
+                                widget.onAddressSelected!(
+                                    _addressesList.indexOf(e));
+                              }
+                              setState(() {
+                                _selectedIndex = _addressesList.indexOf(e);
+                              });
+                            } else {
+                              toast(
+                                  "This adress is not compatible with your cart. Please select another one or add new address.");
+                            }
                           }
-
-                          _checkoutProvider.shipTo = e.id;
                         }
-
-                        setState(() {
-                          _selectedIndex = _addressesList.indexOf(e);
-                        });
                       }
                     },
                     title: Column(

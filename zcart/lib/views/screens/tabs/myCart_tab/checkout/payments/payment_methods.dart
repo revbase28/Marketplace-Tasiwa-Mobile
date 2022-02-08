@@ -17,6 +17,7 @@ class PaymentMethods {
     BuildContext context,
     String paymentMethodCode, {
     required String email,
+    required String invoiceNumber,
     required int grandTotal,
     required String subtotal,
     required String taxes,
@@ -101,6 +102,7 @@ class PaymentMethods {
             builder: (BuildContext context) => PayPalPayment(
               address: address,
               isWalletPayment: isWalletDeposit,
+              invoiceNumber: invoiceNumber,
               clientId: _paymentGatewayResult!["client_id"],
               clientSecret: _paymentGatewayResult!["secret"],
               isSandbox: _paymentGatewayResult!["sandbox"],

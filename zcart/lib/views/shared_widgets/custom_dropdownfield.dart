@@ -12,7 +12,7 @@ class CustomDropDownField extends StatefulWidget {
   final List<String?>? optionsList;
   final double widthMultiplier;
   final String? hintText;
-
+  final bool isReadOnly;
   final void Function(int)? callbackFunction;
   final bool isCallback;
   final bool isProductDetailsView;
@@ -26,6 +26,7 @@ class CustomDropDownField extends StatefulWidget {
       this.onChange,
       this.optionsList,
       this.widthMultiplier = 0.8,
+      this.isReadOnly = false,
       this.callbackFunction,
       this.isCallback = false,
       this.isProductDetailsView = false})
@@ -91,19 +92,22 @@ class _CustomDropDownFieldState extends State<CustomDropDownField> {
             // ),
           );
         }).toList(),
-        onChanged: (String? newValue) {
-          setState(() {
-            widget.controller!.text = newValue!;
-          });
-          if (widget.isCallback) {
-            if (widget.callbackFunction != null) {
-              widget.callbackFunction!(widget.optionsList!.indexOf(newValue));
-            }
-          }
-          if (widget.onChange != null) {
-            widget.onChange!(newValue);
-          }
-        },
+        onChanged: widget.isReadOnly
+            ? null
+            : (String? newValue) {
+                setState(() {
+                  widget.controller!.text = newValue!;
+                });
+                if (widget.isCallback) {
+                  if (widget.callbackFunction != null) {
+                    widget.callbackFunction!(
+                        widget.optionsList!.indexOf(newValue));
+                  }
+                }
+                if (widget.onChange != null) {
+                  widget.onChange!(newValue);
+                }
+              },
         autovalidateMode: AutovalidateMode.onUserInteraction,
         validator: widget.validator,
       ),

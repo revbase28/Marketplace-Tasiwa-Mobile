@@ -161,6 +161,7 @@ class _WalletDepositPageState extends State<WalletDepositPage> {
                             context,
                             _selectedpaymentMethod,
                             isWalletDeposit: true,
+                            invoiceNumber: "",
                             email: widget.customerEmail,
                             cartItems: [],
                             discount: "",

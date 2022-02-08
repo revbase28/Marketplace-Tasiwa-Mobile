@@ -7,6 +7,14 @@ import 'package:zcart/helper/app_images.dart';
 import 'package:zcart/helper/get_color_based_on_theme.dart';
 import 'package:zcart/views/shared_widgets/shared_widgets.dart';
 
+OutlineInputBorder _border = OutlineInputBorder(
+  borderRadius: BorderRadius.circular(10),
+  borderSide: const BorderSide(
+    color: kFadeColor,
+    width: 2.0,
+  ),
+);
+
 class CustomPaymentCardScreen extends StatefulWidget {
   final String payMentMethod;
   final String amount;
@@ -36,23 +44,15 @@ class CustomPaymentCardScreenState extends State<CustomPaymentCardScreen> {
   String cardHolderName = '';
   String cvvCode = '';
   bool isCvvFocused = false;
-  OutlineInputBorder? border;
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
-    border = OutlineInputBorder(
-      borderRadius: BorderRadius.circular(10),
-      borderSide: const BorderSide(
-        color: kFadeColor,
-        width: 2.0,
-      ),
-    );
     cardNumber = widget.cardNumber;
     expiryDate = widget.expiryDate;
     cardHolderName = widget.cardHolderName;
     cvvCode = widget.cvvCode;
-
     super.initState();
   }
 
@@ -82,7 +82,7 @@ class CustomPaymentCardScreenState extends State<CustomPaymentCardScreen> {
               cardBgColor: kPrimaryColor,
             ),
             CreditCardForm(
-              formKey: formKey,
+              formKey: _formKey,
               obscureCvv: true,
               obscureNumber: true,
               cardNumber: cardNumber,
@@ -97,30 +97,30 @@ class CustomPaymentCardScreenState extends State<CustomPaymentCardScreen> {
                 hintText: 'XXXX XXXX XXXX XXXX',
                 hintStyle: Theme.of(context).textTheme.subtitle2,
                 labelStyle: Theme.of(context).textTheme.subtitle2,
-                focusedBorder: border,
-                enabledBorder: border,
+                focusedBorder: _border,
+                enabledBorder: _border,
               ),
               expiryDateDecoration: InputDecoration(
                 hintStyle: Theme.of(context).textTheme.subtitle2,
                 labelStyle: Theme.of(context).textTheme.subtitle2,
-                focusedBorder: border,
-                enabledBorder: border,
+                focusedBorder: _border,
+                enabledBorder: _border,
                 labelText: 'Expired Date',
                 hintText: 'XX/XX',
               ),
               cvvCodeDecoration: InputDecoration(
                 hintStyle: Theme.of(context).textTheme.subtitle2,
                 labelStyle: Theme.of(context).textTheme.subtitle2,
-                focusedBorder: border,
-                enabledBorder: border,
+                focusedBorder: _border,
+                enabledBorder: _border,
                 labelText: 'CVV',
                 hintText: 'XXX',
               ),
               cardHolderDecoration: InputDecoration(
                 hintStyle: Theme.of(context).textTheme.subtitle2,
                 labelStyle: Theme.of(context).textTheme.subtitle2,
-                focusedBorder: border,
-                enabledBorder: border,
+                focusedBorder: _border,
+                enabledBorder: _border,
                 labelText: 'Card Holder',
               ),
               onCreditCardModelChange: onCreditCardModelChange,
@@ -142,7 +142,7 @@ class CustomPaymentCardScreenState extends State<CustomPaymentCardScreen> {
             CustomButton(
               buttonText: "Continue",
               onTap: () {
-                if (formKey.currentState!.validate()) {
+                if (_formKey.currentState!.validate()) {
                   Navigator.of(context).pop(
                     CreditCardResult(
                       cardNumber: cardNumber,

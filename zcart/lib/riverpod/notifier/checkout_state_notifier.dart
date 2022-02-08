@@ -79,8 +79,8 @@ class CheckoutNotifier extends StateNotifier<CheckoutState> {
     var requestBody = {
       "ship_to": shipTo.toString(),
       "payment_method": paymentMethod.toString(),
-      "shipping_option_id": shippingOptionId.toString(),
-      "packaging_id": packagingId.toString(),
+      if (!isOneCheckout) "shipping_option_id": shippingOptionId.toString(),
+      if (!isOneCheckout) "packaging_id": packagingId.toString(),
       "agree": "1",
       "device_id": deviceId.toString(),
       if (prescription != null) "prescription": prescription,
@@ -121,8 +121,8 @@ class CheckoutNotifier extends StateNotifier<CheckoutState> {
     deviceId = await _getDeviceId();
     var requestBody = {
       "payment_method": paymentMethod.toString(),
-      "shipping_option_id": shippingOptionId.toString(),
-      "packaging_id": packagingId.toString(),
+      if (!isOneCheckout) "shipping_option_id": shippingOptionId.toString(),
+      if (!isOneCheckout) "packaging_id": packagingId.toString(),
       "device_id": deviceId.toString(),
       if (prescription != null) "prescription": prescription.toString(),
       if (buyerNote != null) "buyer_note": buyerNote,

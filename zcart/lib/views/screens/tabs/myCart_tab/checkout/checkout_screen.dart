@@ -181,6 +181,8 @@ class _CheckoutScreenState extends State<CheckoutScreen>
                                                 },
                                               )
                                             : CheckOutGuestAddressForm(
+                                                isOneCheckout:
+                                                    widget.isOneCheckout,
                                                 countryId: _cartDetailsProvider
                                                     .cartItemDetails!
                                                     .data!
@@ -218,6 +220,41 @@ class _CheckoutScreenState extends State<CheckoutScreen>
                                                   if (_guestAddressFormKey
                                                       .currentState!
                                                       .validate()) {
+                                                    final _checkoutProvider =
+                                                        context.read(
+                                                            checkoutNotifierProvider
+                                                                .notifier);
+                                                    Addresses _newAddress =
+                                                        Addresses(
+                                                      addressLine1:
+                                                          _checkoutProvider
+                                                              .addressLine1,
+                                                      addressLine2:
+                                                          _checkoutProvider
+                                                              .addressLine2,
+                                                      addressTitle:
+                                                          _checkoutProvider
+                                                              .addressTitle,
+                                                      city: _checkoutProvider
+                                                          .city,
+                                                      countryId:
+                                                          _checkoutProvider
+                                                              .countryId,
+                                                      stateId: _checkoutProvider
+                                                          .stateId,
+                                                      id: DateTime.now()
+                                                          .millisecondsSinceEpoch,
+                                                      phone: _checkoutProvider
+                                                          .phone,
+                                                      zipCode: _checkoutProvider
+                                                          .zipCode,
+                                                    );
+
+                                                    setState(() {
+                                                      _selectedAddress =
+                                                          _newAddress;
+                                                    });
+
                                                     FocusScope.of(context)
                                                         .requestFocus(
                                                             FocusNode());
@@ -366,12 +403,14 @@ class CheckOutGuestAddressForm extends StatefulWidget {
   final int countryId;
   final int? stateId;
   final GlobalKey<FormState> formKey;
+  final bool isOneCheckout;
   const CheckOutGuestAddressForm({
     Key? key,
     required this.cartId,
     required this.countryId,
     this.stateId,
     required this.formKey,
+    this.isOneCheckout = false,
   }) : super(key: key);
 
   @override
@@ -471,6 +510,7 @@ class _CheckOutGuestAddressFormState extends State<CheckOutGuestAddressForm> {
 
                       return countryState is CountryLoadedState
                           ? CustomDropDownField(
+                              isReadOnly: widget.isOneCheckout ? true : false,
                               title: LocaleKeys.country.tr(),
                               optionsList: countryState.countryList!
                                   .map((e) => e.name)
@@ -548,6 +588,7 @@ class _CheckOutGuestAddressFormState extends State<CheckOutGuestAddressForm> {
                       return statesState is StatesLoadedState &&
                               statesState.statesList!.isNotEmpty
                           ? CustomDropDownField(
+                              isReadOnly: widget.isOneCheckout ? true : false,
                               title: LocaleKeys.states.tr(),
                               optionsList: statesState.statesList!.isEmpty
                                   ? ["Select"]
@@ -941,6 +982,113 @@ class CheckOutItemDetailsPage extends ConsumerWidget {
     final _cartDetailsProvider = watch(cartItemDetailsNotifierProvider);
     final _allCartsProvider = watch(cartNotifierProvider);
 
+    String _cartCount = "0";
+    String _itemCount = "0";
+    String _itemCountSubtitle = "";
+    String _quantity = "0";
+    String _quantitySubtitle = "";
+    String _subTotal = "0";
+    String _subTotalSubtitle = "";
+    String _shipping = "0";
+    String _shippingSubtitle = "";
+    String _handling = "0";
+    String _handlingSubtitle = "";
+    String _packaging = "0";
+    String _packagingSubtitle = "";
+    String _discount = "0";
+    String _discountSubtitle = "";
+    String _total = "0";
+    if (_allCartsProvider is CartLoadedState) {
+      _cartCount = _allCartsProvider.cartList!.length.toString();
+      _itemCount = _allCartsProvider.cartList!
+          .fold(
+            0,
+            (int previousValue, element) =>
+                previousValue + element.items!.length,
+          )
+          .toString();
+      _itemCountSubtitle = _allCartsProvider.cartList!
+          .map((e) => e.items!.length)
+          .toList()
+          .join('+');
+
+      int _totalQuantity = 0;
+      for (var e in _allCartsProvider.cartList!) {
+        _totalQuantity += e.items!.fold(
+          0,
+          (int previousValue, element) => previousValue + element.quantity!,
+        );
+      }
+      _quantity = _totalQuantity.toString();
+
+      _quantitySubtitle = _allCartsProvider.cartList!
+          .map((e) => e.items!.fold(
+                0,
+                (int previousValue, element) =>
+                    previousValue + element.quantity!,
+              ))
+          .toList()
+          .join('+');
+
+      _subTotal = _allCartsProvider.cartList!
+          .fold(
+              0.0,
+              (double previousValue, element) =>
+                  previousValue + double.parse(element.totalRaw ?? "0"))
+          .toStringAsFixed(2);
+      _subTotalSubtitle =
+          _allCartsProvider.cartList!.map((e) => e.total!).toList().join('+');
+
+      _shipping = _allCartsProvider.cartList!
+          .fold(
+              0.0,
+              (double previousValue, element) =>
+                  previousValue + double.parse(element.shippingRaw ?? "0"))
+          .toStringAsFixed(2);
+      _shippingSubtitle = _allCartsProvider.cartList!
+          .map((e) => e.shipping!)
+          .toList()
+          .join('+');
+      _handling = _allCartsProvider.cartList!
+          .fold(
+              0.0,
+              (double previousValue, element) =>
+                  previousValue + double.parse(element.handlingRaw ?? "0"))
+          .toStringAsFixed(2);
+      _handlingSubtitle = _allCartsProvider.cartList!
+          .map((e) => e.handling!)
+          .toList()
+          .join('+');
+      _packaging = _allCartsProvider.cartList!
+          .fold(
+              0.0,
+              (double previousValue, element) =>
+                  previousValue + double.parse(element.packagingRaw ?? "0"))
+          .toStringAsFixed(2);
+
+      _packagingSubtitle = _allCartsProvider.cartList!
+          .map((e) => e.packaging!)
+          .toList()
+          .join('+');
+      _discount = "- " +
+          _allCartsProvider.cartList!
+              .fold(
+                  0.0,
+                  (double previousValue, element) =>
+                      previousValue + double.parse(element.discountRaw ?? "0"))
+              .toStringAsFixed(2);
+      _discountSubtitle = _allCartsProvider.cartList!
+          .map((e) => e.discount!)
+          .toList()
+          .join('+');
+      _total = _allCartsProvider.cartList!
+          .fold(
+              0.0,
+              (double previousValue, element) =>
+                  previousValue + double.parse(element.grandTotalRaw ?? "0"))
+          .toStringAsFixed(2);
+    }
+
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).requestFocus(FocusNode());
@@ -951,79 +1099,123 @@ class CheckOutItemDetailsPage extends ConsumerWidget {
                   children: [
                     Expanded(
                       child: SingleChildScrollView(
-                        padding: const EdgeInsets.all(16),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            Text(
-                              "Sold By:",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headline6!
-                                  .copyWith(fontWeight: FontWeight.bold),
+                            const SizedBox(height: 16),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16),
+                              child: Text(
+                                "Sold By:",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headline6!
+                                    .copyWith(fontWeight: FontWeight.bold),
+                              ),
                             ),
                             const SizedBox(height: 10),
 
-                            SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: _allCartsProvider.cartList!.map((e) {
-                                  return e.shop!.image != null
-                                      ? Container(
-                                          margin:
-                                              const EdgeInsets.only(right: 6),
-                                          width: context.screenWidth * 0.15,
-                                          height: context.screenWidth * 0.10,
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 4),
-                                          child: Tooltip(
-                                            message: e.shop!.name,
-                                            child: CachedNetworkImage(
-                                              imageUrl: e.shop!.image!,
-                                              fit: BoxFit.contain,
-                                              errorWidget:
-                                                  (context, url, error) =>
-                                                      const SizedBox(),
-                                              progressIndicatorBuilder:
-                                                  (context, url, progress) =>
-                                                      Center(
-                                                child:
-                                                    CircularProgressIndicator(
-                                                        value:
-                                                            progress.progress),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16),
+                              child: SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children:
+                                      _allCartsProvider.cartList!.map((e) {
+                                    return e.shop!.image != null
+                                        ? Container(
+                                            margin:
+                                                const EdgeInsets.only(right: 6),
+                                            width: context.screenWidth * 0.15,
+                                            height: context.screenWidth * 0.10,
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 4),
+                                            child: Tooltip(
+                                              message: e.shop!.name,
+                                              child: CachedNetworkImage(
+                                                imageUrl: e.shop!.image!,
+                                                fit: BoxFit.contain,
+                                                errorWidget:
+                                                    (context, url, error) =>
+                                                        const SizedBox(),
+                                                progressIndicatorBuilder:
+                                                    (context, url, progress) =>
+                                                        Center(
+                                                  child:
+                                                      CircularProgressIndicator(
+                                                          value: progress
+                                                              .progress),
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                        )
-                                      : const SizedBox();
-                                }).toList(),
+                                          )
+                                        : const SizedBox();
+                                  }).toList(),
+                                ),
                               ),
                             ),
                             const SizedBox(height: 4),
                             const Divider(height: 8),
-                            // CheckOutPageShopCard(
-                            //   image: _cartDetailsProvider
-                            //       .cartItemDetails!.data!.shop!.image,
-                            //   title: _cartDetailsProvider
-                            //           .cartItemDetails!.data!.shop!.name ??
-                            //       "Unknown",
-                            //   verifiedText: _cartDetailsProvider
-                            //           .cartItemDetails!
-                            //           .data!
-                            //           .shop!
-                            //           .verifiedText ??
-                            //       "",
-                            // ),
 
-                            // CheckoutDetailsSingleCartItemCard(
-                            //     cartItems: _cartDetailsProvider
-                            //         .cartItemDetails!.data!.items!),
-                            // CheckOutDetailsPriceWidget(
-                            //     title: LocaleKeys.sub_total.tr(),
-                            //     price: _cartDetailsProvider
-                            //             .cartItemDetails!.data!.total ??
-                            //         "0"),
+                            //1%&>RUz@
+
+                            ..._allCartsProvider.cartList!
+                                .map((e) => Container(
+                                      margin: const EdgeInsets.symmetric(
+                                          horizontal: 10, vertical: 4),
+                                      child: CheckoutDetailsSingleCartItemCard(
+                                          cartItems: e.items!),
+                                    ))
+                                .toList(),
+
+                            CheckOutDetailsPriceWidget(
+                                title: "Cart Count", price: _cartCount),
+
+                            CheckOutDetailsPriceWidget(
+                              title: "Item Count",
+                              price: _itemCount,
+                              subtitle: _itemCountSubtitle,
+                            ),
+                            CheckOutDetailsPriceWidget(
+                              title: "Total Quantity",
+                              price: _quantity,
+                              subtitle: _quantitySubtitle,
+                            ),
+                            CheckOutDetailsPriceWidget(
+                              title: "Sub Total",
+                              price: _subTotal,
+                              subtitle: _subTotalSubtitle,
+                            ),
+                            CheckOutDetailsPriceWidget(
+                              title: LocaleKeys.shipping.tr(),
+                              price: _shipping,
+                              subtitle: _shippingSubtitle,
+                            ),
+                            CheckOutDetailsPriceWidget(
+                              title: LocaleKeys.handling.tr(),
+                              price: _handling,
+                              subtitle: _handlingSubtitle,
+                            ),
+                            CheckOutDetailsPriceWidget(
+                              title: LocaleKeys.packaging.tr(),
+                              price: _packaging,
+                              subtitle: _packagingSubtitle,
+                            ),
+                            CheckOutDetailsPriceWidget(
+                              title: LocaleKeys.discount.tr(),
+                              price: _discount,
+                              subtitle: _discountSubtitle,
+                            ),
+                            const Divider(),
+                            CheckOutDetailsPriceWidget(
+                              title: "Total",
+                              price: _total,
+                              isGrandTotal: true,
+                            ),
+
                             // CheckOutDetailsPriceWidget(
                             //     title: LocaleKeys.shipping.tr(),
                             //     price: _cartDetailsProvider
@@ -1123,9 +1315,13 @@ class CheckOutItemDetailsPage extends ConsumerWidget {
                                     .cartItemDetails!.data!.id!),
                             const SizedBox(height: 8),
 
-                            CheckoutDetailsSingleCartItemCard(
-                                cartItems: _cartDetailsProvider
-                                    .cartItemDetails!.data!.items!),
+                            Container(
+                              margin: const EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 12),
+                              child: CheckoutDetailsSingleCartItemCard(
+                                  cartItems: _cartDetailsProvider
+                                      .cartItemDetails!.data!.items!),
+                            ),
                             CheckOutDetailsPriceWidget(
                                 title: LocaleKeys.sub_total.tr(),
                                 price: _cartDetailsProvider
@@ -1325,11 +1521,13 @@ class CheckOutDetailsPriceWidget extends StatelessWidget {
   final String title;
   final String price;
   final bool isGrandTotal;
+  final String? subtitle;
   const CheckOutDetailsPriceWidget({
     Key? key,
     required this.title,
     required this.price,
     this.isGrandTotal = false,
+    this.subtitle,
   }) : super(key: key);
 
   @override
@@ -1344,6 +1542,7 @@ class CheckOutDetailsPriceWidget extends StatelessWidget {
             : context.textTheme.subtitle2!
                 .copyWith(fontWeight: FontWeight.bold),
       ),
+      subtitle: subtitle != null ? Text("(${subtitle!})") : null,
       trailing: Text(
         price,
         style: context.textTheme.subtitle2!.copyWith(
@@ -1355,7 +1554,7 @@ class CheckOutDetailsPriceWidget extends StatelessWidget {
 }
 
 class CheckoutDetailsSingleCartItemCard extends StatelessWidget {
-  final List<cart_item_details_model.Item> cartItems;
+  final List<dynamic> cartItems;
   const CheckoutDetailsSingleCartItemCard({
     Key? key,
     required this.cartItems,
@@ -1369,7 +1568,6 @@ class CheckoutDetailsSingleCartItemCard extends StatelessWidget {
         color: getColorBasedOnTheme(context, kLightColor, kDarkCardBgColor),
         borderRadius: BorderRadius.circular(10),
       ),
-      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
       child: Column(
         children: cartItems.map((cartItem) {
           return Column(
@@ -1400,7 +1598,7 @@ class CheckoutDetailsSingleCartItemCard extends StatelessWidget {
                       children: [
                         Row(
                           children: [
-                            Flexible(
+                            Expanded(
                               child: Text(cartItem.description!,
                                       maxLines: 3,
                                       softWrap: true,
@@ -1499,72 +1697,119 @@ class _CheckoutPaymentPageState extends State<CheckoutPaymentPage> {
 
           final _cartProvider = watch(cartNotifierProvider);
 
-          if (_cartProvider is CartLoadedState) {
-            String _total = _cartProvider.cartList!
-                .fold(
-                    0.0,
-                    (double previousValue, element) =>
-                        previousValue +
-                        double.parse(element.grandTotalRaw ?? " 0.0"))
+          if (widget.isOneCheckout) {
+            if (_cartProvider is CartLoadedState) {
+              String _total = _cartProvider.cartList!
+                  .fold(
+                      0.0,
+                      (double previousValue, element) =>
+                          previousValue +
+                          double.parse(element.grandTotalRaw ?? " 0.0"))
+                  .toStringAsFixed(2);
+
+              _grandTotal = (double.parse(_total) * 100).toInt();
+
+              _packaging = _cartProvider.cartList!
+                  .fold(
+                      0.0,
+                      (double previousValue, element) =>
+                          previousValue +
+                          double.parse(element.packagingRaw ?? " 0.0"))
+                  .toStringAsFixed(2);
+              _shipping = _cartProvider.cartList!
+                  .fold(
+                      0.0,
+                      (double previousValue, element) =>
+                          previousValue +
+                          double.parse(element.shippingRaw ?? " 0.0"))
+                  .toStringAsFixed(2);
+              _handling = _cartProvider.cartList!
+                  .fold(
+                      0.0,
+                      (double previousValue, element) =>
+                          previousValue +
+                          double.parse(element.handlingRaw ?? " 0.0"))
+                  .toStringAsFixed(2);
+              String _sub = _cartProvider.cartList!
+                  .fold(
+                      0.0,
+                      (double previousValue, element) =>
+                          previousValue +
+                          double.parse(element.totalRaw ?? " 0.0"))
+                  .toStringAsFixed(2);
+              _subtotal = (double.parse(_sub) * 100).toInt().toString();
+
+              _tax = _cartProvider.cartList!
+                  .fold(
+                      0.0,
+                      (double previousValue, element) =>
+                          previousValue +
+                          double.parse(element.taxesRaw ?? " 0.0"))
+                  .toStringAsFixed(2);
+              _discount = "-" +
+                  _cartProvider.cartList!
+                      .fold(
+                          0.0,
+                          (double previousValue, element) =>
+                              previousValue +
+                              double.parse(element.discountRaw ?? " 0.0"))
+                      .toStringAsFixed(2);
+              for (var element in _cartProvider.cartList!) {
+                for (var item in element.items!) {
+                  var _cartItem = CartItemForPayment(
+                    name: item.slug ?? " ",
+                    description: item.description ?? " ",
+                    quantity: item.quantity ?? 1,
+                    price: item.unitPrice ?? "0.0",
+                    sku: item.id.toString(),
+                  );
+                  _cartItems.add(_cartItem);
+                }
+              }
+            }
+          } else {
+            String _total = double.parse(
+                    widget.cartItemDetails!.data!.grandTotalRaw ?? " 0.0")
                 .toStringAsFixed(2);
 
             _grandTotal = (double.parse(_total) * 100).toInt();
 
-            _packaging = _cartProvider.cartList!
-                .fold(
-                    0.0,
-                    (double previousValue, element) =>
-                        previousValue +
-                        double.parse(element.packagingRaw ?? " 0.0"))
+            _packaging = double.parse(
+                    widget.cartItemDetails!.data!.packagingRaw ?? " 0.0")
                 .toStringAsFixed(2);
-            _shipping = _cartProvider.cartList!
-                .fold(
-                    0.0,
-                    (double previousValue, element) =>
-                        previousValue +
-                        double.parse(element.shippingRaw ?? " 0.0"))
-                .toStringAsFixed(2);
-            _handling = _cartProvider.cartList!
-                .fold(
-                    0.0,
-                    (double previousValue, element) =>
-                        previousValue +
-                        double.parse(element.handlingRaw ?? " 0.0"))
-                .toStringAsFixed(2);
-            double _sub = _cartProvider.cartList!.fold(
-                    0.0,
-                    (double previousValue, element) =>
-                        previousValue +
-                        double.parse(element.totalRaw ?? " 0.0")) *
-                100;
-            _subtotal = _sub.toInt().toString();
 
-            _tax = _cartProvider.cartList!
-                .fold(
-                    0.0,
-                    (double previousValue, element) =>
-                        previousValue +
-                        double.parse(element.taxesRaw ?? " 0.0"))
+            _shipping = double.parse(
+                    widget.cartItemDetails!.data!.shippingRaw ?? " 0.0")
                 .toStringAsFixed(2);
-            _discount = "-" +
-                _cartProvider.cartList!
-                    .fold(
-                        0.0,
-                        (double previousValue, element) =>
-                            previousValue +
-                            double.parse(element.discountRaw ?? " 0.0"))
+
+            _handling = double.parse(
+                    widget.cartItemDetails!.data!.handlingRaw ?? " 0.0")
+                .toStringAsFixed(2);
+
+            String _sub =
+                double.parse(widget.cartItemDetails!.data!.totalRaw ?? " 0.0")
                     .toStringAsFixed(2);
-            for (var element in _cartProvider.cartList!) {
-              for (var item in element.items!) {
-                var _cartItem = CartItemForPayment(
-                  name: item.slug ?? " ",
-                  description: item.description ?? " ",
-                  quantity: item.quantity ?? 1,
-                  price: item.unitPrice ?? "0.0",
-                  sku: item.id.toString(),
-                );
-                _cartItems.add(_cartItem);
-              }
+
+            _subtotal = (double.parse(_sub) * 100).toInt().toString();
+
+            _tax =
+                double.parse(widget.cartItemDetails!.data!.taxesRaw ?? " 0.0")
+                    .toStringAsFixed(2);
+
+            _discount = "-" +
+                double.parse(
+                        widget.cartItemDetails!.data!.discountRaw ?? " 0.0")
+                    .toStringAsFixed(2);
+
+            for (var item in widget.cartItemDetails!.data!.items!) {
+              var _cartItem = CartItemForPayment(
+                name: item.slug ?? " ",
+                description: item.description ?? " ",
+                quantity: item.quantity ?? 1,
+                price: item.unitPrice ?? "0.0",
+                sku: item.id.toString(),
+              );
+              _cartItems.add(_cartItem);
             }
           }
 
@@ -1988,11 +2233,16 @@ class _CheckoutPaymentPageState extends State<CheckoutPaymentPage> {
                                             _selectedPaymentMethod,
                                             email: _emailController.text.trim(),
                                             grandTotal: _grandTotal,
+                                            invoiceNumber: widget
+                                                .cartItemDetails!.data!.id!
+                                                .toString(),
                                             shippingId: widget.cartItemDetails!
                                                 .data!.shippingOptionId,
                                             address: widget.address,
-                                            cartId: widget
-                                                .cartItemDetails!.data!.id,
+                                            cartId: widget.isOneCheckout
+                                                ? null
+                                                : widget
+                                                    .cartItemDetails!.data!.id,
                                             currency: widget.cartItemDetails!
                                                 .meta!.currency,
                                             cartItems: _cartItems,
@@ -2041,11 +2291,15 @@ class _CheckoutPaymentPageState extends State<CheckoutPaymentPage> {
                                         _selectedPaymentMethod,
                                         email: _emailController.text.trim(),
                                         grandTotal: _grandTotal,
+                                        invoiceNumber: widget
+                                            .cartItemDetails!.data!.id!
+                                            .toString(),
                                         shippingId: widget.cartItemDetails!
                                             .data!.shippingOptionId,
                                         address: widget.address,
-                                        cartId:
-                                            widget.cartItemDetails!.data!.id,
+                                        cartId: widget.isOneCheckout
+                                            ? null
+                                            : widget.cartItemDetails!.data!.id,
                                         currency: widget
                                             .cartItemDetails!.meta!.currency,
                                         cartItems: _cartItems,
@@ -2090,8 +2344,13 @@ class _CheckoutPaymentPageState extends State<CheckoutPaymentPage> {
                                     grandTotal: _grandTotal,
                                     shippingId: widget.cartItemDetails!.data!
                                         .shippingOptionId,
+                                    invoiceNumber: widget
+                                        .cartItemDetails!.data!.id!
+                                        .toString(),
                                     address: widget.address,
-                                    cartId: widget.cartItemDetails!.data!.id,
+                                    cartId: widget.isOneCheckout
+                                        ? null
+                                        : widget.cartItemDetails!.data!.id,
                                     currency:
                                         widget.cartItemDetails!.meta!.currency,
                                     cartItems: _cartItems,

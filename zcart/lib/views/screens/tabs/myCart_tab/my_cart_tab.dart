@@ -184,8 +184,8 @@ class _MyCartTabState extends State<MyCartTab> {
                                     return Container(
                                       width: double.infinity,
                                       decoration: BoxDecoration(
-                                        color: getColorBasedOnTheme(
-                                            context, kLightColor, kDarkColor),
+                                        color: getColorBasedOnTheme(context,
+                                            kLightBgColor, kDarkBgColor),
                                       ),
                                       child: Padding(
                                         padding: const EdgeInsets.symmetric(
