@@ -24,7 +24,6 @@ import 'package:zcart/views/screens/tabs/account_tab/messages/vendor_chat_screen
 import 'package:zcart/views/screens/tabs/vendors_tab/vendors_details.dart';
 import 'package:zcart/views/shared_widgets/image_viewer_page.dart';
 import 'package:zcart/views/shared_widgets/shared_widgets.dart';
-
 import 'components/frequently_bought_together.dart';
 import 'components/more_offer_from_seller.dart';
 import 'components/product_details_widget.dart';
@@ -100,9 +99,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               );
             }
           },
-          loading: () => Scaffold(
-              // appBar: AppBar(title: const Text("Product Details")),
-              body: const ProductLoadingWidget().p(10)),
+          loading: () => Scaffold(body: const ProductLoadingWidget().p(10)),
           error: (error, stackTrace) => Scaffold(
               appBar: AppBar(title: const Text("Product Details")),
               body: Center(
@@ -309,8 +306,8 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
                                   .caption!
                                   .copyWith(
                                       fontWeight: FontWeight.bold,
-                                      color: kLightColor),
-                              color: kDarkColor,
+                                      color: kPrimaryColor),
+                              color: kLightColor,
                             ),
                           ),
                           onPressed: () {
@@ -648,7 +645,7 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
       backgroundColor: Colors.transparent,
       builder: (context) {
         return SizedBox(
-          height: context.screenHeight * 0.85,
+          height: context.screenHeight * 0.7,
           child: ProductPageDefaultContainer(
             isFullPadding: true,
             padding: 24,

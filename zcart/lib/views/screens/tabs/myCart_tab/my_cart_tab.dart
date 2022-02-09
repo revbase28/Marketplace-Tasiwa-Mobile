@@ -534,13 +534,23 @@ class _ItemCardState extends State<ItemCard> {
                         style: context.textTheme.subtitle2!.copyWith())
                     .pOnly(right: 10),
                 const SizedBox(height: 4),
-                Text(
-                  widget.item.total!,
-                  style: context.textTheme.bodyText2!.copyWith(
-                      color: getColorBasedOnTheme(
-                          context, kPriceColor, kDarkPriceColor),
-                      fontWeight: FontWeight.bold),
-                ).pOnly(right: 5),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      widget.item.unitPrice!,
+                      style: context.textTheme.bodyText2!.copyWith(
+                          color: getColorBasedOnTheme(
+                              context, kPriceColor, kDarkPriceColor),
+                          fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      " x " + widget.item.quantity.toString(),
+                      style: context.textTheme.bodyText2!
+                          .copyWith(fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
               ],
             ),
           ),
@@ -570,14 +580,7 @@ class _ItemCardState extends State<ItemCard> {
                             quantity: widget.item.quantity,
                           );
                     }),
-                const SizedBox(height: 8),
-                Text(
-                  widget.item.quantity.toString(),
-                  style: context.textTheme.headline6!.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 16),
                 ProductDetailsPageIconButton(
                   isNoWidth: true,
                   isNoHeight: true,

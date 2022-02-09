@@ -13,13 +13,12 @@ TextStyle _textStyle(BuildContext context, double size, Color color) =>
       textStyle: TextStyle(
         fontSize: size,
         color: color,
-        fontWeight: FontWeight.w400,
         letterSpacing: 0,
       ),
     );
 
 TextTheme lightTextTheme(BuildContext context) {
-  return GoogleFonts.poppinsTextTheme(
+  return GoogleFonts.latoTextTheme(
     Theme.of(context).textTheme,
   ).copyWith(
     //bodyText1: TextStyle(fontSize: 18, color: kSecondaryDarkTextColor),

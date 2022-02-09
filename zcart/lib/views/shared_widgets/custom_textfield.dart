@@ -18,8 +18,10 @@ class CustomTextField extends StatefulWidget {
   final TextEditingController? controller;
   final int? minLines;
   final int? maxLines;
+  final int? maxLength;
   final List<TextInputFormatter>? inputFormatters;
   final TextInputType keyboardType;
+  final bool autoFocus;
 
   const CustomTextField({
     Key? key,
@@ -32,8 +34,10 @@ class CustomTextField extends StatefulWidget {
     this.controller,
     this.maxLines = 1,
     this.minLines = 1,
+    this.maxLength,
     this.inputFormatters,
     this.keyboardType = TextInputType.text,
+    this.autoFocus = false,
   }) : super(key: key);
 
   @override
@@ -56,7 +60,9 @@ class _CustomTextFieldState extends State<CustomTextField> {
         autovalidateMode: AutovalidateMode.onUserInteraction,
         inputFormatters: widget.inputFormatters,
         controller: widget.controller,
+        autofocus: widget.autoFocus,
         keyboardType: widget.keyboardType,
+        maxLength: widget.maxLength,
         minLines: widget.minLines,
         maxLines: widget.maxLines,
         obscureText: widget.isPassword ? _passwordVisible : false,

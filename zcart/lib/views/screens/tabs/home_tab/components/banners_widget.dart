@@ -64,6 +64,7 @@ class BannerWidget extends StatelessWidget {
                 ).onInkTap(() {
                   if (item.link!.isNotEmpty) {
                     debugPrint(item.link);
+
                     context
                         .read(categoryItemNotifierProvider.notifier)
                         .getCategoryItem(item.link.splitAfter(

@@ -63,8 +63,8 @@ class VendorCard extends StatelessWidget {
                 ),
               ),
               isVerified!
-                  ? Icon(Icons.check_circle, color: kPrimaryColor, size: 15)
-                      .px2()
+                  ? const Icon(Icons.check_circle, color: kGreenColor, size: 15)
+                      .px(4)
                       .pOnly(top: 3)
                       .onInkTap(() {
                       toast(verifiedText);

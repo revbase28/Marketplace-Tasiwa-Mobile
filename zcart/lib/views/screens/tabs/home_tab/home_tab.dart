@@ -154,7 +154,7 @@ class HomeTab extends ConsumerWidget {
                         : const ProductLoadingWidget(),
 
                 ///Featured Brands
-                const FeaturedBrands(),
+                const FeaturedBrands().pOnly(bottom: 10),
 
                 ///Deal of the day
                 dealOfTheDay is DealOfTheDayStateLoadedState

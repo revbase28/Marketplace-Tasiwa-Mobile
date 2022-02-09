@@ -42,7 +42,7 @@ class UserRepository implements IUserRepository {
   Future<User?> logInUsingGoogle(String accessToken) async {
     await setValue(loggedIn, false);
 
-    var requestBody = {'access_token': accessToken};
+    var requestBody = {'access_token': accessToken, 'code': accessToken};
     dynamic responseBody;
 
     try {

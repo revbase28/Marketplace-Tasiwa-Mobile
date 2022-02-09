@@ -1596,33 +1596,30 @@ class CheckoutDetailsSingleCartItemCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       mainAxisSize: MainAxisSize.min,
                       children: [
+                        Text(cartItem.description!,
+                                maxLines: 3,
+                                softWrap: true,
+                                overflow: TextOverflow.ellipsis,
+                                style: context.textTheme.subtitle2!.copyWith())
+                            .pOnly(right: 10),
+                        const SizedBox(height: 4),
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Expanded(
-                              child: Text(cartItem.description!,
-                                      maxLines: 3,
-                                      softWrap: true,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: context.textTheme.subtitle2!
-                                          .copyWith())
-                                  .pOnly(right: 10),
+                            Text(
+                              cartItem.unitPrice!,
+                              style: context.textTheme.bodyText2!.copyWith(
+                                  color: getColorBasedOnTheme(
+                                      context, kPriceColor, kDarkPriceColor),
+                                  fontWeight: FontWeight.bold),
                             ),
                             Text(
                               " x " + cartItem.quantity!.toString(),
-                              style: context.textTheme.headline6!
+                              style: context.textTheme.bodyText2!
                                   .copyWith(fontWeight: FontWeight.bold),
                             ),
-                            const SizedBox(width: 10),
                           ],
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          cartItem.total!,
-                          style: context.textTheme.bodyText2!.copyWith(
-                              color: getColorBasedOnTheme(
-                                  context, kPriceColor, kDarkPriceColor),
-                              fontWeight: FontWeight.bold),
-                        ).pOnly(right: 5),
+                        )
                       ],
                     ),
                   ),

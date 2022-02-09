@@ -13,10 +13,10 @@ class AllBrands {
     required this.data,
   });
 
-  List<Datum> data;
+  List<Brands> data;
 
   factory AllBrands.fromMap(Map<String, dynamic> json) => AllBrands(
-        data: List<Datum>.from(json["data"].map((x) => Datum.fromMap(x))),
+        data: List<Brands>.from(json["data"].map((x) => Brands.fromMap(x))),
       );
 
   Map<String, dynamic> toMap() => {
@@ -24,8 +24,8 @@ class AllBrands {
       };
 }
 
-class Datum {
-  Datum({
+class Brands {
+  Brands({
     this.id,
     this.name,
     this.slug,
@@ -41,7 +41,7 @@ class Datum {
   String? availableFrom;
   String? image;
 
-  factory Datum.fromMap(Map<String, dynamic> json) => Datum(
+  factory Brands.fromMap(Map<String, dynamic> json) => Brands(
         id: json["id"],
         name: json["name"],
         slug: json["slug"],
