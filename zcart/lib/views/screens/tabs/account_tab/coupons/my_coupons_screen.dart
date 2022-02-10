@@ -7,6 +7,8 @@ import 'package:velocity_x/velocity_x.dart';
 import 'package:zcart/Theme/styles/colors.dart';
 import 'package:zcart/data/controller/cart/coupon_controller.dart';
 import 'package:zcart/data/controller/cart/coupon_state.dart';
+import 'package:zcart/riverpod/providers/provider.dart';
+import 'package:zcart/riverpod/state/scroll_state.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:zcart/views/shared_widgets/loading_widget.dart';
 
@@ -15,27 +17,48 @@ class MyCouponsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
-    final couponState = watch(couponsProvider);
+    final _couponState = watch(couponsProvider);
+    final _scrollControllerProvider =
+        watch(couponScrollNotifierProvider.notifier);
     return Scaffold(
       appBar: AppBar(
         systemOverlayStyle: SystemUiOverlayStyle.light,
         title: Text(LocaleKeys.coupons.tr()),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.sync, color: kLightColor),
+            onPressed: () {
+              context.read(couponsProvider.notifier).coupons();
+            },
+          ),
+        ],
       ),
       body: RefreshIndicator(
           onRefresh: () => context.read(couponsProvider.notifier).coupons(),
-          child: couponState is CouponLoadedState
-              ? couponState.coupon!.isNotEmpty
-                  ? ListView.builder(
-                      itemCount: couponState.coupon!.length,
-                      itemBuilder: (context, index) {
-                        return CouponsCard(
-                          amount: couponState.coupon![index].amount,
-                          shopTitle: couponState.coupon![index].shop!.name,
-                          shopImage: couponState.coupon![index].shop!.image,
-                          code: couponState.coupon![index].code,
-                          notice: couponState.coupon![index].validity,
-                        );
-                      })
+          child: _couponState is CouponLoadedState
+              ? _couponState.coupon!.isNotEmpty
+                  ? ProviderListener<ScrollState>(
+                      onChange: (context, state) {
+                        if (state is ScrollReachedBottomState) {
+                          //TODO: Coupon load more
+
+                        }
+                      },
+                      provider: couponScrollNotifierProvider,
+                      child: ListView.builder(
+                          controller: _scrollControllerProvider.controller,
+                          itemCount: _couponState.coupon!.length,
+                          itemBuilder: (context, index) {
+                            return CouponsCard(
+                              amount: _couponState.coupon![index].amount,
+                              shopTitle: _couponState.coupon![index].shop!.name,
+                              shopImage:
+                                  _couponState.coupon![index].shop!.image,
+                              code: _couponState.coupon![index].code,
+                              notice: _couponState.coupon![index].validity,
+                            );
+                          }),
+                    )
                   : Center(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -45,7 +68,7 @@ class MyCouponsScreen extends ConsumerWidget {
                         ],
                       ),
                     )
-              : couponState is CouponLoadingState
+              : _couponState is CouponLoadingState
                   ? const LoadingWidget()
                   : const SizedBox()),
     );

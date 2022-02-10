@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
@@ -48,94 +49,169 @@ class DisputeResponseScreen extends StatelessWidget {
                   : const SizedBox()
             ],
           ),
-          body: disputeDetailsState is DisputeDetailsLoadedState
-              ? Column(
-                  children: <Widget>[
-                    Expanded(
-                      child:
-                          disputeDetailsState.disputeDetails!.replies!.isEmpty
-                              ? const SizedBox()
-                              : _chatBody(context, disputeDetailsState),
-                    ),
-                    _chatTextBody(context, messageController, _statuses,
-                        disputeDetailsState),
-                  ],
-                )
-              : const LoadingWidget(),
+          body: SafeArea(
+            child: disputeDetailsState is DisputeDetailsLoadedState
+                ? Column(
+                    children: <Widget>[
+                      Expanded(
+                        child:
+                            disputeDetailsState.disputeDetails!.replies!.isEmpty
+                                ? const SizedBox()
+                                : _chatBody(context, disputeDetailsState),
+                      ),
+                      _chatTextBox(context, messageController, _statuses,
+                          disputeDetailsState),
+                    ],
+                  )
+                : const LoadingWidget(),
+          ),
         );
       },
     );
   }
 
-  Padding _chatTextBody(
+  Padding _chatTextBox(
       BuildContext context,
-      TextEditingController messageController,
+      TextEditingController _messageController,
       Map<String, String> _statuses,
       DisputeDetailsLoadedState disputeDetailsState) {
     return Padding(
-      padding: const EdgeInsets.all(4),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.end,
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      child: Column(
         children: [
-          IconButton(
-            onPressed: () {
-              //TODO: Attach Images
-            },
-            icon: Icon(Icons.add, color: kPrimaryColor),
-          ),
-          Expanded(
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(width: 1, color: kAccentColor),
-                color: getColorBasedOnTheme(context, kLightColor, kDarkBgColor),
-              ),
-              child: TextField(
-                controller: messageController,
-                keyboardType: TextInputType.multiline,
-                maxLines: 3,
-                minLines: 1,
-                decoration: InputDecoration(
-                  contentPadding: const EdgeInsets.all(8),
-                  border: InputBorder.none,
-                  hintText: LocaleKeys.type_a_message.tr(),
-                  hintStyle: context.textTheme.caption,
-                ),
-              ),
+          // _attachment.isNotEmpty
+          //     ? _attachmentsWidget(context)
+          //     : const SizedBox(),
+          CupertinoTextField(
+            controller: _messageController,
+            keyboardType: TextInputType.text,
+            decoration: BoxDecoration(
+              border: Border.all(width: 2, color: kAccentColor),
+              borderRadius: BorderRadius.circular(10),
+              color: getColorBasedOnTheme(context, kLightColor, kDarkBgColor),
+            ),
+            placeholder: LocaleKeys.type_a_message.tr(),
+            style: context.textTheme.subtitle2!
+                .copyWith(fontWeight: FontWeight.bold),
+            prefixMode: OverlayVisibilityMode.always,
+            textAlignVertical: TextAlignVertical.center,
+            padding: const EdgeInsets.only(right: 16, left: 8),
+            // prefix: CupertinoButton(
+            //   padding: EdgeInsets.zero,
+            //   onPressed: () async {
+            //     final _file = await pickImageToBase64();
+
+            //     if (_file != null) {
+            //       _attachment = _file;
+
+            //       setState(() {});
+            //     }
+            //   },
+            //   child: Icon(Icons.add_photo_alternate, color: kPrimaryColor),
+            // ),
+            suffix: CupertinoButton(
+              borderRadius: BorderRadius.circular(2),
+              padding: EdgeInsets.zero,
+              onPressed: () async {
+                //TODO: Status Need To be created
+                debugPrint(
+                    _statuses[disputeDetailsState.disputeDetails!.status!]);
+                if (_messageController.text.isNotEmpty) {
+                  String message = _messageController.text.trim();
+                  _messageController.clear();
+                  await context
+                      .read(disputeDetailsProvider.notifier)
+                      .postDisputeRespose(
+                    disputeDetailsState.disputeDetails!.id,
+                    {
+                      'reply': message,
+                      'status': _statuses[
+                              disputeDetailsState.disputeDetails!.status!] ??
+                          "3",
+                    },
+                  );
+                } else {
+                  toast(LocaleKeys.empty_message.tr());
+                }
+              },
+              color: kPrimaryColor,
+              child: const Icon(Icons.send, color: kLightColor),
             ),
           ),
-          const SizedBox(
-            width: 4,
-          ),
-          IconButton(
-            onPressed: () async {
-              //TODO: Status Need To be created
-              debugPrint(
-                  _statuses[disputeDetailsState.disputeDetails!.status!]);
-              if (messageController.text.isNotEmpty) {
-                String message = messageController.text.trim();
-                messageController.clear();
-                await context
-                    .read(disputeDetailsProvider.notifier)
-                    .postDisputeRespose(
-                  disputeDetailsState.disputeDetails!.id,
-                  {
-                    'reply': message,
-                    'status': _statuses[
-                            disputeDetailsState.disputeDetails!.status!] ??
-                        "3",
-                  },
-                );
-              } else {
-                toast(LocaleKeys.empty_message.tr());
-              }
-            },
-            icon: Icon(Icons.send, color: kPrimaryColor),
-          )
         ],
       ),
     );
   }
+
+  // Padding _chatTextBody(
+  //     BuildContext context,
+  //     TextEditingController _messageController,
+  //     Map<String, String> _statuses,
+  //     DisputeDetailsLoadedState disputeDetailsState) {
+  //   return Padding(
+  //     padding: const EdgeInsets.all(4),
+  //     child: Row(
+  //       crossAxisAlignment: CrossAxisAlignment.end,
+  //       children: [
+  //         IconButton(
+  //           onPressed: () {
+  //             //TODO: Attach Images
+  //           },
+  //           icon: Icon(Icons.add, color: kPrimaryColor),
+  //         ),
+  //         Expanded(
+  //           child: Container(
+  //             decoration: BoxDecoration(
+  //               borderRadius: BorderRadius.circular(8),
+  //               border: Border.all(width: 1, color: kAccentColor),
+  //               color: getColorBasedOnTheme(context, kLightColor, kDarkBgColor),
+  //             ),
+  //             child: TextField(
+  //               controller: _messageController,
+  //               keyboardType: TextInputType.multiline,
+  //               maxLines: 3,
+  //               minLines: 1,
+  //               decoration: InputDecoration(
+  //                 contentPadding: const EdgeInsets.all(8),
+  //                 border: InputBorder.none,
+  //                 hintText: LocaleKeys.type_a_message.tr(),
+  //                 hintStyle: context.textTheme.caption,
+  //               ),
+  //             ),
+  //           ),
+  //         ),
+  //         const SizedBox(
+  //           width: 4,
+  //         ),
+  //         IconButton(
+  //           onPressed: () async {
+  //             //TODO: Status Need To be created
+  //             debugPrint(
+  //                 _statuses[disputeDetailsState.disputeDetails!.status!]);
+  //             if (_messageController.text.isNotEmpty) {
+  //               String message = _messageController.text.trim();
+  //               _messageController.clear();
+  //               await context
+  //                   .read(disputeDetailsProvider.notifier)
+  //                   .postDisputeRespose(
+  //                 disputeDetailsState.disputeDetails!.id,
+  //                 {
+  //                   'reply': message,
+  //                   'status': _statuses[
+  //                           disputeDetailsState.disputeDetails!.status!] ??
+  //                       "3",
+  //                 },
+  //               );
+  //             } else {
+  //               toast(LocaleKeys.empty_message.tr());
+  //             }
+  //           },
+  //           icon: Icon(Icons.send, color: kPrimaryColor),
+  //         )
+  //       ],
+  //     ),
+  //   );
+  // }
 
   Widget _chatBody(
       BuildContext context, DisputeDetailsLoadedState disputeDetailsState) {

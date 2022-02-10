@@ -7,17 +7,19 @@ class VendorDetailsModel {
 
   VendorDetails? data;
 
-  factory VendorDetailsModel.fromRawJson(String str) => VendorDetailsModel.fromJson(json.decode(str));
+  factory VendorDetailsModel.fromRawJson(String str) =>
+      VendorDetailsModel.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
-  factory VendorDetailsModel.fromJson(Map<String, dynamic> json) => VendorDetailsModel(
-    data: VendorDetails.fromJson(json["data"]),
-  );
+  factory VendorDetailsModel.fromJson(Map<String, dynamic> json) =>
+      VendorDetailsModel(
+        data: VendorDetails.fromJson(json["data"]),
+      );
 
   Map<String, dynamic> toJson() => {
-    "data": data!.toJson(),
-  };
+        "data": data!.toJson(),
+      };
 }
 
 class VendorDetails {
@@ -34,6 +36,7 @@ class VendorDetails {
     this.activeListingsCount,
     this.rating,
     this.feedbacks,
+    this.feedbacksCount,
     this.image,
   });
 
@@ -49,43 +52,48 @@ class VendorDetails {
   int? activeListingsCount;
   String? rating;
   List<VendorDetailsFeedback>? feedbacks;
+  int? feedbacksCount;
   String? image;
 
-  factory VendorDetails.fromRawJson(String str) => VendorDetails.fromJson(json.decode(str));
+  factory VendorDetails.fromRawJson(String str) =>
+      VendorDetails.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
   factory VendorDetails.fromJson(Map<String, dynamic> json) => VendorDetails(
-    id: json["id"],
-    name: json["name"],
-    slug: json["slug"],
-    description: json["description"],
-    memberSince: json["member_since"],
-    verified: json["verified"],
-    verifiedText: json["verified_text"],
-    bannerImage: json["banner_image"],
-    soldItemCount: json["sold_item_count"],
-    activeListingsCount: json["active_listings_count"],
-    rating: json["rating"],
-    feedbacks: List<VendorDetailsFeedback>.from(json["feedbacks"].map((x) => VendorDetailsFeedback.fromJson(x))),
-    image: json["image"],
-  );
+        id: json["id"],
+        name: json["name"],
+        slug: json["slug"],
+        description: json["description"],
+        memberSince: json["member_since"],
+        verified: json["verified"],
+        verifiedText: json["verified_text"],
+        bannerImage: json["banner_image"],
+        soldItemCount: json["sold_item_count"],
+        activeListingsCount: json["active_listings_count"],
+        rating: json["rating"],
+        feedbacks: List<VendorDetailsFeedback>.from(
+            json["feedbacks"].map((x) => VendorDetailsFeedback.fromJson(x))),
+        feedbacksCount: json["feedbacks_count"],
+        image: json["image"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "name": name,
-    "slug": slug,
-    "description": description,
-    "member_since": memberSince,
-    "verified": verified,
-    "verified_text": verifiedText,
-    "banner_image": bannerImage,
-    "sold_item_count": soldItemCount,
-    "active_listings_count": activeListingsCount,
-    "rating": rating,
-    "feedbacks": List<dynamic>.from(feedbacks!.map((x) => x.toJson())),
-    "image": image,
-  };
+        "id": id,
+        "name": name,
+        "slug": slug,
+        "description": description,
+        "member_since": memberSince,
+        "verified": verified,
+        "verified_text": verifiedText,
+        "banner_image": bannerImage,
+        "sold_item_count": soldItemCount,
+        "active_listings_count": activeListingsCount,
+        "rating": rating,
+        "feedbacks": List<dynamic>.from(feedbacks!.map((x) => x.toJson())),
+        "feedbacks_count": feedbacksCount,
+        "image": image,
+      };
 }
 
 class VendorDetailsFeedback {
@@ -105,25 +113,27 @@ class VendorDetailsFeedback {
   bool? spam;
   String? updatedAt;
 
-  factory VendorDetailsFeedback.fromRawJson(String str) => VendorDetailsFeedback.fromJson(json.decode(str));
+  factory VendorDetailsFeedback.fromRawJson(String str) =>
+      VendorDetailsFeedback.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
-  factory VendorDetailsFeedback.fromJson(Map<String, dynamic> json) => VendorDetailsFeedback(
-    id: json["id"],
-    rating: json["rating"],
-    comment: json["comment"],
-    approved: json["approved"],
-    spam: json["spam"],
-    updatedAt: json["updated_at"],
-  );
+  factory VendorDetailsFeedback.fromJson(Map<String, dynamic> json) =>
+      VendorDetailsFeedback(
+        id: json["id"],
+        rating: json["rating"],
+        comment: json["comment"],
+        approved: json["approved"],
+        spam: json["spam"],
+        updatedAt: json["updated_at"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "rating": rating,
-    "comment": comment,
-    "approved": approved,
-    "spam": spam,
-    "updated_at": updatedAt,
-  };
+        "id": id,
+        "rating": rating,
+        "comment": comment,
+        "approved": approved,
+        "spam": spam,
+        "updated_at": updatedAt,
+      };
 }

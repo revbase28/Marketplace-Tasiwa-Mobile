@@ -301,46 +301,40 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
                               return null;
                             },
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              ElevatedButton(
-                                  onPressed: () async {
-                                    if (_formKey.currentState!.validate()) {
-                                      toast(
-                                        LocaleKeys.please_wait.tr(),
+                          CustomButton(
+                              onTap: () async {
+                                if (_formKey.currentState!.validate()) {
+                                  toast(
+                                    LocaleKeys.please_wait.tr(),
+                                  );
+                                  await context
+                                      .read(addressProvider)
+                                      .editAddress(
+                                        addressId: widget.address.id,
+                                        addressType:
+                                            _addressTypeController.text,
+                                        contactPerson:
+                                            _contactPersonController.text,
+                                        contactNumber:
+                                            _contactNumberController.text,
+                                        countryId: selectedCountryID == null
+                                            ? widget.address.country!.id
+                                                .toString()
+                                            : selectedCountryID.toString(),
+                                        stateId: selectedStateID?.toString(),
+                                        cityId: _cityController.text,
+                                        addressLine1:
+                                            _addressLine1Controller.text,
+                                        addressLine2:
+                                            _addressLine2Controller.text,
+                                        zipCode: _zipCodeController.text,
                                       );
-                                      await context
-                                          .read(addressProvider)
-                                          .editAddress(
-                                            addressId: widget.address.id,
-                                            addressType:
-                                                _addressTypeController.text,
-                                            contactPerson:
-                                                _contactPersonController.text,
-                                            contactNumber:
-                                                _contactNumberController.text,
-                                            countryId: selectedCountryID == null
-                                                ? widget.address.country!.id
-                                                    .toString()
-                                                : selectedCountryID.toString(),
-                                            stateId:
-                                                selectedStateID?.toString(),
-                                            cityId: _cityController.text,
-                                            addressLine1:
-                                                _addressLine1Controller.text,
-                                            addressLine2:
-                                                _addressLine2Controller.text,
-                                            zipCode: _zipCodeController.text,
-                                          );
-                                      await context
-                                          .refresh(getAddressFutureProvider);
-                                      context.pop();
-                                    }
-                                  },
-                                  child: Text(LocaleKeys.update_address.tr())),
-                            ],
-                          ),
+                                  await context
+                                      .refresh(getAddressFutureProvider);
+                                  context.pop();
+                                }
+                              },
+                              buttonText: LocaleKeys.update_address.tr()),
                         ],
                       ).p(10),
                     ).cornerRadius(10).p(10),

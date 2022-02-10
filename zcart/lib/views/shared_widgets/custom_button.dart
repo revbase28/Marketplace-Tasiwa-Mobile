@@ -6,14 +6,12 @@ class CustomButton extends StatelessWidget {
   final String? buttonText;
 
   final Color? buttonBGColor;
-  final double widthMultiplier;
 
   const CustomButton({
     Key? key,
     this.onTap,
     this.buttonText,
     this.buttonBGColor,
-    this.widthMultiplier = 0.8,
   }) : super(key: key);
 
   @override
@@ -23,7 +21,7 @@ class CustomButton extends StatelessWidget {
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 10),
         padding: const EdgeInsets.symmetric(horizontal: 20),
-        width: MediaQuery.of(context).size.width * widthMultiplier,
+        width: double.infinity,
         decoration: BoxDecoration(
           color: buttonBGColor ?? kPrimaryColor,
           borderRadius: const BorderRadius.all(Radius.circular(10)),

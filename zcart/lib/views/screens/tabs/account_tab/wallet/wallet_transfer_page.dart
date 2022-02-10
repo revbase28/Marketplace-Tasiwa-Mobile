@@ -23,7 +23,7 @@ class _WalletTransferState extends State<WalletTransferPage> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        FocusScope.of(context).requestFocus(FocusNode());
+        FocusScope.of(context).unfocus();
       },
       child: Scaffold(
         appBar: AppBar(
@@ -74,8 +74,8 @@ class _WalletTransferState extends State<WalletTransferPage> {
                                 : null,
                       ),
                       const SizedBox(height: 8),
-                      ElevatedButton(
-                        onPressed: () async {
+                      CustomButton(
+                        onTap: () async {
                           if (_formKey.currentState!.validate()) {
                             setState(() {
                               _isLoading = true;
@@ -96,7 +96,7 @@ class _WalletTransferState extends State<WalletTransferPage> {
                             }
                           }
                         },
-                        child: const Text('Transfer'),
+                        buttonText: 'Transfer',
                       ),
                     ],
                   ),

@@ -10,7 +10,8 @@ import 'package:zcart/data/network/network_utils.dart';
 class CategoryRepository implements ICategoryRepository {
   @override
   Future<List<CategoryList>?> fetchCategory() async {
-    var responseBody = await handleResponse(await getRequest(API.category));
+    var responseBody =
+        await handleResponse(await getRequest(API.allCategoryGroups));
     if (responseBody.runtimeType == int) {
       if (responseBody > 206) {
         throw NetworkException();
@@ -24,7 +25,7 @@ class CategoryRepository implements ICategoryRepository {
   Future<List<CategorySubgroup>?> fetchCategorySubgroupList(
       String categoryID) async {
     var responseBody = await handleResponse(
-        await getRequest(API.categorySubgroup(categoryID)));
+        await getRequest(API.categorySubgroupOfGroups(categoryID)));
     if (responseBody.runtimeType == int) {
       if (responseBody > 206) {
         throw NetworkException();
@@ -40,7 +41,7 @@ class CategoryRepository implements ICategoryRepository {
   Future<List<SubgroupCategory>?> fetchSubgroupCategoryList(
       String subgroupID) async {
     var responseBody = await handleResponse(
-        await getRequest(API.subgroupCategory(subgroupID)));
+        await getRequest(API.categoriesOfSubGroups(subgroupID)));
     if (responseBody.runtimeType == int) {
       if (responseBody > 206) {
         throw NetworkException();

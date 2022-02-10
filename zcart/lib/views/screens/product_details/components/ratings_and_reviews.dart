@@ -4,20 +4,28 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:zcart/Theme/styles/colors.dart';
 import 'package:zcart/data/models/product/product_details_model.dart';
 import 'package:zcart/helper/get_color_based_on_theme.dart';
+import 'package:zcart/riverpod/providers/product_reviews_provider.dart';
+import 'package:zcart/riverpod/providers/provider.dart';
+import 'package:zcart/riverpod/state/product/product_reviews_state.dart';
+import 'package:zcart/riverpod/state/scroll_state.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:zcart/views/shared_widgets/shared_widgets.dart';
 
 class ProductRatingsAndReview extends StatelessWidget {
-  final List<FeedBack> feedbacks;
+  final String productSlug;
+  final List<ProductDetailsFeedBack> feedbacks;
+  final int feedBackCount;
   const ProductRatingsAndReview({
     Key? key,
+    required this.productSlug,
     required this.feedbacks,
+    required this.feedBackCount,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final _feedbacks =
-        feedbacks.length < 3 ? feedbacks : feedbacks.sublist(0, 3);
     return Container(
       color: getColorBasedOnTheme(context, kLightColor, kDarkCardBgColor),
       child: Column(
@@ -27,7 +35,7 @@ class ProductRatingsAndReview extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Ratings & Reviews (${feedbacks.length})',
+                'Ratings & Reviews ($feedBackCount)',
                 style: Theme.of(context)
                     .textTheme
                     .subtitle2!
@@ -36,11 +44,15 @@ class ProductRatingsAndReview extends StatelessWidget {
               TextButton(
                   style: TextButton.styleFrom(padding: EdgeInsets.zero),
                   onPressed: () {
+                    context
+                        .read(productReviewsNotifierProvider.notifier)
+                        .getProductReviews(productSlug);
+
                     Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
-                                RatingAndReviewAllPage(feedbacks: feedbacks)));
+                                const ProductRatingAndReviewAllPage()));
                   },
                   child: Text(LocaleKeys.view_all.tr(),
                       style: Theme.of(context).textTheme.subtitle2!.copyWith(
@@ -54,7 +66,7 @@ class ProductRatingsAndReview extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 10),
-          for (var feedBack in _feedbacks)
+          for (var feedBack in feedbacks)
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8),
               child: RatingAndReviewSection(feedBack: feedBack),
@@ -65,38 +77,63 @@ class ProductRatingsAndReview extends StatelessWidget {
   }
 }
 
-class RatingAndReviewAllPage extends StatelessWidget {
-  final List<FeedBack> feedbacks;
-  const RatingAndReviewAllPage({
+class ProductRatingAndReviewAllPage extends ConsumerWidget {
+  const ProductRatingAndReviewAllPage({
     Key? key,
-    required this.feedbacks,
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, watch) {
+    final _productReviews = watch(productReviewsNotifierProvider);
+
+    final _scrollControllerProvider =
+        watch(productReviewsScrollNotifierProvider.notifier);
+
     return Scaffold(
       appBar: AppBar(
         systemOverlayStyle: SystemUiOverlayStyle.light,
         title: const Text('Ratings & Reviews'),
-      ),
-      body: ListView(
-        padding: const EdgeInsets.all(16),
-        children: [
-          for (var feedBack in feedbacks)
-            RatingAndReviewSection(feedBack: feedBack),
+        actions: [
+          IconButton(
+              onPressed: () {
+                context
+                    .read(productReviewsNotifierProvider.notifier)
+                    .getMoreProductReviews();
+              },
+              icon: const Icon(Icons.sync)),
         ],
       ),
+      body: _productReviews is ProductReviewsLoadedState
+          ? ProviderListener<ScrollState>(
+              onChange: (context, state) {
+                if (state is ScrollReachedBottomState) {
+                  context
+                      .read(productReviewsNotifierProvider.notifier)
+                      .getMoreProductReviews();
+                }
+              },
+              provider: productReviewsScrollNotifierProvider,
+              child: ListView(
+                controller: _scrollControllerProvider.controller,
+                physics: const AlwaysScrollableScrollPhysics(),
+                padding: const EdgeInsets.all(16),
+                children: [
+                  for (var feedBack in _productReviews.reviews)
+                    RatingAndReviewSection(feedBack: feedBack),
+                ],
+              ),
+            )
+          : const Center(child: LoadingWidget()),
     );
   }
 }
 
 class RatingAndReviewSection extends StatelessWidget {
+  final dynamic feedBack;
   const RatingAndReviewSection({
     Key? key,
     required this.feedBack,
   }) : super(key: key);
-
-  final FeedBack feedBack;
 
   @override
   Widget build(BuildContext context) {

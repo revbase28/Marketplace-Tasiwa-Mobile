@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -86,6 +85,69 @@ class _MyCartTabState extends State<MyCartTab> {
                       : const SizedBox(),
                 ],
               ),
+              floatingActionButtonLocation:
+                  FloatingActionButtonLocation.endFloat,
+              floatingActionButton: _oneCheckoutPluginCheckProvider.when(
+                data: (value) {
+                  if (value) {
+                    bool _canOneCheckout = false;
+                    if (_cartState is CartLoadedState) {
+                      if (_cartState.cartList != null &&
+                          _cartState.cartList!.isNotEmpty &&
+                          _cartState.cartList!.length > 1) {
+                        if (_cartState.cartList!.every((element) =>
+                            element.shipToCountryId ==
+                                _cartState.cartList!.first.shipToCountryId &&
+                            element.shipToStateId ==
+                                _cartState.cartList!.first.shipToStateId)) {
+                          _canOneCheckout = true;
+                        }
+                      }
+                    }
+                    if (_canOneCheckout) {
+                      return FloatingActionButton.extended(
+                        backgroundColor: Colors.black,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        onPressed: () {
+                          String? _customerEmail;
+
+                          if (accessAllowed) {
+                            if (_userState is UserLoadedState) {
+                              _customerEmail = _userState.user!.email!;
+                            }
+                          }
+                          if (_cartState is CartLoadedState) {
+                            _onOneCheckOut(
+                                _cartState.cartList!.first.id!, _customerEmail);
+                          }
+                        },
+                        icon: const Icon(Icons.double_arrow),
+                        label: Text(
+                          "Checkout All",
+                          style: Theme.of(context)
+                              .textTheme
+                              .headline6!
+                              .copyWith(
+                                  fontWeight: FontWeight.w900,
+                                  color: kLightColor),
+                        ),
+                        elevation: 20,
+                        heroTag: "checkout_all",
+                        foregroundColor: kLightColor,
+                        tooltip: "Checkout All",
+                      );
+                    } else {
+                      return const SizedBox();
+                    }
+                  }
+                  return const SizedBox();
+                },
+                loading: () => const SizedBox(),
+                error: (error, stackTrace) => Text(error.toString()),
+              ),
+              // floatingActionButton: ,
               body: _cartState is CartLoadedState
                   ? _cartState.cartList == null || _cartState.cartList!.isEmpty
                       ? ProviderListener(
@@ -150,106 +212,11 @@ class _MyCartTabState extends State<MyCartTab> {
                             ),
                           ),
                         )
-                      : Column(
-                          children: [
-                            Expanded(
-                              child: ListView(
-                                padding:
-                                    const EdgeInsets.only(top: 8, bottom: 16),
-                                children: _cartState.cartList!
-                                    .map((e) => CartItemCard(cartItem: e))
-                                    .toList(),
-                              ),
-                            ),
-                            _oneCheckoutPluginCheckProvider.when(
-                              data: (value) {
-                                if (value) {
-                                  bool _canOneCheckout = false;
-
-                                  if (_cartState.cartList != null &&
-                                      _cartState.cartList!.isNotEmpty &&
-                                      _cartState.cartList!.length > 1) {
-                                    if (_cartState.cartList!.every((element) =>
-                                        element.shipToCountryId ==
-                                            _cartState.cartList!.first
-                                                .shipToCountryId &&
-                                        element.shipToStateId ==
-                                            _cartState.cartList!.first
-                                                .shipToStateId)) {
-                                      _canOneCheckout = true;
-                                    }
-                                  }
-
-                                  if (_canOneCheckout) {
-                                    return Container(
-                                      width: double.infinity,
-                                      decoration: BoxDecoration(
-                                        color: getColorBasedOnTheme(context,
-                                            kLightBgColor, kDarkBgColor),
-                                      ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 16, vertical: 8),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            const Flexible(
-                                              child: Text(
-                                                  "You can checkout for all items with one click."),
-                                            ),
-                                            const SizedBox(width: 16),
-                                            ElevatedButton.icon(
-                                              style: ElevatedButton.styleFrom(
-                                                primary: Colors.black,
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 12,
-                                                        vertical: 16),
-                                              ),
-                                              onPressed: () {
-                                                String? _customerEmail;
-
-                                                if (accessAllowed) {
-                                                  if (_userState
-                                                      is UserLoadedState) {
-                                                    _customerEmail =
-                                                        _userState.user!.email!;
-                                                  }
-                                                }
-                                                _onOneCheckOut(
-                                                    _cartState
-                                                        .cartList!.first.id!,
-                                                    _customerEmail);
-                                              },
-                                              icon: const Icon(
-                                                  CupertinoIcons.cart_fill),
-                                              label: Text(
-                                                "Checkout All",
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .headline6!
-                                                    .copyWith(
-                                                        color: Colors.white,
-                                                        fontWeight:
-                                                            FontWeight.bold),
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                    );
-                                  } else {
-                                    return const SizedBox();
-                                  }
-                                }
-                                return const SizedBox();
-                              },
-                              loading: () => const SizedBox(),
-                              error: (error, stackTrace) =>
-                                  Text(error.toString()),
-                            ),
-                          ],
+                      : ListView(
+                          padding: const EdgeInsets.only(top: 8, bottom: 72),
+                          children: _cartState.cartList!
+                              .map((e) => CartItemCard(cartItem: e))
+                              .toList(),
                         )
                   : const ProductLoadingWidget().px(10));
         },

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:zcart/Theme/styles/colors.dart';
@@ -41,71 +42,76 @@ class _VendorChatScreenState extends State<VendorChatScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        backgroundColor:
-            getColorBasedOnTheme(context, kLightColor, kDarkCardBgColor),
-        flexibleSpace: SafeArea(
-          child: Container(
-            padding: const EdgeInsets.only(right: 16),
-            child: Row(
-              children: <Widget>[
-                const BackButton(),
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).requestFocus(FocusNode());
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          backgroundColor:
+              getColorBasedOnTheme(context, kLightColor, kDarkCardBgColor),
+          flexibleSpace: SafeArea(
+            child: Container(
+              padding: const EdgeInsets.only(right: 16),
+              child: Row(
+                children: <Widget>[
+                  const BackButton(),
 
-                const SizedBox(width: 20),
-                SizedBox(
-                  width: 20,
-                  height: 20,
-                  child: CachedNetworkImage(
-                    imageUrl: widget.shopImage!,
-                    errorWidget: (context, url, error) => const SizedBox(),
-                    progressIndicatorBuilder: (context, url, progress) =>
-                        Center(
-                      child:
-                          CircularProgressIndicator(value: progress.progress),
+                  const SizedBox(width: 20),
+                  SizedBox(
+                    width: 20,
+                    height: 20,
+                    child: CachedNetworkImage(
+                      imageUrl: widget.shopImage!,
+                      errorWidget: (context, url, error) => const SizedBox(),
+                      progressIndicatorBuilder: (context, url, progress) =>
+                          Center(
+                        child:
+                            CircularProgressIndicator(value: progress.progress),
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(width: 20),
+                  const SizedBox(width: 20),
 
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text(
-                        widget.shopName!,
-                        style: const TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w600),
-                      ),
-                      const SizedBox(height: 6),
-                      Text(
-                        widget.shopVerifiedText!,
-                        style: context.textTheme.caption!
-                            .copyWith(color: kFadeColor),
-                      ),
-                    ],
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text(
+                          widget.shopName!,
+                          style: const TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w600),
+                        ),
+                        const SizedBox(height: 6),
+                        Text(
+                          widget.shopVerifiedText!,
+                          style: context.textTheme.caption!
+                              .copyWith(color: kFadeColor),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                //Icon(Icons.settings, color: kDarkColor54),
-              ],
+                  //Icon(Icons.settings, color: kDarkColor54),
+                ],
+              ),
             ),
           ),
+          actions: [
+            IconButton(
+                onPressed: () async {
+                  await context
+                      .read(productChatProvider.notifier)
+                      .productConversation(widget.shopId, update: true);
+                },
+                icon: Icon(Icons.sync,
+                    color: getColorBasedOnTheme(
+                        context, kDarkColor, kLightColor))),
+          ],
         ),
-        actions: [
-          IconButton(
-              onPressed: () async {
-                await context
-                    .read(productChatProvider.notifier)
-                    .productConversation(widget.shopId, update: true);
-              },
-              icon: Icon(Icons.sync,
-                  color:
-                      getColorBasedOnTheme(context, kDarkColor, kLightColor))),
-        ],
+        body: SafeArea(child: _chatBody(context)),
       ),
-      body: SafeArea(child: _chatBody(context)),
     );
   }
 
@@ -139,82 +145,70 @@ class _VendorChatScreenState extends State<VendorChatScreen> {
 
   Padding _chatTextBox(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(4),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       child: Column(
         children: [
           _attachment.isNotEmpty
               ? _attachmentsWidget(context)
               : const SizedBox(),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              IconButton(
-                onPressed: () async {
-                  final _file = await pickImageToBase64();
-                  //  print("_attachments : $_attachments");
+          CupertinoTextField(
+            controller: _messageController,
+            keyboardType: TextInputType.text,
+            decoration: BoxDecoration(
+              border: Border.all(width: 2, color: kAccentColor),
+              borderRadius: BorderRadius.circular(10),
+              color: getColorBasedOnTheme(context, kLightColor, kDarkBgColor),
+            ),
+            placeholder: LocaleKeys.type_a_message.tr(),
+            style: context.textTheme.subtitle2!
+                .copyWith(fontWeight: FontWeight.bold),
+            prefixMode: OverlayVisibilityMode.always,
+            textAlignVertical: TextAlignVertical.center,
+            padding: const EdgeInsets.only(right: 16),
+            prefix: CupertinoButton(
+              padding: EdgeInsets.zero,
+              onPressed: () async {
+                final _file = await pickImageToBase64();
 
-                  if (_file != null) {
-                    _attachment = _file;
+                if (_file != null) {
+                  _attachment = _file;
 
-                    setState(() {});
-                  }
-                },
-                icon: Icon(Icons.add, color: kPrimaryColor),
-              ),
-              Expanded(
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(width: 1, color: kAccentColor),
-                    color: getColorBasedOnTheme(
-                        context, kLightColor, kDarkBgColor),
-                  ),
-                  child: TextField(
-                    controller: _messageController,
-                    keyboardType: TextInputType.multiline,
-                    maxLines: 3,
-                    minLines: 1,
-                    decoration: InputDecoration(
-                      contentPadding: const EdgeInsets.all(8),
-                      border: InputBorder.none,
-                      hintText: LocaleKeys.type_a_message.tr(),
-                      hintStyle: context.textTheme.caption,
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(
-                width: 4,
-              ),
-              IconButton(
-                onPressed: () {
-                  if (_messageController.text.isNotEmpty) {
-                    String message = _messageController.text.trim();
-                    _messageController.clear();
-                    context
-                        .read(productChatSendProvider.notifier)
-                        .sendMessage(
-                          widget.shopId,
-                          message,
-                          photo: _attachment.isNotEmpty ? _attachment : null,
-                        )
-                        .then(
-                      (value) {
-                        _messageController.clear();
-                        _attachment = "";
-                        setState(() {});
-                        context
-                            .read(productChatProvider.notifier)
-                            .productConversation(widget.shopId, update: true);
-                      },
-                    );
-                  } else {
-                    toast(LocaleKeys.empty_message.tr());
-                  }
-                },
-                icon: Icon(Icons.send, color: kPrimaryColor),
-              )
-            ],
+                  setState(() {});
+                }
+              },
+              child: Icon(Icons.add_photo_alternate, color: kPrimaryColor),
+            ),
+            suffix: CupertinoButton(
+              borderRadius: BorderRadius.circular(2),
+              padding: EdgeInsets.zero,
+              onPressed: () {
+                if (_messageController.text.isNotEmpty) {
+                  String message = _messageController.text.trim();
+                  _messageController.clear();
+                  context
+                      .read(productChatSendProvider.notifier)
+                      .sendMessage(
+                        widget.shopId,
+                        message,
+                        photo: _attachment.isNotEmpty ? _attachment : null,
+                      )
+                      .then(
+                    (value) {
+                      _messageController.clear();
+                      _attachment = "";
+                      setState(() {});
+                      context
+                          .read(productChatProvider.notifier)
+                          .productConversation(widget.shopId, update: true);
+                    },
+                  );
+                } else {
+                  toast(LocaleKeys.empty_message.tr());
+                }
+              },
+              color: kPrimaryColor,
+              child: const Icon(Icons.send, color: kLightColor),
+            ),
           ),
         ],
       ),

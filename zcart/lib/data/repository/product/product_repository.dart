@@ -8,37 +8,6 @@ import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 class ProductRepository implements IProductRepository {
-  // @override
-  // Future<ProductDetailsModel> fetchProductDetails(String? slug) async {
-  //   dynamic responseBody;
-  //   responseBody =
-  //       await handleResponse(await getRequest(API.productDetails(slug)));
-
-  //   if (responseBody.runtimeType == int && responseBody > 206) {
-  //     throw NetworkException();
-  //   }
-
-  //   ProductDetailsModel productModel =
-  //       ProductDetailsModel.fromJson(responseBody);
-
-  //   return productModel;
-  // }
-
-  // @override
-  // Future<ProductVariantDetails> fetchProductVariantDetails(
-  //     String? slug, requestBody) async {
-  //   dynamic responseBody;
-  //   responseBody = await handleResponse(
-  //       await postRequest(API.productVariantDetails(slug), requestBody));
-
-  //   if (responseBody.runtimeType == int && responseBody > 206) {
-  //     throw NetworkException();
-  //   }
-  //   ProductVariantDetailsModel productVariantDetailsModel =
-  //       ProductVariantDetailsModel.fromJson(responseBody);
-  //   return productVariantDetailsModel.data;
-  // }
-
   /// Product List
   late ProductModel productListModel;
   List<ProductList> productList = [];

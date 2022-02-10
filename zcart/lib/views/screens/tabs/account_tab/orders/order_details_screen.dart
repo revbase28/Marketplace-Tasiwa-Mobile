@@ -241,9 +241,9 @@ class OrderDetailsScreen extends ConsumerWidget {
                                   style: context.textTheme.headline6!,
                                 ),
                                 orderDetailsState.orderDetails!.shop!.verified!
-                                    ? Icon(Icons.check_circle,
-                                            color: kPrimaryColor, size: 15)
-                                        .px2()
+                                    ? const Icon(Icons.check_circle,
+                                            color: kGreenColor, size: 15)
+                                        .px(4)
                                         .pOnly(top: 3)
                                         .onInkTap(() {
                                         toast(orderDetailsState

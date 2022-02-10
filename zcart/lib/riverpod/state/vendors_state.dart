@@ -1,5 +1,5 @@
 import 'package:zcart/data/models/vendors/vendor_details_model.dart';
-import 'package:zcart/data/models/vendors/vendor_feedback_model.dart';
+import 'package:zcart/data/models/vendors/vendor_reviews_model.dart';
 import 'package:zcart/data/models/vendors/vendor_items_model.dart';
 import 'package:zcart/data/models/vendors/vendors_model.dart';
 
@@ -92,7 +92,7 @@ class VendorFeedbackLoadingState extends VendorFeedbackState {
 }
 
 class VendorFeedbackLoadedState extends VendorFeedbackState {
-  final List<VendorFeedback>? vendorFeedback;
+  final List<VendorReview> vendorFeedback;
 
   const VendorFeedbackLoadedState(this.vendorFeedback);
 }

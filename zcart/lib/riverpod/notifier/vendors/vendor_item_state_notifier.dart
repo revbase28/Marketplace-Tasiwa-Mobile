@@ -29,8 +29,7 @@ class VendorItemNotifier extends StateNotifier<VendorItemsState> {
           await _iVendorsRepository.fetchMoreVendorItemList();
       state = VendorItemLoadedState(vendorsDetails);
     } on NetworkException {
-      state = const VendorItemErrorState(
-          "Couldn't fetch Vendors Item Data. Something went wrong!");
+      state = VendorItemErrorState(LocaleKeys.something_went_wrong.tr());
     }
   }
 }

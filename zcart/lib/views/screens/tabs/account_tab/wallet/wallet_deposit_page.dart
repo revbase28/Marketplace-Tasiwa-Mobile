@@ -27,186 +27,199 @@ class _WalletDepositPageState extends State<WalletDepositPage> {
   String _selectedpaymentMethod = '';
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-          title: const Text("Wallet Deposit"),
-          systemOverlayStyle: SystemUiOverlayStyle.light),
-      body: _isLoading
-          ? Center(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const LoadingWidget(),
-                  const SizedBox(height: 16),
-                  Text(LocaleKeys.please_wait.tr()),
-                ],
-              ),
-            )
-          : Form(
-              key: _formKey,
-              child: ListView(
-                padding: const EdgeInsets.all(16),
-                children: [
-                  CustomTextField(
-                    hintText: "Amount",
-                    title: "Amount",
-                    keyboardType: TextInputType.number,
-                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                    controller: _amountController,
-                    onChanged: (value) {
-                      context.read(walletDepositProvider).amount = value.trim();
-                    },
-                    validator: (value) =>
-                        value!.isEmpty ? LocaleKeys.field_required.tr() : null,
-                  ),
-                  const SizedBox(height: 4),
-                  Consumer(
-                    builder: (context, watch, child) {
-                      final _paymentMethodsProvider =
-                          watch(walletDepositPaymentMethodsProvider);
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
+      child: Scaffold(
+        appBar: AppBar(
+            title: const Text("Wallet Deposit"),
+            systemOverlayStyle: SystemUiOverlayStyle.light),
+        body: _isLoading
+            ? Center(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const LoadingWidget(),
+                    const SizedBox(height: 16),
+                    Text(LocaleKeys.please_wait.tr()),
+                  ],
+                ),
+              )
+            : Form(
+                key: _formKey,
+                child: ListView(
+                  padding: const EdgeInsets.all(16),
+                  children: [
+                    CustomTextField(
+                      hintText: "Amount",
+                      title: "Amount",
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                      controller: _amountController,
+                      onChanged: (value) {
+                        context.read(walletDepositProvider).amount =
+                            value.trim();
+                      },
+                      validator: (value) => value!.isEmpty
+                          ? LocaleKeys.field_required.tr()
+                          : null,
+                    ),
+                    const SizedBox(height: 4),
+                    Consumer(
+                      builder: (context, watch, child) {
+                        final _paymentMethodsProvider =
+                            watch(walletDepositPaymentMethodsProvider);
 
-                      return _paymentMethodsProvider.when(
-                        data: (value) {
-                          return value == null
-                              ? Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 16, vertical: 32),
-                                  child: Text(
-                                      LocaleKeys.something_went_wrong.tr()),
-                                )
-                              : value.data.isNotEmpty
-                                  ? Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        const SizedBox(height: 16),
-                                        Text(
-                                          LocaleKeys.payment_method.tr(),
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .headline6!
-                                              .copyWith(
-                                                  fontWeight: FontWeight.bold),
-                                        ),
-                                        const SizedBox(height: 16),
-                                        ...[
-                                          for (var method in value.data.where(
-                                              (element) => paymentMethods
-                                                  .contains(element.code)))
-                                            RadioListTile<String>(
-                                              controlAffinity:
-                                                  ListTileControlAffinity
-                                                      .trailing,
-                                              contentPadding: EdgeInsets.zero,
-                                              activeColor: Theme.of(context)
-                                                  .textTheme
-                                                  .headline6!
-                                                  .color,
-                                              title: Text(method.name),
-                                              value: method.code,
-                                              groupValue:
-                                                  _selectedpaymentMethod,
-                                              onChanged: (value) {
-                                                setState(() {
-                                                  _selectedpaymentMethod =
-                                                      value!;
-                                                  context
-                                                      .read(
-                                                          walletDepositProvider)
-                                                      .paymentMethod = value;
-                                                });
-                                              },
-                                            )
+                        return _paymentMethodsProvider.when(
+                          data: (value) {
+                            return value == null
+                                ? Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 16, vertical: 32),
+                                    child: Text(
+                                        LocaleKeys.something_went_wrong.tr()),
+                                  )
+                                : value.data.isNotEmpty
+                                    ? Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          const SizedBox(height: 16),
+                                          Text(
+                                            LocaleKeys.payment_method.tr(),
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .headline6!
+                                                .copyWith(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                          ),
+                                          const SizedBox(height: 16),
+                                          ...[
+                                            for (var method in value.data.where(
+                                                (element) => paymentMethods
+                                                    .contains(element.code)))
+                                              RadioListTile<String>(
+                                                controlAffinity:
+                                                    ListTileControlAffinity
+                                                        .trailing,
+                                                contentPadding: EdgeInsets.zero,
+                                                activeColor: Theme.of(context)
+                                                    .textTheme
+                                                    .headline6!
+                                                    .color,
+                                                title: Text(method.name),
+                                                value: method.code,
+                                                groupValue:
+                                                    _selectedpaymentMethod,
+                                                onChanged: (value) {
+                                                  setState(() {
+                                                    _selectedpaymentMethod =
+                                                        value!;
+                                                    context
+                                                        .read(
+                                                            walletDepositProvider)
+                                                        .paymentMethod = value;
+                                                  });
+                                                },
+                                              )
+                                          ],
                                         ],
-                                      ],
-                                    )
-                                  : const Padding(
-                                      padding:
-                                          EdgeInsets.symmetric(vertical: 32),
-                                      child: Center(
-                                        child: Text(
-                                          "No payment methods available",
-                                          textAlign: TextAlign.center,
+                                      )
+                                    : const Padding(
+                                        padding:
+                                            EdgeInsets.symmetric(vertical: 32),
+                                        child: Center(
+                                          child: Text(
+                                            "No payment methods available",
+                                            textAlign: TextAlign.center,
+                                          ),
                                         ),
-                                      ),
-                                    );
-                        },
-                        loading: () {
-                          return const SizedBox(
-                            height: 64,
-                            child: Center(
-                              child: LoadingWidget(),
-                            ),
-                          );
-                        },
-                        error: (error, stackTrace) {
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 32),
-                            child: Text(LocaleKeys.something_went_wrong.tr()),
-                          );
-                        },
-                      );
-                    },
-                  ),
-                  const SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: () async {
-                      if (_formKey.currentState!.validate()) {
-                        if (_selectedpaymentMethod.isEmpty) {
-                          toast("Please select payment method!");
-                        } else {
-                          await PaymentMethods.pay(
-                            context,
-                            _selectedpaymentMethod,
-                            isWalletDeposit: true,
-                            invoiceNumber: "",
-                            email: widget.customerEmail,
-                            cartItems: [],
-                            discount: "",
-                            handling: "",
-                            shipping: "",
-                            subtotal: "",
-                            taxes: "",
-                            packaging: "",
-                            grandTotal:
-                                int.parse(_amountController.text.trim()),
-                          ).then((value) async {
-                            if (value) {
-                              setState(() {
-                                _isLoading = true;
-                              });
-                              try {
-                                await context.read(walletDepositProvider).pay();
+                                      );
+                          },
+                          loading: () {
+                            return const SizedBox(
+                              height: 64,
+                              child: Center(
+                                child: LoadingWidget(),
+                              ),
+                            );
+                          },
+                          error: (error, stackTrace) {
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 16, vertical: 32),
+                              child: Text(LocaleKeys.something_went_wrong.tr()),
+                            );
+                          },
+                        );
+                      },
+                    ),
+                    const SizedBox(height: 16),
+                    CustomButton(
+                      onTap: () async {
+                        if (_formKey.currentState!.validate()) {
+                          if (_selectedpaymentMethod.isEmpty) {
+                            toast("Please select payment method!");
+                          } else {
+                            await PaymentMethods.pay(
+                              context,
+                              _selectedpaymentMethod,
+                              isWalletDeposit: true,
+                              invoiceNumber: DateTime.now()
+                                  .millisecondsSinceEpoch
+                                  .toString(),
+                              email: widget.customerEmail,
+                              cartItems: [],
+                              discount: "0.0",
+                              handling: "0.0",
+                              shipping: "0.0",
+                              subtotal: "0.0",
+                              taxes: "0.0",
+                              packaging: "0.0",
+                              grandTotal:
+                                  int.parse(_amountController.text.trim()) *
+                                      100,
+                            ).then((value) async {
+                              if (value) {
+                                setState(() {
+                                  _isLoading = true;
+                                });
+                                try {
+                                  await context
+                                      .read(walletDepositProvider)
+                                      .pay();
 
-                                context.refresh(walletBalanceProvider);
-                                context
-                                    .refresh(walletTransactionFutureProvider);
-                                Navigator.of(context).pop();
-                              } catch (e) {
-                                toast(e.toString());
+                                  context.refresh(walletBalanceProvider);
+                                  context
+                                      .refresh(walletTransactionFutureProvider);
+                                  Navigator.of(context).pop();
+                                } catch (e) {
+                                  toast(e.toString());
+                                }
+                                setState(() {
+                                  _isLoading = false;
+                                });
+                              } else {
+                                toast("Payment Failed");
                               }
-                              setState(() {
-                                _isLoading = false;
-                              });
-                            } else {
-                              toast("Payment Failed");
-                            }
-                          });
-                        }
+                            });
+                          }
 
-                        // if (_result) {
-                        //   context.refresh(walletTransactionFutureProvider);
-                        //   context.refresh(walletBalanceProvider);
-                        //   Navigator.pop(context);
-                        // }
-                      }
-                    },
-                    child: const Text('Continue'),
-                  ),
-                ],
-              )),
+                          // if (_result) {
+                          //   context.refresh(walletTransactionFutureProvider);
+                          //   context.refresh(walletBalanceProvider);
+                          //   Navigator.pop(context);
+                          // }
+                        }
+                      },
+                      buttonText: "Continue",
+                    ),
+                  ],
+                )),
+      ),
     );
   }
 }

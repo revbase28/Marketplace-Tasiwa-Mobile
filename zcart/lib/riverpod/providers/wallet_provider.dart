@@ -62,7 +62,7 @@ class WalletTransfer {
         API.walletTransfer, {'email': to, 'amount': amount},
         bearerToken: true));
 
-    if (_responseBody.isEmpty) {
+    if (_responseBody is String ? _responseBody.isEmpty : false) {
       return false;
     }
 

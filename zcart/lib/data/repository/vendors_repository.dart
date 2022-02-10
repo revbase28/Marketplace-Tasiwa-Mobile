@@ -1,7 +1,8 @@
+import 'package:flutter/material.dart';
 import 'package:zcart/data/interface/i_vendors_repository.dart';
 import 'package:zcart/data/models/vendors/vendor_details_model.dart';
-import 'package:zcart/data/models/vendors/vendor_feedback_model.dart';
 import 'package:zcart/data/models/vendors/vendor_items_model.dart';
+import 'package:zcart/data/models/vendors/vendor_reviews_model.dart';
 import 'package:zcart/data/models/vendors/vendors_model.dart';
 import 'package:zcart/data/network/api.dart';
 import 'package:zcart/data/network/network_exception.dart';
@@ -71,17 +72,43 @@ class VendorRepository implements IVendorsRepository {
     }
     return vendorItemList;
   }
+}
 
+class VendorReviewsRepository implements IVendorReviewsRepository {
+  late VendorReviewsModel _vendorReviewsModel;
+  List<VendorReview> vendorReviewsList = [];
   @override
-  Future<List<VendorFeedback>?> fetchVendorFeedback(String slug) async {
+  Future<List<VendorReview>> fetchVendorReviews(String slug) async {
+    vendorReviewsList.clear();
     var responseBody =
         await handleResponse(await getRequest(API.vendorFeedback(slug)));
     if (responseBody.runtimeType == int && responseBody > 206) {
       throw NetworkException();
     }
 
-    VendorFeedbackModel vendorFeedbackModel =
-        VendorFeedbackModel.fromJson(responseBody);
-    return vendorFeedbackModel.data;
+    _vendorReviewsModel = VendorReviewsModel.fromJson(responseBody);
+    vendorReviewsList.addAll(_vendorReviewsModel.data ?? []);
+    return vendorReviewsList;
+  }
+
+  @override
+  Future<List<VendorReview>> fetchMoreVendorReviews() async {
+    dynamic responseBody;
+    debugPrint("fetchMoreReviewsItems (before): ${vendorReviewsList.length}");
+    if (_vendorReviewsModel.links!.next != null) {
+      responseBody = await handleResponse(await getRequest(
+          _vendorReviewsModel.links!.next!.split('api/').last));
+      if (responseBody.runtimeType == int && responseBody > 206) {
+        throw NetworkException();
+      }
+
+      _vendorReviewsModel = VendorReviewsModel.fromJson(responseBody);
+      vendorReviewsList.addAll(_vendorReviewsModel.data ?? []);
+      debugPrint("fetchMoreReviewsItems (after): ${vendorReviewsList.length}");
+      return vendorReviewsList;
+    } else {
+      toast(LocaleKeys.reached_to_the_end.tr());
+      return vendorReviewsList;
+    }
   }
 }

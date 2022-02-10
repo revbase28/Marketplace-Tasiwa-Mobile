@@ -140,9 +140,78 @@ class OrderScrollNotifier extends StateNotifier<ScrollState> {
   }
 }
 
+class CouponScrollNotifier extends StateNotifier<ScrollState> {
+  // ignore: prefer_const_constructors
+  CouponScrollNotifier() : super(ScrollInitialState());
+
+  final _scrollController = ScrollController();
+
+  ScrollController get controller {
+    _scrollController.addListener(_scrollListener);
+    return _scrollController;
+  }
+
+  get scrollNotifierState => state;
+
+  _scrollListener() {
+    if (_scrollController.offset >=
+            _scrollController.position.maxScrollExtent &&
+        !_scrollController.position.outOfRange) {
+      // ignore: prefer_const_constructors
+      state = ScrollReachedBottomState();
+    }
+  }
+}
+
 class WalletScrollNotifier extends StateNotifier<ScrollState> {
   // ignore: prefer_const_constructors
   WalletScrollNotifier() : super(ScrollInitialState());
+
+  final _scrollController = ScrollController();
+
+  ScrollController get controller {
+    _scrollController.addListener(_scrollListener);
+    return _scrollController;
+  }
+
+  get scrollNotifierState => state;
+
+  _scrollListener() {
+    if (_scrollController.offset >=
+            _scrollController.position.maxScrollExtent &&
+        !_scrollController.position.outOfRange) {
+      // ignore: prefer_const_constructors
+      state = ScrollReachedBottomState();
+    }
+  }
+}
+
+class ProductReviewsScrollNotifier extends StateNotifier<ScrollState> {
+  // ignore: prefer_const_constructors
+  ProductReviewsScrollNotifier() : super(ScrollInitialState());
+
+  final _scrollController = ScrollController();
+
+  ScrollController get controller {
+    _scrollController.addListener(_scrollListener);
+    return _scrollController;
+  }
+
+  get scrollNotifierState => state;
+
+  _scrollListener() {
+    if (_scrollController.offset >=
+            _scrollController.position.maxScrollExtent &&
+        !_scrollController.position.outOfRange) {
+      // ignore: prefer_const_constructors
+      state = ScrollReachedBottomState();
+    }
+  }
+}
+
+class VendorReviewsScrollNotifier extends StateNotifier<ScrollState> {
+  // ignore: prefer_const_constructors
+  VendorReviewsScrollNotifier() : super(ScrollInitialState());
 
   final _scrollController = ScrollController();
 

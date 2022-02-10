@@ -8,9 +8,11 @@ final randomItemScrollNotifierProvider =
 final vendorItemScrollNotifierProvider =
     StateNotifierProvider<VendorItemScrollNotifier, ScrollState>(
         (ref) => VendorItemScrollNotifier());
+
 final categoryDetailsScrollNotifierProvider =
     StateNotifierProvider<CategoryDetailsScrollNotifier, ScrollState>(
         (ref) => CategoryDetailsScrollNotifier());
+
 final disputesScrollNotifierProvider =
     StateNotifierProvider<DisputesScrollNotifier, ScrollState>(
         (ref) => DisputesScrollNotifier());
@@ -23,6 +25,20 @@ final orderScrollNotifierProvider =
     StateNotifierProvider<OrderScrollNotifier, ScrollState>(
         (ref) => OrderScrollNotifier());
 
+final couponScrollNotifierProvider =
+    StateNotifierProvider<CouponScrollNotifier, ScrollState>(
+        (ref) => CouponScrollNotifier());
+
 final walletScrollNotifierProvider =
     StateNotifierProvider<WalletScrollNotifier, ScrollState>(
         (ref) => WalletScrollNotifier());
+
+final productReviewsScrollNotifierProvider =
+    StateNotifierProvider<ProductReviewsScrollNotifier, ScrollState>((ref) {
+  return ProductReviewsScrollNotifier();
+});
+
+final vendorReviewsScrollNotifierProvider =
+    StateNotifierProvider<VendorReviewsScrollNotifier, ScrollState>((ref) {
+  return VendorReviewsScrollNotifier();
+});

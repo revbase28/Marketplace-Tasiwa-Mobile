@@ -31,13 +31,12 @@ class API {
   static const resetPassword = 'auth/reset';
 
   /// Category
-  static const category = 'category-grps';
+  static const allCategoryGroups = 'category-grps';
+  static categorySubgroupOfGroups(String categoryGroupId) =>
+      'category-subgrps/$categoryGroupId';
+  static categoriesOfSubGroups(String subgroupID) => 'categories/$subgroupID';
 
   static categoryItem(String? slug) => 'listing$slug';
-
-  static categorySubgroup(String categoryID) => 'category-subgrps/$categoryID';
-
-  static subgroupCategory(String subgroupID) => 'categories/$subgroupID';
 
   /// Banner
   static const banner = 'banners';
@@ -62,35 +61,26 @@ class API {
 
   /// Shops
   static const vendors = 'shops';
-
   static vendorDetails(String? slug) => 'shop/$slug';
-
   static vendorItem(String? slug) => 'shop/$slug/listings';
-
   static vendorFeedback(String slug) => 'shop/$slug/feedbacks';
 
   ///Brands
   static const brands = 'brands';
-
   static const featuredBrands = 'brands/featured';
-
   static brandProfile(String? slug) => 'brand/$slug';
-
   static brandItems(String? slug) => 'brand/$slug/listings';
 
   ///DEALS
-
   static const dealsUnderThePrice = 'deals/under-the-price';
   static const dealOfTheDay = 'deals/deal-of-the-day';
 
   /// Product Details
   static productDetails(String? slug) => 'listing/$slug';
-
   static productVariantDetails(String? slug) => 'variant/$slug';
-
   static productList(String slug) => 'listing/$slug';
-
   static offersFromOtherSeller(String? slug) => 'offers/$slug';
+  static productReviews(String? slug) => "listing/$slug/feedbacks";
 
   /// Search
   static search(String searchedItem) => 'search/$searchedItem';

@@ -1,12 +1,14 @@
 import 'package:zcart/data/models/product/product_model.dart';
+import 'package:zcart/data/models/product/product_reviews_model.dart';
 
 abstract class IProductRepository {
-  // Future<ProductDetailsModel> fetchProductDetails(String slug);
-  // Future<ProductVariantDetails?> fetchProductVariantDetails(
-  //     String slug, requestBody);
-
   Future<List<ProductList>> fetchProductList(String slug);
   Future<List<ProductList>> fetchMoreProductList();
+}
+
+abstract class IProductReviewsRepository {
+  Future<List<ProductReview>> fetchReviews(String slug);
+  Future<List<ProductReview>> fetchMoreReviews();
 }
 
 abstract class ILatestItemRepository {
@@ -19,7 +21,6 @@ abstract class IPopularItemRepository {
 
 abstract class IRandomItemRepository {
   Future<List<ProductList>> fetchRandomItems();
-
   Future<List<ProductList>> fetchMoreRandomItems();
 }
 

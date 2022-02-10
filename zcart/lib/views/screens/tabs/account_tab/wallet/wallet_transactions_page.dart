@@ -50,6 +50,7 @@ class WalletTransactionsPage extends ConsumerWidget {
                     child: ListView.builder(
                         controller: _scrollControllerProvider.controller,
                         itemCount: _walletNotifireProvider.transactions.length,
+                        physics: const AlwaysScrollableScrollPhysics(),
                         padding: const EdgeInsets.all(8),
                         itemBuilder: (context, index) {
                           return WalletTransactionTile(

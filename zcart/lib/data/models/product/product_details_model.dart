@@ -117,7 +117,7 @@ class Data {
   int? imageId;
   int? feedbacksCount;
   dynamic rating;
-  List<FeedBack> feedbacks;
+  List<ProductDetailsFeedBack> feedbacks;
   Shop? shop;
   Product? product;
   bool? freeShipping;
@@ -162,8 +162,8 @@ class Data {
         rating: json["rating"],
         feedbacks: json["feedbacks"] == null
             ? []
-            : List<FeedBack>.from(
-                json["feedbacks"].map((x) => FeedBack.fromJson(x))),
+            : List<ProductDetailsFeedBack>.from(json["feedbacks"]
+                .map((x) => ProductDetailsFeedBack.fromJson(x))),
         shop: Shop.fromJson(json["shop"]),
         product: Product.fromJson(json["product"]),
         freeShipping: json["free_shipping"],
@@ -616,8 +616,8 @@ class ProductImage {
       };
 }
 
-class FeedBack {
-  FeedBack({
+class ProductDetailsFeedBack {
+  ProductDetailsFeedBack({
     this.id,
     this.rating,
     this.comment,
@@ -637,7 +637,8 @@ class FeedBack {
   List<String>? labels;
   Customer? customer;
 
-  factory FeedBack.fromJson(Map<String, dynamic> json) => FeedBack(
+  factory ProductDetailsFeedBack.fromJson(Map<String, dynamic> json) =>
+      ProductDetailsFeedBack(
         id: json["id"],
         rating: json["rating"],
         comment: json["comment"],

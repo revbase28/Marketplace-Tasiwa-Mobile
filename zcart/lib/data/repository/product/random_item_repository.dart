@@ -22,7 +22,7 @@ class RandomItemRepository implements IRandomItemRepository {
     }
 
     randomItemModel = ProductModel.fromJson(responseBody);
-    randomItemList.addAll(randomItemModel.data!);
+    randomItemList.addAll(randomItemModel.data ?? []);
     return randomItemList;
   }
 

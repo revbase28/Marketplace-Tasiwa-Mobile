@@ -7,12 +7,11 @@ import 'package:zcart/riverpod/providers/address_provider.dart';
 import 'package:zcart/riverpod/state/address/country_state.dart';
 import 'package:zcart/riverpod/state/address/states_state.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
-import 'package:zcart/views/shared_widgets/custom_dropdownfield.dart';
-import 'package:zcart/views/shared_widgets/custom_textfield.dart';
 import 'package:zcart/views/shared_widgets/dropdown_field_loading_widget.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:zcart/views/shared_widgets/shared_widgets.dart';
 
 class AddNewAddressScreen extends StatefulWidget {
   const AddNewAddressScreen({
@@ -219,39 +218,29 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
                         return null;
                       },
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        ElevatedButton(
-                            onPressed: () async {
-                              if (_formKey.currentState!.validate()) {
-                                toast(
-                                  LocaleKeys.please_wait.tr(),
-                                );
+                    CustomButton(
+                      onTap: () async {
+                        if (_formKey.currentState!.validate()) {
+                          toast(
+                            LocaleKeys.please_wait.tr(),
+                          );
 
-                                await context
-                                    .read(addressProvider)
-                                    .createAddress(
-                                      addressType: _addressTypeController.text,
-                                      contactPerson:
-                                          _contactPersonController.text,
-                                      contactNumber:
-                                          _contactNumberController.text,
-                                      countryId: _selectedCountryID ?? 4,
-                                      stateId: _selectedStateID,
-                                      cityId: _cityController.text,
-                                      addressLine1:
-                                          _addressLine1Controller.text,
-                                      addressLine2:
-                                          _addressLine2Controller.text,
-                                      zipCode: _zipCodeController.text,
-                                    );
-                                await context.refresh(getAddressFutureProvider);
-                                context.pop();
-                              }
-                            },
-                            child: Text(LocaleKeys.add_address.tr())),
-                      ],
+                          await context.read(addressProvider).createAddress(
+                                addressType: _addressTypeController.text,
+                                contactPerson: _contactPersonController.text,
+                                contactNumber: _contactNumberController.text,
+                                countryId: _selectedCountryID ?? 4,
+                                stateId: _selectedStateID,
+                                cityId: _cityController.text,
+                                addressLine1: _addressLine1Controller.text,
+                                addressLine2: _addressLine2Controller.text,
+                                zipCode: _zipCodeController.text,
+                              );
+                          await context.refresh(getAddressFutureProvider);
+                          context.pop();
+                        }
+                      },
+                      buttonText: LocaleKeys.add_address.tr(),
                     ),
                   ],
                 ).p(10),

@@ -1215,41 +1215,6 @@ class CheckOutItemDetailsPage extends ConsumerWidget {
                               price: _total,
                               isGrandTotal: true,
                             ),
-
-                            // CheckOutDetailsPriceWidget(
-                            //     title: LocaleKeys.shipping.tr(),
-                            //     price: _cartDetailsProvider
-                            //             .cartItemDetails!.data!.shipping ??
-                            //         "0"),
-                            // CheckOutDetailsPriceWidget(
-                            //     title: LocaleKeys.packaging.tr(),
-                            //     price: _cartDetailsProvider
-                            //             .cartItemDetails!.data!.packaging ??
-                            //         "0"),
-                            // CheckOutDetailsPriceWidget(
-                            //     title: LocaleKeys.handling.tr(),
-                            //     price: _cartDetailsProvider
-                            //             .cartItemDetails!.data!.handling ??
-                            //         "0"),
-                            // CheckOutDetailsPriceWidget(
-                            //     title: LocaleKeys.taxes.tr(),
-                            //     price: _cartDetailsProvider
-                            //             .cartItemDetails!.data!.taxes ??
-                            //         "0"),
-                            // CheckOutDetailsPriceWidget(
-                            //     title: LocaleKeys.discount.tr(),
-                            //     price: "- " +
-                            //         (_cartDetailsProvider
-                            //                 .cartItemDetails!.data!.discount ??
-                            //             "0")),
-                            // const Divider(),
-                            // //Grand Total
-                            // CheckOutDetailsPriceWidget(
-                            //     isGrandTotal: true,
-                            //     title: LocaleKeys.grand_total.tr(),
-                            //     price: _cartDetailsProvider
-                            //             .cartItemDetails!.data!.grandTotal ??
-                            //         "0"),
                           ],
                         ),
                       ),
@@ -1810,14 +1775,14 @@ class _CheckoutPaymentPageState extends State<CheckoutPaymentPage> {
             }
           }
 
-          print("Grand Total: " + _grandTotal.toString());
-          print("Packaging: " + _packaging);
-          print("Shipping: " + _shipping);
-          print("Handling: " + _handling);
-          print("Subtotal: " + _subtotal);
-          print("Tax: " + _tax);
-          print("Discount: " + _discount);
-          print("Cart Items: " + _cartItems.length.toString());
+          // print("Grand Total: " + _grandTotal.toString());
+          // print("Packaging: " + _packaging);
+          // print("Shipping: " + _shipping);
+          // print("Handling: " + _handling);
+          // print("Subtotal: " + _subtotal);
+          // print("Tax: " + _tax);
+          // print("Discount: " + _discount);
+          // print("Cart Items: " + _cartItems.length.toString());
 
           if (_paymentOptionsState is PaymentOptionsLoadedState) {
             List<PaymentOptions>? _paymentOptions =
@@ -2279,6 +2244,8 @@ class _CheckoutPaymentPageState extends State<CheckoutPaymentPage> {
                                         toast(
                                             LocaleKeys.please_agree_terms.tr());
                                       }
+                                    } else {
+                                      toast("Please enter valid email!");
                                     }
                                   } else {
                                     if (_emailFormKey.currentState!
@@ -2331,6 +2298,8 @@ class _CheckoutPaymentPageState extends State<CheckoutPaymentPage> {
                                           toast("Payment Failed");
                                         }
                                       });
+                                    } else {
+                                      toast("Please enter valid email.");
                                     }
                                   }
                                 } else {

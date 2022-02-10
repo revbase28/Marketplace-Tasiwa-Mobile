@@ -172,8 +172,6 @@ class _PayPalPaymentState extends State<PayPalPayment> {
       }
     ];
 
-    print("_transaction: $_transaction");
-
     return Scaffold(
       appBar: AppBar(
         systemOverlayStyle: SystemUiOverlayStyle.light,

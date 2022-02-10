@@ -6,11 +6,15 @@ import 'package:velocity_x/velocity_x.dart';
 import 'package:zcart/Theme/styles/colors.dart';
 import 'package:zcart/data/models/vendors/vendor_details_model.dart';
 import 'package:zcart/helper/get_color_based_on_theme.dart';
+import 'package:zcart/riverpod/providers/provider.dart';
+import 'package:zcart/riverpod/state/scroll_state.dart';
+import 'package:zcart/riverpod/state/vendors_state.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:zcart/views/shared_widgets/shared_widgets.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'components/vendors_activity_card.dart';
 import 'components/vendors_card.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class VendorsAboutUsScreen extends StatelessWidget {
   final VendorDetails? vendorDetails;
@@ -96,9 +100,11 @@ class VendorsAboutUsScreen extends StatelessWidget {
               rating: vendorDetails!.rating ?? '0',
               itemsSold: vendorDetails!.soldItemCount ?? 0,
             ),
-            VendorRatingsAndReview(feedbacks: vendorDetails!.feedbacks ?? [])
-                .cornerRadius(10)
-                .pSymmetric(h: 10),
+            VendorRatingsAndReview(
+              vendorSlug: vendorDetails!.slug!,
+              feedbacks: vendorDetails!.feedbacks ?? [],
+              feedbacksCount: vendorDetails!.feedbacksCount ?? 0,
+            ).cornerRadius(10).pSymmetric(h: 10),
             Container(
               color:
                   getColorBasedOnTheme(context, kLightColor, kDarkCardBgColor),
@@ -124,16 +130,18 @@ class VendorsAboutUsScreen extends StatelessWidget {
 }
 
 class VendorRatingsAndReview extends StatelessWidget {
+  final String vendorSlug;
   final List<VendorDetailsFeedback> feedbacks;
+  final int feedbacksCount;
   const VendorRatingsAndReview({
     Key? key,
+    required this.vendorSlug,
     required this.feedbacks,
+    required this.feedbacksCount,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final _feedbacks =
-        feedbacks.length < 3 ? feedbacks : feedbacks.sublist(0, 3);
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       color: getColorBasedOnTheme(context, kLightColor, kDarkCardBgColor),
@@ -144,27 +152,30 @@ class VendorRatingsAndReview extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Ratings & Reviews (${feedbacks.length})',
+                'Ratings & Reviews ($feedbacksCount)',
                 style: Theme.of(context).textTheme.subtitle2,
               ),
               TextButton(
                   style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                  onPressed: _feedbacks.isEmpty
+                  onPressed: feedbacks.isEmpty
                       ? null
                       : () {
+                          context
+                              .read(vendorReviewsNotifierProvider.notifier)
+                              .getVendorReviews(vendorSlug);
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => _RatingAndReviewAllPage(
-                                      feedbacks: feedbacks)));
+                                  builder: (context) =>
+                                      const _VendorRatingAndReviewAllPage()));
                         },
                   child: Text(LocaleKeys.view_all.tr(),
                       style: Theme.of(context).textTheme.subtitle2!.copyWith(
-                          color: _feedbacks.isEmpty ? null : kPrimaryColor,
+                          color: feedbacks.isEmpty ? null : kPrimaryColor,
                           fontWeight: FontWeight.bold))),
             ],
           ),
-          _feedbacks.isEmpty
+          feedbacks.isEmpty
               ? const SizedBox()
               : const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 10),
@@ -172,8 +183,8 @@ class VendorRatingsAndReview extends StatelessWidget {
                     height: 0,
                   ),
                 ),
-          _feedbacks.isEmpty ? const SizedBox() : const SizedBox(height: 10),
-          for (var feedBack in _feedbacks)
+          feedbacks.isEmpty ? const SizedBox() : const SizedBox(height: 10),
+          for (var feedBack in feedbacks)
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8),
               child: _RatingAndReviewSection(feedBack: feedBack),
@@ -184,38 +195,61 @@ class VendorRatingsAndReview extends StatelessWidget {
   }
 }
 
-class _RatingAndReviewAllPage extends StatelessWidget {
-  final List<VendorDetailsFeedback> feedbacks;
-  const _RatingAndReviewAllPage({
+class _VendorRatingAndReviewAllPage extends ConsumerWidget {
+  const _VendorRatingAndReviewAllPage({
     Key? key,
-    required this.feedbacks,
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, watch) {
+    final _vendorReviews = watch(vendorReviewsNotifierProvider);
+    final _scrollStateNotifier =
+        watch(vendorReviewsScrollNotifierProvider.notifier);
     return Scaffold(
       appBar: AppBar(
         systemOverlayStyle: SystemUiOverlayStyle.light,
         title: const Text('Ratings & Reviews'),
-      ),
-      body: ListView(
-        padding: const EdgeInsets.all(16),
-        children: [
-          for (var feedBack in feedbacks)
-            _RatingAndReviewSection(feedBack: feedBack),
+        actions: [
+          IconButton(
+              onPressed: () {
+                context
+                    .read(vendorReviewsNotifierProvider.notifier)
+                    .getMoreVendorReviews();
+              },
+              icon: const Icon(Icons.sync)),
         ],
       ),
+      body: _vendorReviews is VendorFeedbackLoadedState
+          ? ProviderListener<ScrollState>(
+              onChange: (context, state) {
+                if (state is ScrollReachedBottomState) {
+                  context
+                      .read(vendorReviewsNotifierProvider.notifier)
+                      .getMoreVendorReviews();
+                }
+              },
+              provider: vendorReviewsScrollNotifierProvider,
+              child: ListView(
+                controller: _scrollStateNotifier.controller,
+                padding: const EdgeInsets.all(16),
+                physics: const AlwaysScrollableScrollPhysics(),
+                children: [
+                  for (var feedBack in _vendorReviews.vendorFeedback)
+                    _RatingAndReviewSection(feedBack: feedBack),
+                ],
+              ),
+            )
+          : const Center(child: LoadingWidget()),
     );
   }
 }
 
 class _RatingAndReviewSection extends StatelessWidget {
+  final dynamic feedBack;
   const _RatingAndReviewSection({
     Key? key,
     required this.feedBack,
   }) : super(key: key);
-
-  final VendorDetailsFeedback feedBack;
 
   @override
   Widget build(BuildContext context) {

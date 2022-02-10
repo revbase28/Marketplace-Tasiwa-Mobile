@@ -438,8 +438,13 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
                       : Column(
                           children: [
                             ProductPageDefaultContainer(
-                                child: ProductRatingsAndReview(
-                                    feedbacks: _details.data!.feedbacks)),
+                              child: ProductRatingsAndReview(
+                                productSlug: _details.data!.slug!,
+                                feedbacks: _details.data!.feedbacks,
+                                feedBackCount:
+                                    _details.data!.feedbacksCount ?? 0,
+                              ),
+                            ),
                             const SizedBox(height: 10),
                           ],
                         ),

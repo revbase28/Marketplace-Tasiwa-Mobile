@@ -30,8 +30,8 @@ class MyOrderScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
-    final ordersState = watch(ordersProvider);
-    final scrollControllerProvider =
+    final _ordersState = watch(ordersProvider);
+    final _scrollControllerProvider =
         watch(orderScrollNotifierProvider.notifier);
 
     return Scaffold(
@@ -40,8 +40,7 @@ class MyOrderScreen extends ConsumerWidget {
         title: Text(LocaleKeys.orders.tr()),
         actions: [
           IconButton(
-            icon: Icon(Icons.sync,
-                color: getColorBasedOnTheme(context, kLightColor, kLightColor)),
+            icon: const Icon(Icons.sync, color: kLightColor),
             onPressed: () {
               context.read(ordersProvider.notifier).orders();
             },
@@ -49,8 +48,8 @@ class MyOrderScreen extends ConsumerWidget {
         ],
       ),
       body: SafeArea(
-        child: ordersState is OrdersLoadedState
-            ? ordersState.orders!.isEmpty
+        child: _ordersState is OrdersLoadedState
+            ? _ordersState.orders!.isEmpty
                 ? Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -76,19 +75,19 @@ class MyOrderScreen extends ConsumerWidget {
                     },
                     provider: orderScrollNotifierProvider,
                     child: ListView(
-                      controller: scrollControllerProvider.controller,
-                      children: ordersState.orders != null
-                          ? ordersState.orders!
+                      controller: _scrollControllerProvider.controller,
+                      children: _ordersState.orders != null
+                          ? _ordersState.orders!
                               .map((e) => OrderCard(
                                     order: e,
-                                    index: ordersState.orders!.indexOf(e),
+                                    index: _ordersState.orders!.indexOf(e),
                                   ))
                               .toList()
                           : [],
                     ),
                   )
-            : ordersState is OrdersErrorState
-                ? ErrorMessageWidget(ordersState.message)
+            : _ordersState is OrdersErrorState
+                ? ErrorMessageWidget(_ordersState.message)
                 : const OrdersLoadingWidget(),
       ),
     );
