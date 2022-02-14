@@ -3,23 +3,24 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:zcart/Theme/styles/colors.dart';
 import 'package:zcart/data/controller/feedback/feedback_controller.dart';
 import 'package:zcart/data/models/orders/order_details_model.dart';
 import 'package:zcart/helper/get_color_based_on_theme.dart';
-import 'package:zcart/riverpod/providers/order_provider.dart';
+import 'package:zcart/riverpod/providers/provider.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
+import 'package:zcart/views/screens/tabs/myCart_tab/checkout/checkout_screen.dart';
 import 'package:zcart/views/shared_widgets/custom_textfield.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class FeedbackScreen extends StatefulWidget {
-  final Order? order;
+  final Order order;
 
   const FeedbackScreen({
     Key? key,
-    this.order,
+    required this.order,
   }) : super(key: key);
 
   @override
@@ -29,8 +30,8 @@ class FeedbackScreen extends StatefulWidget {
 class _FeedbackScreenState extends State<FeedbackScreen> {
   final _formKey = GlobalKey<FormState>();
   final _productFormKey = GlobalKey<FormState>();
-  TextEditingController shopRatingController = TextEditingController();
-  TextEditingController shopCommentController = TextEditingController();
+  final TextEditingController _shopRatingController = TextEditingController();
+  final TextEditingController _shopCommentController = TextEditingController();
 
   List<int?> listingIdList = [];
 
@@ -38,31 +39,31 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
 
   List<String?> feedbackList = [];
 
-  updateListingIdList({int? index, int? listingId}) {
+  updateListingIdList({required int index, required int listingId}) {
     if (listingIdList.isEmpty) {
-      listingIdList.insert(index!, listingId);
-    } else if (index! <= listingIdList.length - 1) {
+      listingIdList.insert(index, listingId);
+    } else if (index <= listingIdList.length - 1) {
       listingIdList[index] = listingId;
     } else {
       listingIdList.insert(index, listingId);
     }
   }
 
-  void updateRatingList({required int index, double? rating}) {
+  void _updateRatingList({required int index, required double rating}) {
     updateListingIdList(
-        index: index, listingId: widget.order!.items![index].id);
+        index: index, listingId: widget.order.items![index].id!);
     if (ratingList.isEmpty) {
-      ratingList.insert(index, rating!.toInt());
+      ratingList.insert(index, rating.toInt());
     } else if (index <= ratingList.length - 1) {
-      ratingList[index] = rating!.toInt();
+      ratingList[index] = rating.toInt();
     } else {
-      ratingList.insert(index, rating!.toInt());
+      ratingList.insert(index, rating.toInt());
     }
   }
 
-  void updateFeedbackList({required int index, String? feedback}) {
+  void _updateFeedbackList({required int index, String? feedback}) {
     updateListingIdList(
-        index: index, listingId: widget.order!.items![index].id);
+        index: index, listingId: widget.order.items![index].id!);
     if (feedbackList.isEmpty) {
       feedbackList.insert(index, feedback);
     } else if (index <= feedbackList.length - 1) {
@@ -74,177 +75,175 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        systemOverlayStyle: SystemUiOverlayStyle.light,
-        title: Text(LocaleKeys.order_feedback.tr()),
-        centerTitle: true,
-        automaticallyImplyLeading: true,
-        elevation: 0,
-        actions: [
-          IconButton(
-            onPressed: () {
-              if (_formKey.currentState!.validate()) {
-                if (_productFormKey.currentState!.validate()) {
-                  if (listingIdList.length == widget.order!.items!.length &&
-                      feedbackList.length == widget.order!.items!.length) {
-                    context
-                        .read(sellerFeedbackProvider.notifier)
-                        .postFeedback(
-                          widget.order!.id,
-                          shopRatingController.text,
-                          shopCommentController.text,
-                        )
-                        .then((value) => context
-                            .read(productFeedbackProvider.notifier)
-                            .postFeedback(
-                              widget.order!.id,
-                              listingIdList,
-                              ratingList,
-                              feedbackList,
-                            ))
-                        .then((value) => context
-                                .read(ordersProvider.notifier)
-                                .orders(ignoreLoadingState: false)
-                                .then((value) {
-                              context.pop();
-                              context.pop();
-                            }));
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).requestFocus(FocusNode());
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          systemOverlayStyle: SystemUiOverlayStyle.light,
+          title: Text(LocaleKeys.order_feedback.tr()),
+          centerTitle: true,
+          automaticallyImplyLeading: true,
+          elevation: 0,
+          actions: [
+            IconButton(
+              onPressed: () {
+                if (_formKey.currentState!.validate()) {
+                  if (_productFormKey.currentState!.validate()) {
+                    if (listingIdList.length == widget.order.items!.length &&
+                        feedbackList.length == widget.order.items!.length) {
+                      context
+                          .read(sellerFeedbackProvider.notifier)
+                          .postFeedback(
+                            widget.order.id,
+                            _shopRatingController.text,
+                            _shopCommentController.text,
+                          )
+                          .then((value) => context
+                              .read(productFeedbackProvider.notifier)
+                              .postFeedback(
+                                widget.order.id,
+                                listingIdList,
+                                ratingList,
+                                feedbackList,
+                              ))
+                          .then((value) => context
+                                  .read(ordersProvider.notifier)
+                                  .orders(ignoreLoadingState: false)
+                                  .then((value) {
+                                context.pop();
+                                context.pop();
+                              }));
+                    }
+                  } else {
+                    toast(LocaleKeys.rate_all_product.tr());
                   }
-                } else {
-                  toast(LocaleKeys.rate_all_product.tr());
                 }
-              }
-            },
-            icon: const Icon(
-              Icons.check,
-              color: kLightColor,
-            ),
-          )
-        ],
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            /// Rate Seller
-            Container(
-              decoration: BoxDecoration(
-                  color:
-                      getColorBasedOnTheme(context, kLightColor, kDarkBgColor),
-                  borderRadius: BorderRadius.circular(10)),
-              margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              padding: const EdgeInsets.all(10),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(LocaleKeys.rate_seller.tr(),
-                            style: context.textTheme.subtitle2)
-                        .py(5),
-                    Row(
-                      children: [
-                        CachedNetworkImage(
-                          imageUrl: widget.order!.shop!.image!,
-                          errorWidget: (context, url, error) =>
-                              const SizedBox(),
-                          progressIndicatorBuilder: (context, url, progress) =>
-                              Center(
-                            child: CircularProgressIndicator(
-                                value: progress.progress),
-                          ),
-                          height: 50,
-                          width: 50,
-                        ).p(10),
-                        Text(widget.order!.shop!.name!,
-                            style: context.textTheme.subtitle2),
-                      ],
-                    ),
-                    Container(
-                      color: kPrimaryColor.withOpacity(0.2),
-                      padding: const EdgeInsets.all(10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          RatingBar.builder(
-                            initialRating: double.parse('0.00'),
-                            minRating: 1,
-                            direction: Axis.horizontal,
-                            allowHalfRating: true,
-                            itemCount: 5,
-                            itemSize: 25,
-                            itemPadding:
-                                const EdgeInsets.symmetric(horizontal: 5),
-                            itemBuilder: (context, _) =>
-                                const Icon(Icons.star, color: kDarkPriceColor),
-                            onRatingUpdate: (rating) {
-                              shopRatingController.text = '$rating';
-                            },
-                          ),
-                        ],
-                      ),
-                    ).cornerRadius(10),
-                    CustomTextField(
-                      title: LocaleKeys.write_a_feedback.tr(),
-                      hintText: LocaleKeys.write_about_experience.tr(),
-                      validator: (value) {
-                        if (value!.length < 10) {
-                          return LocaleKeys.comment_minimum_requirement.tr();
-                        } else if (value.length > 250) {
-                          return LocaleKeys.comment_maximum_requirement.tr();
-                        }
-                        return null;
-                      },
-                      maxLines: null,
-                      controller: shopCommentController,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-
-            /// Rate Product
-            Container(
-              decoration: BoxDecoration(
-                  color:
-                      getColorBasedOnTheme(context, kLightColor, kDarkBgColor),
-                  borderRadius: BorderRadius.circular(10)),
-              margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              padding: const EdgeInsets.all(10),
-              child: Form(
-                key: _productFormKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(LocaleKeys.rate_product.tr(),
-                            style: context.textTheme.subtitle2)
-                        .py(5),
-                    ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: widget.order!.items!.length,
-                        physics: const BouncingScrollPhysics(),
-                        itemBuilder: (BuildContext context, index) {
-                          return ProductRatingCard(
-                            order: widget.order,
-                            index: index,
-                            updateRatingList: updateRatingList,
-                            updateFeedbackList: updateFeedbackList,
-                          );
-                        }),
-                  ],
-                ),
+              },
+              icon: const Icon(
+                Icons.check,
+                color: kLightColor,
               ),
             )
           ],
+        ),
+        body: SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: getColorBasedOnTheme(
+                      context, kLightColor, kDarkCardBgColor),
+                ),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(LocaleKeys.rate_seller.tr(),
+                          style: context.textTheme.headline6),
+                      CustomShopCard(
+                        image: widget.order.shop!.image!,
+                        title: widget.order.shop!.name ?? "Unknown",
+                        verifiedText: widget.order.shop!.verifiedText ?? "",
+                      ),
+                      const Divider(height: 0),
+                      const SizedBox(height: 16),
+                      RatingBar.builder(
+                        initialRating: double.parse('0.00'),
+                        minRating: 1,
+                        direction: Axis.horizontal,
+                        itemCount: 5,
+                        itemSize: 25,
+                        itemPadding: const EdgeInsets.only(right: 5),
+                        itemBuilder: (context, _) =>
+                            const Icon(Icons.star, color: kDarkPriceColor),
+                        onRatingUpdate: (rating) {
+                          _shopRatingController.text = '${rating.toInt()}';
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      CustomTextField(
+                        title: LocaleKeys.write_a_feedback.tr(),
+                        hintText: LocaleKeys.write_about_experience.tr(),
+                        validator: (value) {
+                          if (value!.length < 10) {
+                            return LocaleKeys.comment_minimum_requirement.tr();
+                          } else if (value.length > 250) {
+                            return LocaleKeys.comment_maximum_requirement.tr();
+                          }
+                          return null;
+                        },
+                        maxLines: 3,
+                        controller: _shopCommentController,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              Container(
+                padding: const EdgeInsets.only(
+                  left: 16,
+                  right: 16,
+                  top: 16,
+                ),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: getColorBasedOnTheme(
+                      context, kLightColor, kDarkCardBgColor),
+                ),
+                child: Form(
+                  key: _productFormKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(LocaleKeys.rate_product.tr(),
+                          style: context.textTheme.headline6),
+                      const SizedBox(height: 16),
+                      ListView(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        children: widget.order.items!
+                            .map(
+                              (e) => Column(
+                                children: [
+                                  _SingleProductRatingCard(
+                                    order: widget.order,
+                                    index: widget.order.items!.indexOf(e),
+                                    updateRatingList: _updateRatingList,
+                                    updateFeedbackList: _updateFeedbackList,
+                                  ),
+                                  const Divider(),
+                                ],
+                              ),
+                            )
+                            .toList(),
+                      ),
+                    ],
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
   }
 }
 
-// ignore: must_be_immutable
-class ProductRatingCard extends StatelessWidget {
-  ProductRatingCard({
+class _SingleProductRatingCard extends StatefulWidget {
+  final Order order;
+  final int index;
+  final void Function({required int index, required double rating})
+      updateRatingList;
+  final void Function({required int index, String? feedback})
+      updateFeedbackList;
+  const _SingleProductRatingCard({
     Key? key,
     required this.order,
     required this.index,
@@ -252,21 +251,23 @@ class ProductRatingCard extends StatelessWidget {
     required this.updateFeedbackList,
   }) : super(key: key);
 
-  final Order? order;
-  final int index;
-  final void Function({required int index, double? rating}) updateRatingList;
-  final void Function({required int index, String? feedback})
-      updateFeedbackList;
+  @override
+  State<_SingleProductRatingCard> createState() =>
+      _SingleProductRatingCardState();
+}
 
-  TextEditingController productFeedbackController = TextEditingController();
+class _SingleProductRatingCardState extends State<_SingleProductRatingCard> {
+  final TextEditingController _productFeedbackController =
+      TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         ListTile(
           leading: CachedNetworkImage(
-            imageUrl: order!.items![index].image!,
+            imageUrl: widget.order.items![widget.index].image!,
             errorWidget: (context, url, error) => const SizedBox(),
             progressIndicatorBuilder: (context, url, progress) => Center(
               child: CircularProgressIndicator(value: progress.progress),
@@ -274,40 +275,45 @@ class ProductRatingCard extends StatelessWidget {
             width: 50,
             height: 50,
           ),
-          title: Text(order!.items![index].description!),
-          subtitle: Text(
-            order!.items![index].unitPrice!,
-            style: context.textTheme.subtitle2!.copyWith(color: kPrimaryColor),
-          ),
-          trailing: Text('x ' + order!.items![index].quantity.toString()),
-        ),
-        Container(
-          color: kPrimaryColor.withOpacity(0.2),
-          padding: const EdgeInsets.all(10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+          title: Text(widget.order.items![widget.index].description!,
+              style: context.textTheme.subtitle2),
+          subtitle: Row(
             children: [
-              RatingBar.builder(
-                initialRating: double.parse('0.00'),
-                minRating: 1,
-                direction: Axis.horizontal,
-                allowHalfRating: true,
-                itemCount: 5,
-                itemSize: 25,
-                itemPadding: const EdgeInsets.symmetric(horizontal: 5),
-                itemBuilder: (context, _) =>
-                    const Icon(Icons.star, color: kDarkPriceColor),
-                onRatingUpdate: (rating) =>
-                    updateRatingList(index: index, rating: rating),
+              Text(
+                widget.order.items![widget.index].unitPrice!,
+                style: context.textTheme.subtitle2!.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: getColorBasedOnTheme(
+                      context, kPriceColor, kDarkPriceColor),
+                ),
               ),
+              Text(
+                ' x ' + widget.order.items![widget.index].quantity.toString(),
+                style: context.textTheme.subtitle2!.copyWith(),
+              )
             ],
-          ),
-        ).cornerRadius(10),
+          ).py(8),
+        ),
+        const Divider(height: 0),
+        const SizedBox(height: 16),
+        RatingBar.builder(
+          initialRating: double.parse('0.00'),
+          minRating: 1.0,
+          direction: Axis.horizontal,
+          itemCount: 5,
+          itemSize: 25,
+          itemPadding: const EdgeInsets.only(right: 5),
+          itemBuilder: (context, _) =>
+              const Icon(Icons.star, color: kDarkPriceColor),
+          onRatingUpdate: (rating) =>
+              widget.updateRatingList(index: widget.index, rating: rating),
+        ),
+        const SizedBox(height: 16),
         CustomTextField(
           title: LocaleKeys.write_a_feedback.tr(),
           hintText: LocaleKeys.write_about_experience.tr(),
           maxLines: null,
-          controller: productFeedbackController,
+          controller: _productFeedbackController,
           validator: (value) {
             if (value!.length < 10) {
               return LocaleKeys.comment_minimum_requirement.tr();
@@ -317,9 +323,9 @@ class ProductRatingCard extends StatelessWidget {
             return null;
           },
           onChanged: (feedback) {
-            updateFeedbackList(index: index, feedback: feedback);
+            widget.updateFeedbackList(index: widget.index, feedback: feedback);
           },
-        ).pOnly(bottom: 10),
+        ),
       ],
     );
   }

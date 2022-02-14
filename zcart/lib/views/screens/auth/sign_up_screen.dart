@@ -39,7 +39,7 @@ class SignUpScreen extends StatelessWidget {
                 .nextAndRemoveUntilPage(const BottomNavBar(selectedIndex: 0));
           }
           if (state is UserErrorState) {
-            toast(state.message, bgColor: kPrimaryColor);
+            toast(state.message);
           }
         },
         child: GestureDetector(

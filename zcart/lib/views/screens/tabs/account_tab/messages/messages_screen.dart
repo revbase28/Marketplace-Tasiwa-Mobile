@@ -3,8 +3,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:zcart/Theme/styles/colors.dart';
 import 'package:zcart/data/controller/chat/chat_controller.dart';
 import 'package:zcart/data/controller/chat/chat_state.dart';
+import 'package:zcart/helper/get_color_based_on_theme.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:zcart/views/screens/tabs/account_tab/messages/vendor_chat_screen.dart';
 import 'package:zcart/views/shared_widgets/loading_widget.dart';
@@ -39,41 +41,12 @@ class MessagesScreen extends StatelessWidget {
                         ),
                       )
                     : ListView.builder(
+                        padding: const EdgeInsets.all(16),
                         itemCount:
                             conversationState.conversationModel.data!.length,
                         itemBuilder: (context, index) {
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 8),
-                            child: Card(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10)),
-                              child: ListTile(
-                                tileColor: Colors.transparent,
-                                contentPadding: const EdgeInsets.all(8),
-                                leading: CachedNetworkImage(
-                                  imageUrl: conversationState.conversationModel
-                                      .data![index].shop!.image!,
-                                  errorWidget: (context, url, error) =>
-                                      const SizedBox(),
-                                  progressIndicatorBuilder:
-                                      (context, url, progress) => Center(
-                                    child: CircularProgressIndicator(
-                                        value: progress.progress),
-                                  ),
-                                  width: context.screenWidth * 0.20,
-                                  fit: BoxFit.cover,
-                                ).p(5),
-                                title: Text(
-                                    conversationState.conversationModel
-                                        .data![index].shop!.name!,
-                                    style: context.textTheme.bodyText2!
-                                        .copyWith(fontWeight: FontWeight.bold)),
-                                trailing: const Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Icon(CupertinoIcons.chevron_forward),
-                                ),
-                              ),
-                            ).onInkTap(() async {
+                          return ListTile(
+                            onTap: () async {
                               context.nextPage(VendorChatScreen(
                                   shopId: conversationState
                                       .conversationModel.data![index].shop!.id,
@@ -92,9 +65,42 @@ class MessagesScreen extends StatelessWidget {
                                     conversationState.conversationModel
                                         .data![index].shop!.id,
                                   );
-                            }),
-                          );
-                        }).pOnly(top: 5)
+                            },
+                            tileColor: getColorBasedOnTheme(
+                                context, kLightColor, kDarkCardBgColor),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 8),
+                            leading: CachedNetworkImage(
+                              imageUrl: conversationState
+                                  .conversationModel.data![index].shop!.image!,
+                              errorWidget: (context, url, error) =>
+                                  const SizedBox(),
+                              progressIndicatorBuilder:
+                                  (context, url, progress) => Center(
+                                child: CircularProgressIndicator(
+                                    value: progress.progress),
+                              ),
+                              width: 50,
+                              fit: BoxFit.cover,
+                            ).p(5),
+                            title: Text(
+                                conversationState
+                                    .conversationModel.data![index].shop!.name!,
+                                style: context.textTheme.bodyText2!
+                                    .copyWith(fontWeight: FontWeight.bold)),
+                            subtitle: Text(
+                                conversationState.conversationModel.data![index]
+                                        .shop!.verifiedText ??
+                                    "",
+                                style: context.textTheme.caption!),
+                            trailing:
+                                const Icon(CupertinoIcons.chevron_forward),
+                          ).pOnly(bottom: 12);
+                        },
+                      )
                 : const Center(child: LoadingWidget()));
       },
     );

@@ -4,6 +4,7 @@ import 'package:velocity_x/velocity_x.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:zcart/views/screens/bottom_nav_bar/bottom_nav_bar.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:zcart/views/screens/tabs/myCart_tab/my_cart_tab.dart';
 
 Future<dynamic> addToCartBottomSheet(BuildContext context, responseBody) async {
   return await showModalBottomSheet(
@@ -29,28 +30,27 @@ Future<dynamic> addToCartBottomSheet(BuildContext context, responseBody) async {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            const SizedBox(
-              height: 10,
-            ),
-            ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                ),
-                onPressed: () {
-                  context.nextAndRemoveUntilPage(
-                      const BottomNavBar(selectedIndex: 4));
-                },
-                child: Text(LocaleKeys.view_cart.tr())),
             const SizedBox(height: 16),
             ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 16),
                 ),
                 onPressed: () {
-                  context.pop();
-                  context.pop();
+                  context.nextPage(const MyCartTab());
                 },
-                child: Text(LocaleKeys.continue_shopping.tr()))
+                child: Text(LocaleKeys.view_cart.tr())),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(vertical: 16),
+              ),
+              onPressed: () {
+                context.pop();
+                context.pop();
+              },
+              child: Text(LocaleKeys.continue_shopping.tr()),
+            ),
+            const SizedBox(height: 24),
           ],
         ),
       );

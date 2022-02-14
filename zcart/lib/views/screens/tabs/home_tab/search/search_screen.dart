@@ -1,5 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -54,7 +53,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       .read(searchProvider.notifier)
                       .search(searchController.text)
                   : toast(LocaleKeys.type_something.tr()),
-              icon: const Icon(CupertinoIcons.search))
+              icon: const Icon(Icons.search))
         ],
       ),
       body: Consumer(

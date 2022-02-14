@@ -213,7 +213,7 @@ class _MyCartTabState extends State<MyCartTab> {
                           ),
                         )
                       : ListView(
-                          padding: const EdgeInsets.only(top: 8, bottom: 72),
+                          padding: const EdgeInsets.only(top: 8, bottom: 100),
                           children: _cartState.cartList!
                               .map((e) => CartItemCard(cartItem: e))
                               .toList(),
@@ -547,7 +547,13 @@ class _ItemCardState extends State<ItemCard> {
                             quantity: widget.item.quantity,
                           );
                     }),
-                const SizedBox(height: 16),
+                const SizedBox(height: 4),
+                Text(widget.item.quantity.toString(),
+                    style: Theme.of(context)
+                        .textTheme
+                        .headline6!
+                        .copyWith(fontWeight: FontWeight.bold)),
+                const SizedBox(height: 4),
                 ProductDetailsPageIconButton(
                   isNoWidth: true,
                   isNoHeight: true,

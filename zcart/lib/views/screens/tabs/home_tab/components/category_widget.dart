@@ -21,7 +21,7 @@ class CategoryWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: context.screenHeight * .15,
+      height: 120,
       child: ListView.builder(
           itemCount: categoryList.length,
           scrollDirection: Axis.horizontal,
@@ -33,12 +33,11 @@ class CategoryWidget extends StatelessWidget {
                 color: getColorBasedOnTheme(
                     context, kLightColor, kDarkCardBgColor),
               ),
-              width: context.screenWidth * .35,
+              width: 150,
               child: Center(
                   child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // Category Icon
                   FaIcon(
                     getCategoryIcon(categoryList[index].icon),
                     color: getColorBasedOnTheme(
@@ -47,7 +46,7 @@ class CategoryWidget extends StatelessWidget {
                   Text(
                     categoryList[index].name!,
                     textAlign: TextAlign.center,
-                    style: context.textTheme.subtitle2,
+                    style: context.textTheme.subtitle2!.copyWith(),
                   ),
                 ],
               )),

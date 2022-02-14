@@ -48,9 +48,7 @@ class CartRepository implements ICartRepository {
           API.updateCart(item), requestBody,
           bearerToken: true));
       if (responseBody.runtimeType != int) {
-        toast(
-          responseBody['message'],
-        );
+        toast(responseBody['message']);
       }
     } catch (e) {
       throw NetworkException();
@@ -68,9 +66,7 @@ class CartRepository implements ICartRepository {
           API.removeCart(cartID, listingID),
           bearerToken: true));
       if (responseBody.runtimeType != int) {
-        toast(
-          responseBody['message'],
-        );
+        toast(responseBody['message']);
       }
     } catch (e) {
       throw NetworkException();

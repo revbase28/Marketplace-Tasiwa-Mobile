@@ -88,7 +88,7 @@ class _BrandListBodyState extends State<BrandListBody> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const SizedBox(height: 10),
+        if (widget.showSearchBar) const SizedBox(height: 10),
         AnimatedSwitcher(
           duration: const Duration(milliseconds: 300),
           transitionBuilder: (child, animation) {

@@ -1261,7 +1261,7 @@ class CheckOutItemDetailsPage extends ConsumerWidget {
                       child: SingleChildScrollView(
                         child: Column(
                           children: [
-                            CheckOutPageShopCard(
+                            CustomShopCard(
                               image: _cartDetailsProvider
                                   .cartItemDetails!.data!.shop!.image,
                               title: _cartDetailsProvider
@@ -1432,11 +1432,11 @@ class _ApplyCouponSectionState extends State<ApplyCouponSection> {
   }
 }
 
-class CheckOutPageShopCard extends StatelessWidget {
+class CustomShopCard extends StatelessWidget {
   final String? image;
   final String title;
   final String verifiedText;
-  const CheckOutPageShopCard({
+  const CustomShopCard({
     Key? key,
     required this.image,
     required this.title,
@@ -1469,8 +1469,8 @@ class CheckOutPageShopCard extends StatelessWidget {
                 style: context.textTheme.headline6,
               ),
             ),
-            Icon(Icons.check_circle, color: kPrimaryColor, size: 15)
-                .px2()
+            const Icon(Icons.check_circle, color: kGreenColor, size: 15)
+                .px(4)
                 .pOnly(top: 3)
                 .onInkTap(() {
               toast(verifiedText);

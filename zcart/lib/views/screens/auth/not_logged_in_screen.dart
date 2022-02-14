@@ -1,18 +1,15 @@
 import 'dart:io';
 import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:zcart/Theme/styles/colors.dart';
 import 'package:zcart/config/config.dart';
 import 'package:zcart/data/controller/blog/blog_controller.dart';
-import 'package:zcart/data/controller/others/others_controller.dart';
 import 'package:zcart/helper/get_color_based_on_theme.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:zcart/views/screens/auth/login_screen.dart';
 import 'package:zcart/views/screens/tabs/account_tab/blogs/blogs_screen.dart';
-import 'package:zcart/views/screens/tabs/account_tab/others/about_us_screen.dart';
-import 'package:zcart/views/screens/tabs/account_tab/others/privacy_policy_screen.dart';
-import 'package:zcart/views/screens/tabs/account_tab/others/terms_and_conditions_screen.dart';
 import 'package:zcart/views/screens/tabs/account_tab/settings/settings_page.dart';
 import 'package:zcart/views/shared_widgets/custom_button.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -34,7 +31,7 @@ class NotLoggedInScreen extends StatelessWidget {
         children: [
           Center(
             child: SingleChildScrollView(
-              child: Container(
+              child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -74,89 +71,7 @@ class NotLoggedInScreen extends StatelessWidget {
                       endIndent: 20,
                       indent: 20,
                     ),
-                    Card(
-                      elevation: 0,
-                      child: ListTile(
-                        title: Text(LocaleKeys.language.tr(),
-                            style: context.textTheme.subtitle2!),
-                        trailing: const Icon(Icons.translate),
-                        onTap: () {
-                          updateLanguage(context);
-                        },
-                      ),
-                    ),
-                    if (MyConfig.isDynamicThemeActive)
-                      Card(
-                        elevation: 0,
-                        child: ListTile(
-                            title: Text(LocaleKeys.change_theme.tr(),
-                                style: context.textTheme.subtitle2!),
-                            trailing: EasyDynamicThemeSwitch()),
-                      ),
-                    if (Platform.isAndroid)
-                      Card(
-                        elevation: 0,
-                        child: ListTile(
-                          title: Text("Clear Cache",
-                              style: context.textTheme.subtitle2!),
-                          trailing: const Icon(Icons.arrow_forward_ios),
-                          onTap: () async {
-                            await clearCache(context);
-                          },
-                        ),
-                      ),
-                    Card(
-                      elevation: 0,
-                      child: ListTile(
-                        title: Text(LocaleKeys.blogs.tr(),
-                            style: context.textTheme.subtitle2!),
-                        trailing: const Icon(Icons.arrow_forward_ios),
-                        onTap: () {
-                          context.read(blogsProvider.notifier).blogs();
-                          context.nextPage(const BlogsScreen());
-                        },
-                      ),
-                    ),
-                    Card(
-                      elevation: 0,
-                      child: ListTile(
-                        title: Text(LocaleKeys.about_us.tr(),
-                            style: context.textTheme.subtitle2!),
-                        trailing: const Icon(Icons.arrow_forward_ios),
-                        onTap: () {
-                          context.read(aboutUsProvider.notifier).fetchAboutUs();
-                          context.nextPage(const AboutUsScreen());
-                        },
-                      ),
-                    ),
-                    Card(
-                      elevation: 0,
-                      child: ListTile(
-                        title: Text(LocaleKeys.privacy_policy.tr(),
-                            style: context.textTheme.subtitle2!),
-                        trailing: const Icon(Icons.arrow_forward_ios),
-                        onTap: () {
-                          context
-                              .read(privacyPolicyProvider.notifier)
-                              .fetchPrivacyPolicy();
-                          context.nextPage(const PrivacyPolicyScreen());
-                        },
-                      ),
-                    ),
-                    Card(
-                      elevation: 0,
-                      child: ListTile(
-                        title: Text(LocaleKeys.terms_condition.tr(),
-                            style: context.textTheme.subtitle2!),
-                        trailing: const Icon(Icons.arrow_forward_ios),
-                        onTap: () {
-                          context
-                              .read(termsAndConditionProvider.notifier)
-                              .fetchTermsAndCondition();
-                          context.nextPage(const TermsAndConditionScreen());
-                        },
-                      ),
-                    ),
+                    const NotLoggedInSettingItems(),
                   ],
                 ),
               ),
@@ -164,6 +79,63 @@ class NotLoggedInScreen extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class NotLoggedInSettingItems extends StatelessWidget {
+  const NotLoggedInSettingItems({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Card(
+          elevation: 0,
+          child: ListTile(
+            title: Text(LocaleKeys.language.tr(),
+                style: context.textTheme.subtitle2!),
+            leading: const Icon(Icons.translate),
+            onTap: () {
+              updateLanguage(context);
+            },
+          ),
+        ),
+        if (MyConfig.isDynamicThemeActive)
+          Card(
+            elevation: 0,
+            child: ListTile(
+              title: Text(LocaleKeys.change_theme.tr(),
+                  style: context.textTheme.subtitle2!),
+              trailing: EasyDynamicThemeSwitch(),
+              leading: const Icon(Icons.color_lens),
+            ),
+          ),
+        if (Platform.isAndroid)
+          Card(
+            elevation: 0,
+            child: ListTile(
+              title: Text("Clear Cache", style: context.textTheme.subtitle2!),
+              leading: const Icon(Icons.delete_forever),
+              onTap: () async {
+                await clearCache(context);
+              },
+            ),
+          ),
+        Card(
+          elevation: 0,
+          child: ListTile(
+            title: Text(LocaleKeys.blogs.tr(),
+                style: context.textTheme.subtitle2!),
+            leading: const Icon(CupertinoIcons.doc_append),
+            onTap: () {
+              context.read(blogsProvider.notifier).blogs();
+              context.nextPage(const BlogsScreen());
+            },
+          ),
+        ),
+        const CompanyInfoWidgets(),
+      ],
     );
   }
 }

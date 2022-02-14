@@ -14,8 +14,8 @@ class WishListNotifier extends StateNotifier<WishListState> {
 
   Future getWishList() async {
     try {
-      final wishListItems = await _iWishListRepository.fetchWishList();
-      state = WishListLoadedState(wishListItems);
+      final _wishListItems = await _iWishListRepository.fetchWishList();
+      state = WishListLoadedState(_wishListItems);
     } on NetworkException {
       state = WishListErrorState(LocaleKeys.something_went_wrong.tr());
     }
@@ -23,8 +23,8 @@ class WishListNotifier extends StateNotifier<WishListState> {
 
   Future getMoreWishList() async {
     try {
-      final wishListItems = await _iWishListRepository.fetchMoreWishList();
-      state = WishListLoadedState(wishListItems);
+      final _wishListItems = await _iWishListRepository.fetchMoreWishList();
+      state = WishListLoadedState(_wishListItems);
     } on NetworkException {
       state = WishListErrorState(LocaleKeys.something_went_wrong.tr());
     }

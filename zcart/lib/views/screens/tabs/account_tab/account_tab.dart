@@ -37,6 +37,7 @@ import 'package:zcart/views/screens/tabs/account_tab/settings/settings_page.dart
 import 'package:zcart/views/screens/tabs/account_tab/wallet/wallet_deposit_page.dart';
 import 'package:zcart/views/screens/tabs/account_tab/wallet/wallet_transactions_page.dart';
 import 'package:zcart/views/screens/tabs/account_tab/wallet/wallet_transfer_page.dart';
+import 'package:zcart/views/screens/tabs/tabs.dart';
 import 'package:zcart/views/shared_widgets/pdf_screen.dart';
 
 class AccountTab extends StatelessWidget {
@@ -245,6 +246,7 @@ class UserActivityCard extends StatelessWidget {
                     orderListState is OrdersLoadedState
                         ? orderListState.totalOrder.toString()
                         : "0",
+                    maxLines: 1,
                     style: context.textTheme.headline4!.copyWith(
                         color: getColorBasedOnTheme(
                             context, kPrimaryColor, kDarkPriceColor),
@@ -253,6 +255,8 @@ class UserActivityCard extends StatelessWidget {
                 }),
                 Text(
                   LocaleKeys.orders.tr(),
+                  maxLines: 1,
+                  textAlign: TextAlign.center,
                   style: context.textTheme.caption!
                       .copyWith(fontWeight: FontWeight.bold),
                 )
@@ -281,6 +285,7 @@ class UserActivityCard extends StatelessWidget {
                       couponState is CouponLoadedState
                           ? "${couponState.coupon!.length}"
                           : "0",
+                      maxLines: 1,
                       style: context.textTheme.headline4!.copyWith(
                           color: getColorBasedOnTheme(
                               context, kPrimaryColor, kDarkPriceColor),
@@ -290,6 +295,8 @@ class UserActivityCard extends StatelessWidget {
                 ),
                 Text(
                   LocaleKeys.coupons.tr(),
+                  maxLines: 1,
+                  textAlign: TextAlign.center,
                   style: context.textTheme.caption!
                       .copyWith(fontWeight: FontWeight.bold),
                 ),
@@ -318,6 +325,7 @@ class UserActivityCard extends StatelessWidget {
                       disputesState is DisputesLoadedState
                           ? disputesState.disputes.length.toString()
                           : "0",
+                      maxLines: 1,
                       style: context.textTheme.headline4!.copyWith(
                           color: getColorBasedOnTheme(
                               context, kPrimaryColor, kDarkPriceColor),
@@ -327,6 +335,8 @@ class UserActivityCard extends StatelessWidget {
                 ),
                 Text(
                   LocaleKeys.disputes.tr(),
+                  maxLines: 1,
+                  textAlign: TextAlign.center,
                   style: context.textTheme.caption!
                       .copyWith(fontWeight: FontWeight.bold),
                 )
@@ -355,6 +365,7 @@ class UserActivityCard extends StatelessWidget {
                       wishListState is WishListLoadedState
                           ? wishListState.wishList.length.toString()
                           : '0',
+                      maxLines: 1,
                       style: context.textTheme.headline4!.copyWith(
                           color: getColorBasedOnTheme(
                               context, kPrimaryColor, kDarkPriceColor),
@@ -364,12 +375,14 @@ class UserActivityCard extends StatelessWidget {
                 ),
                 Text(
                   LocaleKeys.wishlist_text.tr(),
+                  maxLines: 1,
+                  textAlign: TextAlign.center,
                   style: context.textTheme.caption!
                       .copyWith(fontWeight: FontWeight.bold),
                 )
               ],
             ).onInkTap(() {
-              context.nextReplacementPage(const BottomNavBar(selectedIndex: 3));
+              context.nextPage(const WishListTab());
             }),
           ),
         ),
@@ -487,12 +500,29 @@ class WalletCard extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text(
-            "Wallet",
-            style: context.textTheme.bodyText1!.copyWith(
-                color: kPrimaryFadeTextColor, fontWeight: FontWeight.bold),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "Wallet",
+                style: context.textTheme.bodyText1!.copyWith(
+                    color: kPrimaryFadeTextColor, fontWeight: FontWeight.bold),
+              ),
+              CupertinoButton(
+                alignment: Alignment.centerRight,
+                padding: EdgeInsets.zero,
+                onPressed: () {
+                  context.refresh(walletBalanceProvider);
+                  context.refresh(walletTransactionFutureProvider);
+                },
+                child: Icon(
+                  Icons.sync,
+                  color: kPrimaryColor,
+                ),
+              )
+            ],
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 10),
           _walletBalanceProvider.when(
             data: (value) {
               if (value != null) {

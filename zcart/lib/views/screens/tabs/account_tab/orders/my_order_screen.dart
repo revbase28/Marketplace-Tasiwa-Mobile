@@ -24,6 +24,7 @@ import 'package:zcart/views/screens/tabs/account_tab/orders/order_details_screen
 import 'package:zcart/views/screens/tabs/home_tab/components/error_widget.dart';
 import 'package:zcart/views/screens/tabs/vendors_tab/vendors_details.dart';
 import 'package:zcart/views/shared_widgets/custom_confirm_dialog.dart';
+import 'package:zcart/views/shared_widgets/custom_small_button.dart';
 
 class MyOrderScreen extends ConsumerWidget {
   const MyOrderScreen({Key? key}) : super(key: key);
@@ -79,9 +80,8 @@ class MyOrderScreen extends ConsumerWidget {
                       children: _ordersState.orders != null
                           ? _ordersState.orders!
                               .map((e) => OrderCard(
-                                    order: e,
-                                    index: _ordersState.orders!.indexOf(e),
-                                  ))
+                                  order: e,
+                                  index: _ordersState.orders!.indexOf(e)))
                               .toList()
                           : [],
                     ),
@@ -143,7 +143,7 @@ class OrderCard extends StatelessWidget {
             color: getColorBasedOnTheme(context, kLightColor, kDarkCardBgColor),
             borderRadius: BorderRadius.circular(10),
           ),
-          margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -161,38 +161,33 @@ class OrderCard extends StatelessWidget {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Card(
-                      elevation: 0,
-                      child: SizedBox(
-                        height: 50,
-                        width: 50,
-                        child: CachedNetworkImage(
-                          imageUrl: order.shop!.image!,
-                          errorWidget: (context, url, error) =>
-                              const SizedBox(),
-                          progressIndicatorBuilder: (context, url, progress) =>
-                              Center(
-                            child: CircularProgressIndicator(
-                                value: progress.progress),
-                          ),
-                          fit: BoxFit.contain,
-                        ).pOnly(left: 10),
+                    SizedBox(
+                      height: 50,
+                      width: 50,
+                      child: CachedNetworkImage(
+                        imageUrl: order.shop!.image!,
+                        errorWidget: (context, url, error) => const SizedBox(),
+                        progressIndicatorBuilder: (context, url, progress) =>
+                            Center(
+                          child: CircularProgressIndicator(
+                              value: progress.progress),
+                        ),
+                        fit: BoxFit.contain,
                       ),
                     ),
+                    const SizedBox(width: 10),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          order.shop!.name == null
-                              ? const Text("")
-                              : Text(
-                                  order.shop!.name!,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
+                          Text(
+                            order.shop!.name ?? "",
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -205,8 +200,7 @@ class OrderCard extends StatelessWidget {
                                 itemCount: 5,
                                 ignoreGestures: true,
                                 itemSize: 12,
-                                itemPadding:
-                                    const EdgeInsets.symmetric(horizontal: 0.0),
+                                itemPadding: const EdgeInsets.only(right: 1),
                                 itemBuilder: (context, _) => const Icon(
                                     Icons.star,
                                     color: kDarkPriceColor),
@@ -238,6 +232,7 @@ class OrderCard extends StatelessWidget {
                 height: 60,
                 child: ListView.builder(
                     itemCount: order.items!.length,
+                    physics: const AlwaysScrollableScrollPhysics(),
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (BuildContext context, itemsIndex) {
                       return CachedNetworkImage(
@@ -256,128 +251,20 @@ class OrderCard extends StatelessWidget {
                       });
                     }),
               ),
-              Text(
-                "${LocaleKeys.order_number.tr()} : ${order.orderNumber}",
-                style: context.textTheme.overline!.copyWith(fontSize: 11),
-              ).pOnly(top: 10),
-              Text(
-                "${LocaleKeys.ordered_at.tr()} : ${order.orderDate}",
-                style: context.textTheme.overline!.copyWith(fontSize: 11),
-              ).pOnly(bottom: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Flexible(
-                    child: Wrap(
-                      //runSpacing: 5.0,
-                      spacing: 10.0,
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                              color: kPrimaryColor,
-                              borderRadius: BorderRadius.circular(5)),
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 7),
-                          margin: const EdgeInsets.symmetric(vertical: 5),
-                          child: Text(
-                            LocaleKeys.contact_seller.tr(),
-                            style: const TextStyle(
-                                fontSize: 12, color: kLightColor),
-                          ),
-                        ).onInkTap(() {
-                          context
-                              .read(orderChatProvider.notifier)
-                              .orderConversation(order.id);
-                          context.nextPage(OrderChatScreen(orders: order));
-                        }),
-                        Container(
-                          decoration: BoxDecoration(
-                              color: kPrimaryColor,
-                              borderRadius: BorderRadius.circular(5)),
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 7),
-                          margin: const EdgeInsets.symmetric(vertical: 5),
-                          child: Text(
-                            LocaleKeys.order_details.tr(),
-                            style: const TextStyle(
-                                fontSize: 12, color: kLightColor),
-                          ),
-                        ).onInkTap(() {
-                          context
-                              .read(orderProvider.notifier)
-                              .getOrderDetails(order.id);
-                          context.nextPage(const OrderDetailsScreen());
-                        }),
-                        Visibility(
-                          visible: order.disputeId == null,
-                          child: Container(
-                            decoration: BoxDecoration(
-                                color: kPrimaryColor,
-                                borderRadius: BorderRadius.circular(5)),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 7),
-                            margin: const EdgeInsets.symmetric(vertical: 5),
-                            child: Text(
-                              LocaleKeys.open_a_dispute.tr(),
-                              style: const TextStyle(
-                                  fontSize: 12, color: kLightColor),
-                            ),
-                          ).onInkTap(() {
-                            context
-                                .read(disputeInfoProvider.notifier)
-                                .getDisputeInfo(order.id);
-                            context.nextPage(const OpenDisputeScreen());
-                          }),
-                        ),
-                        Visibility(
-                          visible: order.orderStatus != "DELIVERED",
-                          child: Container(
-                            decoration: BoxDecoration(
-                                color: kPrimaryColor,
-                                borderRadius: BorderRadius.circular(5)),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 7),
-                            margin: const EdgeInsets.symmetric(vertical: 5),
-                            child: Text(
-                              order.orderStatus == "DELIVERED"
-                                  ? ""
-                                  : LocaleKeys.confirm_received.tr(),
-                              style: const TextStyle(
-                                  fontSize: 12, color: kLightColor),
-                            ),
-                          ).onInkTap(() {
-                            if (order.orderStatus != "DELIVERED") {
-                              showCustomConfirmDialog(
-                                context,
-                                dialogAnimation:
-                                    DialogAnimation.SLIDE_BOTTOM_TOP,
-                                dialogType: DialogType.ACCEPT,
-                                title: LocaleKeys.received_product.tr(),
-                                subTitle: LocaleKeys.are_you_sure.tr(),
-                                positiveText: LocaleKeys.yes.tr(),
-                                onAccept: () {
-                                  context
-                                      .read(orderReceivedProvider.notifier)
-                                      .orderReceived(order.id)
-                                      .then((value) => context
-                                          .read(ordersProvider.notifier)
-                                          .orders(ignoreLoadingState: true));
-                                },
-                              );
-                            }
-
-                            // if (orderListState.order.orderStatus ==
-                            //     "DELIVERED") if (!orderListState.order.canEvaluate)
-                            //   context.nextPage(FeedbackScreen(
-                            //     order: orderListState.order,
-                            //   ));
-                            // else
-                            //   toast('Feedback already given');
-                          }),
-                        ),
-                      ],
-                    ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                          "${LocaleKeys.order_number.tr()} : ${order.orderNumber}",
+                          style: context.textTheme.caption!),
+                      Text("${LocaleKeys.ordered_at.tr()} : ${order.orderDate}",
+                          style: context.textTheme.caption!),
+                    ],
                   ),
+                  const SizedBox(width: 16),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
@@ -389,14 +276,74 @@ class OrderCard extends StatelessWidget {
                       Text(LocaleKeys.total.tr(),
                           style: context.textTheme.overline)
                     ],
-                  ).pOnly(left: 20)
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                alignment: WrapAlignment.start,
+                children: [
+                  CustomSmallButton(
+                    text: LocaleKeys.order_details.tr(),
+                    onPressed: () {
+                      context
+                          .read(orderProvider.notifier)
+                          .getOrderDetails(order.id);
+                      context.nextPage(const OrderDetailsScreen());
+                    },
+                  ),
+                  CustomSmallButton(
+                    text: LocaleKeys.contact_seller.tr(),
+                    onPressed: () {
+                      context
+                          .read(orderChatProvider.notifier)
+                          .orderConversation(order.id);
+                      context.nextPage(OrderChatScreen(orders: order));
+                    },
+                  ),
+                  if (order.disputeId == null)
+                    CustomSmallButton(
+                      text: LocaleKeys.open_a_dispute.tr(),
+                      onPressed: () {
+                        context
+                            .read(disputeInfoProvider.notifier)
+                            .getDisputeInfo(order.id);
+                        context.nextPage(const OpenDisputeScreen());
+                      },
+                    ),
+                  if (order.orderStatus != "DELIVERED")
+                    CustomSmallButton(
+                      text: LocaleKeys.confirm_received.tr(),
+                      onPressed: () {
+                        if (order.orderStatus != "DELIVERED") {
+                          showCustomConfirmDialog(
+                            context,
+                            dialogAnimation: DialogAnimation.SLIDE_BOTTOM_TOP,
+                            dialogType: DialogType.ACCEPT,
+                            title: LocaleKeys.received_product.tr(),
+                            subTitle: LocaleKeys.are_you_sure.tr(),
+                            positiveText: LocaleKeys.yes.tr(),
+                            onAccept: () {
+                              context
+                                  .read(orderReceivedProvider.notifier)
+                                  .orderReceived(order.id)
+                                  .then((value) => context
+                                      .read(ordersProvider.notifier)
+                                      .orders(ignoreLoadingState: true));
+                            },
+                          );
+                        }
+                      },
+                    ),
                 ],
               ),
             ],
           ),
         ),
         Positioned(
-          top: 5,
+          top: 8,
           left: 10,
           child: Container(
             decoration: BoxDecoration(

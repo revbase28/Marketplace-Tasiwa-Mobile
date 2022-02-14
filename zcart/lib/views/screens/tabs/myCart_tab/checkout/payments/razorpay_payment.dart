@@ -63,54 +63,57 @@ class _RazorpayPaymentState extends State<RazorpayPayment> {
       ),
       body: SafeArea(
         child: Center(
-          child: Column(
-            children: [
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      _result == null
-                          ? "⌛ Pending Payment"
-                          : _result!
-                              ? "✅ Payment Successful "
-                              : "❌ Payment Failed",
-                      style: Theme.of(context).textTheme.headline5,
-                    ),
-                    const SizedBox(height: 20),
-                    Text(
-                      widget.grandTotal.toString(),
-                      style: Theme.of(context).textTheme.headline4!.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
-                    ),
-                  ],
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              children: [
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        _result == null
+                            ? "⌛ Pending Payment"
+                            : _result!
+                                ? "✅ Payment Successful "
+                                : "❌ Payment Failed",
+                        style: Theme.of(context).textTheme.headline5,
+                      ),
+                      const SizedBox(height: 20),
+                      Text(
+                        widget.grandTotal.toString(),
+                        style: Theme.of(context).textTheme.headline4!.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              Image.asset(
-                AppImages.razorpay,
-                width: MediaQuery.of(context).size.width / 2,
-              ),
-              const SizedBox(height: 10),
-              CustomButton(
-                onTap: _result == null
-                    ? _openCheckout
-                    : _result!
-                        ? () {
-                            Navigator.pop(context, {
-                              "success": _result,
-                              "paymentMeta": _paymentMeta,
-                              "status": _status,
-                            });
-                          }
-                        : _openCheckout,
-                buttonText: _result == null
-                    ? "Make Payment"
-                    : _result!
-                        ? "Continue"
-                        : "Try Again",
-              ),
-            ],
+                Image.asset(
+                  AppImages.razorpay,
+                  width: MediaQuery.of(context).size.width / 2,
+                ),
+                const SizedBox(height: 10),
+                CustomButton(
+                  onTap: _result == null
+                      ? _openCheckout
+                      : _result!
+                          ? () {
+                              Navigator.pop(context, {
+                                "success": _result,
+                                "paymentMeta": _paymentMeta,
+                                "status": _status,
+                              });
+                            }
+                          : _openCheckout,
+                  buttonText: _result == null
+                      ? "Make Payment"
+                      : _result!
+                          ? "Continue"
+                          : "Try Again",
+                ),
+              ],
+            ),
           ),
         ),
       ),

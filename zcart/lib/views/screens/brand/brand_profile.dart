@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:velocity_x/velocity_x.dart';
@@ -22,11 +23,16 @@ class BrandProfileScreen extends ConsumerWidget {
     final _brandProfileState = watch(brandProfileNotifierProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        systemOverlayStyle: getOverlayStyleBasedOnTheme(context),
-        toolbarHeight: 0,
-        backgroundColor: Colors.transparent,
-      ),
+      appBar: _brandProfileState is BrandProfileErrorState
+          ? AppBar(
+              systemOverlayStyle: SystemUiOverlayStyle.light,
+              title: Text(LocaleKeys.brand_details.tr()),
+            )
+          : AppBar(
+              systemOverlayStyle: getOverlayStyleBasedOnTheme(context),
+              toolbarHeight: 0,
+              backgroundColor: Colors.transparent,
+            ),
       body: _brandProfileState is BrandProfileLoadedState
           ? SingleChildScrollView(
               child: Column(
@@ -143,7 +149,6 @@ class BrandProfileScreen extends ConsumerWidget {
                           const Icon(Icons.info_outline),
                           Text(LocaleKeys.something_went_wrong.tr()),
                           const SizedBox(height: 10),
-                          const BackButton(),
                         ],
                       ),
                     ).px(10)

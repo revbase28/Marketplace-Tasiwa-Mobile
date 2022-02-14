@@ -51,9 +51,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     child: ListTile(
                       title: Text(LocaleKeys.language.tr(),
                           style: context.textTheme.subtitle2!),
-                      trailing: const Icon(
-                        Icons.translate,
-                      ),
+                      leading: const Icon(Icons.translate),
                       onTap: () {
                         updateLanguage(context);
                       },
@@ -65,6 +63,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         title: Text(LocaleKeys.change_theme.tr(),
                             style: context.textTheme.subtitle2!),
                         trailing: EasyDynamicThemeSwitch(),
+                        leading: const Icon(Icons.color_lens),
                       ),
                     ),
                   if (Platform.isAndroid)
@@ -73,7 +72,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       child: ListTile(
                         title: Text("Clear Cache",
                             style: context.textTheme.subtitle2!),
-                        trailing: const Icon(Icons.arrow_forward_ios),
+                        leading: const Icon(Icons.delete_forever),
                         onTap: () async {
                           await clearCache(context);
                         },
@@ -83,50 +82,14 @@ class _SettingsPageState extends State<SettingsPage> {
                     height: 30,
                     thickness: 1,
                   ),
-                  Card(
-                    child: ListTile(
-                      title: Text(LocaleKeys.about_us.tr(),
-                          style: context.textTheme.subtitle2!),
-                      trailing: const Icon(Icons.arrow_forward_ios),
-                      onTap: () {
-                        context.read(aboutUsProvider.notifier).fetchAboutUs();
-                        context.nextPage(const AboutUsScreen());
-                      },
-                    ),
-                  ),
-                  Card(
-                    child: ListTile(
-                      title: Text(LocaleKeys.privacy_policy.tr(),
-                          style: context.textTheme.subtitle2!),
-                      trailing: const Icon(Icons.arrow_forward_ios),
-                      onTap: () {
-                        context
-                            .read(privacyPolicyProvider.notifier)
-                            .fetchPrivacyPolicy();
-                        context.nextPage(const PrivacyPolicyScreen());
-                      },
-                    ),
-                  ),
-                  Card(
-                    child: ListTile(
-                      title: Text(LocaleKeys.terms_condition.tr(),
-                          style: context.textTheme.subtitle2!),
-                      trailing: const Icon(Icons.arrow_forward_ios),
-                      onTap: () {
-                        context
-                            .read(termsAndConditionProvider.notifier)
-                            .fetchTermsAndCondition();
-                        context.nextPage(const TermsAndConditionScreen());
-                      },
-                    ),
-                  ),
+                  const CompanyInfoWidgets(),
                   const Divider(
                     height: 30,
                     thickness: 1,
                   ),
                   Card(
                     child: ListTile(
-                      trailing: const Icon(Icons.logout_outlined),
+                      leading: const Icon(Icons.logout_outlined),
                       title: Text(LocaleKeys.sign_out.tr(),
                           style: context.textTheme.subtitle2!),
                       onTap: () async {
@@ -140,9 +103,6 @@ class _SettingsPageState extends State<SettingsPage> {
                             setState(() {
                               _isLoading = true;
                             });
-                            // await context
-                            //     .read(addressNotifierProvider.notifier)
-                            //     .clearAddresses();
                             await FacebookAuth.instance.logOut();
                             await GoogleSignIn().signOut();
                             await context
@@ -201,4 +161,51 @@ Future<void> _clearAll() async {
     appDir.deleteSync(recursive: true);
   }
   toast("Cache Cleared");
+}
+
+class CompanyInfoWidgets extends StatelessWidget {
+  const CompanyInfoWidgets({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Card(
+          child: ListTile(
+            title: Text(LocaleKeys.about_us.tr(),
+                style: context.textTheme.subtitle2!),
+            leading: const Icon(Icons.info_outline),
+            onTap: () {
+              context.read(aboutUsProvider.notifier).fetchAboutUs();
+              context.nextPage(const AboutUsScreen());
+            },
+          ),
+        ),
+        Card(
+          child: ListTile(
+            title: Text(LocaleKeys.privacy_policy.tr(),
+                style: context.textTheme.subtitle2!),
+            leading: const Icon(Icons.lock_outline),
+            onTap: () {
+              context.read(privacyPolicyProvider.notifier).fetchPrivacyPolicy();
+              context.nextPage(const PrivacyPolicyScreen());
+            },
+          ),
+        ),
+        Card(
+          child: ListTile(
+            title: Text(LocaleKeys.terms_condition.tr(),
+                style: context.textTheme.subtitle2!),
+            leading: const Icon(Icons.description),
+            onTap: () {
+              context
+                  .read(termsAndConditionProvider.notifier)
+                  .fetchTermsAndCondition();
+              context.nextPage(const TermsAndConditionScreen());
+            },
+          ),
+        ),
+      ],
+    );
+  }
 }

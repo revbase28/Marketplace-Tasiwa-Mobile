@@ -21,6 +21,7 @@ import 'package:zcart/views/screens/product_details/components/product_brand_car
 import 'package:zcart/views/screens/product_details/components/ratings_and_reviews.dart';
 import 'package:zcart/views/screens/product_details/components/shop_card.dart';
 import 'package:zcart/views/screens/tabs/account_tab/messages/vendor_chat_screen.dart';
+import 'package:zcart/views/screens/tabs/myCart_tab/my_cart_tab.dart';
 import 'package:zcart/views/screens/tabs/vendors_tab/vendors_details.dart';
 import 'package:zcart/views/shared_widgets/image_viewer_page.dart';
 import 'package:zcart/views/shared_widgets/shared_widgets.dart';
@@ -222,13 +223,13 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
           toolbarHeight: 0,
           backgroundColor: Colors.transparent,
         ),
-        body: Column(
+        body: Stack(
           children: [
-            Expanded(
-              child: ListView(
-                shrinkWrap: true,
-                children: [
-                  Stack(
+            Column(
+              children: [
+                Expanded(
+                  child: ListView(
+                    shrinkWrap: true,
                     children: [
                       _details.variants?.images == null ||
                               _details.variants!.images!.isEmpty
@@ -248,343 +249,342 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
                               images: _details.variants!.images!,
                               selectedImageId: _details.data!.imageId,
                             ),
-                      Positioned(
-                        top: 8,
-                        left: 8,
+                      const SizedBox(height: 10),
+                      ProductPageDefaultContainer(
+                          isFullPadding: true,
+                          child: ProductNameCard(productModel: _details)),
+                      const SizedBox(height: 10),
+
+                      _countries.isEmpty
+                          ? const SizedBox()
+                          : Column(
+                              children: [
+                                _shippingZoneSelection(context),
+                                const SizedBox(height: 10),
+                              ],
+                            ),
+
+                      ProductPageDefaultContainer(
+                        isFullPadding: true,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(LocaleKeys.quantity.tr(),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headline6!
+                                            .copyWith(
+                                                fontWeight: FontWeight.bold)),
+                                    Text(
+                                        (_details.data?.stockQuantity ?? 0)
+                                                .toString() +
+                                            " " +
+                                            LocaleKeys.in_stock.tr(),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .caption!
+                                            .copyWith(
+                                                fontWeight: FontWeight.bold)),
+                                  ],
+                                ),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: getColorBasedOnTheme(
+                                        context,
+                                        kDarkColor.withOpacity(0.5),
+                                        kLightColor.withOpacity(0.5),
+                                      ),
+                                      width: 2,
+                                    ),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      CupertinoButton(
+                                        padding: const EdgeInsets.all(0),
+                                        child: Icon(
+                                          Icons.remove,
+                                          color: getColorBasedOnTheme(
+                                              context, kDarkColor, kLightColor),
+                                        ),
+                                        onPressed: _quantity ==
+                                                _details.data!.minOrderQuantity
+                                            ? () {
+                                                toast(
+                                                  LocaleKeys
+                                                      .reached_minimum_quantity
+                                                      .tr(),
+                                                );
+                                              }
+                                            : _decreaseQuantity,
+                                      ),
+                                      const SizedBox(width: 8),
+                                      Text(
+                                        _quantity.toString(),
+                                        style: context.textTheme.headline6!
+                                            .copyWith(
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 8),
+                                      CupertinoButton(
+                                        padding: const EdgeInsets.all(0),
+                                        child: Icon(
+                                          Icons.add,
+                                          color: getColorBasedOnTheme(
+                                              context, kDarkColor, kLightColor),
+                                        ),
+                                        onPressed: _quantity ==
+                                                _details.data!.stockQuantity
+                                            ? () {
+                                                toast(
+                                                  LocaleKeys
+                                                      .reached_maximum_quantity
+                                                      .tr(),
+                                                );
+                                              }
+                                            : _increaseQuantity,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            _selectedAttributes.isEmpty &&
+                                    _allAttributes == null
+                                ? const SizedBox()
+                                : _attributesSection(),
+                          ],
+                        ),
+                      ),
+
+                      const SizedBox(height: 10),
+
+                      _details.data!.feedbacks.isEmpty
+                          ? const SizedBox()
+                          : Column(
+                              children: [
+                                ProductPageDefaultContainer(
+                                  child: ProductRatingsAndReview(
+                                    productSlug: _details.data!.slug!,
+                                    feedbacks: _details.data!.feedbacks,
+                                    feedBackCount:
+                                        _details.data!.feedbacksCount ?? 0,
+                                  ),
+                                ),
+                                const SizedBox(height: 10),
+                              ],
+                            ),
+
+                      ProductDetailsWidget(details: _details),
+                      // BrandCards
+
+                      _details.data!.product!.manufacturer!.slug == null
+                          ? const SizedBox()
+                          : Column(
+                              children: [
+                                ProductPageDefaultContainer(
+                                    child: ProductBrandCard(details: _details)),
+                                const SizedBox(height: 10),
+                              ],
+                            ),
+
+                      ProductPageDefaultContainer(
+                          child: MoreOffersFromSellerCard(details: _details)),
+                      const SizedBox(height: 10),
+                      ProductPageDefaultContainer(
+                          child: ShopCard(details: _details)),
+                      const SizedBox(height: 10),
+                      FrequentlyBoughtTogetherCard(details: _details),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    // mainAxisAlignment: MainAxisAlignment.,
+                    children: [
+                      Tooltip(
+                        message: LocaleKeys.contact_seller.tr(),
                         child: ProductDetailsPageIconButton(
-                          icon: const Icon(
-                            Icons.chevron_left,
-                            size: 35,
-                          ),
+                          icon: const Icon(CupertinoIcons.chat_bubble_2_fill),
                           backgroundColor: getColorBasedOnTheme(
                               context, kLightColor, kDarkBgColor),
                           onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                      ),
-                      Positioned(
-                        top: 8,
-                        right: 70,
-                        child: ProductDetailsPageIconButton(
-                          backgroundColor: getColorBasedOnTheme(
-                              context, kLightColor, kDarkBgColor),
-                          icon: Icon(
-                            widget.isWishlist
-                                ? CupertinoIcons.heart_fill
-                                : CupertinoIcons.heart,
-                            size: 28,
-                            color: widget.isWishlist ? Colors.red : null,
-                          ),
-                          onPressed: () async {
-                            if (widget.isWishlist) {
-                              toast("Item is already added in the wishlist.");
+                            if (accessAllowed) {
+                              context
+                                  .read(productChatProvider.notifier)
+                                  .productConversation(_details.data!.shop!.id);
+
+                              context.nextPage(VendorChatScreen(
+                                  shopId: _details.data!.shop!.id,
+                                  shopImage: _details.data!.shop!.image,
+                                  shopName: _details.data!.shop!.name,
+                                  shopVerifiedText:
+                                      _details.data!.shop!.verifiedText));
                             } else {
-                              toast(LocaleKeys.adding_to_wishlist.tr());
-                              await context
-                                  .read(wishListNotifierProvider.notifier)
-                                  .addToWishList(_details.data!.slug, context);
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => const LoginScreen(
+                                            needBackButton: true,
+                                          )));
                             }
                           },
                         ),
                       ),
-                      Positioned(
-                        top: 8,
-                        right: 8,
+                      const SizedBox(width: 10),
+                      Tooltip(
+                        message: LocaleKeys.vendor_details.tr(),
+                        child: ProductDetailsPageIconButton(
+                          icon: const Icon(Icons.store),
+                          backgroundColor: getColorBasedOnTheme(
+                              context, kLightColor, kDarkBgColor),
+                          onPressed: () {
+                            context
+                                .read(vendorDetailsNotifierProvider.notifier)
+                                .getVendorDetails(_details.data!.shop!.slug);
+                            context
+                                .read(vendorItemsNotifierProvider.notifier)
+                                .getVendorItems(_details.data!.shop!.slug);
+                            context.nextPage(const VendorsDetailsScreen());
+                          },
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
                         child: ProductDetailsPageIconButton(
                           backgroundColor: kPrimaryColor,
+                          isNoWidth: true,
+                          onPressed: _selectedShippingOption == null
+                              ? () {
+                                  toast("Please select shipping option!");
+                                }
+                              : () async {
+                                  if (_details.data!.stockQuantity == null ||
+                                      _details.data!.stockQuantity! < 0) {
+                                    toast("Out of stock");
+                                    return;
+                                  } else {
+                                    toast(LocaleKeys.please_wait.tr());
+                                    await context
+                                        .read(cartNotifierProvider.notifier)
+                                        .addToCart(
+                                            context, _details.data!.slug!,
+                                            countryId: _countryId,
+                                            quantity: _quantity,
+                                            shippingOptionId: _shippingId,
+                                            stateId: _stateId,
+                                            shippingZoneId: _shippingZoneId);
+                                  }
+                                },
                           icon: Padding(
-                            padding: const EdgeInsets.all(10),
-                            child: VxBadge(
-                              position: VxBadgePosition.rightBottom,
-                              child: const Icon(CupertinoIcons.cart,
-                                  color: kLightColor),
-                              size: 16,
-                              count: widget.cartItemsCount,
-                              textStyle: Theme.of(context)
-                                  .textTheme
-                                  .caption!
-                                  .copyWith(
-                                      fontWeight: FontWeight.bold,
-                                      color: kPrimaryColor),
-                              color: kLightColor,
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                const Icon(
+                                  CupertinoIcons.cart_fill_badge_plus,
+                                  color: kLightColor,
+                                ).pOnly(right: 8),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(LocaleKeys.add_to_cart.tr(),
+                                        style: context.textTheme.subtitle2!
+                                            .copyWith(
+                                          fontWeight: FontWeight.bold,
+                                          color: kLightColor,
+                                        )),
+                                    Text(
+                                      "${LocaleKeys.total.tr()} - ${_details.data!.currencySymbol!}${_totalPrice.toDoubleStringAsPrecised(length: 2)}",
+                                      style:
+                                          context.textTheme.overline!.copyWith(
+                                        fontWeight: FontWeight.bold,
+                                        color: kLightColor,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ],
                             ),
                           ),
-                          onPressed: () {
-                            context.nextAndRemoveUntilPage(
-                                const BottomNavBar(selectedIndex: 4));
-                          },
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 10),
-                  ProductPageDefaultContainer(
-                      isFullPadding: true,
-                      child: ProductNameCard(productModel: _details)),
-                  const SizedBox(height: 10),
-
-                  _countries.isEmpty
-                      ? const SizedBox()
-                      : Column(
-                          children: [
-                            _shippingZoneSelection(context),
-                            const SizedBox(height: 10),
-                          ],
-                        ),
-
-                  ProductPageDefaultContainer(
-                    isFullPadding: true,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(LocaleKeys.quantity.tr(),
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headline6!
-                                        .copyWith(fontWeight: FontWeight.bold)),
-                                Text(
-                                    (_details.data?.stockQuantity ?? 0)
-                                            .toString() +
-                                        " " +
-                                        LocaleKeys.in_stock.tr(),
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .caption!
-                                        .copyWith(fontWeight: FontWeight.bold)),
-                              ],
-                            ),
-                            Container(
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: getColorBasedOnTheme(
-                                    context,
-                                    kDarkColor.withOpacity(0.5),
-                                    kLightColor.withOpacity(0.5),
-                                  ),
-                                  width: 2,
-                                ),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Row(
-                                children: [
-                                  CupertinoButton(
-                                    padding: const EdgeInsets.all(0),
-                                    child: Icon(
-                                      Icons.remove,
-                                      color: getColorBasedOnTheme(
-                                          context, kDarkColor, kLightColor),
-                                    ),
-                                    onPressed: _quantity ==
-                                            _details.data!.minOrderQuantity
-                                        ? () {
-                                            toast(
-                                              LocaleKeys
-                                                  .reached_minimum_quantity
-                                                  .tr(),
-                                            );
-                                          }
-                                        : _decreaseQuantity,
-                                  ),
-                                  const SizedBox(width: 8),
-                                  Text(
-                                    _quantity.toString(),
-                                    style:
-                                        context.textTheme.headline6!.copyWith(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 8),
-                                  CupertinoButton(
-                                    padding: const EdgeInsets.all(0),
-                                    child: Icon(
-                                      Icons.add,
-                                      color: getColorBasedOnTheme(
-                                          context, kDarkColor, kLightColor),
-                                    ),
-                                    onPressed: _quantity ==
-                                            _details.data!.stockQuantity
-                                        ? () {
-                                            toast(
-                                              LocaleKeys
-                                                  .reached_maximum_quantity
-                                                  .tr(),
-                                            );
-                                          }
-                                        : _increaseQuantity,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                        _selectedAttributes.isEmpty && _allAttributes == null
-                            ? const SizedBox()
-                            : _attributesSection(),
-                      ],
-                    ),
-                  ),
-
-                  const SizedBox(height: 10),
-
-                  _details.data!.feedbacks.isEmpty
-                      ? const SizedBox()
-                      : Column(
-                          children: [
-                            ProductPageDefaultContainer(
-                              child: ProductRatingsAndReview(
-                                productSlug: _details.data!.slug!,
-                                feedbacks: _details.data!.feedbacks,
-                                feedBackCount:
-                                    _details.data!.feedbacksCount ?? 0,
-                              ),
-                            ),
-                            const SizedBox(height: 10),
-                          ],
-                        ),
-
-                  ProductDetailsWidget(details: _details),
-                  // BrandCards
-
-                  _details.data!.product!.manufacturer!.slug == null
-                      ? const SizedBox()
-                      : Column(
-                          children: [
-                            ProductPageDefaultContainer(
-                                child: ProductBrandCard(details: _details)),
-                            const SizedBox(height: 10),
-                          ],
-                        ),
-
-                  ProductPageDefaultContainer(
-                      child: MoreOffersFromSellerCard(details: _details)),
-                  const SizedBox(height: 10),
-                  ProductPageDefaultContainer(
-                      child: ShopCard(details: _details)),
-                  const SizedBox(height: 10),
-                  FrequentlyBoughtTogetherCard(details: _details),
-                ],
+                ),
+              ],
+            ),
+            Positioned(
+              top: 8,
+              left: 8,
+              child: ProductDetailsPageIconButton(
+                icon: const Icon(
+                  Icons.chevron_left,
+                  size: 35,
+                ),
+                backgroundColor:
+                    getColorBasedOnTheme(context, kLightColor, kDarkBgColor),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                // mainAxisAlignment: MainAxisAlignment.,
-                children: [
-                  Tooltip(
-                    message: LocaleKeys.contact_seller.tr(),
-                    child: ProductDetailsPageIconButton(
-                      icon: const Icon(CupertinoIcons.chat_bubble_2_fill),
-                      backgroundColor: getColorBasedOnTheme(
-                          context, kLightColor, kDarkBgColor),
-                      onPressed: () {
-                        if (accessAllowed) {
-                          context
-                              .read(productChatProvider.notifier)
-                              .productConversation(_details.data!.shop!.id);
-
-                          context.nextPage(VendorChatScreen(
-                              shopId: _details.data!.shop!.id,
-                              shopImage: _details.data!.shop!.image,
-                              shopName: _details.data!.shop!.name,
-                              shopVerifiedText:
-                                  _details.data!.shop!.verifiedText));
-                        } else {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const LoginScreen(
-                                        needBackButton: true,
-                                      )));
-                        }
-                      },
-                    ),
+            Positioned(
+              top: 8,
+              right: 70,
+              child: ProductDetailsPageIconButton(
+                backgroundColor:
+                    getColorBasedOnTheme(context, kLightColor, kDarkBgColor),
+                icon: Icon(
+                  widget.isWishlist
+                      ? CupertinoIcons.heart_fill
+                      : CupertinoIcons.heart,
+                  size: 28,
+                  color: widget.isWishlist ? Colors.red : null,
+                ),
+                onPressed: () async {
+                  if (widget.isWishlist) {
+                    toast("Item is already added in the wishlist.");
+                  } else {
+                    toast(LocaleKeys.adding_to_wishlist.tr());
+                    await context
+                        .read(wishListNotifierProvider.notifier)
+                        .addToWishList(_details.data!.slug, context);
+                  }
+                },
+              ),
+            ),
+            Positioned(
+              top: 8,
+              right: 8,
+              child: ProductDetailsPageIconButton(
+                backgroundColor: kPrimaryColor,
+                icon: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: VxBadge(
+                    position: VxBadgePosition.rightBottom,
+                    child: const Icon(CupertinoIcons.cart, color: kLightColor),
+                    size: 16,
+                    count: widget.cartItemsCount,
+                    textStyle: Theme.of(context).textTheme.caption!.copyWith(
+                        fontWeight: FontWeight.bold, color: kPrimaryColor),
+                    color: kLightColor,
                   ),
-                  const SizedBox(width: 10),
-                  Tooltip(
-                    message: LocaleKeys.vendor_details.tr(),
-                    child: ProductDetailsPageIconButton(
-                      icon: const Icon(Icons.store),
-                      backgroundColor: getColorBasedOnTheme(
-                          context, kLightColor, kDarkBgColor),
-                      onPressed: () {
-                        context
-                            .read(vendorDetailsNotifierProvider.notifier)
-                            .getVendorDetails(_details.data!.shop!.slug);
-                        context
-                            .read(vendorItemsNotifierProvider.notifier)
-                            .getVendorItems(_details.data!.shop!.slug);
-                        context.nextPage(const VendorsDetailsScreen());
-                      },
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: ProductDetailsPageIconButton(
-                      backgroundColor: kPrimaryColor,
-                      isNoWidth: true,
-                      onPressed: _selectedShippingOption == null
-                          ? () {
-                              toast("Please select shipping option!");
-                            }
-                          : () async {
-                              if (_details.data!.stockQuantity == null ||
-                                  _details.data!.stockQuantity! < 0) {
-                                toast("Out of stock");
-                                return;
-                              } else {
-                                toast(LocaleKeys.please_wait.tr());
-                                await context
-                                    .read(cartNotifierProvider.notifier)
-                                    .addToCart(context, _details.data!.slug!,
-                                        countryId: _countryId,
-                                        quantity: _quantity,
-                                        shippingOptionId: _shippingId,
-                                        stateId: _stateId,
-                                        shippingZoneId: _shippingZoneId);
-                              }
-                            },
-                      icon: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            const Icon(
-                              CupertinoIcons.cart_fill_badge_plus,
-                              color: kLightColor,
-                            ).pOnly(right: 8),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(LocaleKeys.add_to_cart.tr(),
-                                    style:
-                                        context.textTheme.subtitle2!.copyWith(
-                                      fontWeight: FontWeight.bold,
-                                      color: kLightColor,
-                                    )),
-                                Text(
-                                  "${LocaleKeys.total.tr()} - ${_details.data!.currencySymbol!}${_totalPrice.toDoubleStringAsPrecised(length: 2)}",
-                                  style: context.textTheme.overline!.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                    color: kLightColor,
-                                  ),
-                                )
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+                ),
+                onPressed: () {
+                  context.nextPage(const MyCartTab());
+                },
               ),
             ),
           ],

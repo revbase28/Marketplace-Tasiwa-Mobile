@@ -16,8 +16,10 @@ import 'package:zcart/views/screens/product_details/product_details_screen.dart'
 import 'package:zcart/views/screens/tabs/account_tab/disputes/dispute_details_screen.dart';
 import 'package:zcart/views/screens/tabs/account_tab/disputes/open_dispute_screen.dart';
 import 'package:zcart/views/screens/tabs/account_tab/orders/feedback_screen.dart';
+import 'package:zcart/views/screens/tabs/myCart_tab/checkout/checkout_screen.dart';
 import 'package:zcart/views/shared_widgets/custom_button.dart';
 import 'package:zcart/views/shared_widgets/custom_confirm_dialog.dart';
+import 'package:zcart/views/shared_widgets/custom_small_button.dart';
 import 'package:zcart/views/shared_widgets/loading_widget.dart';
 import 'package:zcart/views/shared_widgets/pdf_screen.dart';
 
@@ -35,239 +37,199 @@ class OrderDetailsScreen extends ConsumerWidget {
       ),
       body: orderDetailsState is OrderLoadedState
           ? SingleChildScrollView(
-              child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Column(
-                    children: [
-                      Container(
-                        color: getColorBasedOnTheme(
-                            context, kLightColor, kDarkCardBgColor),
-                        child: Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Center(
-                                child: CustomButton(
-                                  buttonText: orderDetailsState
-                                      .orderDetails!.orderStatus,
-                                  buttonBGColor: orderDetailsState
-                                              .orderDetails!.orderStatus ==
-                                          "DELIVERED"
-                                      ? kGreenColor
-                                      : kPrimaryColor,
-                                ),
-                              ),
-                              Column(
-                                children: [
-                                  Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Expanded(
-                                          flex: 2,
-                                          child: Text(
-                                              "${LocaleKeys.order_number.tr()}: ")),
-                                      Expanded(
-                                          flex: 3,
-                                          child: Text(
-                                              orderDetailsState
-                                                  .orderDetails!.orderNumber!,
-                                              style:
-                                                  context.textTheme.subtitle2)),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 9),
-                                  Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Expanded(
-                                          flex: 2,
-                                          child: Text(
-                                              "${LocaleKeys.date.tr()}: ")),
-                                      Expanded(
-                                          flex: 3,
-                                          child: Text(
-                                              orderDetailsState
-                                                  .orderDetails!.orderDate!,
-                                              style:
-                                                  context.textTheme.subtitle2)),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 9),
-                                  Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Expanded(
-                                          flex: 2,
-                                          child: Text(
-                                              "${LocaleKeys.order_status.tr()}: ")),
-                                      Expanded(
-                                          flex: 3,
-                                          child: Text(
-                                              orderDetailsState.orderDetails!
-                                                      .orderStatus ??
-                                                  LocaleKeys.not_available.tr(),
-                                              style:
-                                                  context.textTheme.subtitle2)),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 9),
-                                  Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Expanded(
-                                          flex: 2,
-                                          child: Text(
-                                              "${LocaleKeys.shipping_address.tr()}: ")),
-                                      Expanded(
-                                          flex: 3,
-                                          child: Text(
-                                              orderDetailsState.orderDetails!
-                                                      .shippingAddress ??
-                                                  LocaleKeys.not_available.tr(),
-                                              style:
-                                                  context.textTheme.subtitle2)),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 9),
-                                  Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Expanded(
-                                          flex: 2,
-                                          child: Text(
-                                              "${LocaleKeys.billing_address.tr()}: ")),
-                                      Expanded(
-                                          flex: 3,
-                                          child: Text(
-                                              orderDetailsState.orderDetails!
-                                                      .billingAddress ??
-                                                  LocaleKeys.not_available.tr(),
-                                              style:
-                                                  context.textTheme.subtitle2)),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 9),
-                                  Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Expanded(
-                                          flex: 2,
-                                          child: Text(
-                                              "${LocaleKeys.shipping_weight.tr()}: ")),
-                                      Expanded(
-                                          flex: 3,
-                                          child: Text(
-                                              orderDetailsState.orderDetails!
-                                                      .shippingWeight ??
-                                                  LocaleKeys.not_available.tr(),
-                                              style:
-                                                  context.textTheme.subtitle2)),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 9),
-                                  orderDetailsState.orderDetails!
-                                              .messageToCustomer !=
-                                          null
-                                      ? Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.end,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Expanded(
-                                                flex: 2,
-                                                child: Text(
-                                                    "${LocaleKeys.message_to_customer.tr()}: ")),
-                                            Expanded(
-                                                flex: 3,
-                                                child: Text(
-                                                    orderDetailsState
-                                                        .orderDetails!
-                                                        .messageToCustomer,
-                                                    style: context
-                                                        .textTheme.subtitle2)),
-                                          ],
-                                        )
-                                      : const SizedBox(),
-                                ],
-                              )
-                            ],
-                          ),
+              padding: const EdgeInsets.all(10.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: getColorBasedOnTheme(
+                          context, kLightColor, kDarkCardBgColor),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CustomButton(
+                          buttonText:
+                              orderDetailsState.orderDetails!.orderStatus,
+                          buttonBGColor:
+                              orderDetailsState.orderDetails!.orderStatus ==
+                                      "DELIVERED"
+                                  ? kGreenColor
+                                  : kPrimaryColor,
                         ),
-                      ).cornerRadius(10),
-                      Container(
-                        color: getColorBasedOnTheme(
-                            context, kLightColor, kDarkCardBgColor),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
+                        const SizedBox(height: 10),
+                        Column(
                           children: [
                             Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                CachedNetworkImage(
-                                  imageUrl: orderDetailsState
-                                      .orderDetails!.shop!.image!,
-                                  errorWidget: (context, url, error) =>
-                                      const SizedBox(),
-                                  progressIndicatorBuilder:
-                                      (context, url, progress) => Center(
-                                    child: CircularProgressIndicator(
-                                        value: progress.progress),
-                                  ),
-                                  height: 50,
-                                  width: 50,
-                                ).pOnly(right: 10, left: 10, top: 10),
-                                Text(
-                                  orderDetailsState.orderDetails!.shop!.name!,
-                                  style: context.textTheme.headline6!,
-                                ),
-                                orderDetailsState.orderDetails!.shop!.verified!
-                                    ? const Icon(Icons.check_circle,
-                                            color: kGreenColor, size: 15)
-                                        .px(4)
-                                        .pOnly(top: 3)
-                                        .onInkTap(() {
-                                        toast(orderDetailsState
-                                            .orderDetails!.shop!.verifiedText);
-                                      })
-                                    : const SizedBox()
+                                Expanded(
+                                    flex: 2,
+                                    child: Text(
+                                        "${LocaleKeys.order_number.tr()}: ")),
+                                Expanded(
+                                    flex: 3,
+                                    child: Text(
+                                        orderDetailsState
+                                            .orderDetails!.orderNumber!,
+                                        style: context.textTheme.subtitle2)),
                               ],
                             ),
-                            const Divider(),
-                            ListView.builder(
-                                shrinkWrap: true,
-                                physics: const BouncingScrollPhysics(),
-                                itemCount: orderDetailsState
-                                    .orderDetails!.items!.length,
-                                itemBuilder: (context, index) {
-                                  return ListTile(
-                                    onTap: () {
-                                      context.nextPage(ProductDetailsScreen(
-                                          productSlug: orderDetailsState
-                                              .orderDetails!
-                                              .items![index]
-                                              .slug!));
-                                    },
-                                    leading: CachedNetworkImage(
+                            const SizedBox(height: 9),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                    flex: 2,
+                                    child: Text("${LocaleKeys.date.tr()}: ")),
+                                Expanded(
+                                    flex: 3,
+                                    child: Text(
+                                        orderDetailsState
+                                            .orderDetails!.orderDate!,
+                                        style: context.textTheme.subtitle2)),
+                              ],
+                            ),
+                            const SizedBox(height: 9),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                    flex: 2,
+                                    child: Text(
+                                        "${LocaleKeys.order_status.tr()}: ")),
+                                Expanded(
+                                    flex: 3,
+                                    child: Text(
+                                        orderDetailsState
+                                                .orderDetails!.orderStatus ??
+                                            LocaleKeys.not_available.tr(),
+                                        style: context.textTheme.subtitle2)),
+                              ],
+                            ),
+                            const SizedBox(height: 9),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                    flex: 2,
+                                    child: Text(
+                                        "${LocaleKeys.shipping_address.tr()}: ")),
+                                Expanded(
+                                    flex: 3,
+                                    child: Text(
+                                        orderDetailsState.orderDetails!
+                                                .shippingAddress ??
+                                            LocaleKeys.not_available.tr(),
+                                        style: context.textTheme.subtitle2)),
+                              ],
+                            ),
+                            const SizedBox(height: 9),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                    flex: 2,
+                                    child: Text(
+                                        "${LocaleKeys.billing_address.tr()}: ")),
+                                Expanded(
+                                    flex: 3,
+                                    child: Text(
+                                        orderDetailsState
+                                                .orderDetails!.billingAddress ??
+                                            LocaleKeys.not_available.tr(),
+                                        style: context.textTheme.subtitle2)),
+                              ],
+                            ),
+                            const SizedBox(height: 9),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                    flex: 2,
+                                    child: Text(
+                                        "${LocaleKeys.shipping_weight.tr()}: ")),
+                                Expanded(
+                                    flex: 3,
+                                    child: Text(
+                                        orderDetailsState
+                                                .orderDetails!.shippingWeight ??
+                                            LocaleKeys.not_available.tr(),
+                                        style: context.textTheme.subtitle2)),
+                              ],
+                            ),
+                            const SizedBox(height: 9),
+                            orderDetailsState.orderDetails!.messageToCustomer !=
+                                    null
+                                ? Row(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Expanded(
+                                          flex: 2,
+                                          child: Text(
+                                              "${LocaleKeys.message_to_customer.tr()}: ")),
+                                      Expanded(
+                                          flex: 3,
+                                          child: Text(
+                                              orderDetailsState.orderDetails!
+                                                  .messageToCustomer,
+                                              style:
+                                                  context.textTheme.subtitle2)),
+                                    ],
+                                  )
+                                : const SizedBox(),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: getColorBasedOnTheme(
+                          context, kLightColor, kDarkCardBgColor),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CustomShopCard(
+                            image: orderDetailsState.orderDetails!.shop!.image,
+                            title: orderDetailsState.orderDetails!.shop!.name ??
+                                "Unknown",
+                            verifiedText: orderDetailsState
+                                    .orderDetails!.shop!.verifiedText ??
+                                ""),
+                        const Divider(height: 0),
+                        const SizedBox(height: 10),
+                        ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount:
+                              orderDetailsState.orderDetails!.items!.length,
+                          itemBuilder: (context, index) {
+                            return ListTile(
+                              onTap: () {
+                                context.nextPage(ProductDetailsScreen(
+                                    productSlug: orderDetailsState
+                                        .orderDetails!.items![index].slug!));
+                              },
+                              leading: orderDetailsState
+                                          .orderDetails!.items![index].image !=
+                                      null
+                                  ? CachedNetworkImage(
                                       imageUrl: orderDetailsState
                                           .orderDetails!.items![index].image!,
                                       errorWidget: (context, url, error) =>
@@ -279,339 +241,279 @@ class OrderDetailsScreen extends ConsumerWidget {
                                       ),
                                       width: 50,
                                       height: 50,
-                                    ),
-                                    title: Text(orderDetailsState.orderDetails!
-                                        .items![index].description!),
-                                    subtitle: Text(
-                                      orderDetailsState.orderDetails!
-                                          .items![index].unitPrice!,
-                                      style: context.textTheme.subtitle2!
-                                          .copyWith(
-                                              color: getColorBasedOnTheme(
-                                                  context,
-                                                  kPriceColor,
-                                                  kDarkPriceColor)),
-                                    ),
-                                    trailing: Text('x ' +
+                                    )
+                                  : null,
+                              title: Text(
+                                orderDetailsState.orderDetails!.items![index]
+                                        .description ??
+                                    "",
+                                style: context.textTheme.subtitle2!,
+                              ),
+                              subtitle: Row(
+                                children: [
+                                  Text(
+                                    orderDetailsState.orderDetails!
+                                            .items![index].unitPrice ??
+                                        "",
+                                    style: context.textTheme.subtitle2!
+                                        .copyWith(
+                                            fontWeight: FontWeight.bold,
+                                            color: getColorBasedOnTheme(context,
+                                                kPriceColor, kDarkPriceColor)),
+                                  ),
+                                  Text(
+                                    ' x ' +
                                         orderDetailsState.orderDetails!
                                             .items![index].quantity
-                                            .toString()),
-                                  );
-                                })
+                                            .toString(),
+                                    style: context.textTheme.subtitle2!,
+                                  )
+                                ],
+                              ).py(8),
+                            );
+                          },
+                        )
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: getColorBasedOnTheme(
+                          context, kLightColor, kDarkCardBgColor),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Text('${LocaleKeys.payment_details.tr()}\n',
+                            style: context.textTheme.headline6),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                                flex: 2,
+                                child: Text("${LocaleKeys.total.tr()}: ")),
+                            Expanded(
+                                flex: 3,
+                                child: Text(
+                                    orderDetailsState.orderDetails!.total ??
+                                        LocaleKeys.not_available.tr(),
+                                    style: context.textTheme.subtitle2)),
                           ],
                         ),
-                      ).cornerRadius(10).py(10),
-                      Container(
-                        color: getColorBasedOnTheme(
-                            context, kLightColor, kDarkCardBgColor),
-                        child: Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text('\n${LocaleKeys.payment_details.tr()}\n',
-                                  style: context.textTheme.subtitle2),
-                              Column(
-                                children: [
-                                  Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Expanded(
-                                          flex: 2,
-                                          child: Text(
-                                              "${LocaleKeys.total.tr()}: ")),
-                                      Expanded(
-                                          flex: 3,
-                                          child: Text(
-                                              orderDetailsState
-                                                      .orderDetails!.total ??
-                                                  LocaleKeys.not_available.tr(),
-                                              style:
-                                                  context.textTheme.subtitle2)),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 9),
-                                  Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Expanded(
-                                          flex: 2,
-                                          child: Text(
-                                              "${LocaleKeys.taxes.tr()}: ")),
-                                      Expanded(
-                                          flex: 3,
-                                          child: Text(
-                                              orderDetailsState
-                                                      .orderDetails!.taxes ??
-                                                  LocaleKeys.not_available.tr(),
-                                              style:
-                                                  context.textTheme.subtitle2)),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 9),
-                                  Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Expanded(
-                                          flex: 2,
-                                          child: Text(
-                                              "${LocaleKeys.shipping.tr()}: ")),
-                                      Expanded(
-                                          flex: 3,
-                                          child: Text(
-                                              orderDetailsState
-                                                      .orderDetails!.shipping ??
-                                                  LocaleKeys.not_available.tr(),
-                                              style:
-                                                  context.textTheme.subtitle2)),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 9),
-                                  Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Expanded(
-                                          flex: 2,
-                                          child: Text(
-                                              "${LocaleKeys.packaging.tr()}: ")),
-                                      Expanded(
-                                          flex: 3,
-                                          child: Text(
-                                              orderDetailsState.orderDetails!
-                                                      .packaging ??
-                                                  LocaleKeys.not_available.tr(),
-                                              style:
-                                                  context.textTheme.subtitle2)),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 9),
-                                  Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Expanded(
-                                          flex: 2,
-                                          child: Text(
-                                              "${LocaleKeys.handling.tr()}: ")),
-                                      Expanded(
-                                          flex: 3,
-                                          child: Text(
-                                              orderDetailsState
-                                                      .orderDetails!.handling ??
-                                                  LocaleKeys.not_available.tr(),
-                                              style:
-                                                  context.textTheme.subtitle2)),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 9),
-                                  Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Expanded(
-                                          flex: 2,
-                                          child: Text(
-                                              "${LocaleKeys.discount.tr()}: ")),
-                                      Expanded(
-                                          flex: 3,
-                                          child: Text(
-                                              orderDetailsState
-                                                      .orderDetails!.discount ??
-                                                  LocaleKeys.not_available.tr(),
-                                              style:
-                                                  context.textTheme.subtitle2)),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 9),
-                                  Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Expanded(
-                                          flex: 2,
-                                          child: Text(
-                                              "${LocaleKeys.payment_method.tr()}: ")),
-                                      Expanded(
-                                          flex: 3,
-                                          child: Text(
-                                              orderDetailsState.orderDetails!
-                                                  .paymentMethod!.name!,
-                                              style:
-                                                  context.textTheme.subtitle2)),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 9),
-                                  Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Expanded(
-                                          flex: 2,
-                                          child: Text(
-                                              "${LocaleKeys.payment_status.tr()}: ")),
-                                      Expanded(
-                                          flex: 3,
-                                          child: Text(
-                                              orderDetailsState
-                                                  .orderDetails!.paymentStatus!,
-                                              style:
-                                                  context.textTheme.subtitle2)),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 9),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      Text(
-                                        '${LocaleKeys.grand_total.tr()}: ' +
-                                            orderDetailsState
-                                                .orderDetails!.grandTotal!,
-                                        style: context.textTheme.subtitle2!
-                                            .copyWith(
-                                          color: getColorBasedOnTheme(context,
-                                              kPriceColor, kDarkPriceColor),
-                                        ),
-                                      )
-                                    ],
-                                  ).pOnly(bottom: 10),
-                                  _orderDetailsFooter(
-                                      context, orderDetailsState),
-                                  const SizedBox(height: 16),
-                                ],
-                              )
-                            ],
-                          ),
+                        const SizedBox(height: 9),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                                flex: 2,
+                                child: Text("${LocaleKeys.taxes.tr()}: ")),
+                            Expanded(
+                                flex: 3,
+                                child: Text(
+                                    orderDetailsState.orderDetails!.taxes ??
+                                        LocaleKeys.not_available.tr(),
+                                    style: context.textTheme.subtitle2)),
+                          ],
                         ),
-                      ).cornerRadius(10),
-                    ],
-                  )),
+                        const SizedBox(height: 9),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                                flex: 2,
+                                child: Text("${LocaleKeys.shipping.tr()}: ")),
+                            Expanded(
+                                flex: 3,
+                                child: Text(
+                                    orderDetailsState.orderDetails!.shipping ??
+                                        LocaleKeys.not_available.tr(),
+                                    style: context.textTheme.subtitle2)),
+                          ],
+                        ),
+                        const SizedBox(height: 9),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                                flex: 2,
+                                child: Text("${LocaleKeys.packaging.tr()}: ")),
+                            Expanded(
+                                flex: 3,
+                                child: Text(
+                                    orderDetailsState.orderDetails!.packaging ??
+                                        LocaleKeys.not_available.tr(),
+                                    style: context.textTheme.subtitle2)),
+                          ],
+                        ),
+                        const SizedBox(height: 9),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                                flex: 2,
+                                child: Text("${LocaleKeys.handling.tr()}: ")),
+                            Expanded(
+                                flex: 3,
+                                child: Text(
+                                    orderDetailsState.orderDetails!.handling ??
+                                        LocaleKeys.not_available.tr(),
+                                    style: context.textTheme.subtitle2)),
+                          ],
+                        ),
+                        const SizedBox(height: 9),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                                flex: 2,
+                                child: Text("${LocaleKeys.discount.tr()}: ")),
+                            Expanded(
+                                flex: 3,
+                                child: Text(
+                                    orderDetailsState.orderDetails!.discount ??
+                                        LocaleKeys.not_available.tr(),
+                                    style: context.textTheme.subtitle2)),
+                          ],
+                        ),
+                        const SizedBox(height: 9),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                                flex: 2,
+                                child: Text(
+                                    "${LocaleKeys.payment_method.tr()}: ")),
+                            Expanded(
+                                flex: 3,
+                                child: Text(
+                                    orderDetailsState
+                                        .orderDetails!.paymentMethod!.name!,
+                                    style: context.textTheme.subtitle2)),
+                          ],
+                        ),
+                        const SizedBox(height: 9),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                                flex: 2,
+                                child: Text(
+                                    "${LocaleKeys.payment_status.tr()}: ")),
+                            Expanded(
+                                flex: 3,
+                                child: Text(
+                                    orderDetailsState
+                                        .orderDetails!.paymentStatus!,
+                                    style: context.textTheme.subtitle2)),
+                          ],
+                        ),
+                        const Divider(),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                                flex: 2,
+                                child:
+                                    Text("${LocaleKeys.grand_total.tr()}: ")),
+                            Expanded(
+                              flex: 3,
+                              child: Text(
+                                orderDetailsState.orderDetails!.grandTotal!,
+                                style: context.textTheme.headline6!.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: getColorBasedOnTheme(
+                                      context, kPriceColor, kDarkPriceColor),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  _orderDetailsFooter(context, orderDetailsState),
+                ],
+              ),
             )
           : const LoadingWidget(),
     );
   }
 
-  Row _orderDetailsFooter(
+  Widget _orderDetailsFooter(
       BuildContext context, OrderLoadedState orderDetailsState) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        Flexible(
-          child: Wrap(
-            spacing: 3,
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                    color: kPrimaryColor,
-                    borderRadius: BorderRadius.circular(5)),
-                child: const Text(
-                  "Generate Invoice",
-                  style: TextStyle(fontSize: 12, color: kLightColor),
-                ).pSymmetric(h: 8, v: 8),
-              ).onInkTap(() async {
-                toast("Generating Invoice...");
-                final _result = await generateInvoice(
-                    API.downloadOrderInvoice(
-                        orderDetailsState.orderDetails!.id!),
-                    orderDetailsState.orderDetails!.orderNumber!);
+    return Padding(
+      padding: const EdgeInsets.only(top: 16, bottom: 40),
+      child: Wrap(
+        spacing: 8,
+        runSpacing: 8,
+        alignment: WrapAlignment.end,
+        children: [
+          CustomSmallButton(
+            text: "Generate Invoice",
+            onPressed: () async {
+              toast("Generating Invoice...");
+              final _result = await generateInvoice(
+                  API.downloadOrderInvoice(orderDetailsState.orderDetails!.id!),
+                  orderDetailsState.orderDetails!.orderNumber!);
 
-                if (_result != null) {
-                  toast("Invoice Generated");
-                  context.nextPage(PDFScreen(path: _result));
-                } else {
-                  toast("Error Generating Invoice");
-                }
-              }),
-              Container(
-                decoration: BoxDecoration(
-                    color: kPrimaryColor,
-                    borderRadius: BorderRadius.circular(5)),
-                child: Text(
-                  LocaleKeys.feedback.tr(),
-                  style: const TextStyle(fontSize: 12, color: kLightColor),
-                ).pSymmetric(h: 8, v: 8),
-              )
-                  .visible(
-                orderDetailsState.orderDetails!.orderStatus == "DELIVERED",
-              )
-                  .onInkTap(() {
-                if (orderDetailsState.orderDetails!.canEvaluate!) {
-                  context.nextPage(FeedbackScreen(
-                    order: orderDetailsState.orderDetails,
-                  ));
+              if (_result != null) {
+                toast("Invoice Generated");
+                context.nextPage(PDFScreen(path: _result));
+              } else {
+                toast("Error Generating Invoice");
+              }
+            },
+          ),
+          if (orderDetailsState.orderDetails!.orderStatus == "DELIVERED")
+            CustomSmallButton(
+              text: LocaleKeys.feedback.tr(),
+              onPressed: () {
+                if (orderDetailsState.orderDetails!.canEvaluate ?? false) {
+                  context.nextPage(
+                      FeedbackScreen(order: orderDetailsState.orderDetails!));
                 } else {
                   toast(LocaleKeys.feedback_already_given.tr());
                 }
-              }),
-              Container(
-                decoration: BoxDecoration(
-                    color: kPrimaryColor,
-                    borderRadius: BorderRadius.circular(5)),
-                child: Text(
-                  LocaleKeys.open_dispute.tr(),
-                  style: const TextStyle(fontSize: 12, color: kLightColor),
-                ).pSymmetric(h: 8, v: 8),
-              )
-                  .visible(
-                orderDetailsState.orderDetails!.disputeId == null,
-              )
-                  .onInkTap(() {
+              },
+            ),
+          if (orderDetailsState.orderDetails!.disputeId == null)
+            CustomSmallButton(
+              text: LocaleKeys.open_dispute.tr(),
+              onPressed: () {
                 context
                     .read(disputeInfoProvider.notifier)
                     .getDisputeInfo(orderDetailsState.orderDetails!.id);
                 context.nextPage(const OpenDisputeScreen());
-              }),
-              Container(
-                decoration: BoxDecoration(
-                    color: kPrimaryColor,
-                    borderRadius: BorderRadius.circular(5)),
-                child: Text(
-                  LocaleKeys.dispute_details.tr(),
-                  style: const TextStyle(fontSize: 12, color: kLightColor),
-                ).pSymmetric(h: 8, v: 8),
-              )
-                  .visible(
-                orderDetailsState.orderDetails!.disputeId != null,
-              )
-                  .onInkTap(() {
-                context.read(disputeDetailsProvider.notifier).getDisputeDetails(
-                    orderDetailsState.orderDetails!.disputeId);
+              },
+            ),
+          if (orderDetailsState.orderDetails!.disputeId != null)
+            CustomSmallButton(
+              text: LocaleKeys.dispute_details.tr(),
+              onPressed: () {
+                context
+                    .read(disputeDetailsProvider.notifier)
+                    .getDisputeDetails(orderDetailsState.orderDetails!.id);
                 context.nextPage(const DisputeDetailsScreen());
-              }),
-              Container(
-                decoration: BoxDecoration(
-                    color: kPrimaryColor,
-                    borderRadius: BorderRadius.circular(5)),
-                child: Text(
-                  LocaleKeys.confirm_received.tr(),
-                  style: const TextStyle(fontSize: 12, color: kLightColor),
-                ).pSymmetric(h: 8, v: 8),
-              )
-                  .visible(
-                orderDetailsState.orderDetails!.orderStatus == "DELIVERED"
-                    ? false
-                    : true,
-              )
-                  .onInkTap(() {
+              },
+            ),
+          if (orderDetailsState.orderDetails!.orderStatus == "DELIVERED"
+              ? false
+              : true)
+            CustomSmallButton(
+              text: LocaleKeys.confirm_received.tr(),
+              onPressed: () {
                 if (orderDetailsState.orderDetails!.orderStatus !=
                     "DELIVERED") {
                   showCustomConfirmDialog(
@@ -632,11 +534,10 @@ class OrderDetailsScreen extends ConsumerWidget {
                     },
                   );
                 }
-              }),
-            ],
-          ),
-        )
-      ],
+              },
+            )
+        ],
+      ),
     );
   }
 }

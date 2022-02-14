@@ -7,6 +7,8 @@ import 'package:nb_utils/nb_utils.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:zcart/Theme/styles/colors.dart';
 import 'package:zcart/data/models/deals/deal_of_the_day_model.dart' as deal;
+import 'package:zcart/data/network/network_utils.dart';
+import 'package:zcart/helper/app_images.dart';
 import 'package:zcart/helper/get_color_based_on_theme.dart';
 import 'package:zcart/riverpod/providers/deals_provider.dart';
 import 'package:zcart/riverpod/providers/plugin_provider.dart';
@@ -14,14 +16,17 @@ import 'package:zcart/riverpod/providers/provider.dart';
 import 'package:zcart/riverpod/state/deals_state.dart';
 import 'package:zcart/riverpod/state/state.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
+import 'package:zcart/views/screens/auth/not_logged_in_screen.dart';
+import 'package:zcart/views/screens/bottom_nav_bar/bottom_nav_bar.dart';
 import 'package:zcart/views/screens/brand/featured_brands.dart';
 import 'package:zcart/views/screens/product_details/product_details_screen.dart';
+import 'package:zcart/views/screens/tabs/account_tab/settings/settings_page.dart';
 import 'package:zcart/views/screens/tabs/home_tab/components/flash_deals.dart';
+import 'package:zcart/views/screens/tabs/home_tab/search/search_screen.dart';
 import 'package:zcart/views/shared_widgets/shared_widgets.dart';
 import 'components/banners_widget.dart';
 import 'components/category_widget.dart';
 import 'components/error_widget.dart';
-import 'components/search_bar.dart';
 import 'components/slider_widget.dart';
 
 class HomeTab extends ConsumerWidget {
@@ -56,8 +61,26 @@ class HomeTab extends ConsumerWidget {
           appBar: AppBar(
             backgroundColor:
                 getColorBasedOnTheme(context, kLightBgColor, kDarkBgColor),
-            flexibleSpace: const SafeArea(child: CustomSearchBar()),
+            centerTitle: true,
+            title: SizedBox(
+              width: MediaQuery.of(context).size.width / 5,
+              child: Image.asset(
+                AppImages.topBar,
+                fit: BoxFit.fitWidth,
+              ),
+            ),
+            iconTheme: IconThemeData(
+                color: getColorBasedOnTheme(context, kDarkColor, kLightColor)),
+            actions: [
+              IconButton(
+                  onPressed: () {
+                    context.nextPage(const SearchScreen());
+                  },
+                  icon: const Icon(Icons.search))
+            ],
+            // flexibleSpace: const SafeArea(child: CustomSearchBar()),
           ),
+          drawer: const AppDrawer(),
           body: SingleChildScrollView(
             controller: scrollControllerProvider.controller,
             physics: const AlwaysScrollableScrollPhysics(
@@ -424,6 +447,144 @@ class DealOfTheDayWidget extends StatelessWidget {
                     ),
                   ),
                 ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class AppDrawer extends ConsumerWidget {
+  const AppDrawer({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, watch) {
+    final cartState = watch(cartNotifierProvider);
+    int _cartItems = 0;
+
+    if (cartState is CartLoadedState) {
+      for (var item in cartState.cartList!) {
+        _cartItems += item.items!.length;
+      }
+    }
+    return Drawer(
+      child: Column(
+        children: [
+          DrawerHeader(
+            child: SizedBox(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 32),
+                child: Image.asset(
+                  AppImages.topBar,
+                  fit: BoxFit.fitWidth,
+                ),
+              ),
+            ),
+          ),
+          Expanded(
+            child: ListView(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              shrinkWrap: true,
+              children: [
+                Card(
+                  elevation: 0,
+                  child: ListTile(
+                    title: Text(LocaleKeys.home_text.tr(),
+                        style: context.textTheme.subtitle2!),
+                    leading: const Icon(Icons.home_outlined),
+                    onTap: () {
+                      context.pop();
+                    },
+                  ),
+                ),
+                Card(
+                  elevation: 0,
+                  child: ListTile(
+                    title: Text(LocaleKeys.vendor_text.tr(),
+                        style: context.textTheme.subtitle2!),
+                    leading: const Icon(Icons.store_outlined),
+                    onTap: () {
+                      context.pop();
+                      context.nextAndRemoveUntilPage(
+                          const BottomNavBar(selectedIndex: 1));
+                    },
+                  ),
+                ),
+                //Brands
+                Card(
+                  elevation: 0,
+                  child: ListTile(
+                    title: Text(LocaleKeys.brands.tr(),
+                        style: context.textTheme.subtitle2!),
+                    leading: const Icon(Icons.local_mall_outlined),
+                    onTap: () {
+                      context.pop();
+                      context.nextAndRemoveUntilPage(
+                          const BottomNavBar(selectedIndex: 2));
+                    },
+                  ),
+                ),
+                //WishList
+                Card(
+                  elevation: 0,
+                  child: ListTile(
+                    title: Text(LocaleKeys.wishlist_text.tr(),
+                        style: context.textTheme.subtitle2!),
+                    leading: const Icon(Icons.favorite_border_outlined),
+                    onTap: () {
+                      context.pop();
+                      context.nextAndRemoveUntilPage(
+                          const BottomNavBar(selectedIndex: 3));
+                    },
+                  ),
+                ),
+                //Cart
+                Card(
+                  elevation: 0,
+                  child: ListTile(
+                    title: Text(LocaleKeys.cart_text.tr(),
+                        style: context.textTheme.subtitle2!),
+                    leading: const Icon(Icons.shopping_cart_outlined),
+                    trailing: CircleAvatar(
+                      radius: 10,
+                      backgroundColor: kPrimaryColor,
+                      foregroundColor: kLightColor,
+                      child: Text(
+                        _cartItems.toString(),
+                        style: context.textTheme.caption!.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: kLightColor,
+                        ),
+                      ),
+                    ),
+                    onTap: () {
+                      context.pop();
+                      context.nextAndRemoveUntilPage(
+                          const BottomNavBar(selectedIndex: 4));
+                    },
+                  ),
+                ),
+                //Account
+                Card(
+                  elevation: 0,
+                  child: ListTile(
+                    title: Text(LocaleKeys.account_text.tr(),
+                        style: context.textTheme.subtitle2!),
+                    leading: const Icon(Icons.person_outline),
+                    onTap: () {
+                      context.pop();
+                      context.nextAndRemoveUntilPage(
+                          const BottomNavBar(selectedIndex: 5));
+                    },
+                  ),
+                ),
+                const Divider(),
+                if (!accessAllowed) const NotLoggedInSettingItems(),
+                if (accessAllowed) const CompanyInfoWidgets(),
               ],
             ),
           ),

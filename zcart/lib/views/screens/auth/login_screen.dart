@@ -67,7 +67,7 @@ class _LoginScreenState extends State<LoginScreen> {
           context.nextAndRemoveUntilPage(const BottomNavBar(selectedIndex: 0));
         }
         if (state is UserErrorState) {
-          toast(state.message, bgColor: kPrimaryColor);
+          toast(state.message);
         }
       },
       child: GestureDetector(
@@ -127,9 +127,13 @@ class _LoginScreenState extends State<LoginScreen> {
                               title: LocaleKeys.your_password.tr(),
                               keyboardType: TextInputType.visiblePassword,
                               controller: _passwordController,
-                              validator: (value) => value!.length < 6
-                                  ? LocaleKeys.password_validation.tr()
-                                  : null,
+                              validator: (value) {
+                                return value!.isEmpty
+                                    ? LocaleKeys.field_required.tr()
+                                    : value.length < 6
+                                        ? LocaleKeys.password_validation.tr()
+                                        : null;
+                              },
                             ),
                             Align(
                               alignment: Alignment.centerRight,
@@ -175,11 +179,14 @@ class _LoginScreenState extends State<LoginScreen> {
                                           final GoogleSignInAuthentication
                                               _googleAuth =
                                               await _googleUser.authentication;
-                                          context
-                                              .read(
-                                                  userNotifierProvider.notifier)
-                                              .loginUsingGoogle(
-                                                  _googleAuth.accessToken!);
+
+                                          if (_googleAuth.accessToken != null) {
+                                            context
+                                                .read(userNotifierProvider
+                                                    .notifier)
+                                                .loginUsingGoogle(
+                                                    _googleAuth.accessToken!);
+                                          }
                                         } else {
                                           toast(LocaleKeys.something_went_wrong
                                               .tr());
@@ -204,8 +211,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                         size: 18,
                                       ),
                                       label: const Text("Google"),
-                                    ).px(5),
+                                    ),
                                   ),
+                                const SizedBox(width: 10),
                                 if (MyConfig.isFacebookLoginActive)
                                   Expanded(
                                     child: ElevatedButton.icon(
@@ -247,7 +255,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                         size: 18,
                                       ),
                                       label: const Text("Facebook"),
-                                    ).px(5),
+                                    ),
                                   ),
                               ],
                             ),

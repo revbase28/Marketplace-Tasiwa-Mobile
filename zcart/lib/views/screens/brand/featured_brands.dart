@@ -11,6 +11,7 @@ import 'package:zcart/views/screens/bottom_nav_bar/bottom_nav_bar.dart';
 import 'package:zcart/views/screens/brand/brand_profile.dart';
 import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:velocity_x/velocity_x.dart';
+import 'package:zcart/views/screens/tabs/brands_tab/brands_tab.dart';
 
 class FeaturedBrands extends ConsumerWidget {
   const FeaturedBrands({Key? key}) : super(key: key);
@@ -37,8 +38,7 @@ class FeaturedBrands extends ConsumerWidget {
                     ),
                     GestureDetector(
                       onTap: () {
-                        context.nextReplacementPage(
-                            const BottomNavBar(selectedIndex: 2));
+                        context.nextPage(const BrandsTab());
                       },
                       child: Text(
                         LocaleKeys.view_all.tr(),

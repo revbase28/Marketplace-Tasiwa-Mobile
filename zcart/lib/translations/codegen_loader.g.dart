@@ -424,10 +424,10 @@ class CodegenLoader extends AssetLoader {
         "Before opening a dispute, we recommend you to contact the seller to discuss about the issue. Most of the case seller will help to solve the issue.",
     "second_step": "Second Step",
     "dispute_second_step":
-        "You can choose between two options:\\n\\nRefund Only – this means that either you did not receive the item and you’re applying for a full refund or you did receive the item and you want a partial refund (without having to send the item back), OR\\n\\nReturn Goods – this means that you want to return the item and apply for a full refund.\\n",
+        "You can choose between two options:\n\nRefund Only – this means that either you did not receive the item and you’re applying for a full refund or you did receive the item and you want a partial refund (without having to send the item back), OR\n\nReturn Goods – this means that you want to return the item and apply for a full refund.",
     "third_step": "Third Step",
     "dispute_third_step":
-        "If you and seller can\\'t come to an agreement, you can appeal the dispute to review. This point we will step in and help.",
+        "If you and seller can't come to an agreement, you can appeal the dispute to review. This point we will step in and help.",
     "empty_inbox": "Empty inbox!",
     "order_chat": "Order Chat",
     "ordered_at": "Ordered at",
