@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -645,111 +646,134 @@ class PackagingDetails extends ConsumerWidget {
               ? const SizedBox()
               : ListTile(
                   onTap: () {
-                    showModalBottomSheet(
-                      context: context,
-                      backgroundColor: Colors.transparent,
-                      isScrollControlled: true,
-                      builder: (context) {
-                        return SizedBox(
-                          height: context.screenHeight * 0.7,
-                          child: ProductPageDefaultContainer(
-                            isFullPadding: true,
-                            padding: 24,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                  "Select Packaging",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headline6!
-                                      .copyWith(fontWeight: FontWeight.bold),
-                                ),
-                                const SizedBox(height: 10),
-                                Expanded(
-                                  child: ListView(
-                                    shrinkWrap: true,
-                                    children: value
-                                        .map(
-                                          (e) => ListTile(
-                                            title: Text(
-                                              e.name ?? "Unknown",
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .subtitle2!
-                                                  .copyWith(
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                            ),
-                                            trailing: Text(
-                                              e.cost ?? "0",
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyText2!
-                                                  .copyWith(
-                                                    color: getColorBasedOnTheme(
-                                                        context,
-                                                        kPriceColor,
-                                                        kDarkPriceColor),
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                            ),
-                                            onTap: () async {
-                                              Navigator.of(context).pop();
-                                              context
-                                                  .read(cartNotifierProvider
-                                                      .notifier)
-                                                  .updateCart(cartItem.id!,
-                                                      packagingId: e.id);
-                                            },
-                                            minLeadingWidth: 0,
-                                            leading: packagingModel?.id == e.id
-                                                ? const Icon(Icons.check_circle)
-                                                : const Icon(
-                                                    Icons.circle_outlined),
-                                            contentPadding: EdgeInsets.zero,
-                                          ),
-                                        )
-                                        .toList(),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
-                      },
-                    );
+                    _onTapSelectPackaging(context, value, packagingModel);
                   },
                   dense: true,
                   contentPadding:
                       const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
-                  title: Text(
-                    LocaleKeys.packaging.tr() + ':',
-                    style: context.textTheme.caption!.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: kPrimaryFadeTextColor),
+                  title: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        LocaleKeys.packaging.tr() + ':',
+                        style: context.textTheme.caption!.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: kPrimaryFadeTextColor),
+                      ),
+                      CupertinoButton(
+                        padding: EdgeInsets.zero,
+                        minSize: 0,
+                        alignment: Alignment.centerRight,
+                        onPressed: () {
+                          _onTapSelectPackaging(context, value, packagingModel);
+                        },
+                        child: Text(
+                          "Change",
+                          style: context.textTheme.caption!.copyWith(
+                              fontWeight: FontWeight.bold, color: kFadeColor),
+                        ),
+                      ),
+                    ],
                   ),
-                  trailing: Text(
-                    double.parse(packagingModel?.costRaw ?? "0") <= 0.0
-                        ? ""
-                        : (packagingModel?.cost ?? "0"),
-                    style: context.textTheme.subtitle2!.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: getColorBasedOnTheme(
-                            context, kPriceColor, kDarkPriceColor)),
-                  ),
-                  subtitle: Text(
-                    packagingModel?.name ?? '',
-                    style: context.textTheme.subtitle2!.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  subtitle: Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          packagingModel?.name ?? '',
+                          style: context.textTheme.subtitle2!.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        double.parse(packagingModel?.costRaw ?? "0") <= 0.0
+                            ? ""
+                            : (packagingModel?.cost ?? "0"),
+                        style: context.textTheme.subtitle2!.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: getColorBasedOnTheme(
+                                context, kPriceColor, kDarkPriceColor)),
+                      )
+                    ],
+                  ).pOnly(top: 8),
                 );
         }
       },
       loading: () => const SizedBox(),
       error: (error, stackTrace) => const SizedBox(),
+    );
+  }
+
+  Future<dynamic> _onTapSelectPackaging(BuildContext context,
+      List<PackagingModel> value, PackagingModel? packagingModel) {
+    return showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      builder: (context) {
+        return SizedBox(
+          height: context.screenHeight * 0.7,
+          child: ProductPageDefaultContainer(
+            isFullPadding: true,
+            padding: 24,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  "Select Packaging",
+                  style: Theme.of(context)
+                      .textTheme
+                      .headline6!
+                      .copyWith(fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 10),
+                Expanded(
+                  child: ListView(
+                    shrinkWrap: true,
+                    children: value
+                        .map(
+                          (e) => ListTile(
+                            title: Text(
+                              e.name ?? "Unknown",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .subtitle2!
+                                  .copyWith(fontWeight: FontWeight.bold),
+                            ),
+                            trailing: Text(
+                              e.cost ?? "0",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyText2!
+                                  .copyWith(
+                                    color: getColorBasedOnTheme(
+                                        context, kPriceColor, kDarkPriceColor),
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                            ),
+                            onTap: () async {
+                              Navigator.of(context).pop();
+                              context
+                                  .read(cartNotifierProvider.notifier)
+                                  .updateCart(cartItem.id!, packagingId: e.id);
+                            },
+                            minLeadingWidth: 0,
+                            leading: packagingModel?.id == e.id
+                                ? const Icon(Icons.check_circle)
+                                : const Icon(Icons.circle_outlined),
+                            contentPadding: EdgeInsets.zero,
+                          ),
+                        )
+                        .toList(),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }
@@ -816,118 +840,60 @@ class ShippingDetails extends ConsumerWidget {
             children: [
               ListTile(
                 onTap: () {
-                  showModalBottomSheet(
-                    context: context,
-                    backgroundColor: Colors.transparent,
-                    isScrollControlled: true,
-                    builder: (context) {
-                      return SizedBox(
-                        height: context.screenHeight * 0.7,
-                        child: ProductPageDefaultContainer(
-                          isFullPadding: true,
-                          padding: 24,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Text(
-                                "Select Shipping",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headline6!
-                                    .copyWith(fontWeight: FontWeight.bold),
-                              ),
-                              const SizedBox(height: 10),
-                              Expanded(
-                                child: ListView(
-                                  children: value
-                                      .map(
-                                        (e) => ListTile(
-                                          title: Text(
-                                            (e.name ?? "Unknown") +
-                                                " by " +
-                                                (e.carrierName ?? "Unknown"),
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .subtitle2!
-                                                .copyWith(
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                          ),
-                                          subtitle: Text(
-                                            e.deliveryTakes ?? "",
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .caption!,
-                                          ),
-                                          trailing: Text(
-                                            e.cost ?? "0",
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodyText2!
-                                                .copyWith(
-                                                  color: getColorBasedOnTheme(
-                                                      context,
-                                                      kPriceColor,
-                                                      kDarkPriceColor),
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                          ),
-                                          onTap: () async {
-                                            Navigator.of(context).pop();
-                                            context
-                                                .read(cartNotifierProvider
-                                                    .notifier)
-                                                .updateCart(
-                                                  cartItem.id!,
-                                                  shippingOptionId: e.id,
-                                                  shippingZoneId:
-                                                      e.shippingZoneId,
-                                                );
-                                          },
-                                          leading: _shippingOption?.id == e.id
-                                              ? const Icon(Icons.check_circle)
-                                              : const Icon(
-                                                  Icons.circle_outlined),
-                                          contentPadding: EdgeInsets.zero,
-                                          minLeadingWidth: 0,
-                                        ),
-                                      )
-                                      .toList(),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  );
+                  _onTapSelectShippingOption(context, value, _shippingOption);
                 },
                 dense: true,
                 contentPadding:
                     const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
-                title: Text(
-                  LocaleKeys.shipping.tr() + ':',
-                  style: context.textTheme.caption!.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: kPrimaryFadeTextColor),
+                title: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      LocaleKeys.shipping.tr() + ':',
+                      style: context.textTheme.caption!.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: kPrimaryFadeTextColor),
+                    ),
+                    CupertinoButton(
+                      padding: EdgeInsets.zero,
+                      minSize: 0,
+                      alignment: Alignment.centerRight,
+                      onPressed: () {
+                        _onTapSelectShippingOption(
+                            context, value, _shippingOption);
+                      },
+                      child: Text(
+                        "Change",
+                        style: context.textTheme.caption!.copyWith(
+                            fontWeight: FontWeight.bold, color: kFadeColor),
+                      ),
+                    ),
+                  ],
                 ),
-                trailing: Text(
-                  double.parse(_shippingOption.costRaw ?? "0") <= 0.0
-                      ? ""
-                      : (_shippingOption.cost ?? "0"),
-                  style: context.textTheme.subtitle2!.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: getColorBasedOnTheme(
-                          context, kPriceColor, kDarkPriceColor)),
-                ),
-                subtitle: Text(
-                  (_shippingOption.name ?? 'Unknown') +
-                      " by " +
-                      (_shippingOption.carrierName ?? 'Unknown'),
-                  style: context.textTheme.subtitle2!.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+                subtitle: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        (_shippingOption.name ?? 'Unknown') +
+                            " by " +
+                            (_shippingOption.carrierName ?? 'Unknown'),
+                        style: context.textTheme.subtitle2!.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      double.parse(_shippingOption.costRaw ?? "0") <= 0.0
+                          ? ""
+                          : (_shippingOption.cost ?? "0"),
+                      style: context.textTheme.subtitle2!.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: getColorBasedOnTheme(
+                              context, kPriceColor, kDarkPriceColor)),
+                    ),
+                  ],
+                ).pOnly(top: 8),
               ),
               const Divider(height: 0),
               Padding(
@@ -971,6 +937,86 @@ class ShippingDetails extends ConsumerWidget {
       error: (error, stackTrace) => const SizedBox(),
     );
   }
+
+  Future<dynamic> _onTapSelectShippingOption(BuildContext context,
+      List<ShippingOption> value, ShippingOption? _shippingOption) {
+    return showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      builder: (context) {
+        return SizedBox(
+          height: context.screenHeight * 0.7,
+          child: ProductPageDefaultContainer(
+            isFullPadding: true,
+            padding: 24,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(
+                  "Select Shipping",
+                  style: Theme.of(context)
+                      .textTheme
+                      .headline6!
+                      .copyWith(fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 10),
+                Expanded(
+                  child: ListView(
+                    children: value
+                        .map(
+                          (e) => ListTile(
+                            title: Text(
+                              (e.name ?? "Unknown") +
+                                  " by " +
+                                  (e.carrierName ?? "Unknown"),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .subtitle2!
+                                  .copyWith(fontWeight: FontWeight.bold),
+                            ),
+                            subtitle: Text(
+                              e.deliveryTakes ?? "",
+                              style: Theme.of(context).textTheme.caption!,
+                            ),
+                            trailing: Text(
+                              e.cost ?? "0",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyText2!
+                                  .copyWith(
+                                    color: getColorBasedOnTheme(
+                                        context, kPriceColor, kDarkPriceColor),
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                            ),
+                            onTap: () async {
+                              Navigator.of(context).pop();
+                              context
+                                  .read(cartNotifierProvider.notifier)
+                                  .updateCart(
+                                    cartItem.id!,
+                                    shippingOptionId: e.id,
+                                    shippingZoneId: e.shippingZoneId,
+                                  );
+                            },
+                            leading: _shippingOption?.id == e.id
+                                ? const Icon(Icons.check_circle)
+                                : const Icon(Icons.circle_outlined),
+                            contentPadding: EdgeInsets.zero,
+                            minLeadingWidth: 0,
+                          ),
+                        )
+                        .toList(),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
 }
 
 class CartGrandTotalPart extends StatelessWidget {
@@ -991,11 +1037,26 @@ class CartGrandTotalPart extends StatelessWidget {
           style: context.textTheme.caption!.copyWith(
               fontWeight: FontWeight.bold, color: kPrimaryFadeTextColor),
         ),
-        Text(cartItem.grandTotal!,
-            style: context.textTheme.bodyText2!.copyWith(
-                color:
-                    getColorBasedOnTheme(context, kPriceColor, kDarkPriceColor),
-                fontWeight: FontWeight.bold)),
+        Row(
+          children: [
+            Text(cartItem.grandTotal!,
+                style: context.textTheme.bodyText2!.copyWith(
+                    color: getColorBasedOnTheme(
+                        context, kPriceColor, kDarkPriceColor),
+                    fontWeight: FontWeight.bold)),
+            const SizedBox(width: 16),
+            // GestureDetector(
+            //   onTap: (){},
+            //   child: Text(
+            //     "[${LocaleKeys.apply_coupon.tr()}]",
+            //     style: context.textTheme.caption!.copyWith(
+            //         fontWeight: FontWeight.bold,
+            //         color: getColorBasedOnTheme(
+            //             context, kPrimaryColor, kLightColor)),
+            //   ),
+            // )
+          ],
+        ),
       ],
     );
   }

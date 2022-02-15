@@ -502,9 +502,8 @@ class OrderDetailsScreen extends ConsumerWidget {
             CustomSmallButton(
               text: LocaleKeys.dispute_details.tr(),
               onPressed: () {
-                context
-                    .read(disputeDetailsProvider.notifier)
-                    .getDisputeDetails(orderDetailsState.orderDetails!.id);
+                context.read(disputeDetailsProvider.notifier).getDisputeDetails(
+                    orderDetailsState.orderDetails!.disputeId);
                 context.nextPage(const DisputeDetailsScreen());
               },
             ),

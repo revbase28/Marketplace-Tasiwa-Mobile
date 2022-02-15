@@ -16,7 +16,6 @@ import 'package:zcart/riverpod/state/cart_state.dart';
 import 'package:zcart/riverpod/state/wishlist_state.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:zcart/views/screens/auth/login_screen.dart';
-import 'package:zcart/views/screens/bottom_nav_bar/bottom_nav_bar.dart';
 import 'package:zcart/views/screens/product_details/components/product_brand_card.dart';
 import 'package:zcart/views/screens/product_details/components/ratings_and_reviews.dart';
 import 'package:zcart/views/screens/product_details/components/shop_card.dart';

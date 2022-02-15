@@ -23,7 +23,6 @@ import 'package:zcart/riverpod/state/state.dart';
 import 'package:zcart/riverpod/state/wallet_state.dart';
 import 'package:zcart/riverpod/state/wishlist_state.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
-import 'package:zcart/views/screens/bottom_nav_bar/bottom_nav_bar.dart';
 import 'package:zcart/views/screens/brand/featured_brands.dart';
 import 'package:zcart/views/screens/product_list/recently_viewed.dart';
 import 'package:zcart/views/screens/tabs/account_tab/account/account_details_screen.dart';

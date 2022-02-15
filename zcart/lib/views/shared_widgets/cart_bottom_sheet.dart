@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:zcart/Theme/styles/colors.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
-import 'package:zcart/views/screens/bottom_nav_bar/bottom_nav_bar.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:zcart/views/screens/tabs/myCart_tab/my_cart_tab.dart';
 

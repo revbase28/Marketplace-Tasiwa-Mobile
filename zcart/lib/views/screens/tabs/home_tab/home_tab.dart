@@ -7,10 +7,10 @@ import 'package:nb_utils/nb_utils.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:zcart/Theme/styles/colors.dart';
 import 'package:zcart/data/models/deals/deal_of_the_day_model.dart' as deal;
-import 'package:zcart/data/network/network_utils.dart';
 import 'package:zcart/helper/app_images.dart';
 import 'package:zcart/helper/get_color_based_on_theme.dart';
 import 'package:zcart/riverpod/providers/deals_provider.dart';
+import 'package:zcart/riverpod/providers/package_info_provider.dart';
 import 'package:zcart/riverpod/providers/plugin_provider.dart';
 import 'package:zcart/riverpod/providers/provider.dart';
 import 'package:zcart/riverpod/state/deals_state.dart';
@@ -20,7 +20,6 @@ import 'package:zcart/views/screens/auth/not_logged_in_screen.dart';
 import 'package:zcart/views/screens/bottom_nav_bar/bottom_nav_bar.dart';
 import 'package:zcart/views/screens/brand/featured_brands.dart';
 import 'package:zcart/views/screens/product_details/product_details_screen.dart';
-import 'package:zcart/views/screens/tabs/account_tab/settings/settings_page.dart';
 import 'package:zcart/views/screens/tabs/home_tab/components/flash_deals.dart';
 import 'package:zcart/views/screens/tabs/home_tab/search/search_screen.dart';
 import 'package:zcart/views/shared_widgets/shared_widgets.dart';
@@ -463,11 +462,12 @@ class AppDrawer extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, watch) {
-    final cartState = watch(cartNotifierProvider);
+    final _cartState = watch(cartNotifierProvider);
+    final _packageInfoProvider = context.read(packageInfoProvider);
     int _cartItems = 0;
 
-    if (cartState is CartLoadedState) {
-      for (var item in cartState.cartList!) {
+    if (_cartState is CartLoadedState) {
+      for (var item in _cartState.cartList!) {
         _cartItems += item.items!.length;
       }
     }
@@ -583,10 +583,19 @@ class AppDrawer extends ConsumerWidget {
                   ),
                 ),
                 const Divider(),
-                if (!accessAllowed) const NotLoggedInSettingItems(),
-                if (accessAllowed) const CompanyInfoWidgets(),
+                const NotLoggedInSettingItems(),
               ],
             ),
+          ),
+          _packageInfoProvider.when(
+            data: (data) => Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              child: Text("v" + data.version + "+" + data.buildNumber,
+                  style: context.textTheme.subtitle2!.copyWith(
+                      fontWeight: FontWeight.bold, color: kFadeColor)),
+            ),
+            loading: () => const SizedBox(),
+            error: (_, __) => const SizedBox(),
           ),
         ],
       ),

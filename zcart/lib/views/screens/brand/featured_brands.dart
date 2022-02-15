@@ -7,7 +7,6 @@ import 'package:zcart/riverpod/providers/brand_provider.dart';
 import 'package:zcart/riverpod/state/brand_state.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:zcart/views/screens/bottom_nav_bar/bottom_nav_bar.dart';
 import 'package:zcart/views/screens/brand/brand_profile.dart';
 import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:velocity_x/velocity_x.dart';

@@ -167,192 +167,166 @@ class WishListTab extends ConsumerWidget {
                                                       Axis.horizontal,
                                                   child: Row(
                                                     children: [
-                                                      Container(
-                                                        decoration: BoxDecoration(
-                                                            color:
-                                                                kPrimaryColor,
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10)),
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .symmetric(
-                                                                horizontal: 10,
-                                                                vertical: 5),
-                                                        margin: const EdgeInsets
-                                                                .symmetric(
-                                                            vertical: 5),
-                                                        child: Text(
-                                                            "Staff Pick",
-                                                            style: context
-                                                                .textTheme
-                                                                .overline!
-                                                                .copyWith(
-                                                                    color:
-                                                                        kPrimaryLightTextColor)),
-                                                      ).pOnly(right: 3).visible(
-                                                          wishListState
-                                                                  .wishList[
-                                                                      index]
-                                                                  .stuffPick ??
-                                                              false),
-                                                      Container(
-                                                        decoration: BoxDecoration(
-                                                            color:
-                                                                kPrimaryColor,
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10)),
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .symmetric(
-                                                                horizontal: 10,
-                                                                vertical: 5),
-                                                        margin: const EdgeInsets
-                                                                .symmetric(
-                                                            vertical: 5),
-                                                        child: Text("Hot Item",
-                                                            style: context
-                                                                .textTheme
-                                                                .overline!
-                                                                .copyWith(
-                                                                    color:
-                                                                        kPrimaryLightTextColor)),
-                                                      ).pOnly(right: 3).visible(
-                                                          wishListState
-                                                                  .wishList[
-                                                                      index]
-                                                                  .hotItem ??
-                                                              false),
-                                                      Container(
-                                                        decoration: BoxDecoration(
-                                                            color:
-                                                                kPrimaryColor,
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10)),
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .symmetric(
-                                                                horizontal: 10,
-                                                                vertical: 5),
-                                                        margin: const EdgeInsets
-                                                                .symmetric(
-                                                            vertical: 5),
-                                                        child: Text(
-                                                            "Free Shipping",
-                                                            style: context
-                                                                .textTheme
-                                                                .overline!
-                                                                .copyWith(
-                                                                    color:
-                                                                        kPrimaryLightTextColor)),
-                                                      ).pOnly(right: 3).visible(
-                                                          wishListState
-                                                                  .wishList[
-                                                                      index]
-                                                                  .freeShipping ??
-                                                              false),
-                                                      Container(
-                                                        decoration: BoxDecoration(
-                                                            color:
-                                                                kPrimaryColor,
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10)),
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .symmetric(
-                                                                horizontal: 10,
-                                                                vertical: 5),
-                                                        margin: const EdgeInsets
-                                                                .symmetric(
-                                                            vertical: 5),
-                                                        child: Text("New",
-                                                            style: context
-                                                                .textTheme
-                                                                .overline!
-                                                                .copyWith(
-                                                                    color:
-                                                                        kPrimaryLightTextColor)),
-                                                      ).pOnly(right: 3).visible(
-                                                          wishListState
-                                                                  .wishList[
-                                                                      index]
-                                                                  .condition ==
-                                                              "New"),
-                                                      Container(
-                                                        decoration: BoxDecoration(
-                                                            color:
-                                                                kPrimaryColor,
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10)),
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .symmetric(
-                                                                horizontal: 10,
-                                                                vertical: 5),
-                                                        margin: const EdgeInsets
-                                                                .symmetric(
-                                                            vertical: 5),
-                                                        child: Text(
-                                                            wishListState
-                                                                .wishList[index]
-                                                                .discount!,
-                                                            style: context
-                                                                .textTheme
-                                                                .overline!
-                                                                .copyWith(
-                                                                    color:
-                                                                        kPrimaryLightTextColor)),
-                                                      ).pOnly(right: 3).visible(
-                                                          wishListState
-                                                                  .wishList[
-                                                                      index]
-                                                                  .hasOffer ??
-                                                              false),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                              const SizedBox(width: 8),
-                                              GestureDetector(
-                                                onTap: () async {
-                                                  showCustomConfirmDialog(
-                                                    context,
-                                                    dialogAnimation:
-                                                        DialogAnimation
-                                                            .SLIDE_RIGHT_LEFT,
-                                                    dialogType:
-                                                        DialogType.DELETE,
-                                                    positiveText: "Remove",
-                                                    title:
-                                                        "Remove Item from Wishlist",
-                                                    onAccept: () {
-                                                      toast(LocaleKeys
-                                                          .please_wait
-                                                          .tr());
-                                                      context
-                                                          .read(
-                                                              wishListNotifierProvider
-                                                                  .notifier)
-                                                          .removeFromWishList(
+                                                      if (wishListState
+                                                              .wishList[index]
+                                                              .stuffPick ??
+                                                          false)
+                                                        Container(
+                                                          decoration: BoxDecoration(
+                                                              color:
+                                                                  kPrimaryColor,
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          10)),
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .symmetric(
+                                                                  horizontal:
+                                                                      10,
+                                                                  vertical: 5),
+                                                          margin:
+                                                              const EdgeInsets
+                                                                      .symmetric(
+                                                                  vertical: 5),
+                                                          child: Text(
+                                                              "Staff Pick",
+                                                              style: context
+                                                                  .textTheme
+                                                                  .overline!
+                                                                  .copyWith(
+                                                                      color:
+                                                                          kPrimaryLightTextColor)),
+                                                        ).pOnly(right: 3),
+                                                      if (wishListState
+                                                              .wishList[index]
+                                                              .hotItem ??
+                                                          false)
+                                                        Container(
+                                                          decoration: BoxDecoration(
+                                                              color:
+                                                                  kPrimaryColor,
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          10)),
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .symmetric(
+                                                                  horizontal:
+                                                                      10,
+                                                                  vertical: 5),
+                                                          margin:
+                                                              const EdgeInsets
+                                                                      .symmetric(
+                                                                  vertical: 5),
+                                                          child: Text(
+                                                              "Hot Item",
+                                                              style: context
+                                                                  .textTheme
+                                                                  .overline!
+                                                                  .copyWith(
+                                                                      color:
+                                                                          kPrimaryLightTextColor)),
+                                                        ).pOnly(right: 3),
+                                                      if (wishListState
+                                                              .wishList[index]
+                                                              .freeShipping ??
+                                                          false)
+                                                        Container(
+                                                          decoration: BoxDecoration(
+                                                              color:
+                                                                  kPrimaryColor,
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          10)),
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .symmetric(
+                                                                  horizontal:
+                                                                      10,
+                                                                  vertical: 5),
+                                                          margin:
+                                                              const EdgeInsets
+                                                                      .symmetric(
+                                                                  vertical: 5),
+                                                          child: Text(
+                                                              "Free Shipping",
+                                                              style: context
+                                                                  .textTheme
+                                                                  .overline!
+                                                                  .copyWith(
+                                                                      color:
+                                                                          kPrimaryLightTextColor)),
+                                                        ).pOnly(right: 3),
+                                                      if (wishListState
+                                                              .wishList[index]
+                                                              .condition ==
+                                                          "New")
+                                                        Container(
+                                                          decoration: BoxDecoration(
+                                                              color:
+                                                                  kPrimaryColor,
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          10)),
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .symmetric(
+                                                                  horizontal:
+                                                                      10,
+                                                                  vertical: 5),
+                                                          margin:
+                                                              const EdgeInsets
+                                                                      .symmetric(
+                                                                  vertical: 5),
+                                                          child: Text("New",
+                                                              style: context
+                                                                  .textTheme
+                                                                  .overline!
+                                                                  .copyWith(
+                                                                      color:
+                                                                          kPrimaryLightTextColor)),
+                                                        ).pOnly(right: 3),
+                                                      if (wishListState
+                                                              .wishList[index]
+                                                              .hasOffer ??
+                                                          false)
+                                                        Container(
+                                                          decoration: BoxDecoration(
+                                                              color:
+                                                                  kPrimaryColor,
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          10)),
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .symmetric(
+                                                                  horizontal:
+                                                                      10,
+                                                                  vertical: 5),
+                                                          margin:
+                                                              const EdgeInsets
+                                                                      .symmetric(
+                                                                  vertical: 5),
+                                                          child: Text(
                                                               wishListState
                                                                   .wishList[
                                                                       index]
-                                                                  .id);
-                                                    },
-                                                  );
-                                                },
-                                                child: const Icon(
-                                                    Icons.favorite,
-                                                    color: Colors.red),
+                                                                  .discount!,
+                                                              style: context
+                                                                  .textTheme
+                                                                  .overline!
+                                                                  .copyWith(
+                                                                      color:
+                                                                          kPrimaryLightTextColor)),
+                                                        ).pOnly(right: 3),
+                                                    ],
+                                                  ),
+                                                ),
                                               ),
                                             ],
                                           ),
@@ -420,42 +394,74 @@ class WishListTab extends ConsumerWidget {
                                                       : const SizedBox(),
                                                 ],
                                               ),
-                                              wishListState.wishList[index]
-                                                          .rating !=
-                                                      null
-                                                  ? Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment.end,
-                                                      children: [
-                                                        const Icon(Icons.star,
-                                                            color:
-                                                                kDarkPriceColor,
-                                                            size: 14),
-                                                        Text(
-                                                          wishListState
-                                                              .wishList[index]
-                                                              .rating
-                                                              .toString(),
-                                                          textAlign:
-                                                              TextAlign.end,
-                                                          style: context
-                                                              .textTheme
-                                                              .caption!
-                                                              .copyWith(
-                                                                  fontSize: 10,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold),
-                                                        ),
-                                                      ],
-                                                    )
-                                                  : const SizedBox(),
                                             ],
                                           ),
                                         ],
                                       ),
                                     ),
-                                    const SizedBox(width: 10)
+                                    SizedBox(
+                                      height: 80,
+                                      child: Column(
+                                        children: [
+                                          GestureDetector(
+                                            onTap: () async {
+                                              showCustomConfirmDialog(
+                                                context,
+                                                dialogAnimation: DialogAnimation
+                                                    .SLIDE_RIGHT_LEFT,
+                                                dialogType: DialogType.DELETE,
+                                                positiveText: "Remove",
+                                                title:
+                                                    "Remove Item from Wishlist",
+                                                onAccept: () {
+                                                  toast(LocaleKeys.please_wait
+                                                      .tr());
+                                                  context
+                                                      .read(
+                                                          wishListNotifierProvider
+                                                              .notifier)
+                                                      .removeFromWishList(
+                                                          wishListState
+                                                              .wishList[index]
+                                                              .id);
+                                                },
+                                              );
+                                            },
+                                            child: const Icon(Icons.favorite,
+                                                color: Colors.red),
+                                          ),
+                                          const Spacer(),
+                                          wishListState
+                                                      .wishList[index].rating !=
+                                                  null
+                                              ? Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.end,
+                                                  children: [
+                                                    const Icon(Icons.star,
+                                                        color: kDarkPriceColor,
+                                                        size: 14),
+                                                    Text(
+                                                      wishListState
+                                                          .wishList[index]
+                                                          .rating
+                                                          .toString(),
+                                                      textAlign: TextAlign.end,
+                                                      style: context
+                                                          .textTheme.caption!
+                                                          .copyWith(
+                                                              fontSize: 10,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                    ),
+                                                  ],
+                                                )
+                                              : const SizedBox(),
+                                        ],
+                                      ),
+                                    ),
+                                    const SizedBox(width: 8)
                                   ],
                                 ),
                                 secondaryActions: <Widget>[

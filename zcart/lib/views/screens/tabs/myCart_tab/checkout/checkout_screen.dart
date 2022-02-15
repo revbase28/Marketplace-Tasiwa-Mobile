@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
@@ -34,8 +35,85 @@ import 'package:zcart/views/screens/tabs/account_tab/account/add_address_screen.
 import 'package:zcart/views/screens/tabs/account_tab/others/terms_and_conditions_screen.dart';
 import 'package:zcart/views/screens/tabs/myCart_tab/checkout/payments/payment_methods.dart';
 import 'package:zcart/views/shared_widgets/address_list_widget.dart';
+import 'package:zcart/views/shared_widgets/custom_confirm_dialog.dart';
 import 'package:zcart/views/shared_widgets/dropdown_field_loading_widget.dart';
 import 'package:zcart/views/shared_widgets/shared_widgets.dart';
+
+class CheckOutProgressItem extends StatelessWidget {
+  final bool isFirst;
+  final bool isLast;
+  final String title;
+  final IconData icon;
+
+  final Color progressColor;
+  const CheckOutProgressItem({
+    Key? key,
+    required this.isFirst,
+    required this.isLast,
+    required this.title,
+    required this.icon,
+    required this.progressColor,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    const _strokeWidth = 2.0;
+    return Column(
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: isFirst
+                  ? const SizedBox()
+                  : Container(height: _strokeWidth, color: progressColor),
+            ),
+            Container(
+              padding: const EdgeInsets.all(4),
+              decoration: BoxDecoration(
+                color: progressColor.withOpacity(0.2),
+                borderRadius: BorderRadius.circular(50),
+                border: Border.all(color: progressColor, width: _strokeWidth),
+              ),
+              child: Icon(icon, color: progressColor, size: 14),
+            ),
+            Expanded(
+              child: isLast
+                  ? const SizedBox()
+                  : Container(height: _strokeWidth, color: progressColor),
+            ),
+          ],
+        ),
+        const SizedBox(height: 4),
+        Text(
+          title,
+          style: context.textTheme.overline!
+              .copyWith(fontWeight: FontWeight.bold, color: progressColor),
+        ),
+      ],
+    );
+  }
+}
+
+class CheckOutProgress {
+  String title;
+  IconData icon;
+  CheckOutProgress({
+    required this.title,
+    required this.icon,
+  });
+}
+
+List<CheckOutProgress> _progressItems = [
+  CheckOutProgress(
+    title: "Shipping",
+    icon: Icons.local_shipping,
+  ),
+  CheckOutProgress(
+    title: "Order Details",
+    icon: Icons.receipt,
+  ),
+  CheckOutProgress(title: "Payment", icon: Icons.payment),
+];
 
 class CheckoutScreen extends StatefulWidget {
   final String? customerEmail;
@@ -54,14 +132,20 @@ class _CheckoutScreenState extends State<CheckoutScreen>
     with WidgetsBindingObserver {
   final _guestAddressFormKey = GlobalKey<FormState>();
   late PageController _pageController;
-
   Addresses? _selectedAddress;
-
   bool _keyboardVisible = false;
+
+  int _currentIndex = 0;
 
   @override
   void initState() {
     _pageController = PageController(initialPage: 0);
+
+    _pageController.addListener(() {
+      setState(() {
+        _currentIndex = _pageController.page?.round() ?? 0;
+      });
+    });
     WidgetsBinding.instance!.addObserver(this);
     super.initState();
   }
@@ -152,8 +236,52 @@ class _CheckoutScreenState extends State<CheckoutScreen>
               top: false,
               child: Scaffold(
                 appBar: AppBar(
-                  title: Text(LocaleKeys.checkout.tr()),
-                  systemOverlayStyle: SystemUiOverlayStyle.light,
+                  elevation: 4,
+                  shadowColor: getColorBasedOnTheme(
+                      context, kDarkColor.withOpacity(0.3), kDarkColor),
+                  backgroundColor: getColorBasedOnTheme(
+                      context, kLightBgColor, kDarkBgColor),
+                  iconTheme: IconThemeData(
+                      color: getColorBasedOnTheme(
+                          context, kDarkColor, kLightColor)),
+                  title: Text(
+                    (accessAllowed
+                            ? LocaleKeys.checkout.tr()
+                            : "Guest Checkout") +
+                        (widget.isOneCheckout ? " All" : ""),
+                    style: Theme.of(context)
+                        .textTheme
+                        .headline6!
+                        .copyWith(fontWeight: FontWeight.bold),
+                  ),
+                  systemOverlayStyle: getOverlayStyleBasedOnTheme(context),
+                  bottomOpacity: 0.8,
+                  bottom: PreferredSize(
+                    preferredSize: const Size.fromHeight(50),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: _progressItems.map((e) {
+                            bool _isDone =
+                                _currentIndex >= _progressItems.indexOf(e);
+                            return Expanded(
+                              child: CheckOutProgressItem(
+                                isFirst: _progressItems.indexOf(e) == 0,
+                                isLast: _progressItems.indexOf(e) ==
+                                    _progressItems.length - 1,
+                                title: e.title,
+                                icon: e.icon,
+                                progressColor:
+                                    _isDone ? kPrimaryColor : kFadeColor,
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                        const SizedBox(height: 16)
+                      ],
+                    ),
+                  ),
                 ),
                 body: Consumer(builder: (context, watch, child) {
                   final _cartDetailsProvider =
@@ -365,7 +493,7 @@ class CheckoutLoggedInAddressScreen extends StatelessWidget {
                     Expanded(
                         child: _userAddressProvider!.when(
                       data: (value) {
-                        if (value == null || value.isEmpty) {
+                        if (value == null) {
                           return const SizedBox();
                         } else {
                           return AddressListBuilder(
@@ -375,6 +503,20 @@ class CheckoutLoggedInAddressScreen extends StatelessWidget {
                                 _cartDetailsProvider.cartItemDetails?.data,
                             onAddressSelected: (index) {
                               onSelectedAddress(value[index]);
+                            },
+                            onTapDisabled: () {
+                              showCustomConfirmDialog(context,
+                                  dialogAnimation: DialogAnimation.DEFAULT,
+                                  transitionDuration:
+                                      const Duration(milliseconds: 0),
+                                  dialogType: DialogType.UPDATE,
+                                  primaryColor: kPrimaryColor,
+                                  title: "Shipping Address",
+                                  subTitle:
+                                      "To select this address change shipping area on the cart page!",
+                                  onAccept: () {
+                                context.pop();
+                              }, positiveText: "Change");
                             },
                             selectedAddressIndex: selectedAddress != null
                                 ? value.indexOf(selectedAddress!)
@@ -808,140 +950,64 @@ class ShippingDetails extends ConsumerWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 12),
                       child: ListTile(
                         onTap: () {
-                          showModalBottomSheet(
-                            context: context,
-                            backgroundColor: Colors.transparent,
-                            isScrollControlled: true,
-                            builder: (context) {
-                              return SizedBox(
-                                height: context.screenHeight * 0.7,
-                                child: ProductPageDefaultContainer(
-                                  padding: 24,
-                                  isFullPadding: true,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.stretch,
-                                    children: [
-                                      Text(
-                                        "Select Shipping",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headline6!
-                                            .copyWith(
-                                                fontWeight: FontWeight.bold),
-                                      ),
-                                      const SizedBox(height: 10),
-                                      Expanded(
-                                        child: ListView(
-                                          children: value
-                                              .map(
-                                                (e) => ListTile(
-                                                  title: Text(
-                                                    (e.name ?? "Unknown") +
-                                                        " by " +
-                                                        (e.carrierName ??
-                                                            "Unknown"),
-                                                    style: Theme.of(context)
-                                                        .textTheme
-                                                        .subtitle2!
-                                                        .copyWith(
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold),
-                                                  ),
-                                                  subtitle: Text(
-                                                    e.deliveryTakes ?? "",
-                                                    style: Theme.of(context)
-                                                        .textTheme
-                                                        .caption!,
-                                                  ),
-                                                  trailing: Text(
-                                                    e.cost ?? "0",
-                                                    style: Theme.of(context)
-                                                        .textTheme
-                                                        .bodyText2!
-                                                        .copyWith(
-                                                          color: getColorBasedOnTheme(
-                                                              context,
-                                                              kPriceColor,
-                                                              kDarkPriceColor),
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                        ),
-                                                  ),
-                                                  onTap: () async {
-                                                    Navigator.of(context).pop();
-                                                    context
-                                                        .read(
-                                                            cartNotifierProvider
-                                                                .notifier)
-                                                        .updateCart(
-                                                          cartItem.id!,
-                                                          shippingOptionId:
-                                                              e.id,
-                                                          shippingZoneId:
-                                                              e.shippingZoneId,
-                                                        );
-                                                    context
-                                                        .read(
-                                                            cartItemDetailsNotifierProvider
-                                                                .notifier)
-                                                        .updateCart(
-                                                          cartItem.id!,
-                                                          shippingOptionId:
-                                                              e.id,
-                                                          shippingZoneId:
-                                                              e.shippingZoneId,
-                                                        );
-                                                  },
-                                                  minLeadingWidth: 0,
-                                                  contentPadding:
-                                                      EdgeInsets.zero,
-                                                  leading: _shippingOption
-                                                              ?.id ==
-                                                          e.id
-                                                      ? const Icon(
-                                                          Icons.check_circle)
-                                                      : const Icon(Icons
-                                                          .circle_outlined),
-                                                ),
-                                              )
-                                              .toList(),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            },
-                          );
+                          _onTapSelectShippingOption(
+                              context, value, _shippingOption);
                         },
                         dense: true,
                         contentPadding: const EdgeInsets.symmetric(
                             horizontal: 12, vertical: 0),
-                        title: Text(
-                          LocaleKeys.shipping.tr() + ':',
-                          style: context.textTheme.caption!.copyWith(
-                              fontWeight: FontWeight.bold,
-                              color: kPrimaryFadeTextColor),
+                        title: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              LocaleKeys.shipping.tr() + ':',
+                              style: context.textTheme.caption!.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: kPrimaryFadeTextColor),
+                            ),
+                            CupertinoButton(
+                              padding: EdgeInsets.zero,
+                              minSize: 0,
+                              alignment: Alignment.centerRight,
+                              onPressed: () {
+                                _onTapSelectShippingOption(
+                                    context, value, _shippingOption);
+                              },
+                              child: Text(
+                                "Change",
+                                style: context.textTheme.caption!.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    color: kFadeColor),
+                              ),
+                            ),
+                          ],
                         ),
-                        trailing: Text(
-                          double.parse(_shippingOption.costRaw ?? "0") <= 0.0
-                              ? ""
-                              : (_shippingOption.cost ?? "0"),
-                          style: context.textTheme.subtitle2!.copyWith(
-                              fontWeight: FontWeight.bold,
-                              color: getColorBasedOnTheme(
-                                  context, kPriceColor, kDarkPriceColor)),
-                        ),
-                        subtitle: Text(
-                          (_shippingOption.name ?? 'Unknown') +
-                              " by " +
-                              (_shippingOption.carrierName ?? 'Unknown'),
-                          style: context.textTheme.subtitle2!.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+                        subtitle: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                (_shippingOption.name ?? 'Unknown') +
+                                    " by " +
+                                    (_shippingOption.carrierName ?? 'Unknown'),
+                                style: context.textTheme.subtitle2!.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              double.parse(_shippingOption.costRaw ?? "0") <=
+                                      0.0
+                                  ? ""
+                                  : (_shippingOption.cost ?? "0"),
+                              style: context.textTheme.subtitle2!.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: getColorBasedOnTheme(
+                                      context, kPriceColor, kDarkPriceColor)),
+                            )
+                          ],
+                        ).pOnly(top: 8),
                       ),
                     ),
               isOneCheckout ? const SizedBox() : const Divider(height: 8),
@@ -960,6 +1026,94 @@ class ShippingDetails extends ConsumerWidget {
       },
       loading: () => const SizedBox(),
       error: (error, stackTrace) => const SizedBox(),
+    );
+  }
+
+  Future<dynamic> _onTapSelectShippingOption(BuildContext context,
+      List<ShippingOption> value, ShippingOption? _shippingOption) {
+    return showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      builder: (context) {
+        return SizedBox(
+          height: context.screenHeight * 0.7,
+          child: ProductPageDefaultContainer(
+            padding: 24,
+            isFullPadding: true,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(
+                  "Select Shipping",
+                  style: Theme.of(context)
+                      .textTheme
+                      .headline6!
+                      .copyWith(fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 10),
+                Expanded(
+                  child: ListView(
+                    children: value
+                        .map(
+                          (e) => ListTile(
+                            title: Text(
+                              (e.name ?? "Unknown") +
+                                  " by " +
+                                  (e.carrierName ?? "Unknown"),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .subtitle2!
+                                  .copyWith(fontWeight: FontWeight.bold),
+                            ),
+                            subtitle: Text(
+                              e.deliveryTakes ?? "",
+                              style: Theme.of(context).textTheme.caption!,
+                            ),
+                            trailing: Text(
+                              e.cost ?? "0",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyText2!
+                                  .copyWith(
+                                    color: getColorBasedOnTheme(
+                                        context, kPriceColor, kDarkPriceColor),
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                            ),
+                            onTap: () async {
+                              Navigator.of(context).pop();
+                              context
+                                  .read(cartNotifierProvider.notifier)
+                                  .updateCart(
+                                    cartItem.id!,
+                                    shippingOptionId: e.id,
+                                    shippingZoneId: e.shippingZoneId,
+                                  );
+                              context
+                                  .read(
+                                      cartItemDetailsNotifierProvider.notifier)
+                                  .updateCart(
+                                    cartItem.id!,
+                                    shippingOptionId: e.id,
+                                    shippingZoneId: e.shippingZoneId,
+                                  );
+                            },
+                            minLeadingWidth: 0,
+                            contentPadding: EdgeInsets.zero,
+                            leading: _shippingOption?.id == e.id
+                                ? const Icon(Icons.check_circle)
+                                : const Icon(Icons.circle_outlined),
+                          ),
+                        )
+                        .toList(),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }
@@ -1189,26 +1343,30 @@ class CheckOutItemDetailsPage extends ConsumerWidget {
                               price: _subTotal,
                               subtitle: _subTotalSubtitle,
                             ),
-                            CheckOutDetailsPriceWidget(
-                              title: LocaleKeys.shipping.tr(),
-                              price: _shipping,
-                              subtitle: _shippingSubtitle,
-                            ),
-                            CheckOutDetailsPriceWidget(
-                              title: LocaleKeys.handling.tr(),
-                              price: _handling,
-                              subtitle: _handlingSubtitle,
-                            ),
-                            CheckOutDetailsPriceWidget(
-                              title: LocaleKeys.packaging.tr(),
-                              price: _packaging,
-                              subtitle: _packagingSubtitle,
-                            ),
-                            CheckOutDetailsPriceWidget(
-                              title: LocaleKeys.discount.tr(),
-                              price: _discount,
-                              subtitle: _discountSubtitle,
-                            ),
+                            if (double.parse(_shipping) > 0)
+                              CheckOutDetailsPriceWidget(
+                                title: LocaleKeys.shipping.tr(),
+                                price: _shipping,
+                                subtitle: _shippingSubtitle,
+                              ),
+                            if (double.parse(_handling) > 0)
+                              CheckOutDetailsPriceWidget(
+                                title: LocaleKeys.handling.tr(),
+                                price: _handling,
+                                subtitle: _handlingSubtitle,
+                              ),
+                            if (double.parse(_packaging) > 0)
+                              CheckOutDetailsPriceWidget(
+                                title: LocaleKeys.packaging.tr(),
+                                price: _packaging,
+                                subtitle: _packagingSubtitle,
+                              ),
+                            if (double.parse(_discount.substring(2)) > 0)
+                              CheckOutDetailsPriceWidget(
+                                title: LocaleKeys.discount.tr(),
+                                price: _discount,
+                                subtitle: _discountSubtitle,
+                              ),
                             const Divider(),
                             CheckOutDetailsPriceWidget(
                               title: "Total",
@@ -1292,32 +1450,52 @@ class CheckOutItemDetailsPage extends ConsumerWidget {
                                 price: _cartDetailsProvider
                                         .cartItemDetails!.data!.total ??
                                     "0"),
-                            CheckOutDetailsPriceWidget(
-                                title: LocaleKeys.shipping.tr(),
-                                price: _cartDetailsProvider
-                                        .cartItemDetails!.data!.shipping ??
-                                    "0"),
-                            CheckOutDetailsPriceWidget(
-                                title: LocaleKeys.packaging.tr(),
-                                price: _cartDetailsProvider
-                                        .cartItemDetails!.data!.packaging ??
-                                    "0"),
-                            CheckOutDetailsPriceWidget(
-                                title: LocaleKeys.handling.tr(),
-                                price: _cartDetailsProvider
-                                        .cartItemDetails!.data!.handling ??
-                                    "0"),
-                            CheckOutDetailsPriceWidget(
-                                title: LocaleKeys.taxes.tr(),
-                                price: _cartDetailsProvider
-                                        .cartItemDetails!.data!.taxes ??
-                                    "0"),
-                            CheckOutDetailsPriceWidget(
-                                title: LocaleKeys.discount.tr(),
-                                price: "- " +
-                                    (_cartDetailsProvider
-                                            .cartItemDetails!.data!.discount ??
-                                        "0")),
+                            if (double.parse(_cartDetailsProvider
+                                        .cartItemDetails!.data!.shippingRaw ??
+                                    "0") >
+                                0)
+                              CheckOutDetailsPriceWidget(
+                                  title: LocaleKeys.shipping.tr(),
+                                  price: _cartDetailsProvider
+                                          .cartItemDetails!.data!.shipping ??
+                                      "0"),
+                            if (double.parse(_cartDetailsProvider
+                                        .cartItemDetails!.data!.handlingRaw ??
+                                    "0") >
+                                0)
+                              CheckOutDetailsPriceWidget(
+                                  title: LocaleKeys.handling.tr(),
+                                  price: _cartDetailsProvider
+                                          .cartItemDetails!.data!.handling ??
+                                      "0"),
+                            if (double.parse(_cartDetailsProvider
+                                        .cartItemDetails!.data!.packagingRaw ??
+                                    "0") >
+                                0)
+                              CheckOutDetailsPriceWidget(
+                                  title: LocaleKeys.packaging.tr(),
+                                  price: _cartDetailsProvider
+                                          .cartItemDetails!.data!.packaging ??
+                                      "0"),
+                            if (double.parse(_cartDetailsProvider
+                                        .cartItemDetails!.data!.taxesRaw ??
+                                    "0") >
+                                0)
+                              CheckOutDetailsPriceWidget(
+                                  title: LocaleKeys.taxes.tr(),
+                                  price: _cartDetailsProvider
+                                          .cartItemDetails!.data!.taxes ??
+                                      "0"),
+                            if (double.parse(_cartDetailsProvider
+                                        .cartItemDetails!.data!.discountRaw ??
+                                    "0") >
+                                0)
+                              CheckOutDetailsPriceWidget(
+                                  title: LocaleKeys.discount.tr(),
+                                  price: "- " +
+                                      (_cartDetailsProvider.cartItemDetails!
+                                              .data!.discount ??
+                                          "0")),
                             const Divider(),
                             //Grand Total
                             CheckOutDetailsPriceWidget(

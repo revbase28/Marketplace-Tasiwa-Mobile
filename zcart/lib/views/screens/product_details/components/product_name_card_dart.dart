@@ -10,6 +10,7 @@ import 'package:zcart/data/models/product/product_details_model.dart';
 import 'package:zcart/data/network/api.dart';
 import 'package:zcart/helper/get_color_based_on_theme.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
+import 'package:zcart/views/shared_widgets/custom_small_button.dart';
 
 class ProductNameCard extends StatelessWidget {
   final ProductDetailsModel productModel;
@@ -147,96 +148,30 @@ class ProductNameCard extends StatelessWidget {
                         .copyWith(fontWeight: FontWeight.bold),
                   ).px(5),
                 ],
-              ).py(5),
-        SizedBox(
-          width:
-              productModel.data!.labels!.isEmpty ? null : context.screenWidth,
-          height: productModel.data!.labels!.isEmpty ? null : 40,
-          child: productModel.data!.labels!.isEmpty
-              ? Align(
-                  alignment: Alignment.centerLeft,
-                  child: Container(
-                    decoration: BoxDecoration(
-                        color: kPrimaryColor,
-                        borderRadius: BorderRadius.circular(10)),
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                    margin: const EdgeInsets.symmetric(vertical: 5),
-                    child: Text(productModel.data!.condition!,
-                        style: context.textTheme.overline!
-                            .copyWith(color: kPrimaryLightTextColor)),
-                  ).onInkTap(() {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        duration: const Duration(seconds: 8),
-                        content: Text(
-                          productModel.data!.conditionNote!,
-                          style: context.textTheme.caption!.copyWith(
-                              color: getColorBasedOnTheme(
-                                  context, kDarkColor, kLightColor)),
-                        ),
-                        shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(10),
-                                topRight: Radius.circular(10))),
-                      ),
-                    );
-                  }),
-                )
-              : ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: productModel.data!.labels!.length,
-                  scrollDirection: Axis.horizontal,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemBuilder: (context, index) {
-                    return Row(
-                      children: [
-                        index == 0
-                            ? Container(
-                                decoration: BoxDecoration(
-                                    color: kPrimaryColor,
-                                    borderRadius: BorderRadius.circular(10)),
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 10, vertical: 5),
-                                margin: const EdgeInsets.symmetric(vertical: 5),
-                                child: Text(productModel.data!.condition!,
-                                    style: context.textTheme.overline!.copyWith(
-                                        color: kPrimaryLightTextColor)),
-                              ).onInkTap(() {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    duration: const Duration(seconds: 8),
-                                    content: Text(
-                                      productModel.data!.conditionNote!,
-                                      style: context.textTheme.caption!
-                                          .copyWith(
-                                              color: getColorBasedOnTheme(
-                                                  context,
-                                                  kDarkColor,
-                                                  kLightColor)),
-                                    ),
-                                    shape: const RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(10),
-                                            topRight: Radius.circular(10))),
-                                  ),
-                                );
-                              })
-                            : const SizedBox(),
-                        Container(
-                          decoration: BoxDecoration(
-                              color: kPrimaryColor,
-                              borderRadius: BorderRadius.circular(10)),
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 5),
-                          margin: const EdgeInsets.symmetric(vertical: 5),
-                          child: Text(productModel.data!.labels![index],
-                              style: context.textTheme.overline!
-                                  .copyWith(color: kPrimaryLightTextColor)),
-                        ).pOnly(left: 5),
-                      ],
-                    );
-                  }),
+              ).py(4),
+        const SizedBox(height: 8),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          alignment: WrapAlignment.start,
+          children: [
+            if (productModel.data!.condition != null)
+              CustomSmallButton(
+                text: productModel.data!.condition!,
+                onPressed: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      duration: const Duration(seconds: 8),
+                      content: Text(productModel.data!.conditionNote!),
+                    ),
+                  );
+                },
+              ),
+            if (productModel.data!.labels != null &&
+                productModel.data!.labels!.isNotEmpty)
+              ...productModel.data!.labels!.map(
+                  (label) => CustomSmallButton(text: label, onPressed: () {})),
+          ],
         ),
       ],
     );

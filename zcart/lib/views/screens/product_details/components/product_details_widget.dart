@@ -143,6 +143,14 @@ class ProductDetailsWidget extends StatelessWidget {
                           details.data!.product!.description!,
                           enableCaching: true,
                           factoryBuilder: () => WidgetFactory(),
+                          isSelectable: true,
+                          textStyle: Theme.of(context).textTheme.subtitle2,
+                          // customWidgetBuilder: (e) {
+                          //   return Text(
+                          //     e.outerHtml,
+                          //     style: Theme.of(context).textTheme.subtitle2,
+                          //   );
+                          // },
                           onTapUrl: (url) {
                             launchURL(url);
                             return true;
@@ -171,6 +179,9 @@ class ProductDetailsWidget extends StatelessWidget {
                         HtmlWidget(
                           details.data!.description!,
                           enableCaching: true,
+                          factoryBuilder: () => WidgetFactory(),
+                          isSelectable: true,
+                          textStyle: Theme.of(context).textTheme.subtitle2,
                           onTapUrl: (url) {
                             launchURL(url);
                             return true;

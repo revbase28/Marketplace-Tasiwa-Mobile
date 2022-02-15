@@ -34,46 +34,31 @@ class ProductDetailsCardGridView extends StatelessWidget {
                           style: context.textTheme.headline6!
                               .copyWith(color: kPrimaryFadeTextColor))
                       .pOnly(bottom: 5),
-              // StaggeredGridView.builder(
-              //     gridDelegate: SliverStaggeredGridDelegateWithMaxCrossAxisExtent(
-              //       maxCrossAxisExtent: 10,
-              //       staggeredTileCount: productList.length,
-              //       staggeredTileBuilder: (index) => StaggeredTile.fit(1),
-              //       // crossAxisCount: 2,
-              //       // childAspectRatio: .75,
-              //       crossAxisSpacing: 10,
-              //       mainAxisSpacing: 10,
-              //     ),
-              //     itemBuilder: (context, index) {
-              //       return ProductDetailsCard(product: productList[index]);
-              //     }),
-
               productList.length - 1 == 0
                   ? const SizedBox(height: 10)
                   : GridView.builder(
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
-                        childAspectRatio: .75,
-                        crossAxisSpacing: 10,
-                        mainAxisSpacing: 10,
+                        childAspectRatio: 0.8,
+                        crossAxisSpacing: 0,
+                        mainAxisSpacing: 0,
                       ),
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
-                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      padding: const EdgeInsets.only(top: 10),
                       itemCount: productList.length.isOdd
                           ? productList.length - 1
                           : productList.length,
                       itemBuilder: (context, index) {
                         return ProductDetailsCard(product: productList[index]);
                       }),
-
               productList.length.isOdd
                   ? SizedBox(
                       height: MediaQuery.of(context).size.width * .6,
                       child: Padding(
                         padding: const EdgeInsets.only(
-                          bottom: 10,
+                          bottom: 2,
                         ),
                         child: ProductDetailsCard(
                             product: productList[productList.length - 1]),
