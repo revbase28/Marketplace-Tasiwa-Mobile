@@ -254,6 +254,7 @@ class DisputeCard extends StatelessWidget {
                         dialogAnimation: DialogAnimation.SLIDE_BOTTOM_TOP,
                         title: LocaleKeys.close_dispute.tr(),
                         subTitle: LocaleKeys.are_you_sure.tr(),
+                        primaryColor: kPrimaryColor,
                         onAccept: () {
                           context
                               .read(disputesProvider.notifier)

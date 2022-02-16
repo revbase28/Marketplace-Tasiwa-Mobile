@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:zcart/data/network/network_utils.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
-import 'package:zcart/views/screens/auth/not_logged_in_screen.dart';
+import 'package:zcart/views/screens/auth/login_screen.dart';
 import 'package:zcart/views/screens/tabs/brands_tab/brands_tab.dart';
 import 'package:zcart/views/screens/tabs/tabs.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -43,7 +43,9 @@ class TabNavigationItem {
           label: LocaleKeys.brands.tr(),
         ),
         TabNavigationItem(
-          page: accessAllowed ? const WishListTab() : const NotLoggedInScreen(),
+          page: accessAllowed
+              ? const WishListTab()
+              : const LoginScreen(needBackButton: false),
           icon: const Icon(Icons.favorite_border),
           selectedIcon: const Icon(Icons.favorite),
           title: Text(LocaleKeys.wishlist_text.tr()),
@@ -57,7 +59,9 @@ class TabNavigationItem {
           label: LocaleKeys.cart_text.tr(),
         ),
         TabNavigationItem(
-          page: accessAllowed ? const AccountTab() : const NotLoggedInScreen(),
+          page: accessAllowed
+              ? const AccountTab()
+              : const LoginScreen(needBackButton: false),
           icon: const Icon(Icons.person_outline),
           selectedIcon: const Icon(Icons.person),
           title: Text(LocaleKeys.account_text.tr()),

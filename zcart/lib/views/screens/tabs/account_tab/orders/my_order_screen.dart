@@ -324,6 +324,7 @@ class OrderCard extends StatelessWidget {
                             dialogType: DialogType.ACCEPT,
                             title: LocaleKeys.received_product.tr(),
                             subTitle: LocaleKeys.are_you_sure.tr(),
+                            primaryColor: kPrimaryColor,
                             positiveText: LocaleKeys.yes.tr(),
                             onAccept: () {
                               context

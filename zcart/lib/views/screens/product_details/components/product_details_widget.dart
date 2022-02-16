@@ -25,7 +25,7 @@ class ProductDetailsWidget extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              details.data!.keyFeatures != null &&
+              details.data!.keyFeatures == null ||
                       details.data!.keyFeatures!.isEmpty
                   ? const SizedBox()
                   : Text('${LocaleKeys.key_features.tr()}\n',
@@ -59,7 +59,11 @@ class ProductDetailsWidget extends StatelessWidget {
                       ).toList(),
                     )
                   : const SizedBox(),
-              Text('\n${LocaleKeys.technical_details.tr()}\n',
+              details.data!.keyFeatures == null ||
+                      details.data!.keyFeatures!.isEmpty
+                  ? const SizedBox()
+                  : const SizedBox(height: 8),
+              Text('${LocaleKeys.technical_details.tr()}\n',
                   style: context.textTheme.subtitle2!
                       .copyWith(fontWeight: FontWeight.bold)),
               Column(

@@ -71,45 +71,50 @@ class _BottomNavBarState extends State<BottomNavBar> {
             ),
             child: _selectPage(),
           ),
-          bottomNavigationBar: Stack(children: [
-            Directionality(
-              textDirection: TextDirection.ltr,
-              child: BottomNavigationBar(
-                currentIndex: _currentIndex!,
-                onTap: (int index) {
-                  setState(() => _currentIndex = index);
-                },
-                backgroundColor: kPrimaryColor,
-                type: BottomNavigationBarType.fixed,
-                unselectedItemColor: kBottomBarUnselectedColor,
-                selectedItemColor: kLightColor,
-                selectedFontSize: 11,
-                elevation: 0,
-                showUnselectedLabels: false,
-                items: [
-                  for (final item in TabNavigationItem.items)
-                    BottomNavigationBarItem(
-                      icon: item.icon,
-                      label: item.label,
-                      activeIcon: item.selectedIcon,
-                    )
-                ],
-              ),
-            ),
-            Positioned(
-              top: 5,
-              right: context.width() / 6 + 10,
-              child: CircleAvatar(
-                backgroundColor: kLightColor,
-                radius: 10,
-                child: Text(
-                  cartItems.toString(),
-                  style: context.theme.textTheme.caption!
-                      .copyWith(color: kPrimaryDarkTextColor),
+          bottomNavigationBar: Stack(
+            children: [
+              Directionality(
+                textDirection: TextDirection.ltr,
+                child: BottomNavigationBar(
+                  currentIndex: _currentIndex!,
+                  onTap: (int index) {
+                    setState(() => _currentIndex = index);
+                  },
+                  backgroundColor: kPrimaryColor,
+                  type: BottomNavigationBarType.fixed,
+                  unselectedItemColor: kBottomBarUnselectedColor,
+                  selectedItemColor: kLightColor,
+                  selectedFontSize: 11,
+                  elevation: 0,
+                  showUnselectedLabels: false,
+                  selectedLabelStyle:
+                      const TextStyle(fontWeight: FontWeight.bold),
+                  items: [
+                    for (final item in TabNavigationItem.items)
+                      BottomNavigationBarItem(
+                        icon: item.icon,
+                        label: item.label,
+                        activeIcon: item.selectedIcon,
+                      )
+                  ],
                 ),
               ),
-            ),
-          ]),
+              Positioned(
+                top: 5,
+                right: context.width() / 6 + 10,
+                child: CircleAvatar(
+                  backgroundColor: kLightColor,
+                  radius: 10,
+                  child: Text(
+                    cartItems.toString(),
+                    style: context.theme.textTheme.caption!.copyWith(
+                        color: kPrimaryDarkTextColor,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       );
     });

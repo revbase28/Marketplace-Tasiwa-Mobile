@@ -12,7 +12,7 @@ final sellerFeedbackProvider =
 class SellerFeedbackRepository extends StateNotifier<SellerFeedbackState> {
   SellerFeedbackRepository() : super(const SellerFeedbackInitialState());
 
-  Future postFeedback(orderId, rating, comment) async {
+  Future<bool> postFeedback(orderId, rating, comment) async {
     state = const SellerFeedbackLoadingState();
 
     dynamic responseBody;
@@ -27,8 +27,10 @@ class SellerFeedbackRepository extends StateNotifier<SellerFeedbackState> {
           bearerToken: true));
       if (responseBody is int) if (responseBody > 206) throw NetworkException();
       state = const SellerFeedbackLoadedState();
+      return true;
     } on NetworkException {
       state = const SellerFeedbackErrorState('Something went wrong');
+      return false;
     }
   }
 }
@@ -40,7 +42,7 @@ final productFeedbackProvider =
 class ProductFeedbackRepository extends StateNotifier<ProductFeedbackState> {
   ProductFeedbackRepository() : super(const ProductFeedbackInitialState());
 
-  Future postFeedback(
+  Future<bool> postFeedback(
       orderId, List listingId, List ratings, List comments) async {
     state = const ProductFeedbackLoadingState();
 
@@ -58,8 +60,10 @@ class ProductFeedbackRepository extends StateNotifier<ProductFeedbackState> {
           bearerToken: true));
       if (responseBody is int) if (responseBody > 206) throw NetworkException();
       state = const ProductFeedbackLoadedState();
+      return true;
     } on NetworkException {
       state = const ProductFeedbackErrorState('Something went wrong');
+      return false;
     }
   }
 }

@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:velocity_x/velocity_x.dart';
@@ -83,7 +84,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           data: (value) {
             if (value == null) {
               return Scaffold(
-                appBar: AppBar(title: const Text("Product Details")),
+                appBar: AppBar(
+                  title: const Text("Product Details"),
+                  systemOverlayStyle: SystemUiOverlayStyle.light,
+                ),
                 body: Center(child: Text(LocaleKeys.something_went_wrong.tr())),
               );
             } else {
@@ -101,9 +105,14 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           },
           loading: () => Scaffold(body: const ProductLoadingWidget().p(10)),
           error: (error, stackTrace) => Scaffold(
-              appBar: AppBar(title: const Text("Product Details")),
+              appBar: AppBar(
+                title: const Text("Product Details"),
+                systemOverlayStyle: SystemUiOverlayStyle.light,
+              ),
               body: Center(
-                child: Text(error.toString()),
+                child: Text(
+                  error.toString(),
+                ),
               )),
         );
       },
@@ -140,6 +149,8 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
   final List<ShippingOption> _shippingOptions = [];
   final List<Attribute> _selectedAttributes = [];
   Map<String, AttributeValue>? _allAttributes;
+
+  bool _isNotAvailable = false;
 
   void _increaseQuantity() {
     setState(() {
@@ -251,7 +262,9 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
                       const SizedBox(height: 10),
                       ProductPageDefaultContainer(
                           isFullPadding: true,
-                          child: ProductNameCard(productModel: _details)),
+                          child: ProductNameCard(
+                              productModel: _details,
+                              isNotAvailable: _isNotAvailable)),
                       const SizedBox(height: 10),
 
                       _countries.isEmpty
@@ -281,7 +294,11 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
                                             .copyWith(
                                                 fontWeight: FontWeight.bold)),
                                     Text(
-                                        (_details.data?.stockQuantity ?? 0)
+                                        (_isNotAvailable
+                                                    ? 0
+                                                    : _details.data
+                                                            ?.stockQuantity ??
+                                                        0)
                                                 .toString() +
                                             " " +
                                             LocaleKeys.in_stock.tr(),
@@ -313,16 +330,19 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
                                           color: getColorBasedOnTheme(
                                               context, kDarkColor, kLightColor),
                                         ),
-                                        onPressed: _quantity ==
-                                                _details.data!.minOrderQuantity
-                                            ? () {
-                                                toast(
-                                                  LocaleKeys
-                                                      .reached_minimum_quantity
-                                                      .tr(),
-                                                );
-                                              }
-                                            : _decreaseQuantity,
+                                        onPressed: _isNotAvailable
+                                            ? null
+                                            : _quantity ==
+                                                    _details
+                                                        .data!.minOrderQuantity
+                                                ? () {
+                                                    toast(
+                                                      LocaleKeys
+                                                          .reached_minimum_quantity
+                                                          .tr(),
+                                                    );
+                                                  }
+                                                : _decreaseQuantity,
                                       ),
                                       const SizedBox(width: 8),
                                       Text(
@@ -340,16 +360,18 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
                                           color: getColorBasedOnTheme(
                                               context, kDarkColor, kLightColor),
                                         ),
-                                        onPressed: _quantity ==
-                                                _details.data!.stockQuantity
-                                            ? () {
-                                                toast(
-                                                  LocaleKeys
-                                                      .reached_maximum_quantity
-                                                      .tr(),
-                                                );
-                                              }
-                                            : _increaseQuantity,
+                                        onPressed: _isNotAvailable
+                                            ? null
+                                            : _quantity ==
+                                                    _details.data!.stockQuantity
+                                                ? () {
+                                                    toast(
+                                                      LocaleKeys
+                                                          .reached_maximum_quantity
+                                                          .tr(),
+                                                    );
+                                                  }
+                                                : _increaseQuantity,
                                       ),
                                     ],
                                   ),
@@ -460,30 +482,35 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
                       const SizedBox(width: 10),
                       Expanded(
                         child: ProductDetailsPageIconButton(
-                          backgroundColor: kPrimaryColor,
+                          backgroundColor:
+                              _isNotAvailable ? kFadeColor : kPrimaryColor,
                           isNoWidth: true,
-                          onPressed: _selectedShippingOption == null
-                              ? () {
-                                  toast("Please select shipping option!");
-                                }
-                              : () async {
-                                  if (_details.data!.stockQuantity == null ||
-                                      _details.data!.stockQuantity! < 0) {
-                                    toast("Out of stock");
-                                    return;
-                                  } else {
-                                    toast(LocaleKeys.please_wait.tr());
-                                    await context
-                                        .read(cartNotifierProvider.notifier)
-                                        .addToCart(
-                                            context, _details.data!.slug!,
-                                            countryId: _countryId,
-                                            quantity: _quantity,
-                                            shippingOptionId: _shippingId,
-                                            stateId: _stateId,
-                                            shippingZoneId: _shippingZoneId);
-                                  }
-                                },
+                          onPressed: _isNotAvailable
+                              ? () {}
+                              : _selectedShippingOption == null
+                                  ? () {
+                                      toast("Please select shipping option!");
+                                    }
+                                  : () async {
+                                      if (_details.data!.stockQuantity ==
+                                              null ||
+                                          _details.data!.stockQuantity! < 0) {
+                                        toast("Out of stock");
+                                        return;
+                                      } else {
+                                        toast(LocaleKeys.please_wait.tr());
+                                        await context
+                                            .read(cartNotifierProvider.notifier)
+                                            .addToCart(
+                                                context, _details.data!.slug!,
+                                                countryId: _countryId,
+                                                quantity: _quantity,
+                                                shippingOptionId: _shippingId,
+                                                stateId: _stateId,
+                                                shippingZoneId:
+                                                    _shippingZoneId);
+                                      }
+                                    },
                           icon: Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 16),
                             child: Row(
@@ -504,14 +531,16 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
                                           fontWeight: FontWeight.bold,
                                           color: kLightColor,
                                         )),
-                                    Text(
-                                      "${LocaleKeys.total.tr()} - ${_details.data!.currencySymbol!}${_totalPrice.toDoubleStringAsPrecised(length: 2)}",
-                                      style:
-                                          context.textTheme.overline!.copyWith(
-                                        fontWeight: FontWeight.bold,
-                                        color: kLightColor,
-                                      ),
-                                    )
+                                    _isNotAvailable
+                                        ? const SizedBox()
+                                        : Text(
+                                            "${LocaleKeys.total.tr()} - ${_details.data!.currencySymbol!}${_totalPrice.toDoubleStringAsPrecised(length: 2)}",
+                                            style: context.textTheme.overline!
+                                                .copyWith(
+                                              fontWeight: FontWeight.bold,
+                                              color: kLightColor,
+                                            ),
+                                          )
                                   ],
                                 ),
                               ],
@@ -606,6 +635,7 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
                 onTap: () async {
                   final _result =
                       await _getAttribute(e, _allAttributes![e.id.toString()]!);
+
                   if (_result != null) {
                     if (_result.value == e.value) {
                       debugPrint("Same");
@@ -623,16 +653,24 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
                             _requestBody,
                           );
 
+                      setState(() {
+                        _selectedAttributes[_selectedAttributes.indexOf(e)] =
+                            _result;
+                      });
+
                       if (_newVariant != null) {
                         setState(() {
-                          _selectedAttributes[_selectedAttributes.indexOf(e)] =
-                              _result;
+                          _isNotAvailable = false;
                         });
                         debugPrint(_newVariant.data.slug);
                         widget.onChangedVariant(_newVariant.data.slug!);
+                      } else {
+                        setState(() {
+                          _isNotAvailable = true;
+                        });
                       }
                     }
-                  }
+                  } else {}
                 },
               ),
             )

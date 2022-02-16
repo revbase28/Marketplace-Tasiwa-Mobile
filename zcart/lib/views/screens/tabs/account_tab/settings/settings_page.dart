@@ -11,6 +11,7 @@ import 'package:nb_utils/nb_utils.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:restart_app/restart_app.dart';
+import 'package:zcart/Theme/styles/colors.dart';
 import 'package:zcart/config/config.dart';
 import 'package:zcart/data/controller/others/others_controller.dart';
 import 'package:zcart/helper/constants.dart';
@@ -97,6 +98,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           context,
                           title: "Are you sure to sign out?",
                           dialogAnimation: DialogAnimation.SLIDE_BOTTOM_TOP,
+                          primaryColor: kPrimaryColor,
                           negativeText: LocaleKeys.no.tr(),
                           positiveText: LocaleKeys.yes.tr(),
                           onAccept: () async {
@@ -135,6 +137,7 @@ Future<void> clearCache(BuildContext context) async {
         "This will delete all of your local data and signed you out if you are signed in.",
     negativeText: LocaleKeys.no.tr(),
     positiveText: LocaleKeys.yes.tr(),
+    primaryColor: kPrimaryColor,
     onAccept: () async {
       _clearAll().then((value) async {
         await Restart.restartApp();

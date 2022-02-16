@@ -65,10 +65,12 @@ class PersonalDetails extends StatelessWidget {
                                   _dateOfBirth != null
                                       ? getDateFormatedToString(_dateOfBirth!)
                                       : "",
-                                );
-                            await context
-                                .read(userNotifierProvider.notifier)
-                                .getUserInfo();
+                                )
+                                .then((value) async {
+                              await context
+                                  .read(userNotifierProvider.notifier)
+                                  .getUserInfo();
+                            });
                           }
                         },
                         child: Text(LocaleKeys.update.tr())),

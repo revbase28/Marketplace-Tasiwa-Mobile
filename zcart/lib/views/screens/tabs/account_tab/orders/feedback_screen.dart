@@ -9,11 +9,10 @@ import 'package:zcart/Theme/styles/colors.dart';
 import 'package:zcart/data/controller/feedback/feedback_controller.dart';
 import 'package:zcart/data/models/orders/order_details_model.dart';
 import 'package:zcart/helper/get_color_based_on_theme.dart';
-import 'package:zcart/riverpod/providers/provider.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:zcart/views/screens/tabs/myCart_tab/checkout/checkout_screen.dart';
-import 'package:zcart/views/shared_widgets/custom_textfield.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:zcart/views/shared_widgets/shared_widgets.dart';
 
 class FeedbackScreen extends StatefulWidget {
   final Order order;
@@ -32,6 +31,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
   final _productFormKey = GlobalKey<FormState>();
   final TextEditingController _shopRatingController = TextEditingController();
   final TextEditingController _shopCommentController = TextEditingController();
+  final _pageController = PageController();
 
   List<int?> listingIdList = [];
 
@@ -74,6 +74,14 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
   }
 
   @override
+  void initState() {
+    for (var _ in widget.order.items!) {
+      ratingList.add(0);
+    }
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
@@ -83,56 +91,89 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
         appBar: AppBar(
           systemOverlayStyle: SystemUiOverlayStyle.light,
           title: Text(LocaleKeys.order_feedback.tr()),
-          centerTitle: true,
-          automaticallyImplyLeading: true,
-          elevation: 0,
-          actions: [
-            IconButton(
-              onPressed: () {
-                if (_formKey.currentState!.validate()) {
-                  if (_productFormKey.currentState!.validate()) {
-                    if (listingIdList.length == widget.order.items!.length &&
-                        feedbackList.length == widget.order.items!.length) {
-                      context
-                          .read(sellerFeedbackProvider.notifier)
-                          .postFeedback(
-                            widget.order.id,
-                            _shopRatingController.text,
-                            _shopCommentController.text,
-                          )
-                          .then((value) => context
-                              .read(productFeedbackProvider.notifier)
-                              .postFeedback(
-                                widget.order.id,
-                                listingIdList,
-                                ratingList,
-                                feedbackList,
-                              ))
-                          .then((value) => context
-                                  .read(ordersProvider.notifier)
-                                  .orders(ignoreLoadingState: false)
-                                  .then((value) {
-                                context.pop();
-                                context.pop();
-                              }));
-                    }
-                  } else {
-                    toast(LocaleKeys.rate_all_product.tr());
-                  }
-                }
-              },
-              icon: const Icon(
-                Icons.check,
-                color: kLightColor,
-              ),
-            )
-          ],
         ),
-        body: SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            children: [
-              Container(
+        body: PageView(
+          controller: _pageController,
+          physics: const NeverScrollableScrollPhysics(),
+          children: [
+            SingleChildScrollView(
+              padding: const EdgeInsets.all(16),
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: getColorBasedOnTheme(
+                      context, kLightColor, kDarkCardBgColor),
+                ),
+                child: Form(
+                  key: _productFormKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(LocaleKeys.rate_product.tr(),
+                          style: context.textTheme.headline6),
+                      const SizedBox(height: 16),
+                      ListView(
+                        padding: EdgeInsets.zero,
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        children: widget.order.items!
+                            .map(
+                              (e) => Column(
+                                children: [
+                                  _SingleProductRatingCard(
+                                    order: widget.order,
+                                    index: widget.order.items!.indexOf(e),
+                                    updateRatingList: _updateRatingList,
+                                    updateFeedbackList: _updateFeedbackList,
+                                  ),
+                                  widget.order.items!.indexOf(e) ==
+                                          widget.order.items!.length - 1
+                                      ? const SizedBox()
+                                      : const Divider(),
+                                ],
+                              ),
+                            )
+                            .toList(),
+                      ),
+                      const SizedBox(height: 8),
+                      CustomButton(
+                        buttonText: LocaleKeys.submit.tr(),
+                        onTap: () async {
+                          if (_productFormKey.currentState!.validate()) {
+                            if (listingIdList.length ==
+                                    widget.order.items!.length &&
+                                feedbackList.length ==
+                                    widget.order.items!.length) {
+                              final _result = await context
+                                  .read(productFeedbackProvider.notifier)
+                                  .postFeedback(
+                                    widget.order.id,
+                                    listingIdList,
+                                    ratingList,
+                                    feedbackList,
+                                  );
+
+                              if (_result) {
+                                _pageController.nextPage(
+                                  duration: const Duration(milliseconds: 300),
+                                  curve: Curves.easeIn,
+                                );
+                              }
+                            }
+                          } else {
+                            toast(LocaleKeys.rate_all_product.tr());
+                          }
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            SingleChildScrollView(
+              padding: const EdgeInsets.all(16),
+              child: Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
@@ -143,6 +184,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                   key: _formKey,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(LocaleKeys.rate_seller.tr(),
                           style: context.textTheme.headline6),
@@ -181,56 +223,152 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                         maxLines: 3,
                         controller: _shopCommentController,
                       ),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(height: 16),
-              Container(
-                padding: const EdgeInsets.only(
-                  left: 16,
-                  right: 16,
-                  top: 16,
-                ),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: getColorBasedOnTheme(
-                      context, kLightColor, kDarkCardBgColor),
-                ),
-                child: Form(
-                  key: _productFormKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(LocaleKeys.rate_product.tr(),
-                          style: context.textTheme.headline6),
-                      const SizedBox(height: 16),
-                      ListView(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        children: widget.order.items!
-                            .map(
-                              (e) => Column(
-                                children: [
-                                  _SingleProductRatingCard(
-                                    order: widget.order,
-                                    index: widget.order.items!.indexOf(e),
-                                    updateRatingList: _updateRatingList,
-                                    updateFeedbackList: _updateFeedbackList,
-                                  ),
-                                  const Divider(),
-                                ],
-                              ),
-                            )
-                            .toList(),
+                      const SizedBox(height: 8),
+                      CustomButton(
+                        buttonText: LocaleKeys.submit.tr(),
+                        onTap: () async {
+                          if (_formKey.currentState!.validate()) {
+                            final _result = await context
+                                .read(sellerFeedbackProvider.notifier)
+                                .postFeedback(
+                                  widget.order.id,
+                                  _shopRatingController.text,
+                                  _shopCommentController.text,
+                                );
+
+                            if (_result) {
+                              context.pop();
+                              context.pop();
+                            }
+                          } else {
+                            toast(LocaleKeys.rate_seller.tr());
+                          }
+                        },
                       ),
                     ],
                   ),
                 ),
-              )
-            ],
-          ),
+              ),
+            ),
+          ],
         ),
+        // body: SingleChildScrollView(
+        //   padding: const EdgeInsets.all(16),
+        //   child: Column(
+        //     children: [
+        //       Container(
+        //         padding: const EdgeInsets.all(16),
+        //         decoration: BoxDecoration(
+        //           borderRadius: BorderRadius.circular(10),
+        //           color: getColorBasedOnTheme(
+        //               context, kLightColor, kDarkCardBgColor),
+        //         ),
+        //         child: Form(
+        //           key: _formKey,
+        //           child: Column(
+        //             crossAxisAlignment: CrossAxisAlignment.start,
+        //             children: [
+        //               Text(LocaleKeys.rate_seller.tr(),
+        //                   style: context.textTheme.headline6),
+        //               CustomShopCard(
+        //                 image: widget.order.shop!.image!,
+        //                 title: widget.order.shop!.name ?? "Unknown",
+        //                 verifiedText: widget.order.shop!.verifiedText ?? "",
+        //               ),
+        //               const Divider(height: 0),
+        //               const SizedBox(height: 16),
+        //               RatingBar.builder(
+        //                 initialRating: double.parse('0.00'),
+        //                 minRating: 1,
+        //                 direction: Axis.horizontal,
+        //                 itemCount: 5,
+        //                 itemSize: 25,
+        //                 itemPadding: const EdgeInsets.only(right: 5),
+        //                 itemBuilder: (context, _) =>
+        //                     const Icon(Icons.star, color: kDarkPriceColor),
+        //                 onRatingUpdate: (rating) {
+        //                   _shopRatingController.text = '${rating.toInt()}';
+        //                 },
+        //               ),
+        //               const SizedBox(height: 16),
+        //               CustomTextField(
+        //                 title: LocaleKeys.write_a_feedback.tr(),
+        //                 hintText: LocaleKeys.write_about_experience.tr(),
+        //                 validator: (value) {
+        //                   if (value!.length < 10) {
+        //                     return LocaleKeys.comment_minimum_requirement.tr();
+        //                   } else if (value.length > 250) {
+        //                     return LocaleKeys.comment_maximum_requirement.tr();
+        //                   }
+        //                   return null;
+        //                 },
+        //                 maxLines: 3,
+        //                 controller: _shopCommentController,
+        //               ),
+        //             ],
+        //           ),
+        //         ),
+        //       ),
+        //       const SizedBox(height: 16),
+        //       Container(
+        //         padding: const EdgeInsets.only(
+        //           left: 16,
+        //           right: 16,
+        //           top: 16,
+        //         ),
+        //         decoration: BoxDecoration(
+        //           borderRadius: BorderRadius.circular(10),
+        //           color: getColorBasedOnTheme(
+        //               context, kLightColor, kDarkCardBgColor),
+        //         ),
+        //         child: Form(
+        //           key: _productFormKey,
+        //           child: Column(
+        //             crossAxisAlignment: CrossAxisAlignment.start,
+        //             children: [
+        //               Text(LocaleKeys.rate_product.tr(),
+        //                   style: context.textTheme.headline6),
+        //               const SizedBox(height: 16),
+        //               ListView(
+        //                 shrinkWrap: true,
+        //                 physics: const NeverScrollableScrollPhysics(),
+        //                 children: widget.order.items!
+        //                     .map(
+        //                       (e) => Column(
+        //                         children: [
+        //                           _SingleProductRatingCard(
+        //                             order: widget.order,
+        //                             index: widget.order.items!.indexOf(e),
+        //                             updateRatingList: _updateRatingList,
+        //                             updateFeedbackList: _updateFeedbackList,
+        //                           ),
+        //                           const Divider(),
+        //                         ],
+        //                       ),
+        //                     )
+        //                     .toList(),
+        //               ),
+        //             ],
+        //           ),
+        //         ),
+        //       ),
+        //       const SizedBox(height: 8),
+        //       CustomButton(
+        //         buttonText: LocaleKeys.submit.tr(),
+        //         onTap: () async {
+        //           if (_formKey.currentState!.validate()) {
+        //             if (_productFormKey.currentState!.validate()) {
+        //               if (listingIdList.length == widget.order.items!.length &&
+        //                   feedbackList.length == widget.order.items!.length) {}
+        //             } else {
+        //               toast(LocaleKeys.rate_all_product.tr());
+        //             }
+        //           }
+        //         },
+        //       ),
+        //     ],
+        //   ),
+        // ),
       ),
     );
   }
@@ -330,3 +468,29 @@ class _SingleProductRatingCardState extends State<_SingleProductRatingCard> {
     );
   }
 }
+
+
+                        // context
+                        //     .read(sellerFeedbackProvider.notifier)
+                        //     .postFeedback(
+                        //       widget.order.id,
+                        //       _shopRatingController.text,
+                        //       _shopCommentController.text,
+                        //     );
+                        // .then((value) {
+                        //   return context
+                        //     .read(productFeedbackProvider.notifier)
+                        //     .postFeedback(
+                        //       widget.order.id,
+                        //       listingIdList,
+                        //       ratingList,
+                        //       feedbackList,
+                        //     );
+                        // })
+                        // .then((value) => context
+                        //         .read(ordersProvider.notifier)
+                        //         .orders(ignoreLoadingState: false)
+                        //         .then((value) {
+                        //       context.pop();
+                        //       context.pop();
+                        //     }));

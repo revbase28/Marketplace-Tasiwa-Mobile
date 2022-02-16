@@ -521,6 +521,7 @@ class OrderDetailsScreen extends ConsumerWidget {
                     dialogAnimation: DialogAnimation.SLIDE_BOTTOM_TOP,
                     title: LocaleKeys.received_product.tr(),
                     subTitle: LocaleKeys.are_you_sure.tr(),
+                    primaryColor: kPrimaryColor,
                     positiveText: LocaleKeys.yes.tr(),
                     onAccept: () {
                       context

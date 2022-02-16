@@ -14,9 +14,11 @@ import 'package:zcart/views/shared_widgets/custom_small_button.dart';
 
 class ProductNameCard extends StatelessWidget {
   final ProductDetailsModel productModel;
+  final bool isNotAvailable;
   const ProductNameCard({
     Key? key,
     required this.productModel,
+    required this.isNotAvailable,
   }) : super(key: key);
 
   @override
@@ -27,75 +29,85 @@ class ProductNameCard extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Container(
-          padding: _hasOffer
-              ? const EdgeInsets.symmetric(horizontal: 16, vertical: 8)
-              : null,
-          decoration: _hasOffer
-              ? BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [kGradientColor1, kGradientColor2],
-                  ),
-                )
-              : null,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Wrap(
-                crossAxisAlignment: WrapCrossAlignment.center,
-                runSpacing: 4,
-                children: [
-                  Text(
-                    productModel.data!.hasOffer!
-                        ? productModel.data!.offerPrice != null
-                            ? productModel.data!.offerPrice!
-                            : productModel.data!.price!
-                        : productModel.data!.price!,
-                    style: context.textTheme.headline6!.copyWith(
-                      color: _hasOffer
-                          ? kLightColor
-                          : getColorBasedOnTheme(
-                              context, kPriceColor, kDarkPriceColor),
-                      fontWeight: FontWeight.w900,
+        isNotAvailable
+            ? Text(
+                "Out of Stock",
+                style: Theme.of(context).textTheme.headline6!.copyWith(
+                      color: getColorBasedOnTheme(
+                          context, kPriceColor, kDarkPriceColor),
                     ),
-                  ),
-                  Text(
-                    productModel.data!.hasOffer!
-                        ? productModel.data!.offerPrice != null
-                            ? productModel.data!.price!
-                            : ""
-                        : "",
-                    style: context.textTheme.caption!.copyWith(
-                      decoration: TextDecoration.lineThrough,
-                      color: _hasOffer ? Colors.white60 : kPrimaryFadeTextColor,
-                      fontStyle: FontStyle.italic,
-                      fontWeight: FontWeight.bold,
+              )
+            : Container(
+                padding: _hasOffer
+                    ? const EdgeInsets.symmetric(horizontal: 16, vertical: 8)
+                    : null,
+                decoration: _hasOffer
+                    ? BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        gradient: LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [kGradientColor1, kGradientColor2],
+                        ),
+                      )
+                    : null,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Wrap(
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      runSpacing: 4,
+                      children: [
+                        Text(
+                          productModel.data!.hasOffer!
+                              ? productModel.data!.offerPrice != null
+                                  ? productModel.data!.offerPrice!
+                                  : productModel.data!.price!
+                              : productModel.data!.price!,
+                          style: context.textTheme.headline6!.copyWith(
+                            color: _hasOffer
+                                ? kLightColor
+                                : getColorBasedOnTheme(
+                                    context, kPriceColor, kDarkPriceColor),
+                            fontWeight: FontWeight.w900,
+                          ),
+                        ),
+                        Text(
+                          productModel.data!.hasOffer!
+                              ? productModel.data!.offerPrice != null
+                                  ? productModel.data!.price!
+                                  : ""
+                              : "",
+                          style: context.textTheme.caption!.copyWith(
+                            decoration: TextDecoration.lineThrough,
+                            color: _hasOffer
+                                ? Colors.white60
+                                : kPrimaryFadeTextColor,
+                            fontStyle: FontStyle.italic,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ).pOnly(left: 8),
+                      ],
                     ),
-                  ).pOnly(left: 8),
-                ],
-              ),
-              _hasOffer
-                  ? SlideCountdown(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 4, vertical: 8),
-                      duration: productModel.data!.offerEnd!
-                          .difference(DateTime.now()),
-                      decoration: const BoxDecoration(),
-                      fade: true,
-                      textStyle:
-                          Theme.of(context).textTheme.headline6!.copyWith(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w900,
-                              ),
-                    )
-                  : const SizedBox()
-            ],
-          ),
-        ).py(5),
+                    _hasOffer
+                        ? SlideCountdown(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 4, vertical: 8),
+                            duration: productModel.data!.offerEnd!
+                                .difference(DateTime.now()),
+                            decoration: const BoxDecoration(),
+                            fade: true,
+                            textStyle:
+                                Theme.of(context).textTheme.headline6!.copyWith(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w900,
+                                    ),
+                          )
+                        : const SizedBox()
+                  ],
+                ),
+              ).py(5),
         Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [

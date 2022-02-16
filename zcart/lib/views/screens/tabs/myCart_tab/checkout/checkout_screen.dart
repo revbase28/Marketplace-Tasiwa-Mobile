@@ -28,92 +28,15 @@ import 'package:zcart/riverpod/state/address/states_state.dart';
 import 'package:zcart/riverpod/state/cart_state.dart';
 import 'package:zcart/riverpod/state/checkout_state.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
-import 'package:zcart/views/screens/bottom_nav_bar/bottom_nav_bar.dart';
 import 'package:zcart/views/screens/product_details/product_details_screen.dart';
-import 'package:zcart/views/screens/startup/loading_screen.dart';
 import 'package:zcart/views/screens/tabs/account_tab/account/add_address_screen.dart';
 import 'package:zcart/views/screens/tabs/account_tab/others/terms_and_conditions_screen.dart';
+import 'package:zcart/views/screens/tabs/myCart_tab/checkout/order_placed_page.dart';
 import 'package:zcart/views/screens/tabs/myCart_tab/checkout/payments/payment_methods.dart';
 import 'package:zcart/views/shared_widgets/address_list_widget.dart';
 import 'package:zcart/views/shared_widgets/custom_confirm_dialog.dart';
 import 'package:zcart/views/shared_widgets/dropdown_field_loading_widget.dart';
 import 'package:zcart/views/shared_widgets/shared_widgets.dart';
-
-class CheckOutProgressItem extends StatelessWidget {
-  final bool isFirst;
-  final bool isLast;
-  final String title;
-  final IconData icon;
-
-  final Color progressColor;
-  const CheckOutProgressItem({
-    Key? key,
-    required this.isFirst,
-    required this.isLast,
-    required this.title,
-    required this.icon,
-    required this.progressColor,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    const _strokeWidth = 2.0;
-    return Column(
-      children: [
-        Row(
-          children: [
-            Expanded(
-              child: isFirst
-                  ? const SizedBox()
-                  : Container(height: _strokeWidth, color: progressColor),
-            ),
-            Container(
-              padding: const EdgeInsets.all(4),
-              decoration: BoxDecoration(
-                color: progressColor.withOpacity(0.2),
-                borderRadius: BorderRadius.circular(50),
-                border: Border.all(color: progressColor, width: _strokeWidth),
-              ),
-              child: Icon(icon, color: progressColor, size: 14),
-            ),
-            Expanded(
-              child: isLast
-                  ? const SizedBox()
-                  : Container(height: _strokeWidth, color: progressColor),
-            ),
-          ],
-        ),
-        const SizedBox(height: 4),
-        Text(
-          title,
-          style: context.textTheme.overline!
-              .copyWith(fontWeight: FontWeight.bold, color: progressColor),
-        ),
-      ],
-    );
-  }
-}
-
-class CheckOutProgress {
-  String title;
-  IconData icon;
-  CheckOutProgress({
-    required this.title,
-    required this.icon,
-  });
-}
-
-List<CheckOutProgress> _progressItems = [
-  CheckOutProgress(
-    title: "Shipping",
-    icon: Icons.local_shipping,
-  ),
-  CheckOutProgress(
-    title: "Order Details",
-    icon: Icons.receipt,
-  ),
-  CheckOutProgress(title: "Payment", icon: Icons.payment),
-];
 
 class CheckoutScreen extends StatefulWidget {
   final String? customerEmail;
@@ -192,19 +115,8 @@ class _CheckoutScreenState extends State<CheckoutScreen>
             context.read(checkoutNotifierProvider.notifier).createAccount =
                 false;
             context.read(checkoutNotifierProvider.notifier).email = null;
-            if (state.accessToken != null) {
-              toast(LocaleKeys.register_successful.tr());
-              await setValue(loggedIn, true);
-              await setValue(access, state.accessToken).then((value) {
-                Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(
-                        builder: (context) => const LoadingScreen()),
-                    (Route<dynamic> route) => false);
-              });
-            } else {
-              context
-                  .nextAndRemoveUntilPage(const BottomNavBar(selectedIndex: 4));
-            }
+            context.nextReplacementPage(
+                OrderPlacedPage(accessToken: state.accessToken));
           }
         },
         child: ProviderListener<CartItemDetailsState>(
@@ -267,6 +179,17 @@ class _CheckoutScreenState extends State<CheckoutScreen>
                                 _currentIndex >= _progressItems.indexOf(e);
                             return Expanded(
                               child: CheckOutProgressItem(
+                                onTap: () {
+                                  if (!_isDone) {
+                                    return;
+                                  } else {
+                                    _pageController.animateToPage(
+                                        _progressItems.indexOf(e),
+                                        duration:
+                                            const Duration(milliseconds: 300),
+                                        curve: Curves.easeInOut);
+                                  }
+                                },
                                 isFirst: _progressItems.indexOf(e) == 0,
                                 isLast: _progressItems.indexOf(e) ==
                                     _progressItems.length - 1,
@@ -1682,8 +1605,7 @@ class CheckOutDetailsPriceWidget extends StatelessWidget {
         title,
         style: isGrandTotal
             ? context.textTheme.headline6!.copyWith(fontWeight: FontWeight.bold)
-            : context.textTheme.subtitle2!
-                .copyWith(fontWeight: FontWeight.bold),
+            : context.textTheme.subtitle2!.copyWith(),
       ),
       subtitle: subtitle != null ? Text("(${subtitle!})") : null,
       trailing: Text(
@@ -1986,556 +1908,626 @@ class _CheckoutPaymentPageState extends State<CheckoutPaymentPage> {
             _implementedPaymentOptions!
                 .sort((a, b) => a.order!.compareTo(b.order!));
 
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Expanded(
-                  child: SingleChildScrollView(
+            return _isLoading
+                ? Center(
                     child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        const SizedBox(height: 12),
-                        Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 12),
-                          decoration: BoxDecoration(
-                            color: getColorBasedOnTheme(
-                                context, kLightColor, kDarkCardBgColor),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
+                        const LoadingWidget(),
+                        const SizedBox(height: 10),
+                        Text(
+                          "Order is being processed...",
+                          textAlign: TextAlign.center,
+                          style: Theme.of(context).textTheme.bodyText1,
+                        ),
+                      ],
+                    ),
+                  )
+                : Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Expanded(
+                        child: SingleChildScrollView(
                           child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
-                              const SizedBox(height: 16),
-                              Padding(
-                                padding:
+                              const SizedBox(height: 12),
+                              Container(
+                                margin:
                                     const EdgeInsets.symmetric(horizontal: 12),
-                                child: Text(
-                                  LocaleKeys.payment_method.tr(),
-                                  style: context.textTheme.headline6!.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                                decoration: BoxDecoration(
+                                  color: getColorBasedOnTheme(
+                                      context, kLightColor, kDarkCardBgColor),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
+                                  children: [
+                                    const SizedBox(height: 16),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 12),
+                                      child: Text(
+                                        LocaleKeys.payment_method.tr(),
+                                        style: context.textTheme.headline6!
+                                            .copyWith(
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 10),
+                                    const Divider(),
+                                    ListView(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 24),
+                                        shrinkWrap: true,
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        children:
+                                            _implementedPaymentOptions.map((e) {
+                                          String _code = e.code!;
+                                          return ListTile(
+                                            contentPadding:
+                                                const EdgeInsets.all(0),
+                                            onTap: () async {
+                                              setState(() {
+                                                _selectedPaymentMethod = _code;
+                                              });
+
+                                              context
+                                                  .read(checkoutNotifierProvider
+                                                      .notifier)
+                                                  .paymentMethod = e.code;
+                                            },
+                                            title: Text(
+                                              e.name!,
+                                              style: context
+                                                  .textTheme.subtitle2!
+                                                  .copyWith(
+                                                fontWeight: _code ==
+                                                        _selectedPaymentMethod
+                                                    ? FontWeight.bold
+                                                    : FontWeight.normal,
+                                              ),
+                                            ),
+                                            trailing: _code ==
+                                                    _selectedPaymentMethod
+                                                ? Icon(Icons.check_circle,
+                                                    color: kPrimaryColor)
+                                                : Icon(
+                                                    Icons
+                                                        .radio_button_unchecked,
+                                                    color: getColorBasedOnTheme(
+                                                        context,
+                                                        kDarkColor,
+                                                        kLightColor),
+                                                  ),
+                                          );
+                                        }).toList()),
+                                    const SizedBox(height: 4),
+                                  ],
                                 ),
                               ),
-                              const SizedBox(height: 10),
-                              const Divider(),
-                              ListView(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 24),
-                                  shrinkWrap: true,
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  children: _implementedPaymentOptions.map((e) {
-                                    String _code = e.code!;
-                                    return ListTile(
-                                      contentPadding: const EdgeInsets.all(0),
-                                      onTap: () async {
-                                        setState(() {
-                                          _selectedPaymentMethod = _code;
-                                        });
+                              const SizedBox(height: 12),
+                              _pharmacyCheckProvider.when(
+                                data: (value) {
+                                  if (value) {
+                                    return Column(
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Text("Prescription",
+                                                style: context
+                                                    .textTheme.bodyText2),
+                                          ],
+                                        ).pOnly(top: 10, bottom: 10),
+                                        GestureDetector(
+                                          onTap: () async {
+                                            await pickImageToBase64()
+                                                .then((value) {
+                                              if (value != null) {
+                                                setState(() {
+                                                  _prescriptionImage = value;
+                                                });
 
+                                                context
+                                                    .read(
+                                                        checkoutNotifierProvider
+                                                            .notifier)
+                                                    .prescription = value;
+                                              }
+                                            });
+                                          },
+                                          child: Container(
+                                            color: getColorBasedOnTheme(context,
+                                                kLightColor, kDarkCardBgColor),
+                                            padding: const EdgeInsets.all(10),
+                                            height: 200,
+                                            child: _prescriptionImage != null
+                                                ? Image.memory(
+                                                    base64Decode(
+                                                        _prescriptionImage!),
+                                                    fit: BoxFit.cover,
+                                                  )
+                                                : Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .stretch,
+                                                    children: [
+                                                      const Icon(Icons.image)
+                                                          .pOnly(bottom: 5),
+                                                      const Text(
+                                                        "Choose Image",
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                      ),
+                                                    ],
+                                                  ),
+                                          ).cornerRadius(10),
+                                        ),
+                                        const SizedBox(height: 12),
+                                      ],
+                                    );
+                                  } else {
+                                    return const SizedBox();
+                                  }
+                                },
+                                loading: () {
+                                  return const SizedBox();
+                                },
+                                error: (error, stackTrace) {
+                                  return Center(
+                                      child: Padding(
+                                    padding: const EdgeInsets.all(16),
+                                    child: Text(
+                                        LocaleKeys.something_went_wrong.tr()),
+                                  ));
+                                },
+                              ),
+                              Container(
+                                margin:
+                                    const EdgeInsets.symmetric(horizontal: 12),
+                                decoration: BoxDecoration(
+                                  color: getColorBasedOnTheme(
+                                      context, kLightColor, kDarkCardBgColor),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                padding: const EdgeInsets.all(16),
+                                child: Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
+                                  children: [
+                                    Text(
+                                      LocaleKeys.note_for_seller.tr(),
+                                      style:
+                                          context.textTheme.headline6!.copyWith(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 8),
+                                    CustomTextField(
+                                      controller: _aditionalNotesController,
+                                      maxLines: 5,
+                                      hintText: LocaleKeys.note_for_seller.tr(),
+                                      onChanged: (value) {
                                         context
                                             .read(checkoutNotifierProvider
                                                 .notifier)
-                                            .paymentMethod = e.code;
+                                            .buyerNote = value;
                                       },
-                                      title: Text(
-                                        e.name!,
-                                        style: context.textTheme.subtitle2!
-                                            .copyWith(
-                                          fontWeight:
-                                              _code == _selectedPaymentMethod
-                                                  ? FontWeight.bold
-                                                  : FontWeight.normal,
-                                        ),
-                                      ),
-                                      trailing: _code == _selectedPaymentMethod
-                                          ? Icon(Icons.check_circle,
-                                              color: kPrimaryColor)
-                                          : Icon(
-                                              Icons.radio_button_unchecked,
-                                              color: getColorBasedOnTheme(
-                                                  context,
-                                                  kDarkColor,
-                                                  kLightColor),
-                                            ),
-                                    );
-                                  }).toList()),
-                              const SizedBox(height: 4),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 12),
-                        _pharmacyCheckProvider.when(
-                          data: (value) {
-                            if (value) {
-                              return Column(
-                                children: [
-                                  Row(
-                                    children: [
-                                      Text("Prescription",
-                                          style: context.textTheme.bodyText2),
-                                    ],
-                                  ).pOnly(top: 10, bottom: 10),
-                                  GestureDetector(
-                                    onTap: () async {
-                                      await pickImageToBase64().then((value) {
-                                        if (value != null) {
-                                          setState(() {
-                                            _prescriptionImage = value;
-                                          });
-
-                                          context
-                                              .read(checkoutNotifierProvider
-                                                  .notifier)
-                                              .prescription = value;
-                                        }
-                                      });
-                                    },
-                                    child: Container(
-                                      color: getColorBasedOnTheme(context,
-                                          kLightColor, kDarkCardBgColor),
-                                      padding: const EdgeInsets.all(10),
-                                      height: 200,
-                                      child: _prescriptionImage != null
-                                          ? Image.memory(
-                                              base64Decode(_prescriptionImage!),
-                                              fit: BoxFit.cover,
-                                            )
-                                          : Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.stretch,
-                                              children: [
-                                                const Icon(Icons.image)
-                                                    .pOnly(bottom: 5),
-                                                const Text(
-                                                  "Choose Image",
-                                                  textAlign: TextAlign.center,
-                                                ),
-                                              ],
-                                            ),
-                                    ).cornerRadius(10),
-                                  ),
-                                  const SizedBox(height: 12),
-                                ],
-                              );
-                            } else {
-                              return const SizedBox();
-                            }
-                          },
-                          loading: () {
-                            return const SizedBox();
-                          },
-                          error: (error, stackTrace) {
-                            return Center(
-                                child: Padding(
-                              padding: const EdgeInsets.all(16),
-                              child: Text(LocaleKeys.something_went_wrong.tr()),
-                            ));
-                          },
-                        ),
-                        Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 12),
-                          decoration: BoxDecoration(
-                            color: getColorBasedOnTheme(
-                                context, kLightColor, kDarkCardBgColor),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          padding: const EdgeInsets.all(16),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Text(
-                                LocaleKeys.note_for_seller.tr(),
-                                style: context.textTheme.headline6!.copyWith(
-                                  fontWeight: FontWeight.bold,
+                                    )
+                                  ],
                                 ),
                               ),
-                              const SizedBox(height: 8),
-                              CustomTextField(
-                                controller: _aditionalNotesController,
-                                maxLines: 5,
-                                hintText: LocaleKeys.note_for_seller.tr(),
-                                onChanged: (value) {
-                                  context
-                                      .read(checkoutNotifierProvider.notifier)
-                                      .buyerNote = value;
-                                },
-                              )
+                              const SizedBox(height: 12),
+                              accessAllowed
+                                  ? const SizedBox()
+                                  : Container(
+                                      margin: const EdgeInsets.symmetric(
+                                          horizontal: 12),
+                                      padding: const EdgeInsets.all(16),
+                                      decoration: BoxDecoration(
+                                          color: getColorBasedOnTheme(context,
+                                              kLightColor, kDarkCardBgColor),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          boxShadow: [
+                                            BoxShadow(
+                                              blurRadius: 10,
+                                              color:
+                                                  Colors.black.withOpacity(0.1),
+                                              offset: const Offset(0, 10),
+                                            ),
+                                          ]),
+                                      child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text("Guest Checkout",
+                                                    style: context
+                                                        .textTheme.headline6)
+                                                .pOnly(bottom: 10),
+                                            Form(
+                                              key: _emailFormKey,
+                                              child: CustomTextField(
+                                                hintText:
+                                                    LocaleKeys.your_email.tr(),
+                                                controller: _emailController,
+                                                keyboardType:
+                                                    TextInputType.emailAddress,
+                                                validator: (value) {
+                                                  if (value != null) {
+                                                    if (!value.contains('@') ||
+                                                        !value.contains('.')) {
+                                                      return LocaleKeys
+                                                          .invalid_email
+                                                          .tr();
+                                                    }
+                                                  }
+                                                  return null;
+                                                },
+                                                onChanged: (value) {
+                                                  context
+                                                      .read(
+                                                          checkoutNotifierProvider
+                                                              .notifier)
+                                                      .email = value;
+                                                },
+                                              ),
+                                            ),
+                                            ListTile(
+                                              title: Text(LocaleKeys
+                                                  .create_account
+                                                  .tr()),
+                                              minLeadingWidth: 0,
+                                              onTap: () {
+                                                setState(() {
+                                                  _createNewAccount =
+                                                      !_createNewAccount;
+                                                });
+                                                context
+                                                        .read(
+                                                            checkoutNotifierProvider
+                                                                .notifier)
+                                                        .createAccount =
+                                                    _createNewAccount;
+                                              },
+                                              leading: Icon(_createNewAccount
+                                                  ? Icons.check_circle
+                                                  : Icons
+                                                      .radio_button_unchecked),
+                                            ),
+                                            Visibility(
+                                              visible: _createNewAccount,
+                                              child: Form(
+                                                key: _formKey,
+                                                child: Column(
+                                                  children: [
+                                                    CustomTextField(
+                                                      isPassword: true,
+                                                      title: LocaleKeys
+                                                          .your_password
+                                                          .tr(),
+                                                      hintText: LocaleKeys
+                                                          .your_password
+                                                          .tr(),
+                                                      keyboardType:
+                                                          TextInputType
+                                                              .visiblePassword,
+                                                      controller:
+                                                          _passWordController,
+                                                      validator: (value) {
+                                                        if (value != null) {
+                                                          if (value.length <
+                                                              6) {
+                                                            return LocaleKeys
+                                                                .password_validation
+                                                                .tr();
+                                                          }
+                                                        }
+                                                        return null;
+                                                      },
+                                                      onChanged: (value) {
+                                                        context
+                                                            .read(
+                                                                checkoutNotifierProvider
+                                                                    .notifier)
+                                                            .password = value;
+                                                      },
+                                                    ),
+                                                    CustomTextField(
+                                                      isPassword: true,
+                                                      title: LocaleKeys
+                                                          .your_confirm_password
+                                                          .tr(),
+                                                      hintText: LocaleKeys
+                                                          .your_confirm_password
+                                                          .tr(),
+                                                      keyboardType:
+                                                          TextInputType
+                                                              .visiblePassword,
+                                                      controller:
+                                                          _confirmPassWordController,
+                                                      validator: (value) {
+                                                        if (value != null) {
+                                                          if (value.length <
+                                                              6) {
+                                                            return LocaleKeys
+                                                                .password_validation
+                                                                .tr();
+                                                          }
+                                                          {
+                                                            if (value !=
+                                                                _passWordController
+                                                                    .text) {
+                                                              return LocaleKeys
+                                                                  .dont_match_password
+                                                                  .tr();
+                                                            }
+                                                          }
+                                                        }
+                                                        return null;
+                                                      },
+                                                      onChanged: (value) {
+                                                        context
+                                                            .read(
+                                                                checkoutNotifierProvider
+                                                                    .notifier)
+                                                            .passwordConfirm = value;
+                                                      },
+                                                    ),
+                                                    ListTile(
+                                                      onTap: () {
+                                                        setState(() {
+                                                          _agreedToTerms =
+                                                              !_agreedToTerms;
+                                                        });
+                                                        context
+                                                                .read(checkoutNotifierProvider
+                                                                    .notifier)
+                                                                .agreeToTerms =
+                                                            _agreedToTerms;
+                                                      },
+                                                      minLeadingWidth: 0,
+                                                      leading: Icon(_agreedToTerms
+                                                          ? Icons.check_circle
+                                                          : Icons
+                                                              .radio_button_unchecked),
+                                                      title: GestureDetector(
+                                                        onTap: () {
+                                                          Navigator.push(
+                                                              context,
+                                                              MaterialPageRoute(
+                                                                  builder:
+                                                                      (context) =>
+                                                                          const TermsAndConditionScreen()));
+                                                        },
+                                                        child: Text(LocaleKeys
+                                                            .agree_terms
+                                                            .tr()),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ]),
+                                    ),
+                              const SizedBox(height: 12),
                             ],
                           ),
                         ),
-                        const SizedBox(height: 12),
-                        accessAllowed
-                            ? const SizedBox()
-                            : Container(
-                                margin:
-                                    const EdgeInsets.symmetric(horizontal: 12),
-                                padding: const EdgeInsets.all(16),
-                                decoration: BoxDecoration(
-                                    color: getColorBasedOnTheme(
-                                        context, kLightColor, kDarkCardBgColor),
-                                    borderRadius: BorderRadius.circular(10),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        blurRadius: 10,
-                                        color: Colors.black.withOpacity(0.1),
-                                        offset: const Offset(0, 10),
-                                      ),
-                                    ]),
-                                child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text("Guest Checkout",
-                                              style:
-                                                  context.textTheme.headline6)
-                                          .pOnly(bottom: 10),
-                                      Form(
-                                        key: _emailFormKey,
-                                        child: CustomTextField(
-                                          hintText: LocaleKeys.your_email.tr(),
-                                          controller: _emailController,
-                                          keyboardType:
-                                              TextInputType.emailAddress,
-                                          validator: (value) {
-                                            if (value != null) {
-                                              if (!value.contains('@') ||
-                                                  !value.contains('.')) {
-                                                return LocaleKeys.invalid_email
-                                                    .tr();
-                                              }
-                                            }
-                                            return null;
-                                          },
-                                          onChanged: (value) {
-                                            context
-                                                .read(checkoutNotifierProvider
-                                                    .notifier)
-                                                .email = value;
-                                          },
-                                        ),
-                                      ),
-                                      ListTile(
-                                        title: Text(
-                                            LocaleKeys.create_account.tr()),
-                                        minLeadingWidth: 0,
-                                        onTap: () {
-                                          setState(() {
-                                            _createNewAccount =
-                                                !_createNewAccount;
-                                          });
-                                          context
-                                                  .read(checkoutNotifierProvider
-                                                      .notifier)
-                                                  .createAccount =
-                                              _createNewAccount;
-                                        },
-                                        leading: Icon(_createNewAccount
-                                            ? Icons.check_circle
-                                            : Icons.radio_button_unchecked),
-                                      ),
-                                      Visibility(
-                                        visible: _createNewAccount,
-                                        child: Form(
-                                          key: _formKey,
-                                          child: Column(
-                                            children: [
-                                              CustomTextField(
-                                                isPassword: true,
-                                                title: LocaleKeys.your_password
-                                                    .tr(),
-                                                hintText: LocaleKeys
-                                                    .your_password
-                                                    .tr(),
-                                                keyboardType: TextInputType
-                                                    .visiblePassword,
-                                                controller: _passWordController,
-                                                validator: (value) {
-                                                  if (value != null) {
-                                                    if (value.length < 6) {
-                                                      return LocaleKeys
-                                                          .password_validation
-                                                          .tr();
+                      ),
+                      if (!widget.isKeyboardVisible)
+                        Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 16)),
+                            onPressed: _isLoading
+                                ? null
+                                : () async {
+                                    if (_selectedPaymentMethod.isEmpty) {
+                                      toast(LocaleKeys
+                                          .select_payment_method_continue
+                                          .tr());
+                                    } else {
+                                      if (!accessAllowed) {
+                                        if (_createNewAccount) {
+                                          if (_emailFormKey.currentState!
+                                              .validate()) {
+                                            if (_agreedToTerms) {
+                                              if (_formKey.currentState!
+                                                  .validate()) {
+                                                await PaymentMethods.pay(
+                                                  context,
+                                                  _selectedPaymentMethod,
+                                                  email: _emailController.text
+                                                      .trim(),
+                                                  grandTotal: _grandTotal,
+                                                  invoiceNumber: widget
+                                                      .cartItemDetails!
+                                                      .data!
+                                                      .id!
+                                                      .toString(),
+                                                  shippingId: widget
+                                                      .cartItemDetails!
+                                                      .data!
+                                                      .shippingOptionId,
+                                                  address: widget.address,
+                                                  cartId: widget.isOneCheckout
+                                                      ? null
+                                                      : widget.cartItemDetails!
+                                                          .data!.id,
+                                                  currency: widget
+                                                      .cartItemDetails!
+                                                      .meta!
+                                                      .currency,
+                                                  cartItems: _cartItems,
+                                                  discount: _discount,
+                                                  handling: _handling,
+                                                  packaging: _packaging,
+                                                  shipping: _shipping,
+                                                  subtotal: _subtotal,
+                                                  taxes: _tax,
+                                                ).then((value) async {
+                                                  if (value) {
+                                                    setState(() {
+                                                      _isLoading = true;
+                                                    });
+                                                    await context
+                                                        .read(
+                                                            checkoutNotifierProvider
+                                                                .notifier)
+                                                        .guestCheckout(
+                                                            isOneCheckout: widget
+                                                                .isOneCheckout);
+                                                    setState(() {
+                                                      _isLoading = false;
+                                                    });
+                                                    if (_selectedPaymentMethod ==
+                                                        zcartWallet) {
+                                                      context.refresh(
+                                                          walletBalanceProvider);
+                                                      context.refresh(
+                                                          walletTransactionFutureProvider);
                                                     }
+                                                  } else {
+                                                    toast("Payment Failed");
                                                   }
-                                                  return null;
-                                                },
-                                                onChanged: (value) {
-                                                  context
-                                                      .read(
-                                                          checkoutNotifierProvider
-                                                              .notifier)
-                                                      .password = value;
-                                                },
-                                              ),
-                                              CustomTextField(
-                                                isPassword: true,
-                                                title: LocaleKeys
-                                                    .your_confirm_password
-                                                    .tr(),
-                                                hintText: LocaleKeys
-                                                    .your_confirm_password
-                                                    .tr(),
-                                                keyboardType: TextInputType
-                                                    .visiblePassword,
-                                                controller:
-                                                    _confirmPassWordController,
-                                                validator: (value) {
-                                                  if (value != null) {
-                                                    if (value.length < 6) {
-                                                      return LocaleKeys
-                                                          .password_validation
-                                                          .tr();
-                                                    }
-                                                    {
-                                                      if (value !=
-                                                          _passWordController
-                                                              .text) {
-                                                        return LocaleKeys
-                                                            .dont_match_password
-                                                            .tr();
-                                                      }
-                                                    }
-                                                  }
-                                                  return null;
-                                                },
-                                                onChanged: (value) {
-                                                  context
-                                                      .read(
-                                                          checkoutNotifierProvider
-                                                              .notifier)
-                                                      .passwordConfirm = value;
-                                                },
-                                              ),
-                                              ListTile(
-                                                onTap: () {
-                                                  setState(() {
-                                                    _agreedToTerms =
-                                                        !_agreedToTerms;
-                                                  });
-                                                  context
-                                                          .read(
-                                                              checkoutNotifierProvider
-                                                                  .notifier)
-                                                          .agreeToTerms =
-                                                      _agreedToTerms;
-                                                },
-                                                minLeadingWidth: 0,
-                                                leading: Icon(_agreedToTerms
-                                                    ? Icons.check_circle
-                                                    : Icons
-                                                        .radio_button_unchecked),
-                                                title: GestureDetector(
-                                                  onTap: () {
-                                                    Navigator.push(
-                                                        context,
-                                                        MaterialPageRoute(
-                                                            builder: (context) =>
-                                                                const TermsAndConditionScreen()));
-                                                  },
-                                                  child: Text(LocaleKeys
-                                                      .agree_terms
-                                                      .tr()),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ]),
-                              ),
-                        const SizedBox(height: 12),
-                      ],
-                    ),
-                  ),
-                ),
-                if (!widget.isKeyboardVisible)
-                  Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(vertical: 16)),
-                      onPressed: _isLoading
-                          ? null
-                          : () async {
-                              if (_selectedPaymentMethod.isEmpty) {
-                                toast(LocaleKeys.select_payment_method_continue
-                                    .tr());
-                              } else {
-                                if (!accessAllowed) {
-                                  if (_createNewAccount) {
-                                    if (_emailFormKey.currentState!
-                                        .validate()) {
-                                      if (_agreedToTerms) {
-                                        if (_formKey.currentState!.validate()) {
-                                          await PaymentMethods.pay(
-                                            context,
-                                            _selectedPaymentMethod,
-                                            email: _emailController.text.trim(),
-                                            grandTotal: _grandTotal,
-                                            invoiceNumber: widget
-                                                .cartItemDetails!.data!.id!
-                                                .toString(),
-                                            shippingId: widget.cartItemDetails!
-                                                .data!.shippingOptionId,
-                                            address: widget.address,
-                                            cartId: widget.isOneCheckout
-                                                ? null
-                                                : widget
-                                                    .cartItemDetails!.data!.id,
-                                            currency: widget.cartItemDetails!
-                                                .meta!.currency,
-                                            cartItems: _cartItems,
-                                            discount: _discount,
-                                            handling: _handling,
-                                            packaging: _packaging,
-                                            shipping: _shipping,
-                                            subtotal: _subtotal,
-                                            taxes: _tax,
-                                          ).then((value) async {
-                                            if (value) {
-                                              setState(() {
-                                                _isLoading = true;
-                                              });
-                                              await context
-                                                  .read(checkoutNotifierProvider
-                                                      .notifier)
-                                                  .guestCheckout(
-                                                      isOneCheckout:
-                                                          widget.isOneCheckout);
-                                              setState(() {
-                                                _isLoading = false;
-                                              });
-                                              if (_selectedPaymentMethod ==
-                                                  zcartWallet) {
-                                                context.refresh(
-                                                    walletBalanceProvider);
-                                                context.refresh(
-                                                    walletTransactionFutureProvider);
+                                                });
                                               }
                                             } else {
-                                              toast("Payment Failed");
+                                              toast(LocaleKeys
+                                                  .please_agree_terms
+                                                  .tr());
                                             }
-                                          });
-                                        }
-                                      } else {
-                                        toast(
-                                            LocaleKeys.please_agree_terms.tr());
-                                      }
-                                    } else {
-                                      toast("Please enter valid email!");
-                                    }
-                                  } else {
-                                    if (_emailFormKey.currentState!
-                                        .validate()) {
-                                      await PaymentMethods.pay(
-                                        context,
-                                        _selectedPaymentMethod,
-                                        email: _emailController.text.trim(),
-                                        grandTotal: _grandTotal,
-                                        invoiceNumber: widget
-                                            .cartItemDetails!.data!.id!
-                                            .toString(),
-                                        shippingId: widget.cartItemDetails!
-                                            .data!.shippingOptionId,
-                                        address: widget.address,
-                                        cartId: widget.isOneCheckout
-                                            ? null
-                                            : widget.cartItemDetails!.data!.id,
-                                        currency: widget
-                                            .cartItemDetails!.meta!.currency,
-                                        cartItems: _cartItems,
-                                        discount: _discount,
-                                        handling: _handling,
-                                        packaging: _packaging,
-                                        shipping: _shipping,
-                                        subtotal: _subtotal,
-                                        taxes: _tax,
-                                      ).then((value) async {
-                                        if (value) {
-                                          setState(() {
-                                            _isLoading = true;
-                                          });
-                                          await context
-                                              .read(checkoutNotifierProvider
-                                                  .notifier)
-                                              .guestCheckout(
-                                                  isOneCheckout:
-                                                      widget.isOneCheckout);
-                                          setState(() {
-                                            _isLoading = false;
-                                          });
-                                          if (_selectedPaymentMethod ==
-                                              zcartWallet) {
-                                            context
-                                                .refresh(walletBalanceProvider);
-                                            context.refresh(
-                                                walletTransactionFutureProvider);
+                                          } else {
+                                            toast("Please enter valid email!");
                                           }
                                         } else {
-                                          toast("Payment Failed");
+                                          if (_emailFormKey.currentState!
+                                              .validate()) {
+                                            await PaymentMethods.pay(
+                                              context,
+                                              _selectedPaymentMethod,
+                                              email:
+                                                  _emailController.text.trim(),
+                                              grandTotal: _grandTotal,
+                                              invoiceNumber: widget
+                                                  .cartItemDetails!.data!.id!
+                                                  .toString(),
+                                              shippingId: widget
+                                                  .cartItemDetails!
+                                                  .data!
+                                                  .shippingOptionId,
+                                              address: widget.address,
+                                              cartId: widget.isOneCheckout
+                                                  ? null
+                                                  : widget.cartItemDetails!
+                                                      .data!.id,
+                                              currency: widget.cartItemDetails!
+                                                  .meta!.currency,
+                                              cartItems: _cartItems,
+                                              discount: _discount,
+                                              handling: _handling,
+                                              packaging: _packaging,
+                                              shipping: _shipping,
+                                              subtotal: _subtotal,
+                                              taxes: _tax,
+                                            ).then((value) async {
+                                              if (value) {
+                                                setState(() {
+                                                  _isLoading = true;
+                                                });
+                                                await context
+                                                    .read(
+                                                        checkoutNotifierProvider
+                                                            .notifier)
+                                                    .guestCheckout(
+                                                        isOneCheckout: widget
+                                                            .isOneCheckout);
+                                                setState(() {
+                                                  _isLoading = false;
+                                                });
+                                                if (_selectedPaymentMethod ==
+                                                    zcartWallet) {
+                                                  context.refresh(
+                                                      walletBalanceProvider);
+                                                  context.refresh(
+                                                      walletTransactionFutureProvider);
+                                                }
+                                              } else {
+                                                toast("Payment Failed");
+                                              }
+                                            });
+                                          } else {
+                                            toast("Please enter valid email.");
+                                          }
                                         }
-                                      });
-                                    } else {
-                                      toast("Please enter valid email.");
-                                    }
-                                  }
-                                } else {
-                                  await PaymentMethods.pay(
-                                    context,
-                                    _selectedPaymentMethod,
-                                    email: widget.customerEmail!,
-                                    grandTotal: _grandTotal,
-                                    shippingId: widget.cartItemDetails!.data!
-                                        .shippingOptionId,
-                                    invoiceNumber: widget
-                                        .cartItemDetails!.data!.id!
-                                        .toString(),
-                                    address: widget.address,
-                                    cartId: widget.isOneCheckout
-                                        ? null
-                                        : widget.cartItemDetails!.data!.id,
-                                    currency:
-                                        widget.cartItemDetails!.meta!.currency,
-                                    cartItems: _cartItems,
-                                    discount: _discount,
-                                    handling: _handling,
-                                    packaging: _packaging,
-                                    shipping: _shipping,
-                                    subtotal: _subtotal,
-                                    taxes: _tax,
-                                  ).then((value) async {
-                                    if (value) {
-                                      setState(() {
-                                        _isLoading = true;
-                                      });
-                                      await context
-                                          .read(
-                                              checkoutNotifierProvider.notifier)
-                                          .checkout(
-                                              isOneCheckout:
-                                                  widget.isOneCheckout);
-                                      setState(() {
-                                        _isLoading = false;
-                                      });
-                                      if (_selectedPaymentMethod ==
-                                          zcartWallet) {
-                                        context.refresh(walletBalanceProvider);
-                                        context.refresh(
-                                            walletTransactionFutureProvider);
+                                      } else {
+                                        await PaymentMethods.pay(
+                                          context,
+                                          _selectedPaymentMethod,
+                                          email: widget.customerEmail!,
+                                          grandTotal: _grandTotal,
+                                          shippingId: widget.cartItemDetails!
+                                              .data!.shippingOptionId,
+                                          invoiceNumber: widget
+                                              .cartItemDetails!.data!.id!
+                                              .toString(),
+                                          address: widget.address,
+                                          cartId: widget.isOneCheckout
+                                              ? null
+                                              : widget
+                                                  .cartItemDetails!.data!.id,
+                                          currency: widget
+                                              .cartItemDetails!.meta!.currency,
+                                          cartItems: _cartItems,
+                                          discount: _discount,
+                                          handling: _handling,
+                                          packaging: _packaging,
+                                          shipping: _shipping,
+                                          subtotal: _subtotal,
+                                          taxes: _tax,
+                                        ).then((value) async {
+                                          if (value) {
+                                            setState(() {
+                                              _isLoading = true;
+                                            });
+                                            await context
+                                                .read(checkoutNotifierProvider
+                                                    .notifier)
+                                                .checkout(
+                                                    isOneCheckout:
+                                                        widget.isOneCheckout);
+                                            setState(() {
+                                              _isLoading = false;
+                                            });
+                                            if (_selectedPaymentMethod ==
+                                                zcartWallet) {
+                                              context.refresh(
+                                                  walletBalanceProvider);
+                                              context.refresh(
+                                                  walletTransactionFutureProvider);
+                                            }
+                                          } else {
+                                            toast("Payment Failed");
+                                          }
+                                        });
                                       }
-                                    } else {
-                                      toast("Payment Failed");
                                     }
-                                  });
-                                }
-                              }
-                            },
-                      child: const Text("Proceed to Checkout"),
-                    ),
-                  ),
-              ],
-            );
+                                  },
+                            child: const Text("Proceed to Checkout"),
+                          ),
+                        ),
+                    ],
+                  );
           } else {
             return Center(
               child: Text(LocaleKeys.something_went_wrong.tr()),
@@ -2546,3 +2538,84 @@ class _CheckoutPaymentPageState extends State<CheckoutPaymentPage> {
     );
   }
 }
+
+class CheckOutProgressItem extends StatelessWidget {
+  final bool isFirst;
+  final bool isLast;
+  final String title;
+  final IconData icon;
+  final VoidCallback onTap;
+
+  final Color progressColor;
+  const CheckOutProgressItem({
+    Key? key,
+    required this.isFirst,
+    required this.isLast,
+    required this.title,
+    required this.icon,
+    required this.progressColor,
+    required this.onTap,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    const _strokeWidth = 2.0;
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: isFirst
+                    ? const SizedBox()
+                    : Container(height: _strokeWidth, color: progressColor),
+              ),
+              Container(
+                padding: const EdgeInsets.all(4),
+                decoration: BoxDecoration(
+                  color: progressColor.withOpacity(0.2),
+                  borderRadius: BorderRadius.circular(50),
+                  border: Border.all(color: progressColor, width: _strokeWidth),
+                ),
+                child: Icon(icon, color: progressColor, size: 14),
+              ),
+              Expanded(
+                child: isLast
+                    ? const SizedBox()
+                    : Container(height: _strokeWidth, color: progressColor),
+              ),
+            ],
+          ),
+          const SizedBox(height: 4),
+          Text(
+            title,
+            style: context.textTheme.overline!
+                .copyWith(fontWeight: FontWeight.bold, color: progressColor),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class CheckOutProgress {
+  String title;
+  IconData icon;
+  CheckOutProgress({
+    required this.title,
+    required this.icon,
+  });
+}
+
+List<CheckOutProgress> _progressItems = [
+  CheckOutProgress(
+    title: "Shipping",
+    icon: Icons.local_shipping,
+  ),
+  CheckOutProgress(
+    title: "Order Details",
+    icon: Icons.receipt,
+  ),
+  CheckOutProgress(title: "Payment", icon: Icons.payment),
+];
