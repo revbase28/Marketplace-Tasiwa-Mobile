@@ -76,14 +76,12 @@ class _MyCartTabState extends State<MyCartTab> {
                 systemOverlayStyle: SystemUiOverlayStyle.light,
                 title: Text(LocaleKeys.cart_text.tr()),
                 actions: [
-                  (_cartState is CartErrorState ||
-                          _cartState is CartLoadingState)
-                      ? const Icon(Icons.sync).pOnly(right: 10).onInkTap(() {
-                          context
-                              .read(cartNotifierProvider.notifier)
-                              .getCartList();
-                        })
-                      : const SizedBox(),
+                  IconButton(
+                    onPressed: () {
+                      context.read(cartNotifierProvider.notifier).getCartList();
+                    },
+                    icon: const Icon(Icons.sync),
+                  )
                 ],
               ),
               floatingActionButtonLocation:

@@ -6,7 +6,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 #Only Chnage this value to update your version
 #1.0.0 is version number and 1 is build number
-version: 2.0.3+4
+version: 2.1.0+5
 
 
 #Don't Change Anything From here

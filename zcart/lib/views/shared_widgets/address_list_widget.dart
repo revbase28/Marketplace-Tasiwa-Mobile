@@ -116,6 +116,29 @@ class _AddressListBuilderState extends State<AddressListBuilder> {
                                   final _shipOptions =
                                       await GetProductDetailsModel
                                           .getCartShippingOptions(_url);
+
+                                  int? _shippingOptionId;
+                                  int? _shippingZoneId;
+                                  if (_shipOptions != null &&
+                                      _shipOptions.isNotEmpty) {
+                                    if (_shipOptions.any((element) {
+                                      return element.id ==
+                                              widget
+                                                  .cartItem!.shippingOptionId &&
+                                          element.shippingZoneId ==
+                                              widget.cartItem!.shippingZoneId;
+                                    })) {
+                                      _shippingOptionId =
+                                          widget.cartItem!.shippingOptionId;
+                                      _shippingZoneId =
+                                          widget.cartItem!.shippingZoneId;
+                                    } else {
+                                      _shippingOptionId = _shipOptions.first.id;
+                                      _shippingZoneId =
+                                          _shipOptions.first.shippingZoneId;
+                                    }
+                                  }
+
                                   context
                                       .read(cartItemDetailsNotifierProvider
                                           .notifier)
@@ -124,15 +147,8 @@ class _AddressListBuilderState extends State<AddressListBuilder> {
                                         countryId: e.country!.id,
                                         stateId: e.state?.id,
                                         shipTo: e.id,
-                                        shippingOptionId:
-                                            _shipOptions != null &&
-                                                    _shipOptions.isNotEmpty
-                                                ? _shipOptions.first.id
-                                                : null,
-                                        shippingZoneId: _shipOptions != null &&
-                                                _shipOptions.isNotEmpty
-                                            ? _shipOptions.first.shippingZoneId
-                                            : null,
+                                        shippingOptionId: _shippingOptionId,
+                                        shippingZoneId: _shippingZoneId,
                                       );
 
                                   context
@@ -142,15 +158,8 @@ class _AddressListBuilderState extends State<AddressListBuilder> {
                                         countryId: e.country!.id,
                                         stateId: e.state?.id,
                                         shipTo: e.id,
-                                        shippingOptionId:
-                                            _shipOptions != null &&
-                                                    _shipOptions.isNotEmpty
-                                                ? _shipOptions.first.id
-                                                : null,
-                                        shippingZoneId: _shipOptions != null &&
-                                                _shipOptions.isNotEmpty
-                                            ? _shipOptions.first.shippingZoneId
-                                            : null,
+                                        shippingOptionId: _shippingOptionId,
+                                        shippingZoneId: _shippingZoneId,
                                       );
 
                                   _checkoutProvider.shipTo = e.id;

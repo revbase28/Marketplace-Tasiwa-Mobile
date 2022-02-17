@@ -34,8 +34,8 @@ final productListNotifierProvider =
 ///
 ///Product Details Providers
 
-final productDetailsFutureProvider =
-    FutureProvider.family<ProductDetailsModel?, String>((ref, slug) async {
+final productDetailsFutureProvider = FutureProvider.autoDispose
+    .family<ProductDetailsModel?, String>((ref, slug) async {
   final _product = await GetProductDetailsModel.getProductDetails(slug);
   if (_product?.data?.id != null) {
     await setRecentlyViewedItems(_product!.data!.id!);

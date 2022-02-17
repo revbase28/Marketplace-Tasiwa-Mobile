@@ -640,8 +640,12 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
                     if (_result.value == e.value) {
                       debugPrint("Same");
                     } else {
-                      Map<String, String> _requestBody = {};
+                      setState(() {
+                        _selectedAttributes[_selectedAttributes.indexOf(e)] =
+                            _result;
+                      });
 
+                      Map<String, String> _requestBody = {};
                       for (var item in _selectedAttributes) {
                         _requestBody["attributes[${item.id}]"] =
                             item.value.toString();
@@ -652,11 +656,6 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
                             _details.data!.slug!,
                             _requestBody,
                           );
-
-                      setState(() {
-                        _selectedAttributes[_selectedAttributes.indexOf(e)] =
-                            _result;
-                      });
 
                       if (_newVariant != null) {
                         setState(() {
