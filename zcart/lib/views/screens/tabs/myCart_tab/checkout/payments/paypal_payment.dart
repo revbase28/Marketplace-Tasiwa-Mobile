@@ -6,8 +6,10 @@ import 'package:nb_utils/nb_utils.dart';
 import 'package:zcart/data/models/address/address_model.dart';
 import 'package:zcart/data/network/api.dart';
 import 'package:zcart/helper/get_amount_from_string.dart';
+import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:zcart/views/screens/tabs/myCart_tab/checkout/payments/payment_methods.dart';
 import 'package:zcart/views/shared_widgets/shared_widgets.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class PayPalPayment extends StatefulWidget {
   final bool isSandbox;
@@ -202,10 +204,10 @@ class _PayPalPaymentState extends State<PayPalPayment> {
                     children: [
                       Text(
                         _result == null
-                            ? "⌛ Pending Payment"
+                            ? "⌛ ${LocaleKeys.pending_payment.tr()}"
                             : _result!
-                                ? "✅ Payment Successful "
-                                : "❌ Payment Failed",
+                                ? "✅  ${LocaleKeys.payment_success.tr()}"
+                                : "❌  ${LocaleKeys.payment_failed.tr()}",
                         style: Theme.of(context).textTheme.headline5,
                       ),
                       const SizedBox(height: 20),
@@ -255,10 +257,10 @@ class _PayPalPaymentState extends State<PayPalPayment> {
                                   transaction: _transaction);
                             },
                   buttonText: _result == null
-                      ? "Make Payment"
+                      ? LocaleKeys.make_payment.tr()
                       : _result!
-                          ? "Continue"
-                          : "Try Again",
+                          ? LocaleKeys.continue_text.tr()
+                          : LocaleKeys.try_again.tr(),
                 ),
               ],
             ),

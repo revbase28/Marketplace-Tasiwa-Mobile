@@ -159,7 +159,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             if (!(!MyConfig.isGoogleLoginActive &&
                                 !MyConfig.isFacebookLoginActive &&
                                 !MyConfig.isAppleLoginActive))
-                              const Text("Or Continue With")
+                              Text(LocaleKeys.or_continue_with.tr())
                                   .text
                                   .textStyle(context.textTheme.caption!)
                                   .align(TextAlign.center)
@@ -307,8 +307,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                                       .tr());
                                                 }
                                               } else {
-                                                toast(
-                                                    "Apple Login is not available on your device");
+                                                toast(LocaleKeys
+                                                    .apple_login_not_available
+                                                    .tr());
                                               }
                                             },
                                           ).px(5).py(5);

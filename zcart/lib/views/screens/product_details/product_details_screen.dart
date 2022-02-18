@@ -85,7 +85,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             if (value == null) {
               return Scaffold(
                 appBar: AppBar(
-                  title: const Text("Product Details"),
+                  title: Text(LocaleKeys.product_details.tr()),
                   systemOverlayStyle: SystemUiOverlayStyle.light,
                 ),
                 body: Center(child: Text(LocaleKeys.something_went_wrong.tr())),
@@ -106,7 +106,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           loading: () => Scaffold(body: const ProductLoadingWidget().p(10)),
           error: (error, stackTrace) => Scaffold(
               appBar: AppBar(
-                title: const Text("Product Details"),
+                title: Text(LocaleKeys.product_details.tr()),
                 systemOverlayStyle: SystemUiOverlayStyle.light,
               ),
               body: Center(
@@ -143,7 +143,7 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
   late ProductDetailsModel _details;
   late int _countryId;
   int? _stateId;
-  late String? _selectedShippingOption;
+  String? _selectedShippingOption;
   final List<_ProductCountry> _countries = [];
   final List<_ProductCountry> _states = [];
   final List<ShippingOption> _shippingOptions = [];
@@ -247,7 +247,7 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
                               height: 300,
                               child: Center(
                                 child: TextIcon(
-                                  text: "Image Not Found",
+                                  text: LocaleKeys.image_not_available.tr(),
                                   textStyle: Theme.of(context)
                                       .textTheme
                                       .headline6!
@@ -489,13 +489,15 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
                               ? () {}
                               : _selectedShippingOption == null
                                   ? () {
-                                      toast("Please select shipping option!");
+                                      toast(LocaleKeys
+                                          .please_select_shipping_option
+                                          .tr());
                                     }
                                   : () async {
                                       if (_details.data!.stockQuantity ==
                                               null ||
                                           _details.data!.stockQuantity! < 0) {
-                                        toast("Out of stock");
+                                        toast(LocaleKeys.out_of_stock.tr());
                                         return;
                                       } else {
                                         toast(LocaleKeys.please_wait.tr());
@@ -583,7 +585,7 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
                 ),
                 onPressed: () async {
                   if (widget.isWishlist) {
-                    toast("Item is already added in the wishlist.");
+                    toast(LocaleKeys.item_already_wishlist.tr());
                   } else {
                     toast(LocaleKeys.adding_to_wishlist.tr());
                     await context
@@ -694,7 +696,7 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Text(
-                  "Select Variants for '${attributeValue.name}'",
+                  "${LocaleKeys.select_variant_for.tr()} '${attributeValue.name}'",
                   style: Theme.of(context)
                       .textTheme
                       .headline6!
@@ -766,8 +768,7 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
             children: [
               const Divider(),
               _selectedShippingOption == null
-                  ? Text(
-                      "This seller does not deliver to your selected Country/Region. Change the shipping address or find other sellers who ship to your area.",
+                  ? Text(LocaleKeys.seller_doesnt_ship_this_area.tr(),
                       style: Theme.of(context).textTheme.caption!.copyWith(
                             fontWeight: FontWeight.bold,
                           ))
@@ -776,7 +777,7 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
                       children: [
                         Flexible(
                           child: Text(
-                              "${_option?.name ?? "Unknown"} by ${_option?.carrierName ?? "Unknown"}",
+                              "${_option?.name ?? LocaleKeys.unknown.tr()} by ${_option?.carrierName ?? LocaleKeys.unknown.tr()}",
                               style: Theme.of(context)
                                   .textTheme
                                   .subtitle2!
@@ -829,7 +830,8 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
                   _states.clear();
                   for (var element in _getStatesForCurrentCountry) {
                     _states.add(_ProductCountry(
-                        id: element.id!, name: element.name ?? "Unknown"));
+                        id: element.id!,
+                        name: element.name ?? LocaleKeys.unknown.tr()));
                   }
                   _stateId = _selectedStateId;
                 });
@@ -869,14 +871,14 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
                 child: Text(
                   LocaleKeys.ship_to.tr() +
                       " " +
-                      (_stateName ?? _countryName ?? "Unknown"),
+                      (_stateName ?? _countryName ?? LocaleKeys.unknown.tr()),
                   style: Theme.of(context).textTheme.headline6!.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
                 ),
               ),
               Text(
-                "Change",
+                LocaleKeys.change.tr(),
                 style: Theme.of(context).textTheme.caption!.copyWith(
                     fontWeight: FontWeight.bold, color: kPrimaryColor),
               ),
@@ -894,7 +896,7 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
       isScrollControlled: true,
       builder: (context) {
         return _SelectSippingCountryPage(
-          title: "Select Shipping Country",
+          title: LocaleKeys.select_shipping_country.tr(),
           items: _countries,
           onCountrySelected: (country) {
             Navigator.pop(context, country.id);
@@ -916,7 +918,7 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
       isDismissible: false,
       builder: (context) {
         return _SelectSippingStatePage(
-          title: "Select Shipping State",
+          title: LocaleKeys.select_shipping_state.tr(),
           items: states,
           onCountrySelected: (state) {
             Navigator.pop(context, state.id);
@@ -986,7 +988,7 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Text(
-                  "Select Shipping Option",
+                  LocaleKeys.select_shipping_option.tr(),
                   style: Theme.of(context)
                       .textTheme
                       .headline6!
@@ -999,9 +1001,9 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
                         .map(
                           (e) => ListTile(
                             title: Text(
-                              (e.name ?? "Unknown") +
+                              (e.name ?? LocaleKeys.unknown.tr()) +
                                   " by " +
-                                  (e.carrierName ?? "Unknown"),
+                                  (e.carrierName ?? LocaleKeys.unknown.tr()),
                               style: Theme.of(context)
                                   .textTheme
                                   .subtitle2!
@@ -1163,7 +1165,7 @@ class _ProductDetailsImageSectionState
                     context.nextPage(
                       ImageViewerPage(
                           imageUrl: widget.images[_selectedImageIndex].path!,
-                          title: "Product Image"),
+                          title: LocaleKeys.product_image.tr()),
                     );
                   },
                   child: CachedNetworkImage(
@@ -1345,7 +1347,7 @@ class _SelectSippingCountryPageState extends State<_SelectSippingCountryPage> {
             const SizedBox(height: 10),
             CustomTextField(
               controller: _searchController,
-              hintText: "Search",
+              hintText: LocaleKeys.search.tr(),
               onChanged: (value) {
                 setState(() {
                   _filteredItems.clear();
@@ -1444,12 +1446,12 @@ class _SelectSippingStatePageState extends State<_SelectSippingStatePage> {
             const SizedBox(height: 10),
             CustomTextField(
               controller: _searchController,
-              hintText: "Search",
+              hintText: LocaleKeys.search.tr(),
               onChanged: (value) {
                 setState(() {
                   _filteredItems.clear();
                   _filteredItems.addAll(widget.items.where((element) =>
-                      (element.name ?? "Unknown")
+                      (element.name ?? LocaleKeys.unknown.tr())
                           .toLowerCase()
                           .contains(value.toLowerCase())));
                 });
@@ -1466,7 +1468,7 @@ class _SelectSippingStatePageState extends State<_SelectSippingStatePage> {
                         widget.onCountrySelected(e);
                       },
                       title: Text(
-                        e.name ?? "Unknown",
+                        e.name ?? LocaleKeys.unknown.tr(),
                         style: Theme.of(context)
                             .textTheme
                             .subtitle2!

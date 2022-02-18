@@ -208,7 +208,7 @@ class OrderDetailsScreen extends ConsumerWidget {
                         CustomShopCard(
                             image: orderDetailsState.orderDetails!.shop!.image,
                             title: orderDetailsState.orderDetails!.shop!.name ??
-                                "Unknown",
+                                LocaleKeys.unknown.tr(),
                             verifiedText: orderDetailsState
                                     .orderDetails!.shop!.verifiedText ??
                                 ""),
@@ -461,18 +461,18 @@ class OrderDetailsScreen extends ConsumerWidget {
         alignment: WrapAlignment.end,
         children: [
           CustomSmallButton(
-            text: "Generate Invoice",
+            text: LocaleKeys.generate_invoice.tr(),
             onPressed: () async {
-              toast("Generating Invoice...");
+              toast(LocaleKeys.generating_invoice.tr());
               final _result = await generateInvoice(
                   API.downloadOrderInvoice(orderDetailsState.orderDetails!.id!),
                   orderDetailsState.orderDetails!.orderNumber!);
 
               if (_result != null) {
-                toast("Invoice Generated");
+                toast(LocaleKeys.invoice_generated.tr());
                 context.nextPage(PDFScreen(path: _result));
               } else {
-                toast("Error Generating Invoice");
+                toast(LocaleKeys.error_generating_invoice.tr());
               }
             },
           ),

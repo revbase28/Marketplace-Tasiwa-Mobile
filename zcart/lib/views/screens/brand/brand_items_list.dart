@@ -19,10 +19,9 @@ class BrandItemsListView extends ConsumerWidget {
       children: [
         brandItemsListState is BrandItemsLoadedState
             ? Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
+                padding: const EdgeInsets.symmetric(horizontal: 8),
                 child: ProductDetailsCardGridView(
-                  productList: brandItemsListState.brandItemsList.data!,
-                ))
+                    productList: brandItemsListState.brandItemsList.data!))
             : brandItemsListState is BrandItemsLoadingState ||
                     brandItemsListState is BrandItemsInitialState
                 ? const ProductLoadingWidget().px(10)

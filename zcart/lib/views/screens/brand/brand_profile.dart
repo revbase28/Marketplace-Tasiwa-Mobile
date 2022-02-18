@@ -113,11 +113,32 @@ class BrandProfileScreen extends ConsumerWidget {
                                   .brandProfile.data!.availableFrom ??
                               LocaleKeys.not_available.tr(),
                         ).py(5),
-                        BrandDetailsRowItem(
-                          title: LocaleKeys.url.tr(),
-                          value: _brandProfileState.brandProfile.data!.url ??
-                              LocaleKeys.not_available.tr(),
-                        ).py(5),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: BrandDetailsRowItem(
+                                title: LocaleKeys.url.tr(),
+                                value:
+                                    _brandProfileState.brandProfile.data!.url ??
+                                        LocaleKeys.not_available.tr(),
+                              ).py(5),
+                            ),
+                            const SizedBox(width: 8),
+                            GestureDetector(
+                              onTap: () {
+                                if (_brandProfileState.brandProfile.data!.url !=
+                                    null) {
+                                  launchURL(_brandProfileState
+                                      .brandProfile.data!.url);
+                                }
+                              },
+                              child: Icon(
+                                Icons.open_in_new,
+                                color: kPrimaryColor,
+                              ),
+                            ),
+                          ],
+                        ),
                         BrandDetailsRowItem(
                           title: LocaleKeys.product_count.tr(),
                           value: _brandProfileState
@@ -171,15 +192,18 @@ class BrandDescription extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 5),
       color: getColorBasedOnTheme(context, kLightColor, kDarkCardBgColor),
       child: ListTile(
-        title: Text(LocaleKeys.description.tr()).py(5),
+        title: Text(LocaleKeys.description.tr(),
+                style: context.textTheme.headline6!)
+            .pOnly(bottom: 10, top: 5),
         subtitle: HtmlWidget(
           brandProfile.data!.description ?? "",
           enableCaching: true,
+          textStyle: context.textTheme.subtitle2,
           onTapUrl: (url) {
             launchURL(url);
             return true;
           },
-        ),
+        ).pOnly(bottom: 5),
       ),
     );
   }

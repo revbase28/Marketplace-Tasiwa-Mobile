@@ -198,7 +198,7 @@ class DisputeDetailsScreen extends ConsumerWidget {
                                 disputeDetailsState.disputeDetails!.shop!.image,
                             title: disputeDetailsState
                                     .disputeDetails!.shop!.name ??
-                                "Unknown",
+                                LocaleKeys.unknown.tr(),
                             verifiedText: disputeDetailsState
                                     .disputeDetails!.shop!.verifiedText ??
                                 ""),

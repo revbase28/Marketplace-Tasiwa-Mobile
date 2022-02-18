@@ -93,7 +93,7 @@ class ProductDetailsWidget extends StatelessWidget {
                     value: details.data!.sku ?? LocaleKeys.not_available.tr(),
                   ),
                   TechnicalDetailsItem(
-                    title: "Condition: ",
+                    title: "${LocaleKeys.condition.tr()}: ",
                     value: details.data!.condition ??
                         LocaleKeys.not_available.tr(),
                   ),

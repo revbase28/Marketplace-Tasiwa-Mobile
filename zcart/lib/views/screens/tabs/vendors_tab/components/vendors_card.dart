@@ -94,9 +94,11 @@ class VendorCard extends StatelessWidget {
                 const SizedBox(width: 5),
                 Text(
                   rating ?? '',
-                  style: context.textTheme.overline!.copyWith(
-                      color: getColorBasedOnTheme(
-                          context, kPriceColor, kDarkPriceColor)),
+                  style: context.textTheme.caption!.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: getColorBasedOnTheme(
+                        context, kPriceColor, kDarkPriceColor),
+                  ),
                 ).visible(rating != null),
               ],
             ),

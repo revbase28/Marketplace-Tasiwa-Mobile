@@ -27,7 +27,7 @@ class _WalletTransferState extends State<WalletTransferPage> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Wallet Transfer'),
+          title: Text(LocaleKeys.wallet_transfer.tr()),
           systemOverlayStyle: SystemUiOverlayStyle.light,
         ),
         body: Container(
@@ -49,8 +49,8 @@ class _WalletTransferState extends State<WalletTransferPage> {
                     padding: const EdgeInsets.all(16),
                     children: [
                       CustomTextField(
-                        hintText: "Amount",
-                        title: "Amount",
+                        hintText: LocaleKeys.amount.tr(),
+                        title: LocaleKeys.amount.tr(),
                         keyboardType: TextInputType.number,
                         inputFormatters: [
                           FilteringTextInputFormatter.allow(
@@ -63,8 +63,8 @@ class _WalletTransferState extends State<WalletTransferPage> {
                       ),
                       const SizedBox(height: 4),
                       CustomTextField(
-                        hintText: "Transfer to (Email)",
-                        title: "Email",
+                        hintText: LocaleKeys.transfer_to.tr(),
+                        title: LocaleKeys.email.tr(),
                         keyboardType: TextInputType.emailAddress,
                         controller: _emailController,
                         validator: (value) => value!.isEmpty
@@ -96,7 +96,7 @@ class _WalletTransferState extends State<WalletTransferPage> {
                             }
                           }
                         },
-                        buttonText: 'Transfer',
+                        buttonText: LocaleKeys.transfer.tr(),
                       ),
                     ],
                   ),

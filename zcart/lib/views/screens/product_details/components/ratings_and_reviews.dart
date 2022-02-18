@@ -35,7 +35,7 @@ class ProductRatingsAndReview extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Ratings & Reviews ($feedBackCount)',
+                '${LocaleKeys.rating_and_reviews.tr()} ($feedBackCount)',
                 style: Theme.of(context)
                     .textTheme
                     .subtitle2!
@@ -92,7 +92,7 @@ class ProductRatingAndReviewAllPage extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         systemOverlayStyle: SystemUiOverlayStyle.light,
-        title: const Text('Ratings & Reviews'),
+        title: Text(LocaleKeys.rating_and_reviews.tr()),
         actions: [
           IconButton(
               onPressed: () {
@@ -158,7 +158,7 @@ class RatingAndReviewSection extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      feedBack.customer?.name ?? 'Unknown',
+                      feedBack.customer?.name ?? LocaleKeys.unknown.tr(),
                       style: Theme.of(context)
                           .textTheme
                           .caption!

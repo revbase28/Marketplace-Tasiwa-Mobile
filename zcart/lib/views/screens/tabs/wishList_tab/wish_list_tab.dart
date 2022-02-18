@@ -410,9 +410,11 @@ class WishListTab extends ConsumerWidget {
                                                 dialogAnimation: DialogAnimation
                                                     .SLIDE_RIGHT_LEFT,
                                                 dialogType: DialogType.DELETE,
-                                                positiveText: "Remove",
-                                                title:
-                                                    "Remove Item from Wishlist",
+                                                positiveText:
+                                                    LocaleKeys.remove.tr(),
+                                                title: LocaleKeys
+                                                    .remove_from_wishlist
+                                                    .tr(),
                                                 onAccept: () {
                                                   toast(LocaleKeys.please_wait
                                                       .tr());

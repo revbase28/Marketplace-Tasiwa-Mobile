@@ -101,7 +101,7 @@ class _VendorsListBodyState extends State<VendorsListBody> {
                   child: CustomTextField(
                     controller: _searchController,
                     autoFocus: widget.showSearchBar,
-                    hintText: "Search Vendor",
+                    hintText: LocaleKeys.search_vendor.tr(),
                     onChanged: (value) {
                       setState(() {
                         _vendorsList.clear();

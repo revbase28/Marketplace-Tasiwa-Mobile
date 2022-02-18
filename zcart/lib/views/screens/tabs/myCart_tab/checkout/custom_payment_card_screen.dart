@@ -5,8 +5,10 @@ import 'package:nb_utils/nb_utils.dart';
 import 'package:zcart/Theme/styles/colors.dart';
 import 'package:zcart/helper/constants.dart';
 import 'package:zcart/helper/app_images.dart';
+import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:zcart/views/shared_widgets/shared_widgets.dart';
 import 'dart:math' as math;
+import 'package:easy_localization/easy_localization.dart';
 
 class CustomPaymentCardScreen extends StatefulWidget {
   final String payMentMethod;
@@ -79,8 +81,9 @@ class _CustomPaymentCardScreenState extends State<CustomPaymentCardScreen> {
       child: Scaffold(
         appBar: AppBar(
           systemOverlayStyle: SystemUiOverlayStyle.light,
-          title: Text(
-              widget.payMentMethod == stripe ? 'Stripe Checkout' : 'Checkout'),
+          title: Text(widget.payMentMethod == stripe
+              ? 'Stripe Checkout'
+              : LocaleKeys.checkout.tr()),
         ),
         body: SingleChildScrollView(
           child: Form(
@@ -113,16 +116,17 @@ class _CustomPaymentCardScreenState extends State<CustomPaymentCardScreen> {
                       CustomTextField(
                         controller: cardNumberCtrl,
                         keyboardType: TextInputType.number,
-                        hintText: 'Card Number',
+                        hintText: LocaleKeys.card_number.tr(),
                         maxLength: 16,
                         inputFormatters: [
                           FilteringTextInputFormatter.digitsOnly
                         ],
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return 'Please enter card number';
+                            return LocaleKeys.please_enter_card_number.tr();
                           } else if (value.length < 16) {
-                            return 'Card number must be 16 digits';
+                            return LocaleKeys.card_number_must_be_16_digits
+                                .tr();
                           }
                           return null;
                         },
@@ -147,18 +151,21 @@ class _CustomPaymentCardScreenState extends State<CustomPaymentCardScreen> {
                       CustomTextField(
                         controller: expiryFieldCtrl,
                         keyboardType: TextInputType.number,
-                        hintText: 'Card Expiry',
+                        hintText: LocaleKeys.expiry_date.tr(),
                         maxLength: 5,
                         inputFormatters: [
                           FilteringTextInputFormatter.digitsOnly
                         ],
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return 'Please enter card expiry';
+                            return LocaleKeys.please_enter_expiry_date.tr();
                           } else if (value.length < 5) {
-                            return 'Card expiry must be 5 digits';
-                          } else if (int.parse(value.substring(0, 2)) > 12) {
-                            return 'Card expiry month must be less than 12';
+                            return LocaleKeys.expiry_date_must_be_5_digits.tr();
+                          } else if (int.parse(value.substring(0, 2)) > 12 ||
+                              int.parse(value.substring(0, 2)) < 1) {
+                            return LocaleKeys
+                                .expiry_month_must_be_between_1_and_12
+                                .tr();
                           } else if (value.substring(3, 5) ==
                                   DateTime.now()
                                       .year
@@ -166,7 +173,9 @@ class _CustomPaymentCardScreenState extends State<CustomPaymentCardScreen> {
                                       .substring(2, 4) &&
                               int.parse(value.substring(0, 2)) <=
                                   DateTime.now().month) {
-                            return 'Card expiry must be greater than current date';
+                            return LocaleKeys
+                                .expiray_year_must_be_greater_than_current_date
+                                .tr();
                           }
                           return null;
                         },
@@ -194,7 +203,7 @@ class _CustomPaymentCardScreenState extends State<CustomPaymentCardScreen> {
                       ),
                       CustomTextField(
                         focusNode: _focusNode,
-                        hintText: 'CVV',
+                        hintText: LocaleKeys.cvv.tr(),
                         maxLength: 3,
                         keyboardType: TextInputType.number,
                         inputFormatters: [
@@ -202,9 +211,9 @@ class _CustomPaymentCardScreenState extends State<CustomPaymentCardScreen> {
                         ],
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return 'Please enter CVV';
+                            return LocaleKeys.please_enter_cvv.tr();
                           } else if (value.length < 3) {
-                            return 'CVV must be 3 digits';
+                            return LocaleKeys.cvv_must_be_3_digits.tr();
                           }
                           return null;
                         },
@@ -215,7 +224,7 @@ class _CustomPaymentCardScreenState extends State<CustomPaymentCardScreen> {
                         },
                       ),
                       CustomTextField(
-                        hintText: 'Card Holder Name (Optional)',
+                        hintText: LocaleKeys.card_holder_name.tr(),
                         onChanged: (value) {
                           setState(() {
                             _cardHolderName = value;
@@ -224,7 +233,7 @@ class _CustomPaymentCardScreenState extends State<CustomPaymentCardScreen> {
                       ),
                       const SizedBox(height: 32),
                       Text(
-                        'Total Amount: ${widget.amount}',
+                        '${LocaleKeys.total_amount.tr()}: ${widget.amount}',
                         style: Theme.of(context).textTheme.headline6!.copyWith(
                               fontWeight: FontWeight.bold,
                             ),
@@ -237,7 +246,7 @@ class _CustomPaymentCardScreenState extends State<CustomPaymentCardScreen> {
                         width: MediaQuery.of(context).size.width / 4,
                       ),
                       CustomButton(
-                        buttonText: "Continue",
+                        buttonText: LocaleKeys.continue_text.tr(),
                         onTap: () {
                           if (_formKey.currentState!.validate()) {
                             Navigator.of(context).pop(
@@ -250,7 +259,7 @@ class _CustomPaymentCardScreenState extends State<CustomPaymentCardScreen> {
                               ),
                             );
                           } else {
-                            toast("Please fill all the details!");
+                            toast(LocaleKeys.please_fill_all_details.tr());
                           }
                         },
                       ),

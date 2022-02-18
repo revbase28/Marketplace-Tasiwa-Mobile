@@ -190,7 +190,8 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                           style: context.textTheme.headline6),
                       CustomShopCard(
                         image: widget.order.shop!.image!,
-                        title: widget.order.shop!.name ?? "Unknown",
+                        title:
+                            widget.order.shop!.name ?? LocaleKeys.unknown.tr(),
                         verifiedText: widget.order.shop!.verifiedText ?? "",
                       ),
                       const Divider(height: 0),

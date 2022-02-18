@@ -6,7 +6,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:zcart/Theme/styles/colors.dart';
-import 'package:zcart/data/controller/blog/blog_controller.dart';
 import 'package:zcart/data/controller/cart/coupon_controller.dart';
 import 'package:zcart/data/controller/cart/coupon_state.dart';
 import 'package:zcart/data/controller/chat/chat_controller.dart';
@@ -53,7 +52,7 @@ class AccountTab extends StatelessWidget {
                 context.nextPage(const SettingsPage());
               },
               icon: const Icon(Icons.settings),
-              tooltip: "Settings",
+              tooltip: LocaleKeys.settings.tr(),
             ),
           ],
         ),
@@ -469,7 +468,6 @@ class ActionCard extends StatelessWidget {
                   )
                 ],
               ).onInkTap(() {
-                context.read(blogsProvider.notifier).blogs();
                 context.nextPage(const BlogsScreen());
               }),
             ),

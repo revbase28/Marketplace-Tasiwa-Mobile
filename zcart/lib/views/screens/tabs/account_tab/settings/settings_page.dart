@@ -71,7 +71,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     Card(
                       elevation: 0,
                       child: ListTile(
-                        title: Text("Clear Cache",
+                        title: Text(LocaleKeys.clear_cache.tr(),
                             style: context.textTheme.subtitle2!),
                         leading: const Icon(Icons.delete_forever),
                         onTap: () async {
@@ -96,7 +96,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       onTap: () async {
                         await showCustomConfirmDialog(
                           context,
-                          title: "Are you sure to sign out?",
+                          title: LocaleKeys.sign_out_warning.tr(),
                           dialogAnimation: DialogAnimation.SLIDE_BOTTOM_TOP,
                           primaryColor: kPrimaryColor,
                           negativeText: LocaleKeys.no.tr(),
@@ -132,9 +132,8 @@ Future<void> clearCache(BuildContext context) async {
   await showCustomConfirmDialog(
     context,
     dialogAnimation: DialogAnimation.SLIDE_BOTTOM_TOP,
-    title: "Are you sure to clear cache?",
-    subTitle:
-        "This will delete all of your local data and signed you out if you are signed in.",
+    title: LocaleKeys.clear_cache_warning.tr(),
+    subTitle: LocaleKeys.clear_cache_subtitle.tr(),
     negativeText: LocaleKeys.no.tr(),
     positiveText: LocaleKeys.yes.tr(),
     primaryColor: kPrimaryColor,
@@ -147,7 +146,7 @@ Future<void> clearCache(BuildContext context) async {
 }
 
 Future<void> _clearAll() async {
-  toast("Clearing Cache...");
+  toast(LocaleKeys.clearing_cache.tr());
   await DefaultCacheManager().emptyCache();
   await sharedPreferences.clear();
   await Hive.deleteFromDisk();
@@ -163,7 +162,7 @@ Future<void> _clearAll() async {
   if (appDir.existsSync()) {
     appDir.deleteSync(recursive: true);
   }
-  toast("Cache Cleared");
+  toast(LocaleKeys.clear_cache_success.tr());
 }
 
 class CompanyInfoWidgets extends StatelessWidget {

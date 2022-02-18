@@ -21,7 +21,7 @@ class WalletTransactionsPage extends ConsumerWidget {
 
     return Scaffold(
         appBar: AppBar(
-          title: const Text("Wallet Transactions"),
+          title: Text(LocaleKeys.wallet_transactions.tr()),
           systemOverlayStyle: SystemUiOverlayStyle.light,
           actions: [
             IconButton(

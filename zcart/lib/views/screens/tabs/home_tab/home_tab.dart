@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -272,7 +273,7 @@ class DealOfTheDayWidget extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("Deal Of The Day",
+          Text(LocaleKeys.deal_of_the_day.tr(),
                   style: context.textTheme.headline6!
                       .copyWith(color: kPrimaryFadeTextColor))
               .pOnly(bottom: 10),
@@ -292,7 +293,6 @@ class DealOfTheDayWidget extends StatelessWidget {
                         child: CarouselSlider(
                             options: CarouselOptions(
                               scrollDirection: Axis.horizontal,
-                              height: context.percentHeight * 45,
                               viewportFraction: 1,
                               autoPlay: true,
                             ),
@@ -397,16 +397,16 @@ class DealOfTheDayWidget extends StatelessWidget {
                                       dealOfTheDay.data!.slug, context);
                             },
                             child: Row(
-                              children: const [
-                                Icon(
+                              children: [
+                                const Icon(
                                   Icons.favorite_border,
                                   color: kDarkPriceColor,
                                   size: 20,
                                 ),
-                                SizedBox(width: 4),
+                                const SizedBox(width: 4),
                                 Text(
-                                  "Add to Wishlist",
-                                  style: TextStyle(
+                                  LocaleKeys.add_to_wishlist.tr(),
+                                  style: const TextStyle(
                                     color: kDarkPriceColor,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -423,7 +423,7 @@ class DealOfTheDayWidget extends StatelessWidget {
                   top: 0,
                   right: 0,
                   child: Container(
-                    padding: const EdgeInsets.only(top: 8, right: 8),
+                    padding: const EdgeInsets.only(top: 8, right: 6),
                     decoration: const BoxDecoration(
                       borderRadius: BorderRadius.only(
                         bottomLeft: Radius.circular(200),
@@ -435,8 +435,7 @@ class DealOfTheDayWidget extends StatelessWidget {
                     child: Center(
                       child: Transform(
                         alignment: FractionalOffset.bottomRight,
-                        transform: Matrix4.identity()
-                          ..rotateZ(45 * 3.1415927 / 180),
+                        transform: Matrix4.identity()..rotateZ(45 * pi / 180),
                         child: Text(
                           "HOT",
                           style: context.textTheme.caption!.copyWith(

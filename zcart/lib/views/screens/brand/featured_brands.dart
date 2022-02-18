@@ -8,7 +8,6 @@ import 'package:zcart/riverpod/state/brand_state.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:zcart/views/screens/brand/brand_profile.dart';
-import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:zcart/views/screens/tabs/brands_tab/brands_tab.dart';
 
@@ -21,7 +20,6 @@ class FeaturedBrands extends ConsumerWidget {
 
     return featuredBrandsState is FeaturedBrandsLoadedState
         ? SizedBox(
-            height: 150,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -31,9 +29,8 @@ class FeaturedBrands extends ConsumerWidget {
                   children: [
                     Expanded(
                       child: Text(LocaleKeys.featured_brands.tr(),
-                              style: context.textTheme.headline6!
-                                  .copyWith(color: kPrimaryFadeTextColor))
-                          .pOnly(bottom: 10),
+                          style: context.textTheme.headline6!
+                              .copyWith(color: kPrimaryFadeTextColor)),
                     ),
                     GestureDetector(
                       onTap: () {
@@ -48,83 +45,82 @@ class FeaturedBrands extends ConsumerWidget {
                   ],
                 ),
                 Flexible(
-                  child: Container(
-                    color: getColorBasedOnTheme(
-                        context, kLightColor, kDarkCardBgColor),
-                    child: GridView.builder(
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 4,
-                                childAspectRatio: 1,
-                                crossAxisSpacing: 10,
-                                mainAxisSpacing: 10),
-                        itemCount:
-                            featuredBrandsState.featuredBrands!.data.length > 8
-                                ? 8
-                                : featuredBrandsState
-                                    .featuredBrands!.data.length,
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemBuilder: (BuildContext ctx, index) {
-                          return Container(
-                            alignment: Alignment.center,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                Expanded(
-                                  child: Container(
-                                    padding: const EdgeInsets.all(8),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(5),
-                                      border: Border.all(
-                                          color: EasyDynamicTheme.of(context)
-                                                      .themeMode ==
-                                                  ThemeMode.dark
-                                              ? kDarkBgColor
-                                              : kFadeColor),
+                  child: GridView.builder(
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 4,
+                              childAspectRatio: 0.85,
+                              crossAxisSpacing: 2,
+                              mainAxisSpacing: 2),
+                      itemCount:
+                          featuredBrandsState.featuredBrands!.data.length > 8
+                              ? 8
+                              : featuredBrandsState.featuredBrands!.data.length,
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemBuilder: (BuildContext ctx, index) {
+                        return Card(
+                          elevation: 5,
+                          shadowColor: getColorBasedOnTheme(
+                              context, Colors.black45, kDarkBgColor),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          color: getColorBasedOnTheme(
+                              context, kLightColor, kDarkCardBgColor),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(12),
+                                  child: CachedNetworkImage(
+                                    imageUrl: featuredBrandsState
+                                        .featuredBrands!.data[index].image!,
+                                    fit: BoxFit.contain,
+                                    errorWidget: (context, url, error) =>
+                                        const SizedBox(),
+                                    progressIndicatorBuilder:
+                                        (context, url, progress) => Center(
+                                      child: CircularProgressIndicator(
+                                          value: progress.progress),
                                     ),
-                                    child: CachedNetworkImage(
-                                      imageUrl: featuredBrandsState
-                                          .featuredBrands!.data[index].image!,
-                                      fit: BoxFit.contain,
-                                      errorWidget: (context, url, error) =>
-                                          const SizedBox(),
-                                      progressIndicatorBuilder:
-                                          (context, url, progress) => Center(
-                                        child: CircularProgressIndicator(
-                                            value: progress.progress),
-                                      ),
-                                    ),
-                                  ).pOnly(bottom: 10),
+                                  ),
                                 ),
-                                Text(
+                              ),
+                              Container(
+                                decoration: BoxDecoration(
+                                    borderRadius: const BorderRadius.only(
+                                      bottomLeft: Radius.circular(8),
+                                      bottomRight: Radius.circular(8),
+                                    ),
+                                    color: getColorBasedOnTheme(
+                                        context, kLightBgColor, kDarkBgColor)),
+                                padding: const EdgeInsets.all(6),
+                                child: Text(
                                   featuredBrandsState
                                       .featuredBrands!.data[index].name!,
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   textAlign: TextAlign.center,
-                                  style: context.textTheme.subtitle2!.copyWith(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 11,
-                                      color: getColorBasedOnTheme(
-                                          context, kDarkColor, kFadeColor)),
-                                )
-                              ],
-                            ),
-                          ).onInkTap(() async {
-                            context.nextPage(const BrandProfileScreen());
-                            await context
-                                .read(brandProfileNotifierProvider.notifier)
-                                .getBrandProfile(featuredBrandsState
-                                    .featuredBrands!.data[index].slug);
+                                  style: context.textTheme.caption!,
+                                ),
+                              )
+                            ],
+                          ),
+                        ).onInkTap(() async {
+                          context.nextPage(const BrandProfileScreen());
+                          await context
+                              .read(brandProfileNotifierProvider.notifier)
+                              .getBrandProfile(featuredBrandsState
+                                  .featuredBrands!.data[index].slug);
 
-                            await context
-                                .read(brandItemsListNotifierProvider.notifier)
-                                .getBrandItemsList(featuredBrandsState
-                                    .featuredBrands!.data[index].slug);
-                          });
-                        }).p(10),
-                  ).cornerRadius(10),
+                          await context
+                              .read(brandItemsListNotifierProvider.notifier)
+                              .getBrandItemsList(featuredBrandsState
+                                  .featuredBrands!.data[index].slug);
+                        });
+                      }),
                 ),
               ],
             ),

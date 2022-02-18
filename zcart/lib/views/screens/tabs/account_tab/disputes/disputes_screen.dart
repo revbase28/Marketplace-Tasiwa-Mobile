@@ -117,7 +117,7 @@ class DisputeCard extends StatelessWidget {
               Expanded(
                 child: CustomShopCard(
                     image: dispute.shop!.image,
-                    title: dispute.shop!.name ?? "Unknown",
+                    title: dispute.shop!.name ?? LocaleKeys.unknown.tr(),
                     verifiedText: dispute.shop!.verifiedText ?? ""),
               ),
               Container(

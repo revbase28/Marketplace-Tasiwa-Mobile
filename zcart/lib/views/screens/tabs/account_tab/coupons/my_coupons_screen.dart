@@ -112,7 +112,7 @@ class CouponsCard extends StatelessWidget {
               Column(
                 children: [
                   Text(
-                    "Redeem Code",
+                    LocaleKeys.redeem_coupon.tr(),
                     style: context.textTheme.subtitle2!.copyWith(
                       color: kPrimaryLightTextColor,
                     ),
@@ -126,7 +126,7 @@ class CouponsCard extends StatelessWidget {
                     ),
                   ).onInkTap(() {
                     Clipboard.setData(ClipboardData(text: code))
-                        .then((value) => toast('Code is copied to clipboard'));
+                        .then((value) => toast(LocaleKeys.code_is_copied.tr()));
                   }),
                 ],
               ),

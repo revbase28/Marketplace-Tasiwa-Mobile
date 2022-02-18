@@ -33,7 +33,7 @@ class _WalletDepositPageState extends State<WalletDepositPage> {
       },
       child: Scaffold(
         appBar: AppBar(
-            title: const Text("Wallet Deposit"),
+            title: Text(LocaleKeys.wallet_deposit.tr()),
             systemOverlayStyle: SystemUiOverlayStyle.light),
         body: _isLoading
             ? Center(
@@ -53,8 +53,8 @@ class _WalletDepositPageState extends State<WalletDepositPage> {
                   padding: const EdgeInsets.all(16),
                   children: [
                     CustomTextField(
-                      hintText: "Amount",
-                      title: "Amount",
+                      hintText: LocaleKeys.amount.tr(),
+                      title: LocaleKeys.amount.tr(),
                       keyboardType: TextInputType.number,
                       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                       controller: _amountController,
@@ -128,12 +128,13 @@ class _WalletDepositPageState extends State<WalletDepositPage> {
                                           ],
                                         ],
                                       )
-                                    : const Padding(
-                                        padding:
-                                            EdgeInsets.symmetric(vertical: 32),
+                                    : Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 32),
                                         child: Center(
                                           child: Text(
-                                            "No payment methods available",
+                                            LocaleKeys.no_payment_method_found
+                                                .tr(),
                                             textAlign: TextAlign.center,
                                           ),
                                         ),
@@ -162,7 +163,7 @@ class _WalletDepositPageState extends State<WalletDepositPage> {
                       onTap: () async {
                         if (_formKey.currentState!.validate()) {
                           if (_selectedpaymentMethod.isEmpty) {
-                            toast("Please select payment method!");
+                            toast(LocaleKeys.please_select_payment_method.tr());
                           } else {
                             await PaymentMethods.pay(
                               context,
@@ -203,7 +204,7 @@ class _WalletDepositPageState extends State<WalletDepositPage> {
                                   _isLoading = false;
                                 });
                               } else {
-                                toast("Payment Failed");
+                                toast(LocaleKeys.payment_failed.tr());
                               }
                             });
                           }
@@ -215,7 +216,7 @@ class _WalletDepositPageState extends State<WalletDepositPage> {
                           // }
                         }
                       },
-                      buttonText: "Continue",
+                      buttonText: LocaleKeys.continue_text.tr(),
                     ),
                   ],
                 )),

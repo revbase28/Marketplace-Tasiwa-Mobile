@@ -87,6 +87,22 @@ class _SearchScreenState extends State<SearchScreen> {
                             title: Text(
                               searchState.searchedItem![index].title!,
                             ),
+                            trailing: Text(
+                              searchState.searchedItem![index].offerPrice !=
+                                      null
+                                  ? searchState.searchedItem![index].offerPrice!
+                                      .toString()
+                                  : searchState.searchedItem![index].price!
+                                      .toString(),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .subtitle2!
+                                  .copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    color: getColorBasedOnTheme(
+                                        context, kPriceColor, kDarkPriceColor),
+                                  ),
+                            ),
                             onTap: () {
                               context.nextPage(ProductDetailsScreen(
                                   productSlug:

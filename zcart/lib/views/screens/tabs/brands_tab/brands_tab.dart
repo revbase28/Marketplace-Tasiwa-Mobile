@@ -101,7 +101,7 @@ class _BrandListBodyState extends State<BrandListBody> {
                   child: CustomTextField(
                     controller: _searchController,
                     autoFocus: widget.showSearchBar,
-                    hintText: "Search Brand",
+                    hintText: LocaleKeys.search_brand.tr(),
                     onChanged: (value) {
                       setState(() {
                         _brandsList.clear();
@@ -121,9 +121,9 @@ class _BrandListBodyState extends State<BrandListBody> {
           child: GridView.builder(
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
-              childAspectRatio: 0.9,
-              crossAxisSpacing: 10,
-              mainAxisSpacing: 10,
+              childAspectRatio: 0.8,
+              crossAxisSpacing: 4,
+              mainAxisSpacing: 4,
             ),
             shrinkWrap: true,
             padding: const EdgeInsets.symmetric(vertical: 10),
@@ -142,48 +142,49 @@ class _BrandListBodyState extends State<BrandListBody> {
                       .getBrandItemsList(brand.slug);
                 },
                 child: Card(
-                  elevation: 3,
-                  shadowColor: kDarkColor.withOpacity(0.26),
+                  elevation: 5,
+                  shadowColor: getColorBasedOnTheme(
+                      context, Colors.black26, kDarkBgColor),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(10),
                   ),
                   color: getColorBasedOnTheme(
                       context, kLightColor, kDarkCardBgColor),
-                  child: GridTile(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Expanded(
-                            child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: CachedNetworkImage(
-                            imageUrl: brand.image!,
-                            errorWidget: (context, url, error) =>
-                                const SizedBox(),
-                            progressIndicatorBuilder:
-                                (context, url, progress) => Center(
-                              child: CircularProgressIndicator(
-                                  value: progress.progress),
-                            ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Expanded(
+                          child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: CachedNetworkImage(
+                          imageUrl: brand.image!,
+                          errorWidget: (context, url, error) =>
+                              const SizedBox(),
+                          progressIndicatorBuilder: (context, url, progress) =>
+                              Center(
+                            child: CircularProgressIndicator(
+                                value: progress.progress),
                           ),
-                        )),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Flexible(
-                              child: Text(
-                                brand.name!,
-                                maxLines: null,
-                                softWrap: true,
-                                textAlign: TextAlign.center,
-                                style: context.textTheme.subtitle2!
-                                    .copyWith(fontWeight: FontWeight.bold),
-                              ),
+                        ),
+                      )),
+                      Container(
+                        decoration: BoxDecoration(
+                            borderRadius: const BorderRadius.only(
+                              bottomLeft: Radius.circular(10),
+                              bottomRight: Radius.circular(10),
                             ),
-                          ],
-                        ).pOnly(bottom: 5, top: 5),
-                      ],
-                    ).p(10),
+                            color: getColorBasedOnTheme(
+                                context, kLightBgColor, kDarkBgColor)),
+                        padding: const EdgeInsets.all(10),
+                        child: Text(
+                          (brand.name ?? ""),
+                          maxLines: null,
+                          softWrap: true,
+                          textAlign: TextAlign.center,
+                          style: context.textTheme.subtitle2!.copyWith(),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               );

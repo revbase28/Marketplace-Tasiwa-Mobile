@@ -19,7 +19,7 @@ class OffersScreen extends ConsumerWidget {
     final offersState = watch(offersNotifierProvider);
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Offers"),
+        title: Text(LocaleKeys.offers.tr()),
         systemOverlayStyle: SystemUiOverlayStyle.light,
       ),
       body: SingleChildScrollView(
@@ -76,7 +76,7 @@ class OffersScreen extends ConsumerWidget {
                       ProductDetailsCardGridView(
                               productList:
                                   offersState.offersModel.data!.listings!)
-                          .px(10)
+                          .px(8)
                     ],
                   )
                 : const SizedBox(),

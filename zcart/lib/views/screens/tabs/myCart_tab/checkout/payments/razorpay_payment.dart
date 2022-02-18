@@ -73,10 +73,10 @@ class _RazorpayPaymentState extends State<RazorpayPayment> {
                     children: [
                       Text(
                         _result == null
-                            ? "⌛ Pending Payment"
+                            ? "⌛ ${LocaleKeys.pending_payment.tr()}"
                             : _result!
-                                ? "✅ Payment Successful "
-                                : "❌ Payment Failed",
+                                ? "✅  ${LocaleKeys.payment_success.tr()}"
+                                : "❌  ${LocaleKeys.payment_failed.tr()}",
                         style: Theme.of(context).textTheme.headline5,
                       ),
                       const SizedBox(height: 20),
@@ -107,10 +107,10 @@ class _RazorpayPaymentState extends State<RazorpayPayment> {
                             }
                           : _openCheckout,
                   buttonText: _result == null
-                      ? "Make Payment"
+                      ? LocaleKeys.make_payment.tr()
                       : _result!
-                          ? "Continue"
-                          : "Try Again",
+                          ? LocaleKeys.continue_text.tr()
+                          : LocaleKeys.try_again.tr(),
                 ),
               ],
             ),

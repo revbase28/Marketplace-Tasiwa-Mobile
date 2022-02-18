@@ -68,6 +68,6 @@ class VendorsActivityCard extends StatelessWidget {
           ).py(10).px(10),
         ],
       ),
-    ).cornerRadius(10).p(10);
+    ).cornerRadius(10);
   }
 }

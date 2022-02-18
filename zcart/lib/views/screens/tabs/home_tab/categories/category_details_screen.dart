@@ -245,7 +245,7 @@ class CategoryDetailsScreen extends ConsumerWidget {
                           )
                         : ProductDetailsCardGridView(
                                 productList: productListState.productList)
-                            .px(10)
+                            .px(8)
                     : const ProductLoadingWidget().px(10),
               ],
             ),

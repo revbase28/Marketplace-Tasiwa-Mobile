@@ -58,22 +58,22 @@ class OrderPlacedPage extends ConsumerWidget {
               ),
             ),
             SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-            const Text(
-              'Order Confirmed',
+            Text(
+              LocaleKeys.order_confirmed.tr(),
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w900,
                   color: kLightColor),
             ),
             const SizedBox(height: 16),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 64),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 64),
               child: Text(
-                "Thank you very much! Your order has been placed successfully!",
+                LocaleKeys.thank_you_for_your_order.tr(),
                 textAlign: TextAlign.center,
-                style:
-                    TextStyle(fontWeight: FontWeight.w400, color: kLightColor),
+                style: const TextStyle(
+                    fontWeight: FontWeight.w400, color: kLightColor),
               ),
             ),
             SizedBox(height: MediaQuery.of(context).size.height * 0.1),
@@ -105,34 +105,12 @@ class OrderPlacedPage extends ConsumerWidget {
                   }
                 },
                 child: Text(
-                  'Continue Shopping',
+                  LocaleKeys.continue_shopping.tr(),
                   style: Theme.of(context).textTheme.headline6!.copyWith(
                       color: kPrimaryColor, fontWeight: FontWeight.bold),
                 ),
               ),
             ),
-            // const SizedBox(height: 8),
-            // Padding(
-            //   padding: EdgeInsets.symmetric(
-            //       horizontal: MediaQuery.of(context).size.width * 0.2),
-            //   child: OutlinedButton(
-            //     style: OutlinedButton.styleFrom(
-            //       padding:
-            //           const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
-            //       side: const BorderSide(color: kLightColor, width: 2),
-            //       shape: RoundedRectangleBorder(
-            //           borderRadius: BorderRadius.circular(10)),
-            //     ),
-            //     onPressed: () async {
-            //       context.nextReplacementPage(const MyOrderScreen());
-            //     },
-            //     child: Text(
-            //       "Order History",
-            //       style: Theme.of(context).textTheme.headline6!.copyWith(
-            //           color: kLightColor, fontWeight: FontWeight.bold),
-            //     ),
-            //   ),
-            // ),
           ],
         ),
       ),

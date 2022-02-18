@@ -124,7 +124,8 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
                                 },
                                 validator: (text) {
                                   if (text == null || text.isEmpty) {
-                                    return 'Please select a country';
+                                    return LocaleKeys.please_select_a_country
+                                        .tr();
                                   }
                                   return null;
                                 },
@@ -159,7 +160,8 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
                                     : null,
                                 validator: (text) {
                                   if (text == null || text.isEmpty) {
-                                    return 'Please select a state';
+                                    return LocaleKeys.please_select_a_state
+                                        .tr();
                                   }
                                   return null;
                                 },

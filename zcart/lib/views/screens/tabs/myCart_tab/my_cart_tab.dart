@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
@@ -38,17 +39,41 @@ class MyCartTab extends StatefulWidget {
 }
 
 class _MyCartTabState extends State<MyCartTab> {
+  // late Timer _timer;
+  @override
+  void initState() {
+    // _isAllCartCheckout.add(false);
+    // _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+    //   setState(() {});
+    // });
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    // _timer.cancel();
+    super.dispose();
+  }
+
+  final List<bool> _isAllCartCheckout = [];
+
   void _onOneCheckOut(int cartId, String? userEmail) {
-    context
-        .read(paymentOptionsNotifierProvider.notifier)
-        .fetchPaymentMethod(cartId: cartId.toString());
+    setState(() {});
+    if (_isAllCartCheckout.any((element) => element == false)) {
+      toast(LocaleKeys.onecheckout_warning.tr(), length: Toast.LENGTH_LONG);
+    } else {
+      context
+          .read(paymentOptionsNotifierProvider.notifier)
+          .fetchPaymentMethod(cartId: cartId.toString());
 
-    context
-        .read(cartItemDetailsNotifierProvider.notifier)
-        .getCartItemDetails(cartId);
+      context
+          .read(cartItemDetailsNotifierProvider.notifier)
+          .getCartItemDetails(cartId);
 
-    context.nextPage(
-        CheckoutScreen(customerEmail: userEmail, isOneCheckout: true));
+      context.nextPage(
+          CheckoutScreen(customerEmail: userEmail, isOneCheckout: true));
+    }
   }
 
   @override
@@ -90,6 +115,8 @@ class _MyCartTabState extends State<MyCartTab> {
                 data: (value) {
                   if (value) {
                     bool _canOneCheckout = false;
+                    debugPrint("_isAllCartCheckout: $_isAllCartCheckout");
+
                     if (_cartState is CartLoadedState) {
                       if (_cartState.cartList != null &&
                           _cartState.cartList!.isNotEmpty &&
@@ -103,6 +130,7 @@ class _MyCartTabState extends State<MyCartTab> {
                         }
                       }
                     }
+
                     if (_canOneCheckout) {
                       return FloatingActionButton.extended(
                         backgroundColor: Colors.black,
@@ -124,7 +152,7 @@ class _MyCartTabState extends State<MyCartTab> {
                         },
                         icon: const Icon(Icons.double_arrow),
                         label: Text(
-                          "Checkout All",
+                          LocaleKeys.checkout_all.tr(),
                           style: Theme.of(context)
                               .textTheme
                               .headline6!
@@ -135,7 +163,7 @@ class _MyCartTabState extends State<MyCartTab> {
                         elevation: 20,
                         heroTag: "checkout_all",
                         foregroundColor: kLightColor,
-                        tooltip: "Checkout All",
+                        tooltip: LocaleKeys.checkout_all.tr(),
                       );
                     } else {
                       return const SizedBox();
@@ -168,7 +196,7 @@ class _MyCartTabState extends State<MyCartTab> {
                                   const SizedBox(height: 60),
 
                                   Text(
-                                    "Empty Cart!",
+                                    LocaleKeys.empty_cart.tr(),
                                     style: Theme.of(context)
                                         .textTheme
                                         .subtitle2!
@@ -213,9 +241,14 @@ class _MyCartTabState extends State<MyCartTab> {
                         )
                       : ListView(
                           padding: const EdgeInsets.only(top: 8, bottom: 100),
-                          children: _cartState.cartList!
-                              .map((e) => CartItemCard(cartItem: e))
-                              .toList(),
+                          children: _cartState.cartList!.map((e) {
+                            _isAllCartCheckout.clear();
+                            return CartItemCard(
+                                cartItem: e,
+                                canCheckout: (value) {
+                                  _isAllCartCheckout.add(value);
+                                });
+                          }).toList(),
                         )
                   : const ProductLoadingWidget().px(10));
         },
@@ -226,10 +259,12 @@ class _MyCartTabState extends State<MyCartTab> {
 
 class CartItemCard extends ConsumerWidget {
   final CartItem cartItem;
+  final Function(bool isCheckout) canCheckout;
 
   const CartItemCard({
     Key? key,
     required this.cartItem,
+    required this.canCheckout,
   }) : super(key: key);
 
   @override
@@ -243,7 +278,7 @@ class CartItemCard extends ConsumerWidget {
         isScrollControlled: true,
         builder: (context) {
           return _SelectSippingCountryPage(
-            title: "Select Shipping Country",
+            title: LocaleKeys.select_shipping_country.tr(),
             items: coutries,
             selected: cartItem.shipToCountryId,
             onCountrySelected: (p0) {
@@ -265,7 +300,7 @@ class CartItemCard extends ConsumerWidget {
         isDismissible: false,
         builder: (context) {
           return _SelectSippingStatePage(
-            title: "Select State",
+            title: LocaleKeys.select_shipping_state.tr(),
             items: states,
             selected: cartItem.shipToStateId,
             onCountrySelected: (p0) {
@@ -389,7 +424,7 @@ class CartItemCard extends ConsumerWidget {
                                           .firstWhere((e) =>
                                               e.id == cartItem.shipToCountryId)
                                           .name!
-                                      : "Unknown",
+                                      : LocaleKeys.unknown.tr(),
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   style: context.textTheme.headline6!.copyWith(
@@ -441,7 +476,7 @@ class CartItemCard extends ConsumerWidget {
               children: [
                 PackagingDetails(cartItem: cartItem),
                 const Divider(height: 0),
-                ShippingDetails(cartItem: cartItem),
+                ShippingDetails(cartItem: cartItem, onChecked: canCheckout),
               ],
             ),
           ),
@@ -666,7 +701,7 @@ class PackagingDetails extends ConsumerWidget {
                           _onTapSelectPackaging(context, value, packagingModel);
                         },
                         child: Text(
-                          "Change",
+                          LocaleKeys.change.tr(),
                           style: context.textTheme.caption!.copyWith(
                               fontWeight: FontWeight.bold, color: kFadeColor),
                         ),
@@ -720,7 +755,7 @@ class PackagingDetails extends ConsumerWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  "Select Packaging",
+                  LocaleKeys.select_packaging.tr(),
                   style: Theme.of(context)
                       .textTheme
                       .headline6!
@@ -734,7 +769,7 @@ class PackagingDetails extends ConsumerWidget {
                         .map(
                           (e) => ListTile(
                             title: Text(
-                              e.name ?? "Unknown",
+                              e.name ?? LocaleKeys.unknown.tr(),
                               style: Theme.of(context)
                                   .textTheme
                                   .subtitle2!
@@ -778,10 +813,12 @@ class PackagingDetails extends ConsumerWidget {
 
 class ShippingDetails extends ConsumerWidget {
   final CartItem cartItem;
+  final Function(bool isChecked) onChecked;
 
   const ShippingDetails({
     Key? key,
     required this.cartItem,
+    required this.onChecked,
   }) : super(key: key);
 
   @override
@@ -795,6 +832,7 @@ class ShippingDetails extends ConsumerWidget {
     return _shippingOptions.when(
       data: (value) {
         if (value == null || value.isEmpty) {
+          onChecked(false);
           return Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -809,7 +847,7 @@ class ShippingDetails extends ConsumerWidget {
                       color: kPrimaryFadeTextColor),
                 ),
                 subtitle: Text(
-                  "This seller does not deliver to your selected Country/Region. Change the shipping address or find other sellers who ship to your area.",
+                  LocaleKeys.seller_doesnt_ship_this_area.tr(),
                   style: Theme.of(context).textTheme.caption!.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
@@ -824,6 +862,7 @@ class ShippingDetails extends ConsumerWidget {
             ],
           );
         } else {
+          onChecked(true);
           ShippingOption? _shippingOption;
           if (value.any((element) => element.id == cartItem.shippingOptionId)) {
             _shippingOption = value.firstWhere(
@@ -861,7 +900,7 @@ class ShippingDetails extends ConsumerWidget {
                             context, value, _shippingOption);
                       },
                       child: Text(
-                        "Change",
+                        LocaleKeys.change.tr(),
                         style: context.textTheme.caption!.copyWith(
                             fontWeight: FontWeight.bold, color: kFadeColor),
                       ),
@@ -872,9 +911,10 @@ class ShippingDetails extends ConsumerWidget {
                   children: [
                     Expanded(
                       child: Text(
-                        (_shippingOption.name ?? 'Unknown') +
+                        (_shippingOption.name ?? LocaleKeys.unknown.tr()) +
                             " by " +
-                            (_shippingOption.carrierName ?? 'Unknown'),
+                            (_shippingOption.carrierName ??
+                                LocaleKeys.unknown.tr()),
                         style: context.textTheme.subtitle2!.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
@@ -952,7 +992,7 @@ class ShippingDetails extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Text(
-                  "Select Shipping",
+                  LocaleKeys.select_shipping.tr(),
                   style: Theme.of(context)
                       .textTheme
                       .headline6!
@@ -965,9 +1005,9 @@ class ShippingDetails extends ConsumerWidget {
                         .map(
                           (e) => ListTile(
                             title: Text(
-                              (e.name ?? "Unknown") +
+                              (e.name ?? LocaleKeys.unknown.tr()) +
                                   " by " +
-                                  (e.carrierName ?? "Unknown"),
+                                  (e.carrierName ?? LocaleKeys.unknown.tr()),
                               style: Theme.of(context)
                                   .textTheme
                                   .subtitle2!
@@ -1117,12 +1157,12 @@ class _SelectSippingCountryPageState extends State<_SelectSippingCountryPage> {
             const SizedBox(height: 10),
             CustomTextField(
               controller: _searchController,
-              hintText: "Search",
+              hintText: LocaleKeys.search.tr(),
               onChanged: (value) {
                 setState(() {
                   _filteredItems.clear();
                   _filteredItems.addAll(widget.items.where((element) =>
-                      (element.name ?? "Unknown")
+                      (element.name ?? LocaleKeys.unknown.tr())
                           .toLowerCase()
                           .contains(value.toLowerCase())));
                 });
@@ -1139,7 +1179,7 @@ class _SelectSippingCountryPageState extends State<_SelectSippingCountryPage> {
                         widget.onCountrySelected(e);
                       },
                       title: Text(
-                        e.name ?? "Unknown",
+                        e.name ?? LocaleKeys.unknown.tr(),
                         style: Theme.of(context)
                             .textTheme
                             .subtitle2!
@@ -1216,12 +1256,12 @@ class _SelectSippingStatePageState extends State<_SelectSippingStatePage> {
             const SizedBox(height: 10),
             CustomTextField(
               controller: _searchController,
-              hintText: "Search",
+              hintText: LocaleKeys.search.tr(),
               onChanged: (value) {
                 setState(() {
                   _filteredItems.clear();
                   _filteredItems.addAll(widget.items.where((element) =>
-                      (element.name ?? "Unknown")
+                      (element.name ?? LocaleKeys.unknown.tr())
                           .toLowerCase()
                           .contains(value.toLowerCase())));
                 });
@@ -1238,7 +1278,7 @@ class _SelectSippingStatePageState extends State<_SelectSippingStatePage> {
                         widget.onCountrySelected(e);
                       },
                       title: Text(
-                        e.name ?? "Unknown",
+                        e.name ?? LocaleKeys.unknown.tr(),
                         style: Theme.of(context)
                             .textTheme
                             .subtitle2!

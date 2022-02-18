@@ -25,7 +25,7 @@ class FrequentlyBoughtTogetherCard extends StatelessWidget {
                   .pOnly(top: 10, left: 10, bottom: 5),
               ProductDetailsCardGridView(
                       productList: details.data!.linkedItems!)
-                  .px(10),
+                  .px(8),
             ],
           )
         : const SizedBox();

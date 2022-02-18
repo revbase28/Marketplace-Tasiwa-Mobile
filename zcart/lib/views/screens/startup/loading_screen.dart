@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:zcart/data/controller/blog/blog_controller.dart';
 import 'package:zcart/data/controller/cart/coupon_controller.dart';
 import 'package:zcart/data/network/api.dart';
 import 'package:zcart/helper/constants.dart';
@@ -54,6 +55,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
     context.read(randomItemNotifierProvider.notifier).getRandomItems();
     context.read(vendorsNotifierProvider.notifier).getVendors();
     context.read(allBrandsNotifierProvider.notifier).getAllBrands();
+    context.read(blogsProvider.notifier).blogs();
     context
         .read(dealsUnderThePriceNotifierProvider.notifier)
         .getAllDealsUnderThePrice();

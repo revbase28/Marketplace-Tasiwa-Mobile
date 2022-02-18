@@ -35,16 +35,16 @@ class ProductListScreen extends ConsumerWidget {
                         child: Center(
                             child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
-                            Icon(Icons.info_outline),
-                            Text("No Items available")
+                          children: [
+                            const Icon(Icons.info_outline),
+                            Text(LocaleKeys.no_item_found.tr())
                           ],
                         )))
                     : SingleChildScrollView(
                         child: ProductDetailsCardGridView(
                                 productList:
                                     categoryItemState.categoryItemList!)
-                            .px(10),
+                            .px(8),
                       )
                 : const SizedBox());
   }

@@ -87,18 +87,22 @@ class VendorsAboutUsScreen extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.only(right: 16),
                     child: IconButton(
-                      tooltip: "Contact Shop",
+                      tooltip: LocaleKeys.contact_shop.tr(),
                       onPressed: onPressedContact,
-                      icon: const Icon(CupertinoIcons.bubble_left),
+                      icon: const Icon(CupertinoIcons.chat_bubble_2),
                     ),
                   ),
                 )
               ],
             ),
-            VendorsActivityCard(
-              activeListCount: vendorDetails!.activeListingsCount ?? 0,
-              rating: vendorDetails!.rating ?? '0',
-              itemsSold: vendorDetails!.soldItemCount ?? 0,
+            Padding(
+              padding: const EdgeInsets.only(
+                  left: 10, right: 10, top: 5, bottom: 10),
+              child: VendorsActivityCard(
+                activeListCount: vendorDetails!.activeListingsCount ?? 0,
+                rating: vendorDetails!.rating ?? '0',
+                itemsSold: vendorDetails!.soldItemCount ?? 0,
+              ),
             ),
             VendorRatingsAndReview(
               vendorSlug: vendorDetails!.slug!,
@@ -108,20 +112,21 @@ class VendorsAboutUsScreen extends StatelessWidget {
             Container(
               color:
                   getColorBasedOnTheme(context, kLightColor, kDarkCardBgColor),
-              padding: const EdgeInsets.all(10),
+              padding: const EdgeInsets.all(16),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(LocaleKeys.description.tr(),
-                          style: context.textTheme.bodyText2)
-                      .py(5),
+                      style: context.textTheme.headline6),
+                  const SizedBox(height: 10),
                   ResponsiveTextWidget(
                       title: vendorDetails!.description,
-                      textStyle: context.textTheme.caption!)
+                      textStyle: context.textTheme.subtitle2!)
                 ],
               ),
             ).cornerRadius(10).p(10),
+            const SizedBox(height: 10),
           ],
         ),
       ),
@@ -152,7 +157,7 @@ class VendorRatingsAndReview extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Ratings & Reviews ($feedbacksCount)',
+                '${LocaleKeys.rating_and_reviews.tr()} ($feedbacksCount)',
                 style: Theme.of(context).textTheme.subtitle2,
               ),
               TextButton(
@@ -208,7 +213,7 @@ class _VendorRatingAndReviewAllPage extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         systemOverlayStyle: SystemUiOverlayStyle.light,
-        title: const Text('Ratings & Reviews'),
+        title: Text(LocaleKeys.rating_and_reviews.tr()),
         actions: [
           IconButton(
               onPressed: () {
@@ -264,7 +269,7 @@ class _RatingAndReviewSection extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Unknown',
+                  LocaleKeys.unknown.tr(),
                   style: Theme.of(context)
                       .textTheme
                       .caption!

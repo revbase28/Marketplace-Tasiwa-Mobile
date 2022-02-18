@@ -66,8 +66,6 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
 
   @override
   Widget build(BuildContext context) {
-    //debugPrint(widget.address.country!.id);
-    // debugPrint(widget.address.state!.id);
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
@@ -80,7 +78,7 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
                 context,
                 dialogAnimation: DialogAnimation.SLIDE_RIGHT_LEFT,
                 dialogType: DialogType.DELETE,
-                title: "Are you sure to delete this address?",
+                title: LocaleKeys.delete_address_warning.tr(),
                 onAccept: () async {
                   setState(() {
                     _isLoading = true;
@@ -183,7 +181,9 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
                                       },
                                       validator: (text) {
                                         if (text == null || text.isEmpty) {
-                                          return 'Please select a country';
+                                          return LocaleKeys
+                                              .please_select_a_country
+                                              .tr();
                                         }
                                         return null;
                                       },
@@ -240,7 +240,9 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
                                               : null,
                                       validator: (text) {
                                         if (text == null || text.isEmpty) {
-                                          return 'Please select a state';
+                                          return LocaleKeys
+                                              .please_select_a_state
+                                              .tr();
                                         }
                                         return null;
                                       },

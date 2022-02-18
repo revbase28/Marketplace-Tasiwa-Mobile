@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:zcart/Theme/styles/colors.dart';
 import 'package:zcart/helper/get_color_based_on_theme.dart';
+import 'package:zcart/translations/locale_keys.g.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 Future<void> showCustomConfirmDialog(
   BuildContext context, {
@@ -108,7 +110,7 @@ Future<void> showCustomConfirmDialog(
                           ),
                           6.width,
                           Text(
-                            negativeText ?? 'Cancel',
+                            negativeText ?? LocaleKeys.cancel.tr(),
                             style: boldTextStyle(
                               color: getColorBasedOnTheme(
                                   context, Colors.black, Colors.white),

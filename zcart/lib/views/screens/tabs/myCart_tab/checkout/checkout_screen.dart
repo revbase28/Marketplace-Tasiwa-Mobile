@@ -158,8 +158,8 @@ class _CheckoutScreenState extends State<CheckoutScreen>
                   title: Text(
                     (accessAllowed
                             ? LocaleKeys.checkout.tr()
-                            : "Guest Checkout") +
-                        (widget.isOneCheckout ? " All" : ""),
+                            : LocaleKeys.guest_checkout.tr()) +
+                        (widget.isOneCheckout ? " ${LocaleKeys.all.tr()}" : ""),
                     style: Theme.of(context)
                         .textTheme
                         .headline6!
@@ -433,12 +433,11 @@ class CheckoutLoggedInAddressScreen extends StatelessWidget {
                                       const Duration(milliseconds: 0),
                                   dialogType: DialogType.UPDATE,
                                   primaryColor: kPrimaryColor,
-                                  title: "Shipping Address",
-                                  subTitle:
-                                      "To select this address change shipping area on the cart page!",
-                                  onAccept: () {
+                                  title: LocaleKeys.shipping_address.tr(),
+                                  subTitle: LocaleKeys.shipping_address_warning
+                                      .tr(), onAccept: () {
                                 context.pop();
-                              }, positiveText: "Change");
+                              }, positiveText: LocaleKeys.change.tr());
                             },
                             selectedAddressIndex: selectedAddress != null
                                 ? value.indexOf(selectedAddress!)
@@ -635,7 +634,8 @@ class _CheckOutGuestAddressFormState extends State<CheckOutGuestAddressForm> {
                               },
                               validator: (text) {
                                 if (text == null || text.isEmpty) {
-                                  return 'Please select a country';
+                                  return LocaleKeys.please_select_a_country
+                                      .tr();
                                 }
                                 return null;
                               },
@@ -727,7 +727,7 @@ class _CheckOutGuestAddressFormState extends State<CheckOutGuestAddressForm> {
                                   : null,
                               validator: (text) {
                                 if (text == null || text.isEmpty) {
-                                  return 'Please select a state';
+                                  return LocaleKeys.please_select_a_state.tr();
                                 }
                                 return null;
                               },
@@ -845,7 +845,7 @@ class ShippingDetails extends ConsumerWidget {
                           color: kPrimaryFadeTextColor),
                     ),
                     subtitle: Text(
-                      "This seller does not deliver to your selected Country/Region. Change the shipping address or find other sellers who ship to your area.",
+                      LocaleKeys.seller_doesnt_ship_this_area.tr(),
                       style: Theme.of(context).textTheme.caption!.copyWith(
                             fontWeight: FontWeight.bold,
                           ),
@@ -896,7 +896,7 @@ class ShippingDetails extends ConsumerWidget {
                                     context, value, _shippingOption);
                               },
                               child: Text(
-                                "Change",
+                                LocaleKeys.change.tr(),
                                 style: context.textTheme.caption!.copyWith(
                                     fontWeight: FontWeight.bold,
                                     color: kFadeColor),
@@ -909,9 +909,11 @@ class ShippingDetails extends ConsumerWidget {
                           children: [
                             Expanded(
                               child: Text(
-                                (_shippingOption.name ?? 'Unknown') +
+                                (_shippingOption.name ??
+                                        LocaleKeys.unknown.tr()) +
                                     " by " +
-                                    (_shippingOption.carrierName ?? 'Unknown'),
+                                    (_shippingOption.carrierName ??
+                                        LocaleKeys.unknown.tr()),
                                 style: context.textTheme.subtitle2!.copyWith(
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -939,7 +941,7 @@ class ShippingDetails extends ConsumerWidget {
                   style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 16)),
                   onPressed: onPressedNext,
-                  child: const Text("Next"),
+                  child: Text(LocaleKeys.next.tr()),
                 ),
               ),
             ],
@@ -967,7 +969,7 @@ class ShippingDetails extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Text(
-                  "Select Shipping",
+                  LocaleKeys.select_shipping.tr(),
                   style: Theme.of(context)
                       .textTheme
                       .headline6!
@@ -980,9 +982,9 @@ class ShippingDetails extends ConsumerWidget {
                         .map(
                           (e) => ListTile(
                             title: Text(
-                              (e.name ?? "Unknown") +
+                              (e.name ?? LocaleKeys.unknown.tr()) +
                                   " by " +
-                                  (e.carrierName ?? "Unknown"),
+                                  (e.carrierName ?? LocaleKeys.unknown.tr()),
                               style: Theme.of(context)
                                   .textTheme
                                   .subtitle2!
@@ -1183,7 +1185,7 @@ class CheckOutItemDetailsPage extends ConsumerWidget {
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 16),
                               child: Text(
-                                "Sold By:",
+                                "${LocaleKeys.sold_by.tr()}:",
                                 style: Theme.of(context)
                                     .textTheme
                                     .headline6!
@@ -1248,20 +1250,21 @@ class CheckOutItemDetailsPage extends ConsumerWidget {
                                 .toList(),
 
                             CheckOutDetailsPriceWidget(
-                                title: "Cart Count", price: _cartCount),
+                                title: LocaleKeys.cart_count.tr(),
+                                price: _cartCount),
 
                             CheckOutDetailsPriceWidget(
-                              title: "Item Count",
+                              title: LocaleKeys.item_count.tr(),
                               price: _itemCount,
                               subtitle: _itemCountSubtitle,
                             ),
                             CheckOutDetailsPriceWidget(
-                              title: "Total Quantity",
+                              title: LocaleKeys.total_quantity.tr(),
                               price: _quantity,
                               subtitle: _quantitySubtitle,
                             ),
                             CheckOutDetailsPriceWidget(
-                              title: "Sub Total",
+                              title: LocaleKeys.subtotal.tr(),
                               price: _subTotal,
                               subtitle: _subTotalSubtitle,
                             ),
@@ -1291,7 +1294,7 @@ class CheckOutItemDetailsPage extends ConsumerWidget {
                               ),
                             const Divider(),
                             CheckOutDetailsPriceWidget(
-                              title: "Total",
+                              title: LocaleKeys.total.tr(),
                               price: _total,
                               isGrandTotal: true,
                             ),
@@ -1315,7 +1318,9 @@ class CheckOutItemDetailsPage extends ConsumerWidget {
                                     padding: const EdgeInsets.symmetric(
                                         vertical: 16)),
                                 onPressed: onPressedBack,
-                                child: const Text("Back"),
+                                child: Text(
+                                  LocaleKeys.back.tr(),
+                                ),
                               ),
                             ),
                             const SizedBox(width: 10),
@@ -1325,7 +1330,9 @@ class CheckOutItemDetailsPage extends ConsumerWidget {
                                     padding: const EdgeInsets.symmetric(
                                         vertical: 16)),
                                 onPressed: onPressedNext,
-                                child: const Text("Next"),
+                                child: Text(
+                                  LocaleKeys.next.tr(),
+                                ),
                               ),
                             ),
                           ],
@@ -1346,7 +1353,7 @@ class CheckOutItemDetailsPage extends ConsumerWidget {
                                   .cartItemDetails!.data!.shop!.image,
                               title: _cartDetailsProvider
                                       .cartItemDetails!.data!.shop!.name ??
-                                  "Unknown",
+                                  LocaleKeys.unknown.tr(),
                               verifiedText: _cartDetailsProvider
                                       .cartItemDetails!
                                       .data!
@@ -1446,7 +1453,7 @@ class CheckOutItemDetailsPage extends ConsumerWidget {
                                     padding: const EdgeInsets.symmetric(
                                         vertical: 16)),
                                 onPressed: onPressedBack,
-                                child: const Text("Back"),
+                                child: Text(LocaleKeys.back.tr()),
                               ),
                             ),
                             const SizedBox(width: 10),
@@ -1456,7 +1463,7 @@ class CheckOutItemDetailsPage extends ConsumerWidget {
                                     padding: const EdgeInsets.symmetric(
                                         vertical: 16)),
                                 onPressed: onPressedNext,
-                                child: const Text("Next"),
+                                child: Text(LocaleKeys.next.tr()),
                               ),
                             ),
                           ],
@@ -1916,7 +1923,7 @@ class _CheckoutPaymentPageState extends State<CheckoutPaymentPage> {
                         const LoadingWidget(),
                         const SizedBox(height: 10),
                         Text(
-                          "Order is being processed...",
+                          LocaleKeys.order_is_being_processed.tr(),
                           textAlign: TextAlign.center,
                           style: Theme.of(context).textTheme.bodyText1,
                         ),
@@ -2016,7 +2023,7 @@ class _CheckoutPaymentPageState extends State<CheckoutPaymentPage> {
                                       children: [
                                         Row(
                                           children: [
-                                            Text("Prescription",
+                                            Text(LocaleKeys.prescription.tr(),
                                                 style: context
                                                     .textTheme.bodyText2),
                                           ],
@@ -2059,8 +2066,9 @@ class _CheckoutPaymentPageState extends State<CheckoutPaymentPage> {
                                                     children: [
                                                       const Icon(Icons.image)
                                                           .pOnly(bottom: 5),
-                                                      const Text(
-                                                        "Choose Image",
+                                                      Text(
+                                                        LocaleKeys.choose_image
+                                                            .tr(),
                                                         textAlign:
                                                             TextAlign.center,
                                                       ),
@@ -2146,7 +2154,7 @@ class _CheckoutPaymentPageState extends State<CheckoutPaymentPage> {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
-                                            Text("Guest Checkout",
+                                            Text(LocaleKeys.guest_checkout.tr(),
                                                     style: context
                                                         .textTheme.headline6)
                                                 .pOnly(bottom: 10),
@@ -2397,7 +2405,9 @@ class _CheckoutPaymentPageState extends State<CheckoutPaymentPage> {
                                                           walletTransactionFutureProvider);
                                                     }
                                                   } else {
-                                                    toast("Payment Failed");
+                                                    toast(LocaleKeys
+                                                        .payment_failed
+                                                        .tr());
                                                   }
                                                 });
                                               }
@@ -2407,7 +2417,8 @@ class _CheckoutPaymentPageState extends State<CheckoutPaymentPage> {
                                                   .tr());
                                             }
                                           } else {
-                                            toast("Please enter valid email!");
+                                            toast(
+                                                LocaleKeys.invalid_email.tr());
                                           }
                                         } else {
                                           if (_emailFormKey.currentState!
@@ -2462,11 +2473,13 @@ class _CheckoutPaymentPageState extends State<CheckoutPaymentPage> {
                                                       walletTransactionFutureProvider);
                                                 }
                                               } else {
-                                                toast("Payment Failed");
+                                                toast(LocaleKeys.payment_failed
+                                                    .tr());
                                               }
                                             });
                                           } else {
-                                            toast("Please enter valid email.");
+                                            toast(
+                                                LocaleKeys.invalid_email.tr());
                                           }
                                         }
                                       } else {
@@ -2516,13 +2529,14 @@ class _CheckoutPaymentPageState extends State<CheckoutPaymentPage> {
                                                   walletTransactionFutureProvider);
                                             }
                                           } else {
-                                            toast("Payment Failed");
+                                            toast(
+                                                LocaleKeys.payment_failed.tr());
                                           }
                                         });
                                       }
                                     }
                                   },
-                            child: const Text("Proceed to Checkout"),
+                            child: Text(LocaleKeys.proceed_to_checkout.tr()),
                           ),
                         ),
                     ],
@@ -2609,12 +2623,15 @@ class CheckOutProgress {
 
 List<CheckOutProgress> _progressItems = [
   CheckOutProgress(
-    title: "Shipping",
+    title: LocaleKeys.shipping.tr(),
     icon: Icons.local_shipping,
   ),
   CheckOutProgress(
-    title: "Order Details",
+    title: LocaleKeys.order_details.tr(),
     icon: Icons.receipt,
   ),
-  CheckOutProgress(title: "Payment", icon: Icons.payment),
+  CheckOutProgress(
+    title: LocaleKeys.payment.tr(),
+    icon: Icons.payment,
+  ),
 ];

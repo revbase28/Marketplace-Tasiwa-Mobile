@@ -19,6 +19,7 @@ class ResponsiveTextWidget extends StatelessWidget {
           child: HtmlWidget(
             title ?? '',
             enableCaching: true,
+            textStyle: textStyle,
             onTapUrl: (url) {
               launchURL(url);
               return true;

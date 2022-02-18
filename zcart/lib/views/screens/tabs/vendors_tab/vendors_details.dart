@@ -82,6 +82,7 @@ class VendorsDetailsScreen extends ConsumerWidget {
                             )),
                           ],
                         ),
+                        const SizedBox(height: 10),
                         VendorCard(
                           logo: _vendorDetailsState.vendorDetails!.image,
                           name: _vendorDetailsState.vendorDetails!.name,
@@ -136,7 +137,7 @@ class VendorsDetailsScreen extends ConsumerWidget {
               _vendorItemDetailsListState is VendorItemLoadedState
                   ? ProductDetailsCardGridView(
                           productList: _vendorItemDetailsListState.vendorItem!)
-                      .px(10)
+                      .px(8)
                   : _vendorItemDetailsListState is VendorItemLoadingState ||
                           _vendorItemDetailsListState is VendorItemInitialState
                       ? const ProductLoadingWidget().px(10)

@@ -8,7 +8,9 @@ import 'package:zcart/data/models/cart/cart_item_details_model.dart';
 import 'package:zcart/data/network/network_utils.dart';
 import 'package:zcart/helper/get_color_based_on_theme.dart';
 import 'package:zcart/riverpod/providers/provider.dart';
+import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:zcart/views/screens/tabs/account_tab/account/edit_address_screen.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class AddressListBuilder extends StatefulWidget {
   final List<Addresses>? addressesList;
@@ -67,12 +69,12 @@ class _AddressListBuilderState extends State<AddressListBuilder> {
             padding: const EdgeInsets.all(32),
             child: Center(
               child: _isOneCheckout
-                  ? const Text(
-                      "No delivery address found for your selected shipping area. Please add new address or update carts.",
+                  ? Text(
+                      LocaleKeys.no_delivery_address_found.tr(),
                       textAlign: TextAlign.center,
                     )
-                  : const Text(
-                      "No address found. Please add address",
+                  : Text(
+                      LocaleKeys.no_address_found.tr(),
                       textAlign: TextAlign.center,
                     ),
             ),
@@ -288,7 +290,7 @@ class _AddressListBuilderState extends State<AddressListBuilder> {
                         kDarkPriceColor.withOpacity(0.9),
                       )),
                   title: Text(
-                    "No delivery address found for your selected shipping area. Please add new address or update carts.",
+                    LocaleKeys.no_delivery_address_found.tr(),
                     style: context.textTheme.subtitle2!.copyWith(
                         fontWeight: FontWeight.bold,
                         color: getColorBasedOnTheme(

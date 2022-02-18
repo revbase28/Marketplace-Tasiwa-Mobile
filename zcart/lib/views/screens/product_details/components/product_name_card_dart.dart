@@ -31,7 +31,7 @@ class ProductNameCard extends StatelessWidget {
       children: [
         isNotAvailable
             ? Text(
-                "Out of Stock",
+                LocaleKeys.out_of_stock.tr(),
                 style: Theme.of(context).textTheme.headline6!.copyWith(
                       color: getColorBasedOnTheme(
                           context, kPriceColor, kDarkPriceColor),
