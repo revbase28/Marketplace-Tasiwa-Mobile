@@ -21,6 +21,7 @@ class ResetPassword extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         systemOverlayStyle: SystemUiOverlayStyle.light,
+        title: Text(LocaleKeys.reset_password.tr()),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),

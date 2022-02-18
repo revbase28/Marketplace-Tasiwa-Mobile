@@ -22,7 +22,7 @@
   "field_required": "This field is required.",
   "your_password": "Your password",
   "password_validation": "Password must be at least 6 characters long.",
-  "dont_have_account": "Don't have an account? SIGN UP",
+  "dont_have_account": "Don't have an account?",
   "your_full_name": "Your full name",
   "your_confirm_password": "Confirm password",
   "dont_match_password": "Passwords don't match",
