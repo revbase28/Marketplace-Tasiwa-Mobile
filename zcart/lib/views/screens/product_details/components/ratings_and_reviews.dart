@@ -35,7 +35,7 @@ class ProductRatingsAndReview extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                '${LocaleKeys.rating_and_reviews.tr()} ($feedBackCount)',
+                LocaleKeys.rating_and_reviews.tr(),
                 style: Theme.of(context)
                     .textTheme
                     .subtitle2!
@@ -54,7 +54,7 @@ class ProductRatingsAndReview extends StatelessWidget {
                             builder: (context) =>
                                 const ProductRatingAndReviewAllPage()));
                   },
-                  child: Text(LocaleKeys.view_all.tr(),
+                  child: Text(LocaleKeys.view_all.tr() + ' ($feedBackCount)',
                       style: Theme.of(context).textTheme.subtitle2!.copyWith(
                           color: kPrimaryColor, fontWeight: FontWeight.bold))),
             ],

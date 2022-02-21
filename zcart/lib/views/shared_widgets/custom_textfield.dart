@@ -23,6 +23,7 @@ class CustomTextField extends StatefulWidget {
   final TextInputType keyboardType;
   final bool autoFocus;
   final FocusNode? focusNode;
+  final Widget? prefixIcon;
 
   const CustomTextField({
     Key? key,
@@ -40,6 +41,7 @@ class CustomTextField extends StatefulWidget {
     this.keyboardType = TextInputType.text,
     this.autoFocus = false,
     this.focusNode,
+    this.prefixIcon,
   }) : super(key: key);
 
   @override
@@ -108,6 +110,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
                     kDarkColor.withOpacity(0.8), kLightColor.withOpacity(0.8)),
                 width: 2),
           ),
+          // prefixIcon: widget.prefixIcon,
+          prefix: widget.prefixIcon,
         ),
       ),
     );

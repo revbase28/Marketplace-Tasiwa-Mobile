@@ -9,6 +9,7 @@ import 'package:zcart/data/models/address/address_model.dart';
 import 'package:zcart/helper/app_images.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:zcart/views/screens/tabs/myCart_tab/checkout/payments/payment_methods.dart';
+import 'package:zcart/views/shared_widgets/currency_widget.dart';
 import 'package:zcart/views/shared_widgets/shared_widgets.dart';
 
 class RazorpayPayment extends StatefulWidget {
@@ -80,12 +81,26 @@ class _RazorpayPaymentState extends State<RazorpayPayment> {
                         style: Theme.of(context).textTheme.headline5,
                       ),
                       const SizedBox(height: 20),
-                      Text(
-                        widget.grandTotal.toString(),
-                        style: Theme.of(context).textTheme.headline4!.copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),
-                      ),
+                      CurrencySymbolWidget(
+                          builder: (context, symbol) => symbol == null
+                              ? Text(
+                                  widget.grandTotal.toString(),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline4!
+                                      .copyWith(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                )
+                              : Text(
+                                  symbol + widget.grandTotal.toString(),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline4!
+                                      .copyWith(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                ))
                     ],
                   ),
                 ),

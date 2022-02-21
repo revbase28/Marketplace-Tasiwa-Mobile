@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
+import 'package:zcart/views/shared_widgets/currency_widget.dart';
 import 'package:zcart/views/shared_widgets/shared_widgets.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -57,6 +58,10 @@ class _WalletTransferState extends State<WalletTransferPage> {
                               RegExp(r'^\d+\.?\d{0,2}')),
                         ],
                         controller: _amountController,
+                        prefixIcon: CurrencySymbolWidget(
+                            builder: (context, symbol) => symbol == null
+                                ? const SizedBox()
+                                : Text(symbol)),
                         validator: (value) => value!.isEmpty
                             ? LocaleKeys.field_required.tr()
                             : null,

@@ -199,6 +199,7 @@ class API {
       "wallet/transaction/$transactionId/invoice";
 
   ///Others
+  static const systemConfig = "system_configs";
   static const aboutUs = 'page/about-us';
   static const privacyPolicy = 'page/privacy-policy';
   static const termsAndCondition = 'page/terms-of-use-merchant';

@@ -327,6 +327,8 @@ class SocialLoginButtons extends StatelessWidget {
             onPressed: _onPressedFacebookLogin,
           ),
         if (Platform.isIOS)
+          if (MyConfig.isAppleLoginActive) const SizedBox(width: 8),
+        if (Platform.isIOS)
           if (MyConfig.isAppleLoginActive)
             Consumer(
               builder: (context, watch, child) {
@@ -338,7 +340,7 @@ class SocialLoginButtons extends StatelessWidget {
                       return SocialIconButton(
                         image: AppImages.apple,
                         onPressed: _onPressedAppleLogin,
-                      ).pOnly(left: 8);
+                      );
                     } else {
                       return const SizedBox();
                     }

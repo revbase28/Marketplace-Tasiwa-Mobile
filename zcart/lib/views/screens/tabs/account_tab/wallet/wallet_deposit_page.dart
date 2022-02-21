@@ -7,6 +7,7 @@ import 'package:zcart/helper/constants.dart';
 import 'package:zcart/riverpod/providers/wallet_provider.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:zcart/views/screens/tabs/myCart_tab/checkout/payments/payment_methods.dart';
+import 'package:zcart/views/shared_widgets/currency_widget.dart';
 import 'package:zcart/views/shared_widgets/shared_widgets.dart';
 
 class WalletDepositPage extends StatefulWidget {
@@ -65,6 +66,9 @@ class _WalletDepositPageState extends State<WalletDepositPage> {
                       validator: (value) => value!.isEmpty
                           ? LocaleKeys.field_required.tr()
                           : null,
+                      prefixIcon: CurrencySymbolWidget(
+                          builder: (context, symbol) =>
+                              symbol == null ? const SizedBox() : Text(symbol)),
                     ),
                     const SizedBox(height: 4),
                     Consumer(
@@ -159,65 +163,69 @@ class _WalletDepositPageState extends State<WalletDepositPage> {
                       },
                     ),
                     const SizedBox(height: 16),
-                    CustomButton(
-                      onTap: () async {
-                        if (_formKey.currentState!.validate()) {
-                          if (_selectedpaymentMethod.isEmpty) {
-                            toast(LocaleKeys.please_select_payment_method.tr());
-                          } else {
-                            await PaymentMethods.pay(
-                              context,
-                              _selectedpaymentMethod,
-                              isWalletDeposit: true,
-                              invoiceNumber: DateTime.now()
-                                  .millisecondsSinceEpoch
-                                  .toString(),
-                              email: widget.customerEmail,
-                              cartItems: [],
-                              discount: "0.0",
-                              handling: "0.0",
-                              shipping: "0.0",
-                              subtotal: "0.0",
-                              taxes: "0.0",
-                              packaging: "0.0",
-                              grandTotal:
-                                  int.parse(_amountController.text.trim()) *
-                                      100,
-                            ).then((value) async {
-                              if (value) {
-                                setState(() {
-                                  _isLoading = true;
-                                });
-                                try {
-                                  await context
-                                      .read(walletDepositProvider)
-                                      .pay();
+                    CurrencyWidget(builder: (context, symbol) {
+                      return CustomButton(
+                        onTap: () async {
+                          if (_formKey.currentState!.validate()) {
+                            if (_selectedpaymentMethod.isEmpty) {
+                              toast(
+                                  LocaleKeys.please_select_payment_method.tr());
+                            } else {
+                              await PaymentMethods.pay(
+                                context,
+                                _selectedpaymentMethod,
+                                isWalletDeposit: true,
+                                invoiceNumber: DateTime.now()
+                                    .millisecondsSinceEpoch
+                                    .toString(),
+                                email: widget.customerEmail,
+                                cartItems: [],
+                                discount: "0.0",
+                                handling: "0.0",
+                                shipping: "0.0",
+                                subtotal: "0.0",
+                                taxes: "0.0",
+                                packaging: "0.0",
+                                currency: symbol,
+                                grandTotal:
+                                    int.parse(_amountController.text.trim()) *
+                                        100,
+                              ).then((value) async {
+                                if (value) {
+                                  setState(() {
+                                    _isLoading = true;
+                                  });
+                                  try {
+                                    await context
+                                        .read(walletDepositProvider)
+                                        .pay();
 
-                                  context.refresh(walletBalanceProvider);
-                                  context
-                                      .refresh(walletTransactionFutureProvider);
-                                  Navigator.of(context).pop();
-                                } catch (e) {
-                                  toast(e.toString());
+                                    context.refresh(walletBalanceProvider);
+                                    context.refresh(
+                                        walletTransactionFutureProvider);
+                                    Navigator.of(context).pop();
+                                  } catch (e) {
+                                    toast(e.toString());
+                                  }
+                                  setState(() {
+                                    _isLoading = false;
+                                  });
+                                } else {
+                                  toast(LocaleKeys.payment_failed.tr());
                                 }
-                                setState(() {
-                                  _isLoading = false;
-                                });
-                              } else {
-                                toast(LocaleKeys.payment_failed.tr());
-                              }
-                            });
-                          }
+                              });
+                            }
 
-                          // if (_result) {
-                          //   context.refresh(walletTransactionFutureProvider);
-                          //   context.refresh(walletBalanceProvider);
-                          //   Navigator.pop(context);
-                          // }
-                        }
-                      },
-                      buttonText: LocaleKeys.continue_text.tr(),
-                    ),
+                            // if (_result) {
+                            //   context.refresh(walletTransactionFutureProvider);
+                            //   context.refresh(walletBalanceProvider);
+                            //   Navigator.pop(context);
+                            // }
+                          }
+                        },
+                        buttonText: LocaleKeys.continue_text.tr(),
+                      );
+                    }),
                   ],
                 )),
       ),

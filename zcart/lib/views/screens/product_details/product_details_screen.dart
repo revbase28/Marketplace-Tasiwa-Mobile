@@ -214,7 +214,8 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
 
   @override
   Widget build(BuildContext context) {
-    final _totalPrice = double.parse(_details.data!.rawPrice!) * _quantity;
+    double _totalPrice = double.parse(_details.data!.rawPrice!) * _quantity;
+
     int? _shippingId;
     int? _shippingZoneId;
     if (_shippingOptions.isNotEmpty) {
@@ -224,6 +225,10 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
       _shippingZoneId = _shippingOptions
           .firstWhere((element) => element.name == _selectedShippingOption)
           .shippingZoneId;
+      _totalPrice += double.parse(_shippingOptions
+              .firstWhere((element) => element.name == _selectedShippingOption)
+              .costRaw ??
+          "0.0");
     }
 
     return SafeArea(
@@ -263,6 +268,9 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
                       ProductPageDefaultContainer(
                           isFullPadding: true,
                           child: ProductNameCard(
+                              onDoneCountDown: () {
+                                widget.onChangedVariant(_details.data!.slug!);
+                              },
                               productModel: _details,
                               isNotAvailable: _isNotAvailable)),
                       const SizedBox(height: 10),
@@ -762,7 +770,7 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
         minLeadingWidth: 0,
         contentPadding: EdgeInsets.zero,
         subtitle: GestureDetector(
-          onTap: _selectShippingOption,
+          onTap: _selectedShippingOption == null ? null : _selectShippingOption,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -786,23 +794,32 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
                                   )).pOnly(right: 8),
                         ),
                         Text(
-                            double.parse(_option!.costRaw ?? "0") <= 0.0
-                                ? ""
-                                : (_option.cost ?? "0"),
-                            style: Theme.of(context)
-                                .textTheme
-                                .subtitle2!
-                                .copyWith(
-                                  fontWeight: FontWeight.bold,
-                                  color: getColorBasedOnTheme(
-                                      context, kPriceColor, kDarkPriceColor),
-                                )),
+                          LocaleKeys.change.tr(),
+                          style: Theme.of(context).textTheme.caption!.copyWith(
+                              fontWeight: FontWeight.bold, color: kFadeColor),
+                        ),
                       ],
                     ),
               const SizedBox(height: 4),
-              Text(
-                _option?.deliveryTakes ?? "",
-                style: context.textTheme.caption!,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Flexible(
+                    child: Text(
+                      _option?.deliveryTakes ?? "",
+                      style: context.textTheme.caption!,
+                    ).pOnly(right: 8),
+                  ),
+                  Text(
+                      double.parse(_option?.costRaw ?? "0") <= 0.0
+                          ? ""
+                          : (_option?.cost ?? "0"),
+                      style: Theme.of(context).textTheme.subtitle2!.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: getColorBasedOnTheme(
+                                context, kPriceColor, kDarkPriceColor),
+                          )),
+                ],
               )
             ],
           ),
@@ -879,8 +896,10 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
               ),
               Text(
                 LocaleKeys.change.tr(),
-                style: Theme.of(context).textTheme.caption!.copyWith(
-                    fontWeight: FontWeight.bold, color: kPrimaryColor),
+                style: Theme.of(context)
+                    .textTheme
+                    .caption!
+                    .copyWith(fontWeight: FontWeight.bold, color: kFadeColor),
               ),
             ],
           ),

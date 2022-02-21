@@ -6,6 +6,7 @@ import 'package:zcart/Theme/styles/colors.dart';
 import 'package:zcart/helper/constants.dart';
 import 'package:zcart/helper/app_images.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
+import 'package:zcart/views/shared_widgets/currency_widget.dart';
 import 'package:zcart/views/shared_widgets/shared_widgets.dart';
 import 'dart:math' as math;
 import 'package:easy_localization/easy_localization.dart';
@@ -232,11 +233,26 @@ class _CustomPaymentCardScreenState extends State<CustomPaymentCardScreen> {
                         },
                       ),
                       const SizedBox(height: 32),
-                      Text(
-                        '${LocaleKeys.total_amount.tr()}: ${widget.amount}',
-                        style: Theme.of(context).textTheme.headline6!.copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),
+                      CurrencySymbolWidget(
+                        builder: (context, symbol) => symbol == null
+                            ? Text(
+                                '${LocaleKeys.total_amount.tr()}: ${widget.amount}',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headline6!
+                                    .copyWith(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                              )
+                            : Text(
+                                '${LocaleKeys.total_amount.tr()}: $symbol${widget.amount}',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headline6!
+                                    .copyWith(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                              ),
                       ),
                       const SizedBox(
                         height: 10,

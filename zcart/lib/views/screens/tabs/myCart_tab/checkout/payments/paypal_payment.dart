@@ -8,6 +8,7 @@ import 'package:zcart/data/network/api.dart';
 import 'package:zcart/helper/get_amount_from_string.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:zcart/views/screens/tabs/myCart_tab/checkout/payments/payment_methods.dart';
+import 'package:zcart/views/shared_widgets/currency_widget.dart';
 import 'package:zcart/views/shared_widgets/shared_widgets.dart';
 import 'package:easy_localization/easy_localization.dart';
 
@@ -211,12 +212,26 @@ class _PayPalPaymentState extends State<PayPalPayment> {
                         style: Theme.of(context).textTheme.headline5,
                       ),
                       const SizedBox(height: 20),
-                      Text(
-                        widget.grandTotal.toString(),
-                        style: Theme.of(context).textTheme.headline4!.copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),
-                      ),
+                      CurrencySymbolWidget(
+                          builder: (context, symbol) => symbol == null
+                              ? Text(
+                                  widget.grandTotal.toString(),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline4!
+                                      .copyWith(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                )
+                              : Text(
+                                  symbol + widget.grandTotal.toString(),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline4!
+                                      .copyWith(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                ))
                     ],
                   ),
                 ),

@@ -33,6 +33,7 @@ import 'package:zcart/views/screens/tabs/account_tab/others/terms_and_conditions
 import 'package:zcart/views/screens/tabs/myCart_tab/checkout/order_placed_page.dart';
 import 'package:zcart/views/screens/tabs/myCart_tab/checkout/payments/payment_methods.dart';
 import 'package:zcart/views/shared_widgets/address_list_widget.dart';
+import 'package:zcart/views/shared_widgets/currency_widget.dart';
 import 'package:zcart/views/shared_widgets/custom_confirm_dialog.dart';
 import 'package:zcart/views/shared_widgets/dropdown_field_loading_widget.dart';
 import 'package:zcart/views/shared_widgets/shared_widgets.dart';
@@ -1263,41 +1264,95 @@ class CheckOutItemDetailsPage extends ConsumerWidget {
                               price: _quantity,
                               subtitle: _quantitySubtitle,
                             ),
-                            CheckOutDetailsPriceWidget(
-                              title: LocaleKeys.subtotal.tr(),
-                              price: _subTotal,
-                              subtitle: _subTotalSubtitle,
+
+                            CurrencySymbolWidget(
+                              builder: (context, symbol) => symbol == null
+                                  ? CheckOutDetailsPriceWidget(
+                                      title: LocaleKeys.subtotal.tr(),
+                                      price: _subTotal,
+                                      subtitle: _subTotalSubtitle,
+                                    )
+                                  : CheckOutDetailsPriceWidget(
+                                      title: LocaleKeys.subtotal.tr(),
+                                      price: symbol + _subTotal,
+                                      subtitle: _subTotalSubtitle,
+                                    ),
                             ),
+
                             if (double.parse(_shipping) > 0)
-                              CheckOutDetailsPriceWidget(
-                                title: LocaleKeys.shipping.tr(),
-                                price: _shipping,
-                                subtitle: _shippingSubtitle,
+                              CurrencySymbolWidget(
+                                builder: (context, symbol) => symbol == null
+                                    ? CheckOutDetailsPriceWidget(
+                                        title: LocaleKeys.shipping.tr(),
+                                        price: _shipping,
+                                        subtitle: _shippingSubtitle,
+                                      )
+                                    : CheckOutDetailsPriceWidget(
+                                        title: LocaleKeys.shipping.tr(),
+                                        price: symbol + _shipping,
+                                        subtitle: _shippingSubtitle,
+                                      ),
                               ),
+
                             if (double.parse(_handling) > 0)
-                              CheckOutDetailsPriceWidget(
-                                title: LocaleKeys.handling.tr(),
-                                price: _handling,
-                                subtitle: _handlingSubtitle,
+                              CurrencySymbolWidget(
+                                builder: (context, symbol) => symbol == null
+                                    ? CheckOutDetailsPriceWidget(
+                                        title: LocaleKeys.handling.tr(),
+                                        price: _handling,
+                                        subtitle: _handlingSubtitle,
+                                      )
+                                    : CheckOutDetailsPriceWidget(
+                                        title: LocaleKeys.handling.tr(),
+                                        price: symbol + _handling,
+                                        subtitle: _handlingSubtitle,
+                                      ),
                               ),
+
                             if (double.parse(_packaging) > 0)
-                              CheckOutDetailsPriceWidget(
-                                title: LocaleKeys.packaging.tr(),
-                                price: _packaging,
-                                subtitle: _packagingSubtitle,
+                              CurrencySymbolWidget(
+                                builder: (context, symbol) => symbol == null
+                                    ? CheckOutDetailsPriceWidget(
+                                        title: LocaleKeys.packaging.tr(),
+                                        price: _packaging,
+                                        subtitle: _packagingSubtitle,
+                                      )
+                                    : CheckOutDetailsPriceWidget(
+                                        title: LocaleKeys.packaging.tr(),
+                                        price: symbol + _packaging,
+                                        subtitle: _packagingSubtitle,
+                                      ),
                               ),
+
                             if (double.parse(_discount.substring(2)) > 0)
-                              CheckOutDetailsPriceWidget(
-                                title: LocaleKeys.discount.tr(),
-                                price: _discount,
-                                subtitle: _discountSubtitle,
+                              CurrencySymbolWidget(
+                                builder: (context, symbol) => symbol == null
+                                    ? CheckOutDetailsPriceWidget(
+                                        title: LocaleKeys.discount.tr(),
+                                        price: _discount,
+                                        subtitle: _discountSubtitle,
+                                      )
+                                    : CheckOutDetailsPriceWidget(
+                                        title: LocaleKeys.discount.tr(),
+                                        price: _discount.insert(symbol, 2),
+                                        subtitle: _discountSubtitle,
+                                      ),
                               ),
+
                             const Divider(),
-                            CheckOutDetailsPriceWidget(
-                              title: LocaleKeys.total.tr(),
-                              price: _total,
-                              isGrandTotal: true,
-                            ),
+                            CurrencySymbolWidget(
+                                builder: (context, symbol) => symbol == null
+                                    ? CheckOutDetailsPriceWidget(
+                                        title: LocaleKeys.total.tr(),
+                                        price: _total,
+                                        isGrandTotal: true,
+                                      )
+                                    : CheckOutDetailsPriceWidget(
+                                        title: LocaleKeys.total.tr(),
+                                        price: symbol + _total,
+                                        isGrandTotal: true,
+                                      )),
+                            const SizedBox(height: 16),
                           ],
                         ),
                       ),

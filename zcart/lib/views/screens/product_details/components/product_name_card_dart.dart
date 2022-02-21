@@ -15,10 +15,12 @@ import 'package:zcart/views/shared_widgets/custom_small_button.dart';
 class ProductNameCard extends StatelessWidget {
   final ProductDetailsModel productModel;
   final bool isNotAvailable;
+  final VoidCallback onDoneCountDown;
   const ProductNameCard({
     Key? key,
     required this.productModel,
     required this.isNotAvailable,
+    required this.onDoneCountDown,
   }) : super(key: key);
 
   @override
@@ -97,12 +99,15 @@ class ProductNameCard extends StatelessWidget {
                             duration: productModel.data!.offerEnd!
                                 .difference(DateTime.now()),
                             decoration: const BoxDecoration(),
+                            onDone: onDoneCountDown,
+                            showZeroValue: true,
                             fade: true,
-                            textStyle:
-                                Theme.of(context).textTheme.headline6!.copyWith(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w900,
-                                    ),
+                            textStyle: Theme.of(context)
+                                .textTheme
+                                .headline6!
+                                .copyWith(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w900),
                           )
                         : const SizedBox()
                   ],
@@ -128,7 +133,7 @@ class ProductNameCard extends StatelessWidget {
                 Text(LocaleKeys.share.tr(), style: context.textTheme.overline)
                     .pOnly(top: 3)
               ],
-            ).px(10).onInkTap(() async {
+            ).pOnly(left: 10).onInkTap(() async {
               await Share.share(
                   '${productModel.data!.title}.\n${API.appUrl}/product/${productModel.data!.slug}');
             }),
@@ -148,17 +153,35 @@ class ProductNameCard extends StatelessWidget {
                     allowHalfRating: true,
                     ignoreGestures: true,
                     itemCount: 5,
-                    itemSize: 12,
+                    itemSize: 15,
                     unratedColor: kFadeColor,
                     itemBuilder: (context, _) =>
                         const Icon(Icons.star, color: kDarkPriceColor),
                     onRatingUpdate: (rating) => debugPrint(rating.toString()),
                   ),
+
                   Text(
-                    (productModel.data!.rating).toString(),
-                    style: context.textTheme.subtitle2!
+                    " (${(productModel.data!.rating).toString()}) ",
+                    style: context.textTheme.caption!
                         .copyWith(fontWeight: FontWeight.bold),
-                  ).px(5),
+                  ),
+
+                  // if (productModel.data!.condition != null)
+                  //   Row(
+                  //     mainAxisSize: MainAxisSize.min,
+                  //     children: [
+
+                  //       //   width: 2,
+                  //       //   height: 15,
+                  //       //   color: kPrimaryColor,
+                  //       // ),
+                  //       const SizedBox(width: 4),
+                  //       Text(productModel.data!.condition!,
+                  //           style: context.textTheme.subtitle2!.copyWith(
+                  //               fontWeight: FontWeight.bold,
+                  //               decoration: TextDecoration.underline)),
+                  //     ],
+                  //   )
                 ],
               ).py(4),
         const SizedBox(height: 8),
@@ -173,8 +196,13 @@ class ProductNameCard extends StatelessWidget {
                 onPressed: () {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
+                      backgroundColor: kPrimaryColor,
                       duration: const Duration(seconds: 8),
-                      content: Text(productModel.data!.conditionNote!),
+                      content: Text(
+                        productModel.data!.conditionNote!,
+                        style: context.textTheme.subtitle2!.copyWith(
+                            fontWeight: FontWeight.bold, color: kLightColor),
+                      ),
                     ),
                   );
                 },
