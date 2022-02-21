@@ -462,7 +462,7 @@ class AppDrawer extends ConsumerWidget {
   @override
   Widget build(BuildContext context, watch) {
     final _cartState = watch(cartNotifierProvider);
-    final _packageInfoProvider = context.read(packageInfoProvider);
+    final _packageInfoProvider = watch(packageInfoProvider);
     int _cartItems = 0;
 
     if (_cartState is CartLoadedState) {
@@ -587,12 +587,14 @@ class AppDrawer extends ConsumerWidget {
             ),
           ),
           _packageInfoProvider.when(
-            data: (data) => Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              child: Text("v" + data.version + "+" + data.buildNumber,
-                  style: context.textTheme.subtitle2!.copyWith(
-                      fontWeight: FontWeight.bold, color: kFadeColor)),
-            ),
+            data: (data) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                child: Text("v" + data.version + "+" + data.buildNumber,
+                    style: context.textTheme.subtitle2!.copyWith(
+                        fontWeight: FontWeight.bold, color: kFadeColor)),
+              );
+            },
             loading: () => const SizedBox(),
             error: (_, __) => const SizedBox(),
           ),
