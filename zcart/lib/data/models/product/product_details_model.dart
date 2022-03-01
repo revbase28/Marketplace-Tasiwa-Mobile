@@ -501,7 +501,7 @@ class ShippingOption {
         carrierId: json["carrier_id"],
         carrierName: json["carrier_name"],
         cost: json["cost"],
-        costRaw: json["cost_raw"].toString(),
+        costRaw: json["cost_raw"],
         deliveryTakes: json["delivery_takes"],
       );
 
