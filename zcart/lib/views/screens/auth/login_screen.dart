@@ -26,10 +26,13 @@ import 'package:zcart/views/shared_widgets/shared_widgets.dart';
 
 class LoginScreen extends StatefulWidget {
   final bool needBackButton;
-
+  final Widget? nextScreen;
+  final int nextScreenIndex;
   const LoginScreen({
     Key? key,
     required this.needBackButton,
+    this.nextScreen,
+    this.nextScreenIndex = 5,
   }) : super(key: key);
 
   @override
@@ -64,7 +67,17 @@ class _LoginScreenState extends State<LoginScreen> {
           context.refresh(walletTransactionFutureProvider);
           context.refresh(getAddressFutureProvider);
 
-          context.nextAndRemoveUntilPage(const BottomNavBar(selectedIndex: 5));
+          Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(
+                  builder: (context) =>
+                      BottomNavBar(selectedIndex: widget.nextScreenIndex)),
+              (route) => false);
+
+          if (widget.nextScreen != null) {
+            print('next screen');
+            Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => widget.nextScreen!));
+          }
         }
         if (state is UserErrorState) {
           toast(state.message);

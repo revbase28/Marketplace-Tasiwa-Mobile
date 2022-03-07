@@ -45,7 +45,7 @@ class TabNavigationItem {
         TabNavigationItem(
           page: accessAllowed
               ? const WishListTab()
-              : const LoginScreen(needBackButton: false),
+              : const LoginScreen(needBackButton: false, nextScreenIndex: 3),
           icon: const Icon(Icons.favorite_border),
           selectedIcon: const Icon(Icons.favorite),
           title: Text(LocaleKeys.wishlist_text.tr()),

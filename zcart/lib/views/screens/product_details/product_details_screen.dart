@@ -475,12 +475,19 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
                                                     .data!.shop!.verifiedText));
                                           } else {
                                             Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        const LoginScreen(
-                                                          needBackButton: true,
-                                                        )));
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    LoginScreen(
+                                                  needBackButton: true,
+                                                  nextScreenIndex: 0,
+                                                  nextScreen:
+                                                      ProductDetailsScreen(
+                                                          productSlug: _details
+                                                              .data!.slug!),
+                                                ),
+                                              ),
+                                            );
                                           }
                                         },
                                       ),

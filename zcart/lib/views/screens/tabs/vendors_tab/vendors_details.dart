@@ -115,12 +115,15 @@ class VendorsDetailsScreen extends ConsumerWidget {
                                   );
                                 } else {
                                   Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              const LoginScreen(
-                                                needBackButton: true,
-                                              )));
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const LoginScreen(
+                                        needBackButton: true,
+                                        nextScreen: VendorsDetailsScreen(),
+                                        nextScreenIndex: 1,
+                                      ),
+                                    ),
+                                  );
                                 }
                               },
                             ),

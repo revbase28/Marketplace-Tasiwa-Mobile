@@ -4,6 +4,7 @@ import 'package:velocity_x/velocity_x.dart';
 import 'package:zcart/Theme/styles/colors.dart';
 import 'package:zcart/helper/get_color_based_on_theme.dart';
 import 'package:zcart/riverpod/providers/address_provider.dart';
+import 'package:zcart/riverpod/providers/system_config_provider.dart';
 import 'package:zcart/riverpod/state/address/country_state.dart';
 import 'package:zcart/riverpod/state/address/states_state.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
@@ -29,7 +30,7 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
       TextEditingController();
   final TextEditingController _contactNumberController =
       TextEditingController();
-  final TextEditingController countryController = TextEditingController();
+  final TextEditingController _countryController = TextEditingController();
   final TextEditingController _zipCodeController = TextEditingController();
   final TextEditingController _addressLine1Controller = TextEditingController();
   final TextEditingController _addressLine2Controller = TextEditingController();
@@ -44,6 +45,16 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
   int? _selectedStateID;
 
   final List<String> _addressTypes = ["Primary", "Billing", "Shipping"];
+
+  @override
+  void initState() {
+    final _systemConfig = context.read(systemConfigFutureProvider);
+
+    _systemConfig.whenData((sys) async {
+      _selectedCountryID = sys?.data?.addressDefaultCountry;
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -102,25 +113,39 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
                     ),
                     Consumer(
                       builder: (context, watch, _) {
-                        final countryState = watch(countryNotifierProvider);
+                        final _countryState = watch(countryNotifierProvider);
 
-                        return countryState is CountryLoadedState
+                        return _countryState is CountryLoadedState
                             ? CustomDropDownField(
                                 title: LocaleKeys.country.tr(),
-                                optionsList: countryState.countryList!
+                                optionsList: _countryState.countryList!
                                     .map((e) => e.name)
                                     .toList(),
-                                controller: countryController,
-                                hintText: LocaleKeys.country.tr(),
+                                controller: _countryController,
+                                hintText: _selectedCountryID == null
+                                    ? LocaleKeys.country.tr()
+                                    : null,
+                                value: _selectedCountryID == null
+                                    ? null
+                                    : _countryState.countryList!.any(
+                                            (element) =>
+                                                element.id ==
+                                                _selectedCountryID)
+                                        ? _countryState.countryList!
+                                            .firstWhere((element) =>
+                                                element.id ==
+                                                _selectedCountryID)
+                                            .name
+                                        : null,
                                 isCallback: true,
                                 callbackFunction: (int index) {
                                   _selectedCountryID =
-                                      countryState.countryList![index].id;
+                                      _countryState.countryList![index].id;
 
                                   context
                                       .read(statesNotifierProvider.notifier)
                                       .getState(
-                                          countryState.countryList![index].id);
+                                          _countryState.countryList![index].id);
                                 },
                                 validator: (text) {
                                   if (text == null || text.isEmpty) {
@@ -130,32 +155,39 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
                                   return null;
                                 },
                               )
-                            : countryState is CountryLoadingState
+                            : _countryState is CountryLoadingState
                                 ? const FieldLoading()
                                 : const SizedBox();
                       },
                     ),
                     Consumer(
                       builder: (context, watch, _) {
-                        final statesState = watch(statesNotifierProvider);
+                        final _statesState = watch(statesNotifierProvider);
 
-                        return statesState is StatesLoadedState &&
-                                statesState.statesList!.isNotEmpty
+                        // final _systemConfig =
+                        //     context.read(systemConfigFutureProvider);
+                        // int? _systemStateID;
+                        // _systemConfig.whenData((value) async {
+                        //   _systemStateID = value?.data?.addressDefaultState;
+                        // });
+
+                        return _statesState is StatesLoadedState &&
+                                _statesState.statesList!.isNotEmpty
                             ? CustomDropDownField(
                                 title: LocaleKeys.states.tr(),
-                                optionsList: statesState.statesList!.isEmpty
+                                optionsList: _statesState.statesList!.isEmpty
                                     ? ["Select"]
-                                    : statesState.statesList!
+                                    : _statesState.statesList!
                                         .map((e) => e.name)
                                         .toList(),
                                 controller: statesController,
                                 hintText: LocaleKeys.states.tr(),
                                 isCallback: true,
-                                callbackFunction: statesState
+                                callbackFunction: _statesState
                                         .statesList!.isNotEmpty
                                     ? (int index) {
                                         _selectedStateID =
-                                            statesState.statesList![index].id;
+                                            _statesState.statesList![index].id;
                                       }
                                     : null,
                                 validator: (text) {
@@ -166,7 +198,7 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
                                   return null;
                                 },
                               )
-                            : statesState is StatesLoadingState
+                            : _statesState is StatesLoadingState
                                 ? const FieldLoading()
                                 : const SizedBox();
                       },

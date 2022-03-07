@@ -80,7 +80,8 @@ class _MyCartTabState extends State<MyCartTab> {
               CheckoutScreen(customerEmail: userEmail, isOneCheckout: true));
         } else {
           if (accessAllowed == false) {
-            context.nextPage(const LoginScreen(needBackButton: true));
+            context.nextPage(
+                const LoginScreen(needBackButton: true, nextScreenIndex: 4));
           } else {
             context
                 .read(paymentOptionsNotifierProvider.notifier)
@@ -991,8 +992,8 @@ class ShippingDetails extends ConsumerWidget {
                                   customerEmail: _customerEmail));
                             } else {
                               if (accessAllowed == false) {
-                                context.nextPage(
-                                    const LoginScreen(needBackButton: true));
+                                context.nextPage(const LoginScreen(
+                                    needBackButton: true, nextScreenIndex: 4));
                               } else {
                                 if (accessAllowed) {
                                   if (_userState is UserLoadedState) {

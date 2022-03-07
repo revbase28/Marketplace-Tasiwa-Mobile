@@ -8,6 +8,7 @@ import 'package:zcart/data/network/network_utils.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:zcart/views/screens/auth/login_screen.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:zcart/views/screens/product_details/product_details_screen.dart';
 
 class WishListRepository implements IWishListRepository {
   late WishListModel wishListModel;
@@ -65,8 +66,10 @@ class WishListRepository implements IWishListRepository {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => const LoginScreen(
+                builder: (context) => LoginScreen(
                       needBackButton: true,
+                      nextScreenIndex: 0,
+                      nextScreen: ProductDetailsScreen(productSlug: slug ?? ""),
                     )));
       }
     } catch (e) {

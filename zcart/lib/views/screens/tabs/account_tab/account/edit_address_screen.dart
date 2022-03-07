@@ -56,9 +56,9 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
     super.initState();
   }
 
-  int? selectedCountryID;
+  int? _selectedCountryID;
 
-  int? selectedStateID;
+  int? _selectedStateID;
 
   bool _isLoading = false;
 
@@ -171,7 +171,7 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
                                           .name,
                                       isCallback: true,
                                       callbackFunction: (int countryId) {
-                                        selectedCountryID = countryState
+                                        _selectedCountryID = countryState
                                             .countryList![countryId].id;
                                         context
                                             .read(
@@ -197,7 +197,7 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
                             builder: (context, watch, _) {
                               final statesState = watch(statesNotifierProvider);
                               if (statesState is StatesLoadedState) {
-                                selectedStateID =
+                                _selectedStateID =
                                     statesState.statesList!.isEmpty
                                         ? null
                                         : statesState.statesList![0].id;
@@ -220,12 +220,18 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
                                                       _countryController.text
                                                   ? statesState
                                                       .statesList!.first.name
-                                                  : statesState.statesList!
-                                                      .firstWhere((e) =>
-                                                          e.id ==
-                                                          widget.address.state!
-                                                              .id)
-                                                      .name
+                                                  : statesState.statesList!.any(
+                                                          (element) =>
+                                                              element.id ==
+                                                              widget.address
+                                                                  .state!.id)
+                                                      ? statesState.statesList!
+                                                          .firstWhere((e) =>
+                                                              e.id ==
+                                                              widget.address
+                                                                  .state!.id)
+                                                          .name
+                                                      : "Select"
                                           : statesState.statesList!.isEmpty
                                               ? "Select"
                                               : statesState
@@ -234,7 +240,7 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
                                       callbackFunction:
                                           statesState.statesList!.isNotEmpty
                                               ? (int stateId) {
-                                                  selectedStateID = statesState
+                                                  _selectedStateID = statesState
                                                       .statesList![stateId].id;
                                                 }
                                               : null,
@@ -319,11 +325,11 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
                                             _contactPersonController.text,
                                         contactNumber:
                                             _contactNumberController.text,
-                                        countryId: selectedCountryID == null
+                                        countryId: _selectedCountryID == null
                                             ? widget.address.country!.id
                                                 .toString()
-                                            : selectedCountryID.toString(),
-                                        stateId: selectedStateID?.toString(),
+                                            : _selectedCountryID.toString(),
+                                        stateId: _selectedStateID?.toString(),
                                         cityId: _cityController.text,
                                         addressLine1:
                                             _addressLine1Controller.text,
