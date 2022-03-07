@@ -61,7 +61,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   if (MyConfig.isDynamicThemeActive)
                     Card(
                       child: ListTile(
-                        title: Text(LocaleKeys.change_theme.tr(),
+                        title: Text("Dark Mode",
                             style: context.textTheme.subtitle2!),
                         trailing: EasyDynamicThemeSwitch(),
                         leading: const Icon(Icons.color_lens),

@@ -25,6 +25,7 @@ import 'package:zcart/views/screens/tabs/myCart_tab/my_cart_tab.dart';
 import 'package:zcart/views/screens/tabs/vendors_tab/vendors_details.dart';
 import 'package:zcart/views/shared_widgets/image_viewer_page.dart';
 import 'package:zcart/views/shared_widgets/shared_widgets.dart';
+import 'package:zcart/views/shared_widgets/system_config_builder.dart';
 import 'components/frequently_bought_together.dart';
 import 'components/more_offer_from_seller.dart';
 import 'components/product_details_widget.dart';
@@ -104,16 +105,19 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             }
           },
           loading: () => Scaffold(body: const ProductLoadingWidget().p(10)),
-          error: (error, stackTrace) => Scaffold(
-              appBar: AppBar(
-                title: Text(LocaleKeys.product_details.tr()),
-                systemOverlayStyle: SystemUiOverlayStyle.light,
-              ),
-              body: Center(
-                child: Text(
-                  error.toString(),
+          error: (error, stackTrace) {
+            debugPrint("Stack Trace: $stackTrace");
+            return Scaffold(
+                appBar: AppBar(
+                  title: Text(LocaleKeys.product_details.tr()),
+                  systemOverlayStyle: SystemUiOverlayStyle.light,
                 ),
-              )),
+                body: Center(
+                  child: Text(
+                    error.toString(),
+                  ),
+                ));
+          },
         );
       },
     );
@@ -440,36 +444,53 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
                   child: Row(
                     // mainAxisAlignment: MainAxisAlignment.,
                     children: [
-                      Tooltip(
-                        message: LocaleKeys.contact_seller.tr(),
-                        child: ProductDetailsPageIconButton(
-                          icon: const Icon(CupertinoIcons.chat_bubble_2_fill),
-                          backgroundColor: getColorBasedOnTheme(
-                              context, kLightColor, kDarkBgColor),
-                          onPressed: () {
-                            if (accessAllowed) {
-                              context
-                                  .read(productChatProvider.notifier)
-                                  .productConversation(_details.data!.shop!.id);
+                      SystemConfigBuilder(
+                        builder: (context, systemConfig) {
+                          return systemConfig?.enableChat == true
+                              ? Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Tooltip(
+                                      message: LocaleKeys.contact_seller.tr(),
+                                      child: ProductDetailsPageIconButton(
+                                        icon: const Icon(
+                                            CupertinoIcons.chat_bubble_2_fill),
+                                        backgroundColor: getColorBasedOnTheme(
+                                            context, kLightColor, kDarkBgColor),
+                                        onPressed: () {
+                                          if (accessAllowed) {
+                                            context
+                                                .read(productChatProvider
+                                                    .notifier)
+                                                .productConversation(
+                                                    _details.data!.shop!.id);
 
-                              context.nextPage(VendorChatScreen(
-                                  shopId: _details.data!.shop!.id,
-                                  shopImage: _details.data!.shop!.image,
-                                  shopName: _details.data!.shop!.name,
-                                  shopVerifiedText:
-                                      _details.data!.shop!.verifiedText));
-                            } else {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => const LoginScreen(
-                                            needBackButton: true,
-                                          )));
-                            }
-                          },
-                        ),
+                                            context.nextPage(VendorChatScreen(
+                                                shopId: _details.data!.shop!.id,
+                                                shopImage:
+                                                    _details.data!.shop!.image,
+                                                shopName:
+                                                    _details.data!.shop!.name,
+                                                shopVerifiedText: _details
+                                                    .data!.shop!.verifiedText));
+                                          } else {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        const LoginScreen(
+                                                          needBackButton: true,
+                                                        )));
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                    const SizedBox(width: 10),
+                                  ],
+                                )
+                              : const SizedBox();
+                        },
                       ),
-                      const SizedBox(width: 10),
                       Tooltip(
                         message: LocaleKeys.vendor_details.tr(),
                         child: ProductDetailsPageIconButton(

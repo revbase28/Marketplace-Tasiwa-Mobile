@@ -99,8 +99,7 @@ class NotLoggedInSettingItems extends StatelessWidget {
           Card(
             elevation: 0,
             child: ListTile(
-              title: Text(LocaleKeys.change_theme.tr(),
-                  style: context.textTheme.subtitle2!),
+              title: Text("Dark Mode", style: context.textTheme.subtitle2!),
               trailing: EasyDynamicThemeSwitch(),
               leading: const Icon(Icons.color_lens),
             ),

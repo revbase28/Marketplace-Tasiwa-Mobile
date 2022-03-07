@@ -88,10 +88,10 @@ class GetProductDetailsModel {
       return null;
     }
 
-    ProductDetailsModel productModel =
+    ProductDetailsModel _productModel =
         ProductDetailsModel.fromJson(_responseBody);
 
-    return productModel;
+    return _productModel;
   }
 
   Future<ProductVariantDetailsModel?> getProductVariantDetails(

@@ -42,7 +42,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             context.refresh(walletTransactionFutureProvider);
             context.refresh(getAddressFutureProvider);
             context
-                .nextAndRemoveUntilPage(const BottomNavBar(selectedIndex: 0));
+                .nextAndRemoveUntilPage(const BottomNavBar(selectedIndex: 5));
           }
           if (state is UserErrorState) {
             toast(state.message);

@@ -12,6 +12,7 @@ import 'package:zcart/riverpod/state/vendors_state.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:zcart/views/shared_widgets/shared_widgets.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:zcart/views/shared_widgets/system_config_builder.dart';
 import 'components/vendors_activity_card.dart';
 import 'components/vendors_card.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -82,17 +83,23 @@ class VendorsAboutUsScreen extends StatelessWidget {
                   rating: vendorDetails!.rating,
                   trailingEnabled: false,
                 ),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 16),
-                    child: IconButton(
-                      tooltip: LocaleKeys.contact_shop.tr(),
-                      onPressed: onPressedContact,
-                      icon: const Icon(CupertinoIcons.chat_bubble_2),
-                    ),
-                  ),
-                )
+                SystemConfigBuilder(
+                  builder: (context, systemConfig) {
+                    return systemConfig?.enableChat == true
+                        ? Align(
+                            alignment: Alignment.centerRight,
+                            child: Padding(
+                              padding: const EdgeInsets.only(right: 16),
+                              child: IconButton(
+                                tooltip: LocaleKeys.contact_shop.tr(),
+                                onPressed: onPressedContact,
+                                icon: const Icon(CupertinoIcons.chat_bubble_2),
+                              ),
+                            ),
+                          )
+                        : const SizedBox();
+                  },
+                ),
               ],
             ),
             Padding(

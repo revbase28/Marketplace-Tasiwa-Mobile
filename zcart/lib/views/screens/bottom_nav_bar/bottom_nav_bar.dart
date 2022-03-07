@@ -3,10 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:zcart/Theme/styles/colors.dart';
+import 'package:zcart/config/config.dart';
 import 'package:zcart/data/network/network_utils.dart';
 import 'package:zcart/helper/constants.dart';
+import 'package:zcart/helper/url_launcher_helper.dart';
 import 'package:zcart/riverpod/providers/cart_provider.dart';
+import 'package:zcart/riverpod/providers/system_config_provider.dart';
 import 'package:zcart/riverpod/state/cart_state.dart';
+import 'package:zcart/views/shared_widgets/custom_confirm_dialog.dart';
 import 'tab_navigation_item.dart';
 
 class BottomNavBar extends StatefulWidget {
@@ -30,6 +34,28 @@ class _BottomNavBarState extends State<BottomNavBar> {
 
     getLoginState();
     _currentIndex = widget.selectedIndex ?? 0;
+
+    final _systemConfigFutureProvider =
+        context.read(systemConfigFutureProvider);
+
+    Future.delayed(const Duration(seconds: 5), () {
+      _systemConfigFutureProvider.whenData((value) {
+        if (value?.data?.installVerion != apiVersion) {
+          showCustomConfirmDialog(
+            context,
+            dialogType: DialogType.RETRY,
+            primaryColor: kPriceColor,
+            positiveText: "Contact",
+            title: "WARNING!",
+            subTitle:
+                "The API is not fully compatible, please ask site admin to upgrade the API",
+            onAccept: () {
+              launchURL(MyConfig.appUrl + "/page/contact-us/");
+            },
+          );
+        }
+      });
+    });
   }
 
   getLoginState() async {

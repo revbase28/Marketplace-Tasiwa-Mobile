@@ -18,8 +18,10 @@ import 'package:zcart/data/network/network_utils.dart';
 import 'package:zcart/helper/get_color_based_on_theme.dart';
 import 'package:zcart/riverpod/providers/plugin_provider.dart';
 import 'package:zcart/riverpod/providers/provider.dart';
+import 'package:zcart/riverpod/providers/system_config_provider.dart';
 import 'package:zcart/riverpod/state/state.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
+import 'package:zcart/views/screens/auth/login_screen.dart';
 import 'package:zcart/views/screens/bottom_nav_bar/bottom_nav_bar.dart';
 import 'package:zcart/views/screens/product_details/product_details_screen.dart';
 import 'package:zcart/views/screens/product_list/recently_viewed.dart';
@@ -63,16 +65,36 @@ class _MyCartTabState extends State<MyCartTab> {
     if (_isAllCartCheckout.any((element) => element == false)) {
       toast(LocaleKeys.onecheckout_warning.tr(), length: Toast.LENGTH_LONG);
     } else {
-      context
-          .read(paymentOptionsNotifierProvider.notifier)
-          .fetchPaymentMethod(cartId: cartId.toString());
+      final _systemConfigProvider = context.read(systemConfigFutureProvider);
+      _systemConfigProvider.whenData((value) {
+        if (value?.data?.allowGuestCheckout == true) {
+          context
+              .read(paymentOptionsNotifierProvider.notifier)
+              .fetchPaymentMethod(cartId: cartId.toString());
 
-      context
-          .read(cartItemDetailsNotifierProvider.notifier)
-          .getCartItemDetails(cartId);
+          context
+              .read(cartItemDetailsNotifierProvider.notifier)
+              .getCartItemDetails(cartId);
 
-      context.nextPage(
-          CheckoutScreen(customerEmail: userEmail, isOneCheckout: true));
+          context.nextPage(
+              CheckoutScreen(customerEmail: userEmail, isOneCheckout: true));
+        } else {
+          if (accessAllowed == false) {
+            context.nextPage(const LoginScreen(needBackButton: true));
+          } else {
+            context
+                .read(paymentOptionsNotifierProvider.notifier)
+                .fetchPaymentMethod(cartId: cartId.toString());
+
+            context
+                .read(cartItemDetailsNotifierProvider.notifier)
+                .getCartItemDetails(cartId);
+
+            context.nextPage(
+                CheckoutScreen(customerEmail: userEmail, isOneCheckout: true));
+          }
+        }
+      });
     }
   }
 
@@ -945,23 +967,55 @@ class ShippingDetails extends ConsumerWidget {
                         onPressed: () async {
                           String? _customerEmail;
 
-                          if (accessAllowed) {
-                            if (_userState is UserLoadedState) {
-                              _customerEmail = _userState.user!.email!;
+                          final _systemConfigProvider =
+                              context.read(systemConfigFutureProvider);
+                          _systemConfigProvider.whenData((value) {
+                            if (value?.data?.allowGuestCheckout == true) {
+                              if (accessAllowed) {
+                                if (_userState is UserLoadedState) {
+                                  _customerEmail = _userState.user!.email!;
+                                }
+                              }
+
+                              context
+                                  .read(paymentOptionsNotifierProvider.notifier)
+                                  .fetchPaymentMethod(
+                                      cartId: cartItem.id!.toString());
+
+                              context
+                                  .read(
+                                      cartItemDetailsNotifierProvider.notifier)
+                                  .getCartItemDetails(cartItem.id);
+
+                              context.nextPage(CheckoutScreen(
+                                  customerEmail: _customerEmail));
+                            } else {
+                              if (accessAllowed == false) {
+                                context.nextPage(
+                                    const LoginScreen(needBackButton: true));
+                              } else {
+                                if (accessAllowed) {
+                                  if (_userState is UserLoadedState) {
+                                    _customerEmail = _userState.user!.email!;
+                                  }
+                                }
+
+                                context
+                                    .read(
+                                        paymentOptionsNotifierProvider.notifier)
+                                    .fetchPaymentMethod(
+                                        cartId: cartItem.id!.toString());
+
+                                context
+                                    .read(cartItemDetailsNotifierProvider
+                                        .notifier)
+                                    .getCartItemDetails(cartItem.id);
+
+                                context.nextPage(CheckoutScreen(
+                                    customerEmail: _customerEmail));
+                              }
                             }
-                          }
-
-                          context
-                              .read(paymentOptionsNotifierProvider.notifier)
-                              .fetchPaymentMethod(
-                                  cartId: cartItem.id!.toString());
-
-                          context
-                              .read(cartItemDetailsNotifierProvider.notifier)
-                              .getCartItemDetails(cartItem.id);
-
-                          context.nextPage(
-                              CheckoutScreen(customerEmail: _customerEmail));
+                          });
                         },
                         child: Text(LocaleKeys.checkout.tr()))
                   ],

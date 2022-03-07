@@ -11,6 +11,7 @@ import 'package:zcart/data/network/api.dart';
 import 'package:zcart/helper/get_color_based_on_theme.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:zcart/views/shared_widgets/custom_small_button.dart';
+import 'package:zcart/views/shared_widgets/system_config_builder.dart';
 
 class ProductNameCard extends StatelessWidget {
   final ProductDetailsModel productModel;
@@ -191,20 +192,27 @@ class ProductNameCard extends StatelessWidget {
           alignment: WrapAlignment.start,
           children: [
             if (productModel.data!.condition != null)
-              CustomSmallButton(
-                text: productModel.data!.condition!,
-                onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      backgroundColor: kPrimaryColor,
-                      duration: const Duration(seconds: 8),
-                      content: Text(
-                        productModel.data!.conditionNote!,
-                        style: context.textTheme.subtitle2!.copyWith(
-                            fontWeight: FontWeight.bold, color: kLightColor),
-                      ),
-                    ),
-                  );
+              SystemConfigBuilder(
+                builder: (context, systemConfig) {
+                  return systemConfig?.showItemConditions == true
+                      ? CustomSmallButton(
+                          text: productModel.data!.condition!,
+                          onPressed: () {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                backgroundColor: kPrimaryColor,
+                                duration: const Duration(seconds: 8),
+                                content: Text(
+                                  productModel.data!.conditionNote!,
+                                  style: context.textTheme.subtitle2!.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      color: kLightColor),
+                                ),
+                              ),
+                            );
+                          },
+                        )
+                      : const SizedBox();
                 },
               ),
             if (productModel.data!.labels != null &&

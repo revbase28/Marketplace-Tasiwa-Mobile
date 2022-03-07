@@ -10,10 +10,14 @@ import 'package:nb_utils/nb_utils.dart';
 import 'package:zcart/Theme/theme.dart';
 import 'package:zcart/config/config.dart';
 import 'package:zcart/data/network/api.dart';
+import 'package:zcart/helper/app_images.dart';
 import 'package:zcart/helper/constants.dart';
 import 'package:zcart/riverpod/providers/logger_provider.dart';
+import 'package:zcart/riverpod/providers/system_config_provider.dart';
 import 'package:zcart/translations/codegen_loader.g.dart';
 import 'package:zcart/translations/supported_locales.dart';
+import 'package:zcart/views/shared_widgets/shared_widgets.dart';
+import 'package:zcart/views/shared_widgets/system_config_builder.dart';
 import 'views/screens/startup/loading_screen.dart';
 
 void main() async {
@@ -72,7 +76,17 @@ class MyApp extends StatelessWidget {
           : ThemeMode.light,
       theme: AppTheme.light(context),
       darkTheme: AppTheme.dark(context),
-      home: const LoadingScreen(),
+      // home: const LoadingScreen(),
+      home: SystemConfigBuilder(
+        builder: (context, systemConfig) {
+          final bool? _isInMaintenance = systemConfig?.maintenanceMode;
+          return _isInMaintenance == false
+              ? const LoadingScreen()
+              : _isInMaintenance == null
+                  ? const SimpleLoadinPage()
+                  : const MainTenanceModePage();
+        },
+      ),
     );
   }
 }
@@ -83,5 +97,63 @@ class MyHttpOverrides extends HttpOverrides {
     return super.createHttpClient(context)
       ..badCertificateCallback =
           (X509Certificate cert, String host, int port) => true;
+  }
+}
+
+class MainTenanceModePage extends StatelessWidget {
+  const MainTenanceModePage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        toolbarHeight: 0,
+        backgroundColor: Colors.transparent,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(32),
+        child: Center(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(
+                AppImages.logo,
+                width: MediaQuery.of(context).size.width * 0.5,
+              ),
+              const SizedBox(height: 24),
+              Text(
+                "Marketplace is in maintenance mode!\nPlease try again later.",
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.headline6,
+              ),
+              const SizedBox(height: 48),
+              ElevatedButton.icon(
+                onPressed: () {
+                  context.refresh(systemConfigFutureProvider);
+                },
+                icon: const Icon(Icons.sync),
+                label: const Text("Retry"),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class SimpleLoadinPage extends StatelessWidget {
+  const SimpleLoadinPage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        toolbarHeight: 0,
+        backgroundColor: Colors.transparent,
+      ),
+      body: const Center(child: LoadingWidget()),
+    );
   }
 }
