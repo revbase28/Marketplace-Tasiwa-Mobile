@@ -74,7 +74,6 @@ class _LoginScreenState extends State<LoginScreen> {
               (route) => false);
 
           if (widget.nextScreen != null) {
-            print('next screen');
             Navigator.of(context).push(
                 MaterialPageRoute(builder: (context) => widget.nextScreen!));
           }
@@ -242,7 +241,9 @@ class _LoginScreenState extends State<LoginScreen> {
                               textAlign: TextAlign.center),
                           TextButton(
                               onPressed: () {
-                                context.nextPage(const SignUpScreen());
+                                context.nextPage(SignUpScreen(
+                                    nextScreen: widget.nextScreen,
+                                    nextScreenIndex: widget.nextScreenIndex));
                               },
                               child: Text(LocaleKeys.sign_up.tr(),
                                   style: context.textTheme.subtitle2!.copyWith(

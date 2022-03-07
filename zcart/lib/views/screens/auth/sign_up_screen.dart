@@ -15,7 +15,13 @@ import 'package:zcart/Theme/styles/colors.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({Key? key}) : super(key: key);
+  final Widget? nextScreen;
+  final int nextScreenIndex;
+  const SignUpScreen({
+    Key? key,
+    this.nextScreen,
+    this.nextScreenIndex = 5,
+  }) : super(key: key);
 
   @override
   State<SignUpScreen> createState() => _SignUpScreenState();
@@ -41,8 +47,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
             context.refresh(walletBalanceProvider);
             context.refresh(walletTransactionFutureProvider);
             context.refresh(getAddressFutureProvider);
-            context
-                .nextAndRemoveUntilPage(const BottomNavBar(selectedIndex: 5));
+
+            Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(
+                    builder: (context) =>
+                        BottomNavBar(selectedIndex: widget.nextScreenIndex)),
+                (route) => false);
+
+            if (widget.nextScreen != null) {
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => widget.nextScreen!));
+            }
           }
           if (state is UserErrorState) {
             toast(state.message);
