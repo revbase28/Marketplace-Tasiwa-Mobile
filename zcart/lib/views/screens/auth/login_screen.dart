@@ -224,12 +224,15 @@ class _LoginScreenState extends State<LoginScreen> {
                             }
                           }),
                       const SizedBox(height: 16),
-                      Text(
-                        LocaleKeys.or_continue_with.tr(),
-                        textAlign: TextAlign.center,
-                        style: context.textTheme.caption!
-                            .copyWith(fontWeight: FontWeight.bold),
-                      ),
+                      if (MyConfig.isGoogleLoginActive ||
+                          MyConfig.isFacebookLoginActive ||
+                          MyConfig.isAppleLoginActive)
+                        Text(
+                          LocaleKeys.or_continue_with.tr(),
+                          textAlign: TextAlign.center,
+                          style: context.textTheme.caption!
+                              .copyWith(fontWeight: FontWeight.bold),
+                        ),
                       const SizedBox(height: 16),
                       const SocialLoginButtons(),
                       const SizedBox(height: 16),

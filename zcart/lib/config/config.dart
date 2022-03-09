@@ -76,7 +76,7 @@ class MyConfig {
   /// GOOGLE LOGIN
   static const bool isGoogleLoginActive = true;
 
-  /// APPLE LOGIN [Not Yet Implemented]
+  /// APPLE LOGIN
   static const bool isAppleLoginActive = true;
 
   // Theme

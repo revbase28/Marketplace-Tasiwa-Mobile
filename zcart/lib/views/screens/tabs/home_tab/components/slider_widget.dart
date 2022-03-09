@@ -38,7 +38,7 @@ class SliderWidget extends StatelessWidget {
                     ),
                   ),
                 ).cornerRadius(10).onInkTap(() {
-                  if (item.link!.isNotEmpty) {
+                  if (item.link != null && item.link!.isNotEmpty) {
                     context
                         .read(categoryItemNotifierProvider.notifier)
                         .getCategoryItem(item.link);

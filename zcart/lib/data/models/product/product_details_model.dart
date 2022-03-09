@@ -38,8 +38,10 @@ class ProductDetailsModel {
                 .map((x) => ShippingOption.fromJson(x))),
         countries: Map.from(json["countries"])
             .map((k, v) => MapEntry<String, String>(k, v)),
-        states: Map.from(json["states"])
-            .map((k, v) => MapEntry<String, String>(k, v)),
+        states: json["states"] is Map<String, String>
+            ? Map.from(json["states"])
+                .map((k, v) => MapEntry<String, String>(k, v))
+            : null,
       );
 
   Map<String, dynamic> toJson() => {
