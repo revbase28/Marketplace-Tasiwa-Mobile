@@ -21,9 +21,9 @@ import 'package:zcart/views/screens/auth/not_logged_in_screen.dart';
 import 'package:zcart/views/screens/bottom_nav_bar/bottom_nav_bar.dart';
 import 'package:zcart/views/screens/brand/featured_brands.dart';
 import 'package:zcart/views/screens/product_details/product_details_screen.dart';
-import 'package:zcart/views/screens/tabs/home_tab/categories/categoris_list_screen.dart';
+import 'package:zcart/views/screens/tabs/home_tab/categories/categories_page.dart';
+import 'package:zcart/views/screens/tabs/home_tab/categories/category_products_list.dart';
 import 'package:zcart/views/screens/tabs/home_tab/components/flash_deals.dart';
-import 'package:zcart/views/screens/tabs/home_tab/components/search_bar.dart';
 import 'package:zcart/views/screens/tabs/home_tab/search/search_screen.dart';
 import 'package:zcart/views/shared_widgets/shared_widgets.dart';
 import 'components/banners_widget.dart';
@@ -634,7 +634,7 @@ class FeaturedCategoriesSection extends ConsumerWidget {
                             ),
                             GestureDetector(
                               onTap: () {
-                                context.nextPage(const CategoryListScreen());
+                                context.nextPage(const CategoriesPage());
                               },
                               child: Text(
                                 LocaleKeys.view_all.tr(),
@@ -654,73 +654,86 @@ class FeaturedCategoriesSection extends ConsumerWidget {
                             shrinkWrap: true,
                             children: model.data!.map(
                               (category) {
-                                return Container(
-                                  margin: const EdgeInsets.only(right: 16),
-                                  width: 100,
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      category.featureImage != null
-                                          ? ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(8),
-                                              child: CachedNetworkImage(
-                                                imageUrl:
-                                                    category.featureImage!,
-                                                fit: BoxFit.contain,
-                                                errorWidget: (_, __, ___) =>
-                                                    Container(
-                                                  decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            8),
-                                                    color: kFadeColor
-                                                        .withOpacity(0.3),
-                                                  ),
-                                                  height: 100,
-                                                  child: const Center(
-                                                      child: Icon(Icons.image)),
-                                                ),
-                                                placeholder: (_, __) =>
-                                                    Container(
-                                                  decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            8),
-                                                    color: kFadeColor
-                                                        .withOpacity(0.3),
-                                                  ),
-                                                  height: 100,
-                                                  child: const Center(
-                                                      child:
-                                                          CircularProgressIndicator()),
-                                                ),
-                                              ),
-                                            )
-                                          : Container(
-                                              decoration: BoxDecoration(
+                                return GestureDetector(
+                                  onTap: () {
+                                    context.nextPage(CategoryProductsList(
+                                        categoryName: category.name ??
+                                            LocaleKeys.unknown.tr()));
+
+                                    context
+                                        .read(productListNotifierProvider
+                                            .notifier)
+                                        .getProductList(
+                                            'category/${category.slug}');
+                                  },
+                                  child: Container(
+                                    margin: const EdgeInsets.only(right: 16),
+                                    width: 100,
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        category.featureImage != null
+                                            ? ClipRRect(
                                                 borderRadius:
                                                     BorderRadius.circular(8),
-                                                color:
-                                                    kFadeColor.withOpacity(0.3),
+                                                child: CachedNetworkImage(
+                                                  imageUrl:
+                                                      category.featureImage!,
+                                                  fit: BoxFit.contain,
+                                                  errorWidget: (_, __, ___) =>
+                                                      Container(
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              8),
+                                                      color: kFadeColor
+                                                          .withOpacity(0.3),
+                                                    ),
+                                                    height: 100,
+                                                    child: const Center(
+                                                        child:
+                                                            Icon(Icons.image)),
+                                                  ),
+                                                  placeholder: (_, __) =>
+                                                      Container(
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              8),
+                                                      color: kFadeColor
+                                                          .withOpacity(0.3),
+                                                    ),
+                                                    height: 100,
+                                                    child: const Center(
+                                                        child: LoadingWidget()),
+                                                  ),
+                                                ),
+                                              )
+                                            : Container(
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(8),
+                                                  color: kFadeColor
+                                                      .withOpacity(0.3),
+                                                ),
+                                                height: 100,
+                                                child: const Center(
+                                                    child: Icon(Icons.image)),
                                               ),
-                                              height: 100,
-                                              child: const Center(
-                                                  child: Icon(Icons.image)),
-                                            ),
-                                      const SizedBox(height: 4),
-                                      Text(
-                                        category.name ?? "",
-                                        textAlign: TextAlign.center,
-                                        overflow: TextOverflow.ellipsis,
-                                        maxLines: 2,
-                                        style:
-                                            context.textTheme.caption!.copyWith(
-                                          fontWeight: FontWeight.bold,
-                                          color: kFadeColor,
+                                        const SizedBox(height: 4),
+                                        Text(
+                                          category.name ?? "",
+                                          textAlign: TextAlign.center,
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 2,
+                                          style: context.textTheme.caption!
+                                              .copyWith(
+                                            fontWeight: FontWeight.bold,
+                                            color: kFadeColor,
+                                          ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
                                 );
                               },

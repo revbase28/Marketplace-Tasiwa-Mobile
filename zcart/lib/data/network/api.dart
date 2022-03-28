@@ -33,8 +33,10 @@ class API {
 
   /// Category
   static const allCategoryGroups = 'category-grps';
+
   static categorySubgroupOfGroups(String categoryGroupId) =>
       'category-subgrps/$categoryGroupId';
+
   static categoriesOfSubGroups(String subgroupID) => 'categories/$subgroupID';
 
   static categoryItem(String? slug) => 'listing$slug';
