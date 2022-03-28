@@ -53,8 +53,7 @@ class CategoryWidget extends StatelessWidget {
             )
                 .onInkTap(() {
                   if (index == 0) {
-                    context.nextPage(CategoryListScreen(
-                        categoryList: categoryList.sublist(1)));
+                    context.nextPage(const CategoryListScreen());
                   } else {
                     context
                         .read(subgroupCategoryNotifierProvider.notifier)

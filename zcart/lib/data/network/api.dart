@@ -39,6 +39,8 @@ class API {
 
   static categoryItem(String? slug) => 'listing$slug';
 
+  static const String featuredCategories = "featured-categories";
+
   /// Banner
   static const banner = 'banners';
 
