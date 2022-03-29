@@ -11,7 +11,7 @@ const String hiveBox = 'hive_box';
 const String recentlyReviewedIds = 'recently_reviewed_ids';
 
 //Compatible API Version
-const String apiVersion = '2.5.0';
+const String apiVersion = '2.5.1';
 
 /// Implemented payment methods
 

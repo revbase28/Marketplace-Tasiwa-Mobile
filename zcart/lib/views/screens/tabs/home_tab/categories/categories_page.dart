@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -214,6 +213,8 @@ class _CategorySubGroupsList extends ConsumerWidget {
     return Column(
       children: subGroups.map((e) {
         return ExpansionTile(
+          iconColor: getColorBasedOnTheme(context, kLightColor, kDarkColor),
+          collapsedIconColor: kPrimaryColor,
           title: Text(
             e.name ?? LocaleKeys.unknown.tr(),
             style: context.textTheme.bodyMedium!.copyWith(

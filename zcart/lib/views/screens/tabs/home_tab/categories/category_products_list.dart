@@ -49,6 +49,7 @@ class CategoryProductsList extends ConsumerWidget {
                   )
                 : SingleChildScrollView(
                     controller: scrollControllerProvider.controller,
+                    physics: const AlwaysScrollableScrollPhysics(),
                     child: ProductDetailsCardGridView(
                             productList: productListState.productList)
                         .px(8),

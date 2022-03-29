@@ -174,11 +174,11 @@ class ProductDetailsWidget extends StatelessWidget {
                     child: ExpansionTile(
                       childrenPadding: EdgeInsets.zero,
                       tilePadding: EdgeInsets.zero,
-                      title: Text(LocaleKeys.seller_spec.tr(),
-                          style: context.textTheme.subtitle2),
                       iconColor: getColorBasedOnTheme(
                           context, kLightColor, kDarkColor),
                       collapsedIconColor: kPrimaryColor,
+                      title: Text(LocaleKeys.seller_spec.tr(),
+                          style: context.textTheme.subtitle2),
                       children: [
                         HtmlWidget(
                           details.data!.description!,

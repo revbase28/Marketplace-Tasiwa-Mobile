@@ -59,3 +59,30 @@ class CategoryWidget extends StatelessWidget {
     );
   }
 }
+
+class CategoryLoadingWidget extends StatelessWidget {
+  const CategoryLoadingWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      child: SizedBox(
+        height: context.screenHeight * .1,
+        child: ListView.builder(
+            itemCount: 8,
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            itemBuilder: (BuildContext context, int index) {
+              return Chip(
+                backgroundColor: getColorBasedOnTheme(
+                    context, kLightCardBgColor, kDarkCardBgColor),
+                label: Text(
+                  LocaleKeys.loading.tr(),
+                ).pSymmetric(h: 12, v: 8),
+              ).px(4);
+            }),
+      ),
+    );
+  }
+}
