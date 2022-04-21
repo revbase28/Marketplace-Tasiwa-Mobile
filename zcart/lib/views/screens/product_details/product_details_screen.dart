@@ -194,7 +194,8 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
 
     if (_details.shippingOptions != null) {
       _shippingOptions.addAll(_details.shippingOptions!);
-      _selectedShippingOption = _shippingOptions.first.name!;
+      _selectedShippingOption =
+          _shippingOptions.isNotEmpty ? _shippingOptions.first.name : null;
     }
 
     _allAttributes = _details.variants?.attributes;
