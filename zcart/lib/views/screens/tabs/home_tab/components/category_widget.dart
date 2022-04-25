@@ -3,11 +3,12 @@ import 'package:zcart/data/models/categories/category_model.dart';
 import 'package:zcart/helper/category_icons.dart';
 import 'package:zcart/helper/get_color_based_on_theme.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
-import 'package:zcart/views/screens/tabs/home_tab/categories/categories_page.dart';
 import 'package:zcart/Theme/styles/colors.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:zcart/views/screens/tabs/home_tab/categories/categoris_list_screen.dart';
+import 'package:zcart/views/screens/tabs/home_tab/categories/category_details_screen.dart';
 import 'package:zcart/views/screens/tabs/home_tab/components/search_bar.dart';
 
 class CategoryWidget extends StatelessWidget {
@@ -51,9 +52,17 @@ class CategoryWidget extends StatelessWidget {
               )),
             )
                 .onInkTap(() {
-                  context.nextPage(CategoriesPage(
-                    selectedIndex: index == 0 ? 0 : index - 1,
-                  ));
+                  // context.nextPage(CategoriesPage(
+                  //   selectedIndex: index == 0 ? 0 : index - 1,
+                  // ));
+
+                  if (index > 0) {
+                    context.nextPage(CategoryDetailsScreen(
+                      categoryListItem: categoryList[index],
+                    ));
+                  } else {
+                    context.nextPage(const CategoryListScreen());
+                  }
                 })
                 .cornerRadius(10)
                 .pOnly(right: 10);

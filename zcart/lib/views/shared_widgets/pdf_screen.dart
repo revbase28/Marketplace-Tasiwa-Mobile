@@ -78,7 +78,7 @@ class _PDFScreenState extends State<PDFScreen> with WidgetsBindingObserver {
                 _controller.complete(pdfViewController);
               },
               onLinkHandler: (String? uri) {
-                launchURL(uri);
+                launchURL(uri ?? "");
               },
               onPageChanged: (int? page, int? total) {
                 setState(() {

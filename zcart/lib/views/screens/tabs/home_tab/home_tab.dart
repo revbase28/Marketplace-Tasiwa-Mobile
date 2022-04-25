@@ -21,8 +21,6 @@ import 'package:zcart/views/screens/auth/not_logged_in_screen.dart';
 import 'package:zcart/views/screens/bottom_nav_bar/bottom_nav_bar.dart';
 import 'package:zcart/views/screens/brand/featured_brands.dart';
 import 'package:zcart/views/screens/product_details/product_details_screen.dart';
-import 'package:zcart/views/screens/tabs/home_tab/categories/categories_page.dart';
-import 'package:zcart/views/screens/tabs/home_tab/categories/category_products_list.dart';
 import 'package:zcart/views/screens/tabs/home_tab/components/flash_deals.dart';
 import 'package:zcart/views/screens/tabs/home_tab/search/search_screen.dart';
 import 'package:zcart/views/shared_widgets/shared_widgets.dart';
@@ -601,151 +599,164 @@ class FeaturedCategoriesSection extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, watch) {
-    final _categoriesProvider = watch(featuredCategoriesProvider);
+    // final _categoriesProvider = watch(featuredCategoriesProvider);
     final _categoryState = watch(categoryNotifierProvider);
-    return _categoriesProvider.when(
-        data: (model) {
-          return model == null || model.data == null || model.data!.isEmpty
-              ? (_categoryState is CategoryInitialState ||
-                      _categoryState is CategoryLoadingState)
-                  ? const SizedBox()
-                  : _categoryState is CategoryLoadedState
-                      ? _categoryState.categoryList.isEmpty
-                          ? const SizedBox()
-                          : CategoryWidget(_categoryState.categoryList).py(5)
-                      : _categoryState is CategoryErrorState
-                          ? ErrorMessageWidget(_categoryState.message)
-                          : const SizedBox()
-              : SizedBox(
-                  height: 190,
-                  child: Center(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              LocaleKeys.categories.tr(),
-                              style: context.textTheme.bodyMedium!.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                  color: kFadeColor),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                context.nextPage(const CategoriesPage());
-                              },
-                              child: Text(
-                                LocaleKeys.view_all.tr(),
-                                style: context.textTheme.subtitle2!.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                    color: kFadeColor),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 4),
-                        SizedBox(
-                          height: 148,
-                          child: ListView(
-                            padding: const EdgeInsets.symmetric(vertical: 8),
-                            scrollDirection: Axis.horizontal,
-                            shrinkWrap: true,
-                            children: model.data!.map(
-                              (category) {
-                                return GestureDetector(
-                                  onTap: () {
-                                    context.nextPage(CategoryProductsList(
-                                        categoryName: category.name ??
-                                            LocaleKeys.unknown.tr()));
 
-                                    context
-                                        .read(productListNotifierProvider
-                                            .notifier)
-                                        .getProductList(
-                                            'category/${category.slug}');
-                                  },
-                                  child: Container(
-                                    margin: const EdgeInsets.only(right: 16),
-                                    width: 100,
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        category.featureImage != null
-                                            ? ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(8),
-                                                child: CachedNetworkImage(
-                                                  imageUrl:
-                                                      category.featureImage!,
-                                                  fit: BoxFit.contain,
-                                                  errorWidget: (_, __, ___) =>
-                                                      Container(
-                                                    decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              8),
-                                                      color: kFadeColor
-                                                          .withOpacity(0.3),
-                                                    ),
-                                                    height: 100,
-                                                    child: const Center(
-                                                        child:
-                                                            Icon(Icons.image)),
-                                                  ),
-                                                  placeholder: (_, __) =>
-                                                      Container(
-                                                    decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              8),
-                                                      color: kFadeColor
-                                                          .withOpacity(0.3),
-                                                    ),
-                                                    height: 100,
-                                                    child: const Center(
-                                                        child: LoadingWidget()),
-                                                  ),
-                                                ),
-                                              )
-                                            : Container(
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(8),
-                                                  color: kFadeColor
-                                                      .withOpacity(0.3),
-                                                ),
-                                                height: 100,
-                                                child: const Center(
-                                                    child: Icon(Icons.image)),
-                                              ),
-                                        const SizedBox(height: 4),
-                                        Text(
-                                          category.name ?? "",
-                                          textAlign: TextAlign.center,
-                                          overflow: TextOverflow.ellipsis,
-                                          maxLines: 2,
-                                          style: context.textTheme.caption!
-                                              .copyWith(
-                                            fontWeight: FontWeight.bold,
-                                            color: kFadeColor,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              },
-                            ).toList(),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-        },
-        loading: () => const SizedBox(),
-        error: (_, __) => const SizedBox());
+    return (_categoryState is CategoryInitialState ||
+            _categoryState is CategoryLoadingState)
+        ? const SizedBox()
+        : _categoryState is CategoryLoadedState
+            ? _categoryState.categoryList.isEmpty
+                ? const SizedBox()
+                : CategoryWidget(_categoryState.categoryList).py(5)
+            : _categoryState is CategoryErrorState
+                ? ErrorMessageWidget(_categoryState.message)
+                : const SizedBox();
+
+    //   return _categoriesProvider.when(
+    //       data: (model) {
+    //         return model == null || model.data == null || model.data!.isEmpty
+    //             ? (_categoryState is CategoryInitialState ||
+    //                     _categoryState is CategoryLoadingState)
+    //                 ? const SizedBox()
+    //                 : _categoryState is CategoryLoadedState
+    //                     ? _categoryState.categoryList.isEmpty
+    //                         ? const SizedBox()
+    //                         : CategoryWidget(_categoryState.categoryList).py(5)
+    //                     : _categoryState is CategoryErrorState
+    //                         ? ErrorMessageWidget(_categoryState.message)
+    //                         : const SizedBox()
+    //             : SizedBox(
+    //                 height: 190,
+    //                 child: Center(
+    //                   child: Column(
+    //                     crossAxisAlignment: CrossAxisAlignment.stretch,
+    //                     mainAxisSize: MainAxisSize.min,
+    //                     children: [
+    //                       Row(
+    //                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //                         children: [
+    //                           Text(
+    //                             LocaleKeys.categories.tr(),
+    //                             style: context.textTheme.bodyMedium!.copyWith(
+    //                                 fontWeight: FontWeight.bold,
+    //                                 color: kFadeColor),
+    //                           ),
+    //                           GestureDetector(
+    //                             onTap: () {
+    //                               context.nextPage(const CategoriesPage());
+    //                             },
+    //                             child: Text(
+    //                               LocaleKeys.view_all.tr(),
+    //                               style: context.textTheme.subtitle2!.copyWith(
+    //                                   fontWeight: FontWeight.bold,
+    //                                   color: kFadeColor),
+    //                             ),
+    //                           ),
+    //                         ],
+    //                       ),
+    //                       const SizedBox(height: 4),
+    //                       SizedBox(
+    //                         height: 148,
+    //                         child: ListView(
+    //                           padding: const EdgeInsets.symmetric(vertical: 8),
+    //                           scrollDirection: Axis.horizontal,
+    //                           shrinkWrap: true,
+    //                           children: model.data!.map(
+    //                             (category) {
+    //                               return GestureDetector(
+    //                                 onTap: () {
+    //                                   context.nextPage(CategoryProductsList(
+    //                                       categoryName: category.name ??
+    //                                           LocaleKeys.unknown.tr()));
+
+    //                                   context
+    //                                       .read(productListNotifierProvider
+    //                                           .notifier)
+    //                                       .getProductList(
+    //                                           'category/${category.slug}');
+    //                                 },
+    //                                 child: Container(
+    //                                   margin: const EdgeInsets.only(right: 16),
+    //                                   width: 100,
+    //                                   child: Column(
+    //                                     mainAxisSize: MainAxisSize.min,
+    //                                     children: [
+    //                                       category.featureImage != null
+    //                                           ? ClipRRect(
+    //                                               borderRadius:
+    //                                                   BorderRadius.circular(8),
+    //                                               child: CachedNetworkImage(
+    //                                                 imageUrl:
+    //                                                     category.featureImage!,
+    //                                                 fit: BoxFit.contain,
+    //                                                 errorWidget: (_, __, ___) =>
+    //                                                     Container(
+    //                                                   decoration: BoxDecoration(
+    //                                                     borderRadius:
+    //                                                         BorderRadius.circular(
+    //                                                             8),
+    //                                                     color: kFadeColor
+    //                                                         .withOpacity(0.3),
+    //                                                   ),
+    //                                                   height: 100,
+    //                                                   child: const Center(
+    //                                                       child:
+    //                                                           Icon(Icons.image)),
+    //                                                 ),
+    //                                                 placeholder: (_, __) =>
+    //                                                     Container(
+    //                                                   decoration: BoxDecoration(
+    //                                                     borderRadius:
+    //                                                         BorderRadius.circular(
+    //                                                             8),
+    //                                                     color: kFadeColor
+    //                                                         .withOpacity(0.3),
+    //                                                   ),
+    //                                                   height: 100,
+    //                                                   child: const Center(
+    //                                                       child: LoadingWidget()),
+    //                                                 ),
+    //                                               ),
+    //                                             )
+    //                                           : Container(
+    //                                               decoration: BoxDecoration(
+    //                                                 borderRadius:
+    //                                                     BorderRadius.circular(8),
+    //                                                 color: kFadeColor
+    //                                                     .withOpacity(0.3),
+    //                                               ),
+    //                                               height: 100,
+    //                                               child: const Center(
+    //                                                   child: Icon(Icons.image)),
+    //                                             ),
+    //                                       const SizedBox(height: 4),
+    //                                       Text(
+    //                                         category.name ?? "",
+    //                                         textAlign: TextAlign.center,
+    //                                         overflow: TextOverflow.ellipsis,
+    //                                         maxLines: 2,
+    //                                         style: context.textTheme.caption!
+    //                                             .copyWith(
+    //                                           fontWeight: FontWeight.bold,
+    //                                           color: kFadeColor,
+    //                                         ),
+    //                                       ),
+    //                                     ],
+    //                                   ),
+    //                                 ),
+    //                               );
+    //                             },
+    //                           ).toList(),
+    //                         ),
+    //                       ),
+    //                     ],
+    //                   ),
+    //                 ),
+    //               );
+    //       },
+    //       loading: () => const SizedBox(),
+    //       error: (_, __) => const SizedBox());
+    // }
   }
 }

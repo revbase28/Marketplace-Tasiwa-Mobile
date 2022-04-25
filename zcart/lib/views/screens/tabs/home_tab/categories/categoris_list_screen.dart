@@ -30,67 +30,64 @@ class CategoryListScreen extends ConsumerWidget {
         body: _categoryState is CategoryLoadedState
             ? _categoryState.categoryList.isEmpty
                 ? const SizedBox()
-                : GridView.builder(
+                : GridView(
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
                     ),
-                    itemCount: _categoryState.categoryList.length,
                     shrinkWrap: true,
-                    itemBuilder: (BuildContext ctx, index) {
-                      return Container(
-                        decoration: customBoxDecoration.copyWith(
-                          boxShadow: [],
-                          color: getColorBasedOnTheme(
-                              context, kLightCardBgColor, kDarkCardBgColor),
-                        ),
-                        child: GridTile(
-                          // header: Container(
-                          //   height: 5,
-                          //   decoration: BoxDecoration(
-                          //       gradient: LinearGradient(colors: [
-                          //         kAccentColor.withOpacity(0.7),
-                          //         kPrimaryColor
-                          //       ]),
-                          //       borderRadius: BorderRadius.circular(30)),
-                          // ).pOnly(top: 16, left: 112, right: 16),
-                          child: Center(
-                            child: FaIcon(
-                              getCategoryIcon(
-                                  _categoryState.categoryList[index].icon),
-                              size: 35,
-                              color: getColorBasedOnTheme(
-                                  context, kDarkColor, kLightBgColor),
-                            ),
-                            // child: Image.network(
-                            //   _categoryState.categoryList[index].coverImage ??
-                            //       "",
-                            //   fit: BoxFit.cover,
-                            // ),
-                          ),
-                          footer: Center(
-                              child:
-                                  Text(_categoryState.categoryList[index].name!)
-                                      .pOnly(bottom: 24)),
-                        ).onInkTap(() {
-                          context
-                              .read(subgroupCategoryNotifierProvider.notifier)
-                              .resetState();
-                          context
-                              .read(categorySubgroupNotifierProvider.notifier)
-                              .getCategorySubgroup(_categoryState
-                                  .categoryList[index].id
-                                  .toString());
-                          context
-                              .read(productListNotifierProvider.notifier)
-                              .getProductList(
-                                  'category-grp/${_categoryState.categoryList[index].slug}');
-                          context.nextPage(CategoryDetailsScreen(
-                              categoryListItem:
-                                  _categoryState.categoryList[index]));
-                        }),
-                      ).p(10);
-                    })
+                    children: _categoryState.categoryList
+                        .sublist(1)
+                        .map((e) => Container(
+                              decoration: customBoxDecoration.copyWith(
+                                boxShadow: [],
+                                color: getColorBasedOnTheme(context,
+                                    kLightCardBgColor, kDarkCardBgColor),
+                              ),
+                              child: GridTile(
+                                // header: Container(
+                                //   height: 5,
+                                //   decoration: BoxDecoration(
+                                //       gradient: LinearGradient(colors: [
+                                //         kAccentColor.withOpacity(0.7),
+                                //         kPrimaryColor
+                                //       ]),
+                                //       borderRadius: BorderRadius.circular(30)),
+                                // ).pOnly(top: 16, left: 112, right: 16),
+                                child: Center(
+                                  child: FaIcon(
+                                    getCategoryIcon(e.icon),
+                                    size: 35,
+                                    color: getColorBasedOnTheme(
+                                        context, kDarkColor, kLightBgColor),
+                                  ),
+                                  // child: Image.network(
+                                  //   _categoryState.categoryList[index].coverImage ??
+                                  //       "",
+                                  //   fit: BoxFit.cover,
+                                  // ),
+                                ),
+                                footer: Center(
+                                    child:
+                                        Text(e.name ?? "").pOnly(bottom: 24)),
+                              ).onInkTap(() {
+                                context
+                                    .read(subgroupCategoryNotifierProvider
+                                        .notifier)
+                                    .resetState();
+                                context
+                                    .read(categorySubgroupNotifierProvider
+                                        .notifier)
+                                    .getCategorySubgroup(e.id.toString());
+                                context
+                                    .read(productListNotifierProvider.notifier)
+                                    .getProductList('category-grp/${e.slug}');
+                                context.nextPage(
+                                    CategoryDetailsScreen(categoryListItem: e));
+                              }),
+                            ).p(10))
+                        .toList(),
+                  )
             : const Center(child: CircularProgressIndicator()));
   }
 }

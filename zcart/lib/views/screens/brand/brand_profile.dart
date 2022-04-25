@@ -129,7 +129,8 @@ class BrandProfileScreen extends ConsumerWidget {
                                 if (_brandProfileState.brandProfile.data!.url !=
                                     null) {
                                   launchURL(_brandProfileState
-                                      .brandProfile.data!.url);
+                                          .brandProfile.data!.url ??
+                                      "");
                                 }
                               },
                               child: Icon(
