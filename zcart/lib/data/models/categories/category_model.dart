@@ -7,12 +7,14 @@ class CategoryModel {
 
   List<CategoryList>? data;
 
-  factory CategoryModel.fromRawJson(String str) => CategoryModel.fromJson(json.decode(str));
+  factory CategoryModel.fromRawJson(String str) =>
+      CategoryModel.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
   factory CategoryModel.fromJson(Map<String, dynamic> json) => CategoryModel(
-        data: List<CategoryList>.from(json["data"].map((x) => CategoryList.fromJson(x))),
+        data: List<CategoryList>.from(
+            json["data"].map((x) => CategoryList.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -27,6 +29,7 @@ class CategoryList {
     this.slug,
     this.description,
     this.icon,
+    this.iconImage,
     this.order,
     this.coverImage,
   });
@@ -36,10 +39,12 @@ class CategoryList {
   String? slug;
   String? description;
   String? icon;
+  String? iconImage;
   int? order;
   String? coverImage;
 
-  factory CategoryList.fromRawJson(String str) => CategoryList.fromJson(json.decode(str));
+  factory CategoryList.fromRawJson(String str) =>
+      CategoryList.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
@@ -49,6 +54,7 @@ class CategoryList {
         slug: json["slug"],
         description: json["description"],
         icon: json["icon"],
+        iconImage: json["icon_image"],
         order: json["order"],
         coverImage: json["cover_image"],
       );
@@ -59,6 +65,7 @@ class CategoryList {
         "slug": slug,
         "description": description,
         "icon": icon,
+        "icon_image": iconImage,
         "order": order,
         "cover_image": coverImage,
       };

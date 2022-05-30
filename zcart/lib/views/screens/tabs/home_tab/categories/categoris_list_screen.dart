@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -45,31 +46,33 @@ class CategoryListScreen extends ConsumerWidget {
                                     kLightCardBgColor, kDarkCardBgColor),
                               ),
                               child: GridTile(
-                                // header: Container(
-                                //   height: 5,
-                                //   decoration: BoxDecoration(
-                                //       gradient: LinearGradient(colors: [
-                                //         kAccentColor.withOpacity(0.7),
-                                //         kPrimaryColor
-                                //       ]),
-                                //       borderRadius: BorderRadius.circular(30)),
-                                // ).pOnly(top: 16, left: 112, right: 16),
-                                child: Center(
-                                  child: FaIcon(
-                                    getCategoryIcon(e.icon),
-                                    size: 35,
-                                    color: getColorBasedOnTheme(
-                                        context, kDarkColor, kLightBgColor),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(64),
+                                  child: Center(
+                                    child: e.iconImage == null
+                                        ? FaIcon(
+                                            getCategoryIcon(e.icon),
+                                            size: 35,
+                                            color: getColorBasedOnTheme(context,
+                                                kDarkColor, kLightBgColor),
+                                          )
+                                        : CachedNetworkImage(
+                                            imageUrl: e.iconImage!,
+                                            errorWidget:
+                                                (context, url, error) => FaIcon(
+                                              getCategoryIcon(e.icon),
+                                              size: 35,
+                                              color: getColorBasedOnTheme(
+                                                  context,
+                                                  kDarkColor,
+                                                  kLightBgColor),
+                                            ),
+                                          ),
                                   ),
-                                  // child: Image.network(
-                                  //   _categoryState.categoryList[index].coverImage ??
-                                  //       "",
-                                  //   fit: BoxFit.cover,
-                                  // ),
                                 ),
                                 footer: Center(
-                                    child:
-                                        Text(e.name ?? "").pOnly(bottom: 24)),
+                                    child: Text(e.name ?? "")
+                                        .pOnly(bottom: 24, top: 16)),
                               ).onInkTap(() {
                                 context
                                     .read(subgroupCategoryNotifierProvider

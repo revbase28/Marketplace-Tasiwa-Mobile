@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:zcart/data/models/categories/category_model.dart';
 import 'package:zcart/helper/category_icons.dart';
@@ -36,11 +37,26 @@ class CategoryWidget extends StatelessWidget {
                   child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  FaIcon(
-                    getCategoryIcon(categoryList[index].icon),
-                    color: getColorBasedOnTheme(
-                        context, kDarkBgColor, kLightColor),
-                  ).pOnly(bottom: 5),
+                  const SizedBox(height: 4),
+                  Expanded(
+                    child: Center(
+                      child: categoryList[index].iconImage == null
+                          ? FaIcon(
+                              getCategoryIcon(categoryList[index].icon),
+                              color: getColorBasedOnTheme(
+                                  context, kDarkBgColor, kLightColor),
+                            )
+                          : CachedNetworkImage(
+                              imageUrl: categoryList[index].iconImage!,
+                              errorWidget: (context, url, error) => FaIcon(
+                                getCategoryIcon(categoryList[index].icon),
+                                color: getColorBasedOnTheme(
+                                    context, kDarkBgColor, kLightColor),
+                              ),
+                            ),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
                   Text(
                     categoryList[index].name!,
                     textAlign: TextAlign.center,
