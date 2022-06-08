@@ -27,7 +27,7 @@ class CouponRepository extends StateNotifier<CouponState> {
       CouponModel couponModel = CouponModel.fromJson(responseBody);
 
       state = CouponLoadedState(couponModel.data);
-    } on NetworkException {
+    } catch (e) {
       state = const CouponErrorState("Failed to fetch coupon data!");
     }
   }

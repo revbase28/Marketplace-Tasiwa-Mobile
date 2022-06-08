@@ -1417,10 +1417,30 @@ class CheckOutItemDetailsPage extends ConsumerWidget {
                                   "",
                             ),
 
-                            ApplyCouponSection(
-                                cartId: _cartDetailsProvider
-                                    .cartItemDetails!.data!.id!),
-                            const SizedBox(height: 8),
+                            Consumer(
+                              builder: (context, watch, child) {
+                                final couponPluginCheck =
+                                    watch(checkCouponPluginProvider);
+                                return couponPluginCheck.when(
+                                    data: (data) {
+                                      return data
+                                          ? Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                ApplyCouponSection(
+                                                    cartId: _cartDetailsProvider
+                                                        .cartItemDetails!
+                                                        .data!
+                                                        .id!),
+                                                const SizedBox(height: 8),
+                                              ],
+                                            )
+                                          : const SizedBox();
+                                    },
+                                    loading: () => const SizedBox(),
+                                    error: (_, __) => const SizedBox());
+                              },
+                            ),
 
                             Container(
                               margin: const EdgeInsets.symmetric(

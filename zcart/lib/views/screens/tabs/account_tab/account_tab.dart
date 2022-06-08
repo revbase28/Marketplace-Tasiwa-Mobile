@@ -263,45 +263,54 @@ class UserActivityCard extends StatelessWidget {
             }),
           ),
         ),
-        Expanded(
-          flex: 1,
-          child: Container(
-            margin: const EdgeInsets.all(4),
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: kLightCardBgColor,
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Consumer(
-                  builder: (context, watch, _) {
-                    final couponState = watch(couponsProvider);
-                    return Text(
-                      couponState is CouponLoadedState
-                          ? "${couponState.coupon!.length}"
-                          : "0",
-                      maxLines: 1,
-                      style: context.textTheme.headline4!.copyWith(
-                          color: getColorBasedOnTheme(
-                              context, kPrimaryColor, kDarkPriceColor),
-                          fontWeight: FontWeight.bold),
-                    );
-                  },
-                ),
-                Text(
-                  LocaleKeys.coupons.tr(),
-                  maxLines: 1,
-                  textAlign: TextAlign.center,
-                  style: context.textTheme.caption!
-                      .copyWith(fontWeight: FontWeight.bold),
-                ),
-              ],
-            ).onInkTap(() {
-              context.nextPage(const MyCouponsScreen());
-            }),
-          ),
+        Consumer(
+          builder: (context, watch, child) {
+            final couponPluginCheck = watch(checkCouponPluginProvider);
+
+            final couponState = watch(couponsProvider);
+            return couponPluginCheck.when(
+                data: (data) {
+                  return data
+                      ? Expanded(
+                          flex: 1,
+                          child: Container(
+                            margin: const EdgeInsets.all(4),
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: kLightCardBgColor,
+                            ),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  couponState is CouponLoadedState
+                                      ? "${couponState.coupon!.length}"
+                                      : "0",
+                                  maxLines: 1,
+                                  style: context.textTheme.headline4!.copyWith(
+                                      color: getColorBasedOnTheme(context,
+                                          kPrimaryColor, kDarkPriceColor),
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  LocaleKeys.coupons.tr(),
+                                  maxLines: 1,
+                                  textAlign: TextAlign.center,
+                                  style: context.textTheme.caption!
+                                      .copyWith(fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            ).onInkTap(() {
+                              context.nextPage(const MyCouponsScreen());
+                            }),
+                          ),
+                        )
+                      : const SizedBox();
+                },
+                loading: () => const SizedBox(),
+                error: (_, __) => const SizedBox());
+          },
         ),
         Expanded(
           flex: 1,
@@ -343,45 +352,54 @@ class UserActivityCard extends StatelessWidget {
             }),
           ),
         ),
-        Expanded(
-          flex: 1,
-          child: Container(
-            margin: const EdgeInsets.all(4),
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: kLightCardBgColor,
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Consumer(
-                  builder: (ctx, watch, _) {
-                    final wishListState = watch(wishListNotifierProvider);
-                    return Text(
-                      wishListState is WishListLoadedState
-                          ? wishListState.wishList.length.toString()
-                          : '0',
-                      maxLines: 1,
-                      style: context.textTheme.headline4!.copyWith(
-                          color: getColorBasedOnTheme(
-                              context, kPrimaryColor, kDarkPriceColor),
-                          fontWeight: FontWeight.bold),
-                    );
-                  },
-                ),
-                Text(
-                  LocaleKeys.wishlist_text.tr(),
-                  maxLines: 1,
-                  textAlign: TextAlign.center,
-                  style: context.textTheme.caption!
-                      .copyWith(fontWeight: FontWeight.bold),
-                )
-              ],
-            ).onInkTap(() {
-              context.nextPage(const WishListTab());
-            }),
-          ),
+        Consumer(
+          builder: (context, watch, child) {
+            final wishlistPluginCheck = watch(checkWishlistPluginProvider);
+            final wishListState = watch(wishListNotifierProvider);
+
+            return wishlistPluginCheck.when(
+                data: (data) {
+                  return data
+                      ? Expanded(
+                          flex: 1,
+                          child: Container(
+                            margin: const EdgeInsets.all(4),
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: kLightCardBgColor,
+                            ),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  wishListState is WishListLoadedState
+                                      ? wishListState.wishList.length.toString()
+                                      : '0',
+                                  maxLines: 1,
+                                  style: context.textTheme.headline4!.copyWith(
+                                      color: getColorBasedOnTheme(context,
+                                          kPrimaryColor, kDarkPriceColor),
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  LocaleKeys.wishlist_text.tr(),
+                                  maxLines: 1,
+                                  textAlign: TextAlign.center,
+                                  style: context.textTheme.caption!
+                                      .copyWith(fontWeight: FontWeight.bold),
+                                )
+                              ],
+                            ).onInkTap(() {
+                              context.nextPage(const WishListTab());
+                            }),
+                          ),
+                        )
+                      : const SizedBox();
+                },
+                loading: () => const SizedBox(),
+                error: (_, __) => const SizedBox());
+          },
         ),
       ],
     ).cornerRadius(10).p(10);
@@ -398,24 +416,38 @@ class ActionCard extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 20),
         child: Row(
           children: [
-            Expanded(
-              flex: 1,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const Icon(
-                    CupertinoIcons.bubble_left_bubble_right,
-                  ).pOnly(bottom: 10),
-                  Text(
-                    LocaleKeys.messages.tr(),
-                    style: context.textTheme.caption!
-                        .copyWith(fontWeight: FontWeight.bold),
-                  )
-                ],
-              ).onInkTap(() {
-                context.read(conversationProvider.notifier).conversation();
-                context.nextPage(const MessagesScreen());
-              }),
+            Consumer(
+              builder: (context, watch, child) {
+                final liveChatPluginCheck = watch(checkLiveChatPluginProvider);
+                return liveChatPluginCheck.when(
+                    data: (data) {
+                      return data
+                          ? Expanded(
+                              flex: 1,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  const Icon(
+                                    CupertinoIcons.bubble_left_bubble_right,
+                                  ).pOnly(bottom: 10),
+                                  Text(
+                                    LocaleKeys.messages.tr(),
+                                    style: context.textTheme.caption!
+                                        .copyWith(fontWeight: FontWeight.bold),
+                                  )
+                                ],
+                              ).onInkTap(() {
+                                context
+                                    .read(conversationProvider.notifier)
+                                    .conversation();
+                                context.nextPage(const MessagesScreen());
+                              }),
+                            )
+                          : const SizedBox();
+                    },
+                    loading: () => const SizedBox(),
+                    error: (_, __) => const SizedBox());
+              },
             ),
             Expanded(
               flex: 1,

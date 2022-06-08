@@ -7,6 +7,7 @@ import 'package:zcart/Theme/styles/colors.dart';
 import 'package:zcart/helper/constants.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:zcart/views/screens/bottom_nav_bar/bottom_nav_bar.dart';
+import 'package:zcart/views/screens/bottom_nav_bar/tab_navigation_item.dart';
 import 'package:zcart/views/screens/startup/loading_screen.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:velocity_x/velocity_x.dart';
@@ -28,7 +29,7 @@ class OrderPlacedPage extends ConsumerWidget {
           leading: IconButton(
               onPressed: () {
                 context.nextAndRemoveUntilPage(
-                    const BottomNavBar(selectedIndex: 0));
+                    const BottomNavBar(selectedTabId: homeTabId));
               },
               icon: const Icon(Icons.home))),
       body: Center(
@@ -101,7 +102,7 @@ class OrderPlacedPage extends ConsumerWidget {
                     });
                   } else {
                     context.nextAndRemoveUntilPage(
-                        const BottomNavBar(selectedIndex: 0));
+                        const BottomNavBar(selectedTabId: homeTabId));
                   }
                 },
                 child: Text(

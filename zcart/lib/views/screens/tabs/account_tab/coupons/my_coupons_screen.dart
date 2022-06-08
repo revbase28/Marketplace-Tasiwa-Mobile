@@ -70,7 +70,15 @@ class MyCouponsScreen extends ConsumerWidget {
                     )
               : _couponState is CouponLoadingState
                   ? const LoadingWidget()
-                  : const SizedBox()),
+                  : Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(Icons.info_outline).pOnly(bottom: 10),
+                          Text(LocaleKeys.no_item_found.tr()),
+                        ],
+                      ),
+                    )),
     );
   }
 }

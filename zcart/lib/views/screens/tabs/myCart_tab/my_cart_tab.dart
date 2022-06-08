@@ -18,11 +18,11 @@ import 'package:zcart/data/network/network_utils.dart';
 import 'package:zcart/helper/get_color_based_on_theme.dart';
 import 'package:zcart/riverpod/providers/plugin_provider.dart';
 import 'package:zcart/riverpod/providers/provider.dart';
-import 'package:zcart/riverpod/providers/system_config_provider.dart';
 import 'package:zcart/riverpod/state/state.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:zcart/views/screens/auth/login_screen.dart';
 import 'package:zcart/views/screens/bottom_nav_bar/bottom_nav_bar.dart';
+import 'package:zcart/views/screens/bottom_nav_bar/tab_navigation_item.dart';
 import 'package:zcart/views/screens/product_details/product_details_screen.dart';
 import 'package:zcart/views/screens/product_list/recently_viewed.dart';
 import 'package:zcart/views/screens/tabs/home_tab/components/error_widget.dart';
@@ -62,12 +62,14 @@ class _MyCartTabState extends State<MyCartTab> {
 
   void _onOneCheckOut(int cartId, String? userEmail) {
     setState(() {});
+
     if (_isAllCartCheckout.any((element) => element == false)) {
       toast(LocaleKeys.onecheckout_warning.tr(), length: Toast.LENGTH_LONG);
     } else {
-      final _systemConfigProvider = context.read(systemConfigFutureProvider);
-      _systemConfigProvider.whenData((value) {
-        if (value?.data?.allowGuestCheckout == true) {
+      final _isGuestCheckout = context.read(checkGuestCheckoutPluginProvider);
+
+      _isGuestCheckout.whenData((value) {
+        if (value) {
           context
               .read(paymentOptionsNotifierProvider.notifier)
               .fetchPaymentMethod(cartId: cartId.toString());
@@ -80,8 +82,8 @@ class _MyCartTabState extends State<MyCartTab> {
               CheckoutScreen(customerEmail: userEmail, isOneCheckout: true));
         } else {
           if (accessAllowed == false) {
-            context.nextPage(
-                const LoginScreen(needBackButton: true, nextScreenIndex: 4));
+            context.nextPage(const LoginScreen(
+                needBackButton: true, nextScreenId: cartTabId));
           } else {
             context
                 .read(paymentOptionsNotifierProvider.notifier)
@@ -230,7 +232,7 @@ class _MyCartTabState extends State<MyCartTab> {
                                       onPressed: () {
                                         context.nextReplacementPage(
                                             const BottomNavBar(
-                                                selectedIndex: 0));
+                                                selectedTabId: homeTabId));
                                       },
                                       child: Text(LocaleKeys.go_shopping.tr())),
                                   const SizedBox(height: 50),
@@ -964,37 +966,15 @@ class ShippingDetails extends ConsumerWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     CartGrandTotalPart(cartItem: cartItem),
-                    ElevatedButton(
-                        onPressed: () async {
-                          String? _customerEmail;
+                    Consumer(builder: (context, watch, _) {
+                      final _isGuestCheckout =
+                          watch(checkGuestCheckoutPluginProvider);
+                      return ElevatedButton(
+                          onPressed: () async {
+                            String? _customerEmail;
 
-                          final _systemConfigProvider =
-                              context.read(systemConfigFutureProvider);
-                          _systemConfigProvider.whenData((value) {
-                            if (value?.data?.allowGuestCheckout == true) {
-                              if (accessAllowed) {
-                                if (_userState is UserLoadedState) {
-                                  _customerEmail = _userState.user!.email!;
-                                }
-                              }
-
-                              context
-                                  .read(paymentOptionsNotifierProvider.notifier)
-                                  .fetchPaymentMethod(
-                                      cartId: cartItem.id!.toString());
-
-                              context
-                                  .read(
-                                      cartItemDetailsNotifierProvider.notifier)
-                                  .getCartItemDetails(cartItem.id);
-
-                              context.nextPage(CheckoutScreen(
-                                  customerEmail: _customerEmail));
-                            } else {
-                              if (accessAllowed == false) {
-                                context.nextPage(const LoginScreen(
-                                    needBackButton: true, nextScreenIndex: 4));
-                              } else {
+                            _isGuestCheckout.whenData((value) {
+                              if (value) {
                                 if (accessAllowed) {
                                   if (_userState is UserLoadedState) {
                                     _customerEmail = _userState.user!.email!;
@@ -1014,11 +994,37 @@ class ShippingDetails extends ConsumerWidget {
 
                                 context.nextPage(CheckoutScreen(
                                     customerEmail: _customerEmail));
+                              } else {
+                                if (accessAllowed == false) {
+                                  context.nextPage(const LoginScreen(
+                                      needBackButton: true,
+                                      nextScreenId: cartTabId));
+                                } else {
+                                  if (accessAllowed) {
+                                    if (_userState is UserLoadedState) {
+                                      _customerEmail = _userState.user!.email!;
+                                    }
+                                  }
+
+                                  context
+                                      .read(paymentOptionsNotifierProvider
+                                          .notifier)
+                                      .fetchPaymentMethod(
+                                          cartId: cartItem.id!.toString());
+
+                                  context
+                                      .read(cartItemDetailsNotifierProvider
+                                          .notifier)
+                                      .getCartItemDetails(cartItem.id);
+
+                                  context.nextPage(CheckoutScreen(
+                                      customerEmail: _customerEmail));
+                                }
                               }
-                            }
-                          });
-                        },
-                        child: Text(LocaleKeys.checkout.tr()))
+                            });
+                          },
+                          child: Text(LocaleKeys.checkout.tr()));
+                    })
                   ],
                 ),
               ),

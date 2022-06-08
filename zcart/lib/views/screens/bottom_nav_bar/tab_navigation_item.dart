@@ -7,21 +7,25 @@ import 'package:zcart/views/screens/tabs/tabs.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 class TabNavigationItem {
+  final String id;
   final Widget page;
   final Widget title;
   final Icon icon;
   final Icon selectedIcon;
   final String label;
 
-  TabNavigationItem(
-      {required this.page,
-      required this.title,
-      required this.icon,
-      required this.selectedIcon,
-      required this.label});
+  TabNavigationItem({
+    required this.id,
+    required this.page,
+    required this.title,
+    required this.icon,
+    required this.selectedIcon,
+    required this.label,
+  });
 
   static List<TabNavigationItem> get items => [
         TabNavigationItem(
+          id: homeTabId,
           page: const HomeTab(),
           icon: const Icon(Icons.home_outlined),
           selectedIcon: const Icon(Icons.home),
@@ -29,6 +33,7 @@ class TabNavigationItem {
           label: LocaleKeys.home_text.tr(),
         ),
         TabNavigationItem(
+          id: vendorTabId,
           page: const VendorsTab(),
           icon: const Icon(Icons.store_outlined),
           selectedIcon: const Icon(Icons.store),
@@ -36,6 +41,7 @@ class TabNavigationItem {
           label: LocaleKeys.vendor_text.tr(),
         ),
         TabNavigationItem(
+          id: brandTabId,
           page: const BrandsTab(),
           icon: const Icon(Icons.local_mall_outlined),
           selectedIcon: const Icon(Icons.local_mall),
@@ -43,15 +49,18 @@ class TabNavigationItem {
           label: LocaleKeys.brands.tr(),
         ),
         TabNavigationItem(
+          id: wishlistTabId,
           page: accessAllowed
               ? const WishListTab()
-              : const LoginScreen(needBackButton: false, nextScreenIndex: 3),
+              : const LoginScreen(
+                  needBackButton: false, nextScreenId: wishlistTabId),
           icon: const Icon(Icons.favorite_border),
           selectedIcon: const Icon(Icons.favorite),
           title: Text(LocaleKeys.wishlist_text.tr()),
           label: LocaleKeys.wishlist_text.tr(),
         ),
         TabNavigationItem(
+          id: cartTabId,
           page: const MyCartTab(),
           icon: const Icon(Icons.shopping_cart_outlined),
           selectedIcon: const Icon(Icons.shopping_cart),
@@ -59,6 +68,7 @@ class TabNavigationItem {
           label: LocaleKeys.cart_text.tr(),
         ),
         TabNavigationItem(
+          id: accountTabId,
           page: accessAllowed
               ? const AccountTab()
               : const LoginScreen(needBackButton: false),
@@ -69,3 +79,10 @@ class TabNavigationItem {
         ),
       ];
 }
+
+const String homeTabId = "home";
+const String vendorTabId = "vendor";
+const String brandTabId = "brand";
+const String wishlistTabId = "wishlist";
+const String cartTabId = "cart";
+const String accountTabId = "profile";

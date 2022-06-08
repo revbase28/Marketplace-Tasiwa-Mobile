@@ -68,7 +68,6 @@ class WishListRepository implements IWishListRepository {
             MaterialPageRoute(
                 builder: (context) => LoginScreen(
                       needBackButton: true,
-                      nextScreenIndex: 0,
                       nextScreen: ProductDetailsScreen(productSlug: slug ?? ""),
                     )));
       }

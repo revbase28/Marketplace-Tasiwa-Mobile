@@ -8,17 +8,19 @@ import 'package:zcart/data/network/network_utils.dart';
 import 'package:zcart/helper/constants.dart';
 import 'package:zcart/helper/url_launcher_helper.dart';
 import 'package:zcart/riverpod/providers/cart_provider.dart';
+import 'package:zcart/riverpod/providers/plugin_provider.dart';
 import 'package:zcart/riverpod/providers/system_config_provider.dart';
 import 'package:zcart/riverpod/state/cart_state.dart';
 import 'package:zcart/views/shared_widgets/custom_confirm_dialog.dart';
+import 'package:zcart/views/shared_widgets/shared_widgets.dart';
 import 'tab_navigation_item.dart';
 
 class BottomNavBar extends StatefulWidget {
-  final int? selectedIndex;
+  final String selectedTabId;
 
   const BottomNavBar({
     Key? key,
-    this.selectedIndex,
+    this.selectedTabId = homeTabId,
   }) : super(key: key);
 
   @override
@@ -26,14 +28,15 @@ class BottomNavBar extends StatefulWidget {
 }
 
 class _BottomNavBarState extends State<BottomNavBar> {
-  int? _currentIndex;
+  late String _selectedTabId;
 
   @override
   void initState() {
     super.initState();
 
     getLoginState();
-    _currentIndex = widget.selectedIndex ?? 0;
+
+    _selectedTabId = widget.selectedTabId;
 
     final _systemConfigFutureProvider =
         context.read(systemConfigFutureProvider);
@@ -66,6 +69,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
   Widget build(BuildContext context) {
     return Consumer(builder: (context, watch, _) {
       final cartState = watch(cartNotifierProvider);
+      final wishlistPluginCheck = watch(checkWishlistPluginProvider);
       int cartItems = 0;
 
       if (cartState is CartLoadedState) {
@@ -76,77 +80,98 @@ class _BottomNavBarState extends State<BottomNavBar> {
 
       return WillPopScope(
         onWillPop: () async {
-          if (_currentIndex == 0) {
+          if (_selectedTabId == homeTabId) {
             return true;
           } else {
             setState(() {
-              _currentIndex = 0;
+              _selectedTabId = homeTabId;
             });
             return false;
           }
         },
-        child: Scaffold(
-          body: PageTransitionSwitcher(
-            duration: const Duration(milliseconds: 500),
-            transitionBuilder: (child, primaryAnimation, secondaryAnimation) =>
-                FadeThroughTransition(
-              fillColor: Colors.transparent,
-              animation: primaryAnimation,
-              secondaryAnimation: secondaryAnimation,
-              child: child,
-            ),
-            child: _selectPage(),
-          ),
-          bottomNavigationBar: Stack(
-            children: [
-              Directionality(
-                textDirection: TextDirection.ltr,
-                child: BottomNavigationBar(
-                  currentIndex: _currentIndex!,
-                  onTap: (int index) {
-                    setState(() => _currentIndex = index);
-                  },
-                  backgroundColor: kPrimaryColor,
-                  type: BottomNavigationBarType.fixed,
-                  unselectedItemColor: kBottomBarUnselectedColor,
-                  selectedItemColor: kLightColor,
-                  selectedFontSize: 11,
-                  elevation: 0,
-                  showUnselectedLabels: false,
-                  selectedLabelStyle:
-                      const TextStyle(fontWeight: FontWeight.bold),
-                  items: [
-                    for (final item in TabNavigationItem.items)
-                      BottomNavigationBarItem(
-                        icon: item.icon,
-                        label: item.label,
-                        activeIcon: item.selectedIcon,
-                      )
+        child: wishlistPluginCheck.when(
+            data: (data) {
+              final List<TabNavigationItem> _navItems = [];
+              if (data) {
+                _navItems.addAll(TabNavigationItem.items);
+              } else {
+                final _tempItems = TabNavigationItem.items;
+                _tempItems.removeAt(3);
+                _navItems.addAll(_tempItems);
+              }
+
+              return Scaffold(
+                body: PageTransitionSwitcher(
+                  duration: const Duration(milliseconds: 500),
+                  transitionBuilder:
+                      (child, primaryAnimation, secondaryAnimation) =>
+                          FadeThroughTransition(
+                    fillColor: Colors.transparent,
+                    animation: primaryAnimation,
+                    secondaryAnimation: secondaryAnimation,
+                    child: child,
+                  ),
+                  child: _navItems
+                      .firstWhere((element) => element.id == _selectedTabId)
+                      .page,
+                ),
+                bottomNavigationBar: Stack(
+                  children: [
+                    Directionality(
+                      textDirection: TextDirection.ltr,
+                      child: BottomNavigationBar(
+                        currentIndex: _navItems.indexWhere((item) {
+                          return item.id == _selectedTabId;
+                        }),
+                        onTap: (int index) {
+                          setState(() {
+                            _selectedTabId = _navItems[index].id;
+                          });
+                        },
+                        backgroundColor: kPrimaryColor,
+                        type: BottomNavigationBarType.fixed,
+                        unselectedItemColor: kBottomBarUnselectedColor,
+                        selectedItemColor: kLightColor,
+                        selectedFontSize: 11,
+                        elevation: 0,
+                        showUnselectedLabels: false,
+                        selectedLabelStyle:
+                            const TextStyle(fontWeight: FontWeight.bold),
+                        items: [
+                          for (final item in _navItems)
+                            BottomNavigationBarItem(
+                              icon: item.icon,
+                              label: item.label,
+                              activeIcon: item.selectedIcon,
+                            )
+                        ],
+                      ),
+                    ),
+                    Positioned(
+                      top: 5,
+                      right: (context.width() / _navItems.length) +
+                          (10 + _navItems.length / 2),
+                      child: CircleAvatar(
+                        backgroundColor: kLightColor,
+                        radius: 10,
+                        child: Text(
+                          cartItems.toString(),
+                          style: context.theme.textTheme.caption!.copyWith(
+                              color: kPrimaryDarkTextColor,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
-              ),
-              Positioned(
-                top: 5,
-                right: context.width() / 6 + 10,
-                child: CircleAvatar(
-                  backgroundColor: kLightColor,
-                  radius: 10,
-                  child: Text(
-                    cartItems.toString(),
-                    style: context.theme.textTheme.caption!.copyWith(
-                        color: kPrimaryDarkTextColor,
-                        fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
+              );
+            },
+            loading: () => const Scaffold(
+                    body: Center(
+                  child: LoadingWidget(),
+                )),
+            error: (_, __) => const Scaffold(body: ProductLoadingWidget())),
       );
     });
-  }
-
-  Widget _selectPage() {
-    return TabNavigationItem.items[_currentIndex!].page;
   }
 }

@@ -12,11 +12,13 @@ import 'package:zcart/data/models/address/states_model.dart';
 import 'package:zcart/data/models/product/product_details_model.dart';
 import 'package:zcart/data/network/network_utils.dart';
 import 'package:zcart/helper/get_color_based_on_theme.dart';
+import 'package:zcart/riverpod/providers/plugin_provider.dart';
 import 'package:zcart/riverpod/providers/provider.dart';
 import 'package:zcart/riverpod/state/cart_state.dart';
 import 'package:zcart/riverpod/state/wishlist_state.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:zcart/views/screens/auth/login_screen.dart';
+import 'package:zcart/views/screens/bottom_nav_bar/tab_navigation_item.dart';
 import 'package:zcart/views/screens/product_details/components/product_brand_card.dart';
 import 'package:zcart/views/screens/product_details/components/ratings_and_reviews.dart';
 import 'package:zcart/views/screens/product_details/components/shop_card.dart';
@@ -25,7 +27,6 @@ import 'package:zcart/views/screens/tabs/myCart_tab/my_cart_tab.dart';
 import 'package:zcart/views/screens/tabs/vendors_tab/vendors_details.dart';
 import 'package:zcart/views/shared_widgets/image_viewer_page.dart';
 import 'package:zcart/views/shared_widgets/shared_widgets.dart';
-import 'package:zcart/views/shared_widgets/system_config_builder.dart';
 import 'components/frequently_bought_together.dart';
 import 'components/more_offer_from_seller.dart';
 import 'components/product_details_widget.dart';
@@ -445,58 +446,80 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
                   child: Row(
                     // mainAxisAlignment: MainAxisAlignment.,
                     children: [
-                      SystemConfigBuilder(
-                        builder: (context, systemConfig) {
-                          return systemConfig?.enableChat == true
-                              ? Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Tooltip(
-                                      message: LocaleKeys.contact_seller.tr(),
-                                      child: ProductDetailsPageIconButton(
-                                        icon: const Icon(
-                                            CupertinoIcons.chat_bubble_2_fill),
-                                        backgroundColor: getColorBasedOnTheme(
-                                            context, kLightColor, kDarkBgColor),
-                                        onPressed: () {
-                                          if (accessAllowed) {
-                                            context
-                                                .read(productChatProvider
-                                                    .notifier)
-                                                .productConversation(
-                                                    _details.data!.shop!.id);
+                      Consumer(
+                        builder: (context, watch, child) {
+                          final liveChatPluginCheck =
+                              watch(checkLiveChatPluginProvider);
+                          return liveChatPluginCheck.when(
+                              data: (data) {
+                                return data
+                                    ? Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Tooltip(
+                                            message:
+                                                LocaleKeys.contact_seller.tr(),
+                                            child: ProductDetailsPageIconButton(
+                                              icon: const Icon(CupertinoIcons
+                                                  .chat_bubble_2_fill),
+                                              backgroundColor:
+                                                  getColorBasedOnTheme(
+                                                      context,
+                                                      kLightColor,
+                                                      kDarkBgColor),
+                                              onPressed: () {
+                                                if (accessAllowed) {
+                                                  context
+                                                      .read(productChatProvider
+                                                          .notifier)
+                                                      .productConversation(
+                                                          _details
+                                                              .data!.shop!.id);
 
-                                            context.nextPage(VendorChatScreen(
-                                                shopId: _details.data!.shop!.id,
-                                                shopImage:
-                                                    _details.data!.shop!.image,
-                                                shopName:
-                                                    _details.data!.shop!.name,
-                                                shopVerifiedText: _details
-                                                    .data!.shop!.verifiedText));
-                                          } else {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    LoginScreen(
-                                                  needBackButton: true,
-                                                  nextScreenIndex: 0,
-                                                  nextScreen:
-                                                      ProductDetailsScreen(
-                                                          productSlug: _details
-                                                              .data!.slug!),
-                                                ),
-                                              ),
-                                            );
-                                          }
-                                        },
-                                      ),
-                                    ),
-                                    const SizedBox(width: 10),
-                                  ],
-                                )
-                              : const SizedBox();
+                                                  context.nextPage(
+                                                      VendorChatScreen(
+                                                          shopId:
+                                                              _details.data!
+                                                                  .shop!.id,
+                                                          shopImage:
+                                                              _details.data!
+                                                                  .shop!.image,
+                                                          shopName:
+                                                              _details.data!
+                                                                  .shop!.name,
+                                                          shopVerifiedText:
+                                                              _details
+                                                                  .data!
+                                                                  .shop!
+                                                                  .verifiedText));
+                                                } else {
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          LoginScreen(
+                                                        needBackButton: true,
+                                                        nextScreenId: homeTabId,
+                                                        nextScreen:
+                                                            ProductDetailsScreen(
+                                                                productSlug:
+                                                                    _details
+                                                                        .data!
+                                                                        .slug!),
+                                                      ),
+                                                    ),
+                                                  );
+                                                }
+                                              },
+                                            ),
+                                          ),
+                                          const SizedBox(width: 10),
+                                        ],
+                                      )
+                                    : const SizedBox();
+                              },
+                              loading: () => const SizedBox(),
+                              error: (_, __) => const SizedBox());
                         },
                       ),
                       Tooltip(
@@ -610,25 +633,41 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
             Positioned(
               top: 8,
               right: 70,
-              child: ProductDetailsPageIconButton(
-                backgroundColor:
-                    getColorBasedOnTheme(context, kLightColor, kDarkBgColor),
-                icon: Icon(
-                  widget.isWishlist
-                      ? CupertinoIcons.heart_fill
-                      : CupertinoIcons.heart,
-                  size: 28,
-                  color: widget.isWishlist ? Colors.red : null,
-                ),
-                onPressed: () async {
-                  if (widget.isWishlist) {
-                    toast(LocaleKeys.item_already_wishlist.tr());
-                  } else {
-                    toast(LocaleKeys.adding_to_wishlist.tr());
-                    await context
-                        .read(wishListNotifierProvider.notifier)
-                        .addToWishList(_details.data!.slug, context);
-                  }
+              child: Consumer(
+                builder: (context, watch, child) {
+                  final wishlistPluginCheck =
+                      watch(checkWishlistPluginProvider);
+
+                  return wishlistPluginCheck.when(
+                      data: (data) {
+                        return data
+                            ? ProductDetailsPageIconButton(
+                                backgroundColor: getColorBasedOnTheme(
+                                    context, kLightColor, kDarkBgColor),
+                                icon: Icon(
+                                  widget.isWishlist
+                                      ? CupertinoIcons.heart_fill
+                                      : CupertinoIcons.heart,
+                                  size: 28,
+                                  color: widget.isWishlist ? Colors.red : null,
+                                ),
+                                onPressed: () async {
+                                  if (widget.isWishlist) {
+                                    toast(
+                                        LocaleKeys.item_already_wishlist.tr());
+                                  } else {
+                                    toast(LocaleKeys.adding_to_wishlist.tr());
+                                    await context
+                                        .read(wishListNotifierProvider.notifier)
+                                        .addToWishList(
+                                            _details.data!.slug, context);
+                                  }
+                                },
+                              )
+                            : const SizedBox();
+                      },
+                      loading: () => const SizedBox(),
+                      error: (_, __) => const SizedBox());
                 },
               ),
             ),

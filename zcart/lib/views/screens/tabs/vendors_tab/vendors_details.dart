@@ -8,6 +8,7 @@ import 'package:zcart/helper/get_color_based_on_theme.dart';
 import 'package:zcart/riverpod/providers/provider.dart';
 import 'package:zcart/riverpod/state/state.dart';
 import 'package:zcart/views/screens/auth/login_screen.dart';
+import 'package:zcart/views/screens/bottom_nav_bar/tab_navigation_item.dart';
 import 'package:zcart/views/screens/tabs/account_tab/messages/vendor_chat_screen.dart';
 import 'package:zcart/views/screens/tabs/home_tab/components/error_widget.dart';
 import 'package:zcart/views/screens/tabs/vendors_tab/vendors_about_us_screen.dart';
@@ -120,7 +121,7 @@ class VendorsDetailsScreen extends ConsumerWidget {
                                       builder: (context) => const LoginScreen(
                                         needBackButton: true,
                                         nextScreen: VendorsDetailsScreen(),
-                                        nextScreenIndex: 1,
+                                        nextScreenId: vendorTabId,
                                       ),
                                     ),
                                   );

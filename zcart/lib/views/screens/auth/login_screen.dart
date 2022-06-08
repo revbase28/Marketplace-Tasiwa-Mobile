@@ -22,17 +22,18 @@ import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:zcart/views/screens/auth/reset_password.dart';
 import 'package:zcart/views/screens/auth/sign_up_screen.dart';
 import 'package:zcart/views/screens/bottom_nav_bar/bottom_nav_bar.dart';
+import 'package:zcart/views/screens/bottom_nav_bar/tab_navigation_item.dart';
 import 'package:zcart/views/shared_widgets/shared_widgets.dart';
 
 class LoginScreen extends StatefulWidget {
   final bool needBackButton;
   final Widget? nextScreen;
-  final int nextScreenIndex;
+  final String nextScreenId;
   const LoginScreen({
     Key? key,
     required this.needBackButton,
     this.nextScreen,
-    this.nextScreenIndex = 5,
+    this.nextScreenId = accountTabId,
   }) : super(key: key);
 
   @override
@@ -70,7 +71,7 @@ class _LoginScreenState extends State<LoginScreen> {
           Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(
                   builder: (context) =>
-                      BottomNavBar(selectedIndex: widget.nextScreenIndex)),
+                      BottomNavBar(selectedTabId: widget.nextScreenId)),
               (route) => false);
 
           if (widget.nextScreen != null) {
@@ -246,7 +247,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               onPressed: () {
                                 context.nextPage(SignUpScreen(
                                     nextScreen: widget.nextScreen,
-                                    nextScreenIndex: widget.nextScreenIndex));
+                                    nextScreenID: widget.nextScreenId));
                               },
                               child: Text(LocaleKeys.sign_up.tr(),
                                   style: context.textTheme.subtitle2!.copyWith(
@@ -266,11 +267,20 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 }
 
-class SocialLoginButtons extends StatelessWidget {
+class SocialLoginButtons extends ConsumerWidget {
   const SocialLoginButtons({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, watch) {
+    //Apple login check
+    final _checkAppleLoginPluginProvider = watch(checkAppleLoginPluginProvider);
+    //Google Login Check
+    final _checkGoogleLoginPluginProvider =
+        watch(checkGoogleLoginPluginProvider);
+    //Facebook Login Check
+    final _checkFacebookLoginPluginProvider =
+        watch(checkFacebookLoginPluginProvider);
+
     void _onPressedAppleLogin() async {
       final _checkAvailability = await SignInWithApple.isAvailable();
       if (_checkAvailability) {
@@ -333,40 +343,51 @@ class SocialLoginButtons extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         if (MyConfig.isGoogleLoginActive)
-          SocialIconButton(
-            image: AppImages.google,
-            onPressed: _onPressedGoogleLogin,
+          _checkGoogleLoginPluginProvider.when(
+            data: (value) {
+              if (value) {
+                return SocialIconButton(
+                    image: AppImages.google, onPressed: _onPressedGoogleLogin);
+              } else {
+                return const SizedBox();
+              }
+            },
+            loading: () => const SizedBox(),
+            error: (error, stackTrace) => const SizedBox(),
           ),
         if (MyConfig.isFacebookLoginActive) const SizedBox(width: 8),
         if (MyConfig.isFacebookLoginActive)
-          SocialIconButton(
-            image: AppImages.facebook,
-            onPressed: _onPressedFacebookLogin,
+          _checkFacebookLoginPluginProvider.when(
+            data: (value) {
+              if (value) {
+                return SocialIconButton(
+                    image: AppImages.facebook,
+                    onPressed: _onPressedFacebookLogin);
+              } else {
+                return const SizedBox();
+              }
+            },
+            loading: () => const SizedBox(),
+            error: (error, stackTrace) => const SizedBox(),
           ),
         if (Platform.isIOS)
           if (MyConfig.isAppleLoginActive) const SizedBox(width: 8),
         if (Platform.isIOS)
           if (MyConfig.isAppleLoginActive)
-            Consumer(
-              builder: (context, watch, child) {
-                final _checkAppleLoginPluginProvider =
-                    watch(checkAppleLoginPluginProvider);
-                return _checkAppleLoginPluginProvider.when(
-                  data: (value) {
-                    if (value) {
-                      return SocialIconButton(
-                        image: AppImages.apple,
-                        onPressed: _onPressedAppleLogin,
-                      );
-                    } else {
-                      return const SizedBox();
-                    }
-                  },
-                  loading: () => const SizedBox(),
-                  error: (error, stackTrace) => const SizedBox(),
-                );
+            _checkAppleLoginPluginProvider.when(
+              data: (value) {
+                if (value) {
+                  return SocialIconButton(
+                    image: AppImages.apple,
+                    onPressed: _onPressedAppleLogin,
+                  );
+                } else {
+                  return const SizedBox();
+                }
               },
-            )
+              loading: () => const SizedBox(),
+              error: (error, stackTrace) => const SizedBox(),
+            ),
       ],
     );
   }

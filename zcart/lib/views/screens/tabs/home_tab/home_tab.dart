@@ -19,6 +19,7 @@ import 'package:zcart/riverpod/state/state.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:zcart/views/screens/auth/not_logged_in_screen.dart';
 import 'package:zcart/views/screens/bottom_nav_bar/bottom_nav_bar.dart';
+import 'package:zcart/views/screens/bottom_nav_bar/tab_navigation_item.dart';
 import 'package:zcart/views/screens/brand/featured_brands.dart';
 import 'package:zcart/views/screens/product_details/product_details_screen.dart';
 import 'package:zcart/views/screens/tabs/home_tab/components/flash_deals.dart';
@@ -378,31 +379,50 @@ class DealOfTheDayWidget extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(width: 16),
-                          TextButton(
-                            onPressed: () async {
-                              toast(LocaleKeys.adding_to_wishlist.tr());
-                              await context
-                                  .read(wishListNotifierProvider.notifier)
-                                  .addToWishList(
-                                      dealOfTheDay.data!.slug, context);
+                          Consumer(
+                            builder: (context, watch, child) {
+                              final wishlistPluginCheck =
+                                  watch(checkWishlistPluginProvider);
+
+                              return wishlistPluginCheck.when(
+                                  data: (data) {
+                                    return data
+                                        ? TextButton(
+                                            onPressed: () async {
+                                              toast(LocaleKeys
+                                                  .adding_to_wishlist
+                                                  .tr());
+                                              await context
+                                                  .read(wishListNotifierProvider
+                                                      .notifier)
+                                                  .addToWishList(
+                                                      dealOfTheDay.data!.slug,
+                                                      context);
+                                            },
+                                            child: Row(
+                                              children: [
+                                                const Icon(
+                                                  Icons.favorite_border,
+                                                  color: kDarkPriceColor,
+                                                  size: 20,
+                                                ),
+                                                const SizedBox(width: 4),
+                                                Text(
+                                                  LocaleKeys.add_to_wishlist
+                                                      .tr(),
+                                                  style: const TextStyle(
+                                                    color: kDarkPriceColor,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          )
+                                        : const SizedBox();
+                                  },
+                                  loading: () => const SizedBox(),
+                                  error: (_, __) => const SizedBox());
                             },
-                            child: Row(
-                              children: [
-                                const Icon(
-                                  Icons.favorite_border,
-                                  color: kDarkPriceColor,
-                                  size: 20,
-                                ),
-                                const SizedBox(width: 4),
-                                Text(
-                                  LocaleKeys.add_to_wishlist.tr(),
-                                  style: const TextStyle(
-                                    color: kDarkPriceColor,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            ),
                           ),
                         ],
                       ).pSymmetric(h: 16).pOnly(bottom: 16)
@@ -499,7 +519,7 @@ class AppDrawer extends ConsumerWidget {
                     onTap: () {
                       context.pop();
                       context.nextAndRemoveUntilPage(
-                          const BottomNavBar(selectedIndex: 1));
+                          const BottomNavBar(selectedTabId: vendorTabId));
                     },
                   ),
                 ),
@@ -513,23 +533,40 @@ class AppDrawer extends ConsumerWidget {
                     onTap: () {
                       context.pop();
                       context.nextAndRemoveUntilPage(
-                          const BottomNavBar(selectedIndex: 2));
+                          const BottomNavBar(selectedTabId: brandTabId));
                     },
                   ),
                 ),
                 //WishList
-                Card(
-                  elevation: 0,
-                  child: ListTile(
-                    title: Text(LocaleKeys.wishlist_text.tr(),
-                        style: context.textTheme.subtitle2!),
-                    leading: const Icon(Icons.favorite_border_outlined),
-                    onTap: () {
-                      context.pop();
-                      context.nextAndRemoveUntilPage(
-                          const BottomNavBar(selectedIndex: 3));
-                    },
-                  ),
+
+                Consumer(
+                  builder: (context, watch, child) {
+                    final wishlistPluginCheck =
+                        watch(checkWishlistPluginProvider);
+
+                    return wishlistPluginCheck.when(
+                        data: (data) {
+                          return data
+                              ? Card(
+                                  elevation: 0,
+                                  child: ListTile(
+                                    title: Text(LocaleKeys.wishlist_text.tr(),
+                                        style: context.textTheme.subtitle2!),
+                                    leading: const Icon(
+                                        Icons.favorite_border_outlined),
+                                    onTap: () {
+                                      context.pop();
+                                      context.nextAndRemoveUntilPage(
+                                          const BottomNavBar(
+                                              selectedTabId: wishlistTabId));
+                                    },
+                                  ),
+                                )
+                              : const SizedBox();
+                        },
+                        loading: () => const SizedBox(),
+                        error: (_, __) => const SizedBox());
+                  },
                 ),
                 //Cart
                 Card(
@@ -553,7 +590,7 @@ class AppDrawer extends ConsumerWidget {
                     onTap: () {
                       context.pop();
                       context.nextAndRemoveUntilPage(
-                          const BottomNavBar(selectedIndex: 4));
+                          const BottomNavBar(selectedTabId: cartTabId));
                     },
                   ),
                 ),
@@ -567,7 +604,7 @@ class AppDrawer extends ConsumerWidget {
                     onTap: () {
                       context.pop();
                       context.nextAndRemoveUntilPage(
-                          const BottomNavBar(selectedIndex: 5));
+                          const BottomNavBar(selectedTabId: accountTabId));
                     },
                   ),
                 ),

@@ -17,6 +17,7 @@ import 'package:zcart/riverpod/state/order_state.dart';
 import 'package:zcart/riverpod/state/scroll_state.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:zcart/views/screens/bottom_nav_bar/bottom_nav_bar.dart';
+import 'package:zcart/views/screens/bottom_nav_bar/tab_navigation_item.dart';
 import 'package:zcart/views/screens/product_details/product_details_screen.dart';
 import 'package:zcart/views/screens/tabs/account_tab/disputes/open_dispute_screen.dart';
 import 'package:zcart/views/screens/tabs/account_tab/messages/order_chat_screen.dart';
@@ -60,7 +61,7 @@ class MyOrderScreen extends ConsumerWidget {
                         TextButton(
                             onPressed: () {
                               context.nextReplacementPage(
-                                  const BottomNavBar(selectedIndex: 0));
+                                  const BottomNavBar(selectedTabId: homeTabId));
                             },
                             child: Text(LocaleKeys.go_shopping.tr())),
                       ],

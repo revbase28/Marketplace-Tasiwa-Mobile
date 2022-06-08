@@ -16,7 +16,7 @@ class WishListNotifier extends StateNotifier<WishListState> {
     try {
       final _wishListItems = await _iWishListRepository.fetchWishList();
       state = WishListLoadedState(_wishListItems);
-    } on NetworkException {
+    } catch (e) {
       state = WishListErrorState(LocaleKeys.something_went_wrong.tr());
     }
   }

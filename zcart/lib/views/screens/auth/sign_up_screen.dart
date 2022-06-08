@@ -9,6 +9,7 @@ import 'package:zcart/riverpod/providers/wallet_provider.dart';
 import 'package:zcart/riverpod/state/user_state.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:zcart/views/screens/bottom_nav_bar/bottom_nav_bar.dart';
+import 'package:zcart/views/screens/bottom_nav_bar/tab_navigation_item.dart';
 import 'package:zcart/views/screens/tabs/account_tab/others/terms_and_conditions_screen.dart';
 import 'package:zcart/views/shared_widgets/shared_widgets.dart';
 import 'package:zcart/Theme/styles/colors.dart';
@@ -16,11 +17,11 @@ import 'package:easy_localization/easy_localization.dart';
 
 class SignUpScreen extends StatefulWidget {
   final Widget? nextScreen;
-  final int nextScreenIndex;
+  final String nextScreenID;
   const SignUpScreen({
     Key? key,
     this.nextScreen,
-    this.nextScreenIndex = 5,
+    this.nextScreenID = accountTabId,
   }) : super(key: key);
 
   @override
@@ -51,7 +52,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             Navigator.of(context).pushAndRemoveUntil(
                 MaterialPageRoute(
                     builder: (context) =>
-                        BottomNavBar(selectedIndex: widget.nextScreenIndex)),
+                        BottomNavBar(selectedTabId: widget.nextScreenID)),
                 (route) => false);
 
             if (widget.nextScreen != null) {
