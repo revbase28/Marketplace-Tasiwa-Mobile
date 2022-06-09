@@ -28,7 +28,7 @@ class CurrencySymbolWidget extends ConsumerWidget {
 }
 
 class CurrencyWidget extends ConsumerWidget {
-  final Widget Function(BuildContext context, String? symbol) builder;
+  final Widget Function(String? symbol) builder;
   const CurrencyWidget({
     Key? key,
     required this.builder,
@@ -41,13 +41,13 @@ class CurrencyWidget extends ConsumerWidget {
     return _systemConfigProvider.when(
       data: (value) {
         if (value == null) {
-          return builder(context, null);
+          return builder(null);
         } else {
-          return builder(context, value.data?.currency?.isoCode);
+          return builder(value.data?.currency?.isoCode);
         }
       },
-      loading: () => builder(context, null),
-      error: (e, stackTrace) => builder(context, null),
+      loading: () => builder(null),
+      error: (e, stackTrace) => builder(null),
     );
   }
 }

@@ -1114,7 +1114,7 @@ class CheckOutItemDetailsPage extends ConsumerWidget {
               0.0,
               (double previousValue, element) =>
                   previousValue + double.parse(element.totalRaw ?? "0"))
-          .toStringAsFixed(2);
+          .toString();
       _subTotalSubtitle =
           _allCartsProvider.cartList!.map((e) => e.total!).toList().join('+');
 
@@ -1123,7 +1123,7 @@ class CheckOutItemDetailsPage extends ConsumerWidget {
               0.0,
               (double previousValue, element) =>
                   previousValue + double.parse(element.shippingRaw ?? "0"))
-          .toStringAsFixed(2);
+          .toString();
       _shippingSubtitle = _allCartsProvider.cartList!
           .map((e) => e.shipping!)
           .toList()
@@ -1133,7 +1133,7 @@ class CheckOutItemDetailsPage extends ConsumerWidget {
               0.0,
               (double previousValue, element) =>
                   previousValue + double.parse(element.handlingRaw ?? "0"))
-          .toStringAsFixed(2);
+          .toString();
       _handlingSubtitle = _allCartsProvider.cartList!
           .map((e) => e.handling!)
           .toList()
@@ -1143,7 +1143,7 @@ class CheckOutItemDetailsPage extends ConsumerWidget {
               0.0,
               (double previousValue, element) =>
                   previousValue + double.parse(element.packagingRaw ?? "0"))
-          .toStringAsFixed(2);
+          .toString();
 
       _packagingSubtitle = _allCartsProvider.cartList!
           .map((e) => e.packaging!)
@@ -1155,7 +1155,7 @@ class CheckOutItemDetailsPage extends ConsumerWidget {
                   0.0,
                   (double previousValue, element) =>
                       previousValue + double.parse(element.discountRaw ?? "0"))
-              .toStringAsFixed(2);
+              .toString();
       _discountSubtitle = _allCartsProvider.cartList!
           .map((e) => e.discount!)
           .toList()
@@ -1165,7 +1165,7 @@ class CheckOutItemDetailsPage extends ConsumerWidget {
               0.0,
               (double previousValue, element) =>
                   previousValue + double.parse(element.grandTotalRaw ?? "0"))
-          .toStringAsFixed(2);
+          .toString();
     }
 
     return GestureDetector(
@@ -1848,7 +1848,7 @@ class _CheckoutPaymentPageState extends State<CheckoutPaymentPage> {
                       (double previousValue, element) =>
                           previousValue +
                           double.parse(element.grandTotalRaw ?? " 0.0"))
-                  .toStringAsFixed(2);
+                  .toString();
 
               _grandTotal = (double.parse(_total) * 100).toInt();
 
@@ -1858,28 +1858,28 @@ class _CheckoutPaymentPageState extends State<CheckoutPaymentPage> {
                       (double previousValue, element) =>
                           previousValue +
                           double.parse(element.packagingRaw ?? " 0.0"))
-                  .toStringAsFixed(2);
+                  .toString();
               _shipping = _cartProvider.cartList!
                   .fold(
                       0.0,
                       (double previousValue, element) =>
                           previousValue +
                           double.parse(element.shippingRaw ?? " 0.0"))
-                  .toStringAsFixed(2);
+                  .toString();
               _handling = _cartProvider.cartList!
                   .fold(
                       0.0,
                       (double previousValue, element) =>
                           previousValue +
                           double.parse(element.handlingRaw ?? " 0.0"))
-                  .toStringAsFixed(2);
+                  .toString();
               String _sub = _cartProvider.cartList!
                   .fold(
                       0.0,
                       (double previousValue, element) =>
                           previousValue +
                           double.parse(element.totalRaw ?? " 0.0"))
-                  .toStringAsFixed(2);
+                  .toString();
               _subtotal = (double.parse(_sub) * 100).toInt().toString();
 
               _tax = _cartProvider.cartList!
@@ -1888,7 +1888,7 @@ class _CheckoutPaymentPageState extends State<CheckoutPaymentPage> {
                       (double previousValue, element) =>
                           previousValue +
                           double.parse(element.taxesRaw ?? " 0.0"))
-                  .toStringAsFixed(2);
+                  .toString();
               _discount = "-" +
                   _cartProvider.cartList!
                       .fold(
@@ -1896,7 +1896,7 @@ class _CheckoutPaymentPageState extends State<CheckoutPaymentPage> {
                           (double previousValue, element) =>
                               previousValue +
                               double.parse(element.discountRaw ?? " 0.0"))
-                      .toStringAsFixed(2);
+                      .toString();
               for (var element in _cartProvider.cartList!) {
                 for (var item in element.items!) {
                   var _cartItem = CartItemForPayment(
@@ -1913,36 +1913,36 @@ class _CheckoutPaymentPageState extends State<CheckoutPaymentPage> {
           } else {
             String _total = double.parse(
                     widget.cartItemDetails!.data!.grandTotalRaw ?? " 0.0")
-                .toStringAsFixed(2);
+                .toString();
 
             _grandTotal = (double.parse(_total) * 100).toInt();
 
             _packaging = double.parse(
                     widget.cartItemDetails!.data!.packagingRaw ?? " 0.0")
-                .toStringAsFixed(2);
+                .toString();
 
             _shipping = double.parse(
                     widget.cartItemDetails!.data!.shippingRaw ?? " 0.0")
-                .toStringAsFixed(2);
+                .toString();
 
             _handling = double.parse(
                     widget.cartItemDetails!.data!.handlingRaw ?? " 0.0")
-                .toStringAsFixed(2);
+                .toString();
 
             String _sub =
                 double.parse(widget.cartItemDetails!.data!.totalRaw ?? " 0.0")
-                    .toStringAsFixed(2);
+                    .toString();
 
             _subtotal = (double.parse(_sub) * 100).toInt().toString();
 
             _tax =
                 double.parse(widget.cartItemDetails!.data!.taxesRaw ?? " 0.0")
-                    .toStringAsFixed(2);
+                    .toString();
 
             _discount = "-" +
                 double.parse(
                         widget.cartItemDetails!.data!.discountRaw ?? " 0.0")
-                    .toStringAsFixed(2);
+                    .toString();
 
             for (var item in widget.cartItemDetails!.data!.items!) {
               var _cartItem = CartItemForPayment(

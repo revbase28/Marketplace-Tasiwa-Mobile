@@ -21,7 +21,7 @@ class MyConfig {
   /// This is your app url. You must change this url as your own app url. Currently the app url is
   /// [https://zcart.incevio.com].
   ///
-  static const String appUrl = "https://zcart.incevio.cloud";
+  static const String appUrl = "https://test.incevio.cloud";
 
   ///
 
@@ -90,9 +90,9 @@ class MyConfig {
   ///
   ///
   ///[Payment gateway API key]
-  static const String zcartApiKey = "xO6ncjBYCqhGWTkV6kOB75EEOFqlu7x8";
-  static const String zcartSecretKey = "MptNHtqeYs6TZlyO3i9JFheb2bCughWk";
-  static const String zcartIV = "JjXCJWVeZwtmlfCI";
+  static const String zcartApiKey = "ZDiCk73HVvKkxO9DlfDZ75fAyU4Nqfe9";
+  static const String zcartSecretKey = "W7GEp9KOdQWYX0HCbmZb1XNy3ygSquUU";
+  static const String zcartIV = "M9RzG4u5mJh5n9Og";
 
   ///
   ///

@@ -26,6 +26,7 @@ class _WalletDepositPageState extends State<WalletDepositPage> {
   final _formKey = GlobalKey<FormState>();
   final _amountController = TextEditingController();
   String _selectedpaymentMethod = '';
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -163,7 +164,7 @@ class _WalletDepositPageState extends State<WalletDepositPage> {
                       },
                     ),
                     const SizedBox(height: 16),
-                    CurrencyWidget(builder: (context, symbol) {
+                    CurrencyWidget(builder: (symbol) {
                       return CustomButton(
                         onTap: () async {
                           if (_formKey.currentState!.validate()) {
@@ -171,7 +172,7 @@ class _WalletDepositPageState extends State<WalletDepositPage> {
                               toast(
                                   LocaleKeys.please_select_payment_method.tr());
                             } else {
-                              await PaymentMethods.pay(
+                              final _result = await PaymentMethods.pay(
                                 context,
                                 _selectedpaymentMethod,
                                 isWalletDeposit: true,
@@ -190,37 +191,37 @@ class _WalletDepositPageState extends State<WalletDepositPage> {
                                 grandTotal:
                                     int.parse(_amountController.text.trim()) *
                                         100,
-                              ).then((value) async {
-                                if (value) {
-                                  setState(() {
-                                    _isLoading = true;
-                                  });
-                                  try {
-                                    await context
-                                        .read(walletDepositProvider)
-                                        .pay();
+                              );
 
-                                    context.refresh(walletBalanceProvider);
-                                    context.refresh(
-                                        walletTransactionFutureProvider);
-                                    Navigator.of(context).pop();
-                                  } catch (e) {
-                                    toast(e.toString());
-                                  }
+                              if (_result) {
+                                setState(() {
+                                  _isLoading = true;
+                                });
+
+                                try {
+                                  await context
+                                      .read(walletDepositProvider)
+                                      .pay();
+
                                   setState(() {
                                     _isLoading = false;
                                   });
-                                } else {
-                                  toast(LocaleKeys.payment_failed.tr());
-                                }
-                              });
-                            }
 
-                            // if (_result) {
-                            //   context.refresh(walletTransactionFutureProvider);
-                            //   context.refresh(walletBalanceProvider);
-                            //   Navigator.pop(context);
-                            // }
+                                  context.refresh(walletBalanceProvider);
+                                  context
+                                      .refresh(walletTransactionFutureProvider);
+
+                                  Navigator.of(context).pop();
+                                } catch (e) {
+                                  setState(() {
+                                    _isLoading = false;
+                                  });
+                                  // Navigator.of(context).pop();
+                                }
+                              } else {
+                                toast(LocaleKeys.payment_failed.tr());
+                              }
+                            }
                           }
                         },
                         buttonText: LocaleKeys.continue_text.tr(),

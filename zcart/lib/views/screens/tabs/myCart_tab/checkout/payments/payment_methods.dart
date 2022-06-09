@@ -75,7 +75,7 @@ class PaymentMethods {
         requestBody: cartId != null ? {"cart_id": cartId.toString()} : null,
       );
 
-      if (_result == null || _result["public_key"] == null) {
+      if (_result == null) {
         return false;
       } else {
         return await PayStackPayment(
@@ -84,7 +84,7 @@ class PaymentMethods {
           email: email,
           price: grandTotal,
           currency: currency ?? "ZAR",
-          publicKey: _result["public_key"],
+          publicKey: _result,
         ).chargeCardAndMakePayment().then((value) => value);
       }
     } else if (paymentMethodCode == paypal) {

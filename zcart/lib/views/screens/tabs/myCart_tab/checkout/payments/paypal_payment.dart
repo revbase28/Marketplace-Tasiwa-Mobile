@@ -20,7 +20,6 @@ class PayPalPayment extends StatefulWidget {
   final Addresses? address;
   final bool isWalletPayment;
   final int? cartId;
-
   final String email;
   final double grandTotal;
   final String subtotal;
@@ -174,6 +173,8 @@ class _PayPalPaymentState extends State<PayPalPayment> {
               }
       }
     ];
+
+    print(_transaction);
 
     return Scaffold(
       appBar: AppBar(
