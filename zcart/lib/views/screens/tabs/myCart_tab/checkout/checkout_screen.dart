@@ -1847,7 +1847,7 @@ class _CheckoutPaymentPageState extends State<CheckoutPaymentPage> {
                       0.0,
                       (double previousValue, element) =>
                           previousValue +
-                          double.parse(element.grandTotalRaw ?? " 0.0"))
+                          double.parse(element.grandTotalRaw ?? "0.0"))
                   .toString();
 
               _grandTotal = (double.parse(_total) * 100).toInt();
@@ -1857,28 +1857,28 @@ class _CheckoutPaymentPageState extends State<CheckoutPaymentPage> {
                       0.0,
                       (double previousValue, element) =>
                           previousValue +
-                          double.parse(element.packagingRaw ?? " 0.0"))
+                          double.parse(element.packagingRaw ?? "0.0"))
                   .toString();
               _shipping = _cartProvider.cartList!
                   .fold(
                       0.0,
                       (double previousValue, element) =>
                           previousValue +
-                          double.parse(element.shippingRaw ?? " 0.0"))
+                          double.parse(element.shippingRaw ?? "0.0"))
                   .toString();
               _handling = _cartProvider.cartList!
                   .fold(
                       0.0,
                       (double previousValue, element) =>
                           previousValue +
-                          double.parse(element.handlingRaw ?? " 0.0"))
+                          double.parse(element.handlingRaw ?? "0.0"))
                   .toString();
               String _sub = _cartProvider.cartList!
                   .fold(
                       0.0,
                       (double previousValue, element) =>
                           previousValue +
-                          double.parse(element.totalRaw ?? " 0.0"))
+                          double.parse(element.totalRaw ?? "0.0"))
                   .toString();
               _subtotal = (double.parse(_sub) * 100).toInt().toString();
 
@@ -1887,7 +1887,7 @@ class _CheckoutPaymentPageState extends State<CheckoutPaymentPage> {
                       0.0,
                       (double previousValue, element) =>
                           previousValue +
-                          double.parse(element.taxesRaw ?? " 0.0"))
+                          double.parse(element.taxesRaw ?? "0.0"))
                   .toString();
               _discount = "-" +
                   _cartProvider.cartList!
@@ -1895,7 +1895,7 @@ class _CheckoutPaymentPageState extends State<CheckoutPaymentPage> {
                           0.0,
                           (double previousValue, element) =>
                               previousValue +
-                              double.parse(element.discountRaw ?? " 0.0"))
+                              double.parse(element.discountRaw ?? "0.0"))
                       .toString();
               for (var element in _cartProvider.cartList!) {
                 for (var item in element.items!) {
