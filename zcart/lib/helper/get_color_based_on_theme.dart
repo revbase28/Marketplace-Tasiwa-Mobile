@@ -8,7 +8,7 @@ Color getColorBasedOnTheme(
   return EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
       ? darkColor
       : EasyDynamicTheme.of(context).themeMode == ThemeMode.system
-          ? SchedulerBinding.instance!.window.platformBrightness ==
+          ? SchedulerBinding.instance.window.platformBrightness ==
                   Brightness.dark
               ? darkColor
               : lightColor
@@ -19,7 +19,7 @@ SystemUiOverlayStyle getOverlayStyleBasedOnTheme(BuildContext context) {
   return EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
       ? SystemUiOverlayStyle.light
       : EasyDynamicTheme.of(context).themeMode == ThemeMode.system
-          ? SchedulerBinding.instance!.window.platformBrightness ==
+          ? SchedulerBinding.instance.window.platformBrightness ==
                   Brightness.light
               ? SystemUiOverlayStyle.light
               : SystemUiOverlayStyle.dark
