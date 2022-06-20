@@ -129,7 +129,9 @@ class DisputeCard extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
                 margin: const EdgeInsets.symmetric(horizontal: 16),
                 child: Text(dispute.status!,
-                    style: context.textTheme.overline!
+                    style: Theme.of(context)
+                        .textTheme
+                        .overline!
                         .copyWith(color: kPrimaryLightTextColor)),
               )
             ],
@@ -165,7 +167,7 @@ class DisputeCard extends StatelessWidget {
                         Text(
                           _item.description!,
                           softWrap: true,
-                          style: context.textTheme.subtitle2,
+                          style: Theme.of(context).textTheme.subtitle2,
                         ),
                         const SizedBox(height: 8),
                         Row(
@@ -173,14 +175,19 @@ class DisputeCard extends StatelessWidget {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Text(_item.total!,
-                                style: context.textTheme.subtitle2!.copyWith(
-                                  color: getColorBasedOnTheme(
-                                      context, kPriceColor, kDarkPriceColor),
-                                  fontWeight: FontWeight.bold,
-                                )),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .subtitle2!
+                                    .copyWith(
+                                      color: getColorBasedOnTheme(context,
+                                          kPriceColor, kDarkPriceColor),
+                                      fontWeight: FontWeight.bold,
+                                    )),
                             Text(
                               " x ${_item.quantity}",
-                              style: context.textTheme.subtitle2!
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .subtitle2!
                                   .copyWith(fontWeight: FontWeight.bold),
                             ),
                           ],
@@ -201,12 +208,14 @@ class DisputeCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Text("${LocaleKeys.total.tr()} : ",
-                    style: context.textTheme.subtitle2!
+                    style: Theme.of(context)
+                        .textTheme
+                        .subtitle2!
                         .copyWith(fontWeight: FontWeight.bold)),
                 Text(
                   dispute.orderDetails!.grandTotal ?? "",
                   textAlign: TextAlign.end,
-                  style: context.textTheme.headline6!.copyWith(
+                  style: Theme.of(context).textTheme.headline6!.copyWith(
                       color: getColorBasedOnTheme(
                           context, kPriceColor, kDarkPriceColor),
                       fontWeight: FontWeight.bold),

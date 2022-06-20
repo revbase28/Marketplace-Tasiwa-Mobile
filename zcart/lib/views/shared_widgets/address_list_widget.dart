@@ -203,32 +203,40 @@ class _AddressListBuilderState extends State<AddressListBuilder> {
                             children: [
                               Text(
                                 e.addressType!,
-                                style: context.textTheme.bodyText2!.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                  color: widget.cartItem != null
-                                      ? e.country!.id ==
-                                                  widget.cartItem!
-                                                      .shipToCountryId &&
-                                              e.state?.id ==
-                                                  widget.cartItem!.shipToStateId
-                                          ? kPrimaryColor
-                                          : widget.isOneCheckout
-                                              ? kFadeColor
-                                              : getColorBasedOnTheme(
-                                                  context,
-                                                  kPrimaryDarkTextColor,
-                                                  kPrimaryLightTextColor)
-                                      : getColorBasedOnTheme(
-                                          context,
-                                          kPrimaryDarkTextColor,
-                                          kPrimaryLightTextColor),
-                                ),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyText2!
+                                    .copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      color: widget.cartItem != null
+                                          ? e.country!.id ==
+                                                      widget.cartItem!
+                                                          .shipToCountryId &&
+                                                  e.state?.id ==
+                                                      widget.cartItem!
+                                                          .shipToStateId
+                                              ? kPrimaryColor
+                                              : widget.isOneCheckout
+                                                  ? kFadeColor
+                                                  : getColorBasedOnTheme(
+                                                      context,
+                                                      kPrimaryDarkTextColor,
+                                                      kPrimaryLightTextColor)
+                                          : getColorBasedOnTheme(
+                                              context,
+                                              kPrimaryDarkTextColor,
+                                              kPrimaryLightTextColor),
+                                    ),
                               ),
                               Text(e.addressTitle!,
-                                  style: context.textTheme.subtitle2!
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .subtitle2!
                                       .copyWith(color: _textColor)),
                               Text('(${e.phone})',
-                                  style: context.textTheme.subtitle2!
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .subtitle2!
                                       .copyWith(color: _textColor)),
                             ],
                           ),
@@ -236,12 +244,16 @@ class _AddressListBuilderState extends State<AddressListBuilder> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text('${e.addressLine1}, ${e.addressLine2}',
-                                  style: context.textTheme.caption!
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .caption!
                                       .copyWith(color: _textColor)),
                               Text(
                                   '${e.state != null ? e.state!.name! + ',' : ''} ${e.country == null ? '' : e.country!.name! + ','} ${e.zipCode}'
                                       .trim(),
-                                  style: context.textTheme.caption!
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .caption!
                                       .copyWith(color: _textColor)),
                             ],
                           ),
@@ -291,7 +303,7 @@ class _AddressListBuilderState extends State<AddressListBuilder> {
                       )),
                   title: Text(
                     LocaleKeys.no_delivery_address_found.tr(),
-                    style: context.textTheme.subtitle2!.copyWith(
+                    style: Theme.of(context).textTheme.subtitle2!.copyWith(
                         fontWeight: FontWeight.bold,
                         color: getColorBasedOnTheme(
                           context,

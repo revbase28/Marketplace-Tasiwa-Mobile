@@ -91,7 +91,9 @@ class DisputeResponseScreen extends StatelessWidget {
               color: getColorBasedOnTheme(context, kLightColor, kDarkBgColor),
             ),
             placeholder: LocaleKeys.type_a_message.tr(),
-            style: context.textTheme.subtitle2!
+            style: Theme.of(context)
+                .textTheme
+                .subtitle2!
                 .copyWith(fontWeight: FontWeight.bold),
             prefixMode: OverlayVisibilityMode.always,
             textAlignVertical: TextAlignVertical.center,
@@ -175,7 +177,7 @@ class DisputeResponseScreen extends StatelessWidget {
   //                 contentPadding: const EdgeInsets.all(8),
   //                 border: InputBorder.none,
   //                 hintText: LocaleKeys.type_a_message.tr(),
-  //                 hintStyle: context.textTheme.caption,
+  //                 hintStyle: Theme.of(context).textTheme.caption,
   //               ),
   //             ),
   //           ),

@@ -39,7 +39,7 @@ class ResetPassword extends StatelessWidget {
               children: [
                 Text(
                   LocaleKeys.reset_password.tr(),
-                  style: context.textTheme.headline6,
+                  style: Theme.of(context).textTheme.headline6,
                 ),
                 const SizedBox(height: 16),
                 CustomTextField(

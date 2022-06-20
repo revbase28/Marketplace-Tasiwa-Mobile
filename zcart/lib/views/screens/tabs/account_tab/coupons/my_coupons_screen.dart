@@ -121,17 +121,17 @@ class CouponsCard extends StatelessWidget {
                 children: [
                   Text(
                     LocaleKeys.redeem_coupon.tr(),
-                    style: context.textTheme.subtitle2!.copyWith(
-                      color: kPrimaryLightTextColor,
-                    ),
+                    style: Theme.of(context).textTheme.subtitle2!.copyWith(
+                          color: kPrimaryLightTextColor,
+                        ),
                   ).py(5),
                   Text(
                     code!,
-                    style: context.textTheme.headline4!.copyWith(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 28,
-                      color: kPrimaryLightTextColor,
-                    ),
+                    style: Theme.of(context).textTheme.headline4!.copyWith(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 28,
+                          color: kPrimaryLightTextColor,
+                        ),
                   ).onInkTap(() {
                     Clipboard.setData(ClipboardData(text: code))
                         .then((value) => toast(LocaleKeys.code_is_copied.tr()));
@@ -151,18 +151,18 @@ class CouponsCard extends StatelessWidget {
                         )),
                     child: Text(
                       amount!,
-                      style: context.textTheme.headline4!.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: kPrimaryLightTextColor,
-                      ),
+                      style: Theme.of(context).textTheme.headline4!.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: kPrimaryLightTextColor,
+                          ),
                     ),
                   ),
                   Text(
                     shopTitle!,
-                    style: context.textTheme.subtitle1!.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: kPrimaryLightTextColor,
-                    ),
+                    style: Theme.of(context).textTheme.subtitle1!.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: kPrimaryLightTextColor,
+                        ),
                   ).py(5)
                 ],
               ),
@@ -170,9 +170,9 @@ class CouponsCard extends StatelessWidget {
           ),
           Text(
             notice!,
-            style: context.textTheme.caption!.copyWith(
-              color: kPrimaryLightTextColor,
-            ),
+            style: Theme.of(context).textTheme.caption!.copyWith(
+                  color: kPrimaryLightTextColor,
+                ),
           ).pOnly(left: 16, top: 8),
         ],
       ),

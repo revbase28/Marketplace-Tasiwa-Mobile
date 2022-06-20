@@ -32,7 +32,9 @@ class BlogDetailsScreen extends ConsumerWidget {
                 children: [
                   Text(
                     blogState.blog!.title!,
-                    style: context.textTheme.headline6!
+                    style: Theme.of(context)
+                        .textTheme
+                        .headline6!
                         .copyWith(color: kDarkColor),
                   ).py(15).px(16),
                   Row(
@@ -49,10 +51,10 @@ class BlogDetailsScreen extends ConsumerWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(blogState.blog!.author!.name!,
-                                  style: context.textTheme.subtitle2)
+                                  style: Theme.of(context).textTheme.subtitle2)
                               .pOnly(bottom: 5),
                           Text('${blogState.blog!.publishedAt}',
-                              style: context.textTheme.caption),
+                              style: Theme.of(context).textTheme.caption),
                         ],
                       ),
                       Expanded(
@@ -106,9 +108,12 @@ class BlogDetailsScreen extends ConsumerWidget {
                           padding: const EdgeInsets.symmetric(horizontal: 8),
                           label: Text(
                             blogState.blog!.tags![index].firstLetterUpperCase(),
-                            style: context.textTheme.caption!.copyWith(
-                                fontWeight: FontWeight.bold,
-                                color: kPrimaryLightTextColor),
+                            style: Theme.of(context)
+                                .textTheme
+                                .caption!
+                                .copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    color: kPrimaryLightTextColor),
                           ),
                         ).p(2);
                       },
@@ -129,7 +134,7 @@ class BlogDetailsScreen extends ConsumerWidget {
                   ),
                   HtmlWidget(
                     blogState.blog!.content!,
-                    textStyle: context.textTheme.bodyText2!.copyWith(
+                    textStyle: Theme.of(context).textTheme.bodyText2!.copyWith(
                         fontSize: 15, letterSpacing: 0, wordSpacing: 1.4),
                     enableCaching: true,
                     onTapUrl: (url) {
@@ -139,9 +144,9 @@ class BlogDetailsScreen extends ConsumerWidget {
                   ).pOnly(bottom: 10).px(16),
                   Text(
                     LocaleKeys.comments.tr(),
-                    style: context.textTheme.headline6!.copyWith(
-                      color: kPrimaryColor,
-                    ),
+                    style: Theme.of(context).textTheme.headline6!.copyWith(
+                          color: kPrimaryColor,
+                        ),
                   ).pOnly(left: 16, bottom: 10),
                   ListView.builder(
                       shrinkWrap: true,

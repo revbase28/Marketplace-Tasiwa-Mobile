@@ -841,7 +841,7 @@ class ShippingDetails extends ConsumerWidget {
                         const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
                     title: Text(
                       LocaleKeys.shipping.tr() + ':',
-                      style: context.textTheme.caption!.copyWith(
+                      style: Theme.of(context).textTheme.caption!.copyWith(
                           fontWeight: FontWeight.bold,
                           color: kPrimaryFadeTextColor),
                     ),
@@ -884,9 +884,12 @@ class ShippingDetails extends ConsumerWidget {
                           children: [
                             Text(
                               LocaleKeys.shipping.tr() + ':',
-                              style: context.textTheme.caption!.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                  color: kPrimaryFadeTextColor),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .caption!
+                                  .copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      color: kPrimaryFadeTextColor),
                             ),
                             CupertinoButton(
                               padding: EdgeInsets.zero,
@@ -898,9 +901,12 @@ class ShippingDetails extends ConsumerWidget {
                               },
                               child: Text(
                                 LocaleKeys.change.tr(),
-                                style: context.textTheme.caption!.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                    color: kFadeColor),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .caption!
+                                    .copyWith(
+                                        fontWeight: FontWeight.bold,
+                                        color: kFadeColor),
                               ),
                             ),
                           ],
@@ -915,9 +921,12 @@ class ShippingDetails extends ConsumerWidget {
                                     " by " +
                                     (_shippingOption.carrierName ??
                                         LocaleKeys.unknown.tr()),
-                                style: context.textTheme.subtitle2!.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                ),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .subtitle2!
+                                    .copyWith(
+                                      fontWeight: FontWeight.bold,
+                                    ),
                               ),
                             ),
                             const SizedBox(width: 8),
@@ -926,10 +935,13 @@ class ShippingDetails extends ConsumerWidget {
                                       0.0
                                   ? ""
                                   : (_shippingOption.cost ?? "0"),
-                              style: context.textTheme.subtitle2!.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                  color: getColorBasedOnTheme(
-                                      context, kPriceColor, kDarkPriceColor)),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .subtitle2!
+                                  .copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      color: getColorBasedOnTheme(context,
+                                          kPriceColor, kDarkPriceColor)),
                             )
                           ],
                         ).pOnly(top: 8),
@@ -1571,14 +1583,18 @@ class _ApplyCouponSectionState extends State<ApplyCouponSection> {
       child: CupertinoTextField(
         controller: _couponCodeController,
         placeholder: LocaleKeys.enter_coupon_code.tr(),
-        style:
-            context.textTheme.headline6!.copyWith(fontWeight: FontWeight.bold),
+        style: Theme.of(context)
+            .textTheme
+            .headline6!
+            .copyWith(fontWeight: FontWeight.bold),
         suffixMode: OverlayVisibilityMode.editing,
         suffix: CupertinoButton.filled(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Text(
             LocaleKeys.apply_coupon.tr(),
-            style: context.textTheme.subtitle2!
+            style: Theme.of(context)
+                .textTheme
+                .subtitle2!
                 .copyWith(fontWeight: FontWeight.bold),
           ),
           borderRadius: BorderRadius.circular(0),
@@ -1648,7 +1664,7 @@ class CustomShopCard extends StatelessWidget {
             Flexible(
               child: Text(
                 title,
-                style: context.textTheme.headline6,
+                style: Theme.of(context).textTheme.headline6,
               ),
             ),
             const Icon(Icons.check_circle, color: kGreenColor, size: 15)
@@ -1685,13 +1701,16 @@ class CheckOutDetailsPriceWidget extends StatelessWidget {
       title: Text(
         title,
         style: isGrandTotal
-            ? context.textTheme.headline6!.copyWith(fontWeight: FontWeight.bold)
-            : context.textTheme.subtitle2!.copyWith(),
+            ? Theme.of(context)
+                .textTheme
+                .headline6!
+                .copyWith(fontWeight: FontWeight.bold)
+            : Theme.of(context).textTheme.subtitle2!.copyWith(),
       ),
       subtitle: subtitle != null ? Text("(${subtitle!})") : null,
       trailing: Text(
         price,
-        style: context.textTheme.subtitle2!.copyWith(
+        style: Theme.of(context).textTheme.subtitle2!.copyWith(
             fontWeight: FontWeight.bold,
             color: getColorBasedOnTheme(context, kPriceColor, kDarkPriceColor)),
       ),
@@ -1746,7 +1765,10 @@ class CheckoutDetailsSingleCartItemCard extends StatelessWidget {
                                 maxLines: 3,
                                 softWrap: true,
                                 overflow: TextOverflow.ellipsis,
-                                style: context.textTheme.subtitle2!.copyWith())
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .subtitle2!
+                                    .copyWith())
                             .pOnly(right: 10),
                         const SizedBox(height: 4),
                         Row(
@@ -1754,14 +1776,19 @@ class CheckoutDetailsSingleCartItemCard extends StatelessWidget {
                           children: [
                             Text(
                               cartItem.unitPrice!,
-                              style: context.textTheme.bodyText2!.copyWith(
-                                  color: getColorBasedOnTheme(
-                                      context, kPriceColor, kDarkPriceColor),
-                                  fontWeight: FontWeight.bold),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyText2!
+                                  .copyWith(
+                                      color: getColorBasedOnTheme(context,
+                                          kPriceColor, kDarkPriceColor),
+                                      fontWeight: FontWeight.bold),
                             ),
                             Text(
                               " x " + cartItem.quantity!.toString(),
-                              style: context.textTheme.bodyText2!
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyText2!
                                   .copyWith(fontWeight: FontWeight.bold),
                             ),
                           ],
@@ -2031,10 +2058,12 @@ class _CheckoutPaymentPageState extends State<CheckoutPaymentPage> {
                                           horizontal: 12),
                                       child: Text(
                                         LocaleKeys.payment_method.tr(),
-                                        style: context.textTheme.headline6!
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headline6!
                                             .copyWith(
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                       ),
                                     ),
                                     const SizedBox(height: 10),
@@ -2063,14 +2092,15 @@ class _CheckoutPaymentPageState extends State<CheckoutPaymentPage> {
                                             },
                                             title: Text(
                                               e.name!,
-                                              style: context
-                                                  .textTheme.subtitle2!
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .subtitle2!
                                                   .copyWith(
-                                                fontWeight: _code ==
-                                                        _selectedPaymentMethod
-                                                    ? FontWeight.bold
-                                                    : FontWeight.normal,
-                                              ),
+                                                    fontWeight: _code ==
+                                                            _selectedPaymentMethod
+                                                        ? FontWeight.bold
+                                                        : FontWeight.normal,
+                                                  ),
                                             ),
                                             trailing: _code ==
                                                     _selectedPaymentMethod
@@ -2099,8 +2129,9 @@ class _CheckoutPaymentPageState extends State<CheckoutPaymentPage> {
                                         Row(
                                           children: [
                                             Text(LocaleKeys.prescription.tr(),
-                                                style: context
-                                                    .textTheme.bodyText2),
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyText2),
                                           ],
                                         ).pOnly(top: 10, bottom: 10),
                                         GestureDetector(
@@ -2185,10 +2216,12 @@ class _CheckoutPaymentPageState extends State<CheckoutPaymentPage> {
                                   children: [
                                     Text(
                                       LocaleKeys.note_for_seller.tr(),
-                                      style:
-                                          context.textTheme.headline6!.copyWith(
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headline6!
+                                          .copyWith(
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                     ),
                                     const SizedBox(height: 8),
                                     CustomTextField(
@@ -2230,8 +2263,9 @@ class _CheckoutPaymentPageState extends State<CheckoutPaymentPage> {
                                               CrossAxisAlignment.start,
                                           children: [
                                             Text(LocaleKeys.guest_checkout.tr(),
-                                                    style: context
-                                                        .textTheme.headline6)
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .headline6)
                                                 .pOnly(bottom: 10),
                                             Form(
                                               key: _emailFormKey,
@@ -2678,7 +2712,9 @@ class CheckOutProgressItem extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             title,
-            style: context.textTheme.overline!
+            style: Theme.of(context)
+                .textTheme
+                .overline!
                 .copyWith(fontWeight: FontWeight.bold, color: progressColor),
           ),
         ],

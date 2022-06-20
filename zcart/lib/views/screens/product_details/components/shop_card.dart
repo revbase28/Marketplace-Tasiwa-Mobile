@@ -37,7 +37,7 @@ class ShopCard extends StatelessWidget {
           Flexible(
             child: Text(
               details.data!.shop!.name!,
-              style: context.textTheme.headline6,
+              style: Theme.of(context).textTheme.headline6,
             ),
           ),
           const Icon(Icons.check_circle, color: kGreenColor, size: 15)
@@ -67,7 +67,7 @@ class ShopCard extends StatelessWidget {
           ),
           Text(
             details.data!.shop!.rating ?? '',
-            style: context.textTheme.overline,
+            style: Theme.of(context).textTheme.overline,
           ).visible(details.data!.shop!.rating != null),
         ],
       ),

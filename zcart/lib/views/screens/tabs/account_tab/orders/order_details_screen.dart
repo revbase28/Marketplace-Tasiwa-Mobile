@@ -76,7 +76,9 @@ class OrderDetailsScreen extends ConsumerWidget {
                                     child: Text(
                                         orderDetailsState
                                             .orderDetails!.orderNumber!,
-                                        style: context.textTheme.subtitle2)),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .subtitle2)),
                               ],
                             ),
                             const SizedBox(height: 9),
@@ -92,7 +94,9 @@ class OrderDetailsScreen extends ConsumerWidget {
                                     child: Text(
                                         orderDetailsState
                                             .orderDetails!.orderDate!,
-                                        style: context.textTheme.subtitle2)),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .subtitle2)),
                               ],
                             ),
                             const SizedBox(height: 9),
@@ -110,7 +114,9 @@ class OrderDetailsScreen extends ConsumerWidget {
                                         orderDetailsState
                                                 .orderDetails!.orderStatus ??
                                             LocaleKeys.not_available.tr(),
-                                        style: context.textTheme.subtitle2)),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .subtitle2)),
                               ],
                             ),
                             const SizedBox(height: 9),
@@ -128,7 +134,9 @@ class OrderDetailsScreen extends ConsumerWidget {
                                         orderDetailsState.orderDetails!
                                                 .shippingAddress ??
                                             LocaleKeys.not_available.tr(),
-                                        style: context.textTheme.subtitle2)),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .subtitle2)),
                               ],
                             ),
                             const SizedBox(height: 9),
@@ -146,7 +154,9 @@ class OrderDetailsScreen extends ConsumerWidget {
                                         orderDetailsState
                                                 .orderDetails!.billingAddress ??
                                             LocaleKeys.not_available.tr(),
-                                        style: context.textTheme.subtitle2)),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .subtitle2)),
                               ],
                             ),
                             const SizedBox(height: 9),
@@ -164,7 +174,9 @@ class OrderDetailsScreen extends ConsumerWidget {
                                         orderDetailsState
                                                 .orderDetails!.shippingWeight ??
                                             LocaleKeys.not_available.tr(),
-                                        style: context.textTheme.subtitle2)),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .subtitle2)),
                               ],
                             ),
                             const SizedBox(height: 9),
@@ -184,8 +196,9 @@ class OrderDetailsScreen extends ConsumerWidget {
                                           child: Text(
                                               orderDetailsState.orderDetails!
                                                   .messageToCustomer,
-                                              style:
-                                                  context.textTheme.subtitle2)),
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .subtitle2)),
                                     ],
                                   )
                                 : const SizedBox(),
@@ -247,7 +260,7 @@ class OrderDetailsScreen extends ConsumerWidget {
                                 orderDetailsState.orderDetails!.items![index]
                                         .description ??
                                     "",
-                                style: context.textTheme.subtitle2!,
+                                style: Theme.of(context).textTheme.subtitle2!,
                               ),
                               subtitle: Row(
                                 children: [
@@ -255,7 +268,9 @@ class OrderDetailsScreen extends ConsumerWidget {
                                     orderDetailsState.orderDetails!
                                             .items![index].unitPrice ??
                                         "",
-                                    style: context.textTheme.subtitle2!
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .subtitle2!
                                         .copyWith(
                                             fontWeight: FontWeight.bold,
                                             color: getColorBasedOnTheme(context,
@@ -266,7 +281,8 @@ class OrderDetailsScreen extends ConsumerWidget {
                                         orderDetailsState.orderDetails!
                                             .items![index].quantity
                                             .toString(),
-                                    style: context.textTheme.subtitle2!,
+                                    style:
+                                        Theme.of(context).textTheme.subtitle2!,
                                   )
                                 ],
                               ).py(8),
@@ -288,7 +304,7 @@ class OrderDetailsScreen extends ConsumerWidget {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         Text('${LocaleKeys.payment_details.tr()}\n',
-                            style: context.textTheme.headline6),
+                            style: Theme.of(context).textTheme.headline6),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -301,7 +317,8 @@ class OrderDetailsScreen extends ConsumerWidget {
                                 child: Text(
                                     orderDetailsState.orderDetails!.total ??
                                         LocaleKeys.not_available.tr(),
-                                    style: context.textTheme.subtitle2)),
+                                    style:
+                                        Theme.of(context).textTheme.subtitle2)),
                           ],
                         ),
                         const SizedBox(height: 9),
@@ -317,7 +334,8 @@ class OrderDetailsScreen extends ConsumerWidget {
                                 child: Text(
                                     orderDetailsState.orderDetails!.taxes ??
                                         LocaleKeys.not_available.tr(),
-                                    style: context.textTheme.subtitle2)),
+                                    style:
+                                        Theme.of(context).textTheme.subtitle2)),
                           ],
                         ),
                         const SizedBox(height: 9),
@@ -333,7 +351,8 @@ class OrderDetailsScreen extends ConsumerWidget {
                                 child: Text(
                                     orderDetailsState.orderDetails!.shipping ??
                                         LocaleKeys.not_available.tr(),
-                                    style: context.textTheme.subtitle2)),
+                                    style:
+                                        Theme.of(context).textTheme.subtitle2)),
                           ],
                         ),
                         const SizedBox(height: 9),
@@ -349,7 +368,8 @@ class OrderDetailsScreen extends ConsumerWidget {
                                 child: Text(
                                     orderDetailsState.orderDetails!.packaging ??
                                         LocaleKeys.not_available.tr(),
-                                    style: context.textTheme.subtitle2)),
+                                    style:
+                                        Theme.of(context).textTheme.subtitle2)),
                           ],
                         ),
                         const SizedBox(height: 9),
@@ -365,7 +385,8 @@ class OrderDetailsScreen extends ConsumerWidget {
                                 child: Text(
                                     orderDetailsState.orderDetails!.handling ??
                                         LocaleKeys.not_available.tr(),
-                                    style: context.textTheme.subtitle2)),
+                                    style:
+                                        Theme.of(context).textTheme.subtitle2)),
                           ],
                         ),
                         const SizedBox(height: 9),
@@ -381,7 +402,8 @@ class OrderDetailsScreen extends ConsumerWidget {
                                 child: Text(
                                     orderDetailsState.orderDetails!.discount ??
                                         LocaleKeys.not_available.tr(),
-                                    style: context.textTheme.subtitle2)),
+                                    style:
+                                        Theme.of(context).textTheme.subtitle2)),
                           ],
                         ),
                         const SizedBox(height: 9),
@@ -398,7 +420,8 @@ class OrderDetailsScreen extends ConsumerWidget {
                                 child: Text(
                                     orderDetailsState
                                         .orderDetails!.paymentMethod!.name!,
-                                    style: context.textTheme.subtitle2)),
+                                    style:
+                                        Theme.of(context).textTheme.subtitle2)),
                           ],
                         ),
                         const SizedBox(height: 9),
@@ -415,7 +438,8 @@ class OrderDetailsScreen extends ConsumerWidget {
                                 child: Text(
                                     orderDetailsState
                                         .orderDetails!.paymentStatus!,
-                                    style: context.textTheme.subtitle2)),
+                                    style:
+                                        Theme.of(context).textTheme.subtitle2)),
                           ],
                         ),
                         const Divider(),
@@ -431,11 +455,14 @@ class OrderDetailsScreen extends ConsumerWidget {
                               flex: 3,
                               child: Text(
                                 orderDetailsState.orderDetails!.grandTotal!,
-                                style: context.textTheme.headline6!.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                  color: getColorBasedOnTheme(
-                                      context, kPriceColor, kDarkPriceColor),
-                                ),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headline6!
+                                    .copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      color: getColorBasedOnTheme(context,
+                                          kPriceColor, kDarkPriceColor),
+                                    ),
                               ),
                             ),
                           ],

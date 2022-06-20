@@ -32,7 +32,7 @@ class PasswordUpdate extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(LocaleKeys.your_password.tr(),
-                        style: context.textTheme.headline6!)
+                        style: Theme.of(context).textTheme.headline6!)
                     .pOnly(bottom: 10),
                 ElevatedButton(
                     onPressed: () async {

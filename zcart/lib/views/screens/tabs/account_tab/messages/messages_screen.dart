@@ -89,13 +89,15 @@ class MessagesScreen extends StatelessWidget {
                             title: Text(
                                 conversationState
                                     .conversationModel.data![index].shop!.name!,
-                                style: context.textTheme.bodyText2!
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyText2!
                                     .copyWith(fontWeight: FontWeight.bold)),
                             subtitle: Text(
                                 conversationState.conversationModel.data![index]
                                         .shop!.verifiedText ??
                                     "",
-                                style: context.textTheme.caption!),
+                                style: Theme.of(context).textTheme.caption!),
                             trailing:
                                 const Icon(CupertinoIcons.chevron_forward),
                           ).pOnly(bottom: 12);

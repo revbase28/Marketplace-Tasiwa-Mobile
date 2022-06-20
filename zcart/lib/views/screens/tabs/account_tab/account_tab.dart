@@ -124,13 +124,18 @@ class AccountDashboard extends StatelessWidget {
                           children: [
                             Text(
                               LocaleKeys.your_full_name.tr(),
-                              style: context.textTheme.caption!.copyWith(
-                                  color: kPrimaryFadeTextColor,
-                                  fontWeight: FontWeight.bold),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .caption!
+                                  .copyWith(
+                                      color: kPrimaryFadeTextColor,
+                                      fontWeight: FontWeight.bold),
                             ),
                             Text(
                               "${userState.user!.name}",
-                              style: context.textTheme.subtitle2!
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .subtitle2!
                                   .copyWith(fontWeight: FontWeight.bold),
                             )
                           ],
@@ -147,13 +152,15 @@ class AccountDashboard extends StatelessWidget {
                     children: [
                       Text(
                         LocaleKeys.your_email.tr(),
-                        style: context.textTheme.caption!.copyWith(
+                        style: Theme.of(context).textTheme.caption!.copyWith(
                             color: kPrimaryFadeTextColor,
                             fontWeight: FontWeight.bold),
                       ),
                       Text(
                         "${userState.user!.email}",
-                        style: context.textTheme.subtitle2!
+                        style: Theme.of(context)
+                            .textTheme
+                            .subtitle2!
                             .copyWith(fontWeight: FontWeight.bold),
                       )
                     ],
@@ -175,13 +182,18 @@ class AccountDashboard extends StatelessWidget {
                                 children: [
                                   Text(
                                     LocaleKeys.sex.tr(),
-                                    style: context.textTheme.caption!.copyWith(
-                                        color: kPrimaryFadeTextColor,
-                                        fontWeight: FontWeight.bold),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .caption!
+                                        .copyWith(
+                                            color: kPrimaryFadeTextColor,
+                                            fontWeight: FontWeight.bold),
                                   ),
                                   Text(
                                     "${userState.user!.sex}",
-                                    style: context.textTheme.subtitle2!
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .subtitle2!
                                         .copyWith(fontWeight: FontWeight.bold),
                                   )
                                 ],
@@ -195,13 +207,18 @@ class AccountDashboard extends StatelessWidget {
                                 children: [
                                   Text(
                                     LocaleKeys.dob.tr(),
-                                    style: context.textTheme.caption!.copyWith(
-                                        color: kPrimaryFadeTextColor,
-                                        fontWeight: FontWeight.bold),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .caption!
+                                        .copyWith(
+                                            color: kPrimaryFadeTextColor,
+                                            fontWeight: FontWeight.bold),
                                   ),
                                   Text(
                                     "${userState.user!.dob}",
-                                    style: context.textTheme.subtitle2!
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .subtitle2!
                                         .copyWith(fontWeight: FontWeight.bold),
                                   )
                                 ],
@@ -244,7 +261,7 @@ class UserActivityCard extends StatelessWidget {
                         ? orderListState.totalOrder.toString()
                         : "0",
                     maxLines: 1,
-                    style: context.textTheme.headline4!.copyWith(
+                    style: Theme.of(context).textTheme.headline4!.copyWith(
                         color: getColorBasedOnTheme(
                             context, kPrimaryColor, kDarkPriceColor),
                         fontWeight: FontWeight.bold),
@@ -254,7 +271,9 @@ class UserActivityCard extends StatelessWidget {
                   LocaleKeys.orders.tr(),
                   maxLines: 1,
                   textAlign: TextAlign.center,
-                  style: context.textTheme.caption!
+                  style: Theme.of(context)
+                      .textTheme
+                      .caption!
                       .copyWith(fontWeight: FontWeight.bold),
                 )
               ],
@@ -288,16 +307,21 @@ class UserActivityCard extends StatelessWidget {
                                       ? "${couponState.coupon!.length}"
                                       : "0",
                                   maxLines: 1,
-                                  style: context.textTheme.headline4!.copyWith(
-                                      color: getColorBasedOnTheme(context,
-                                          kPrimaryColor, kDarkPriceColor),
-                                      fontWeight: FontWeight.bold),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline4!
+                                      .copyWith(
+                                          color: getColorBasedOnTheme(context,
+                                              kPrimaryColor, kDarkPriceColor),
+                                          fontWeight: FontWeight.bold),
                                 ),
                                 Text(
                                   LocaleKeys.coupons.tr(),
                                   maxLines: 1,
                                   textAlign: TextAlign.center,
-                                  style: context.textTheme.caption!
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .caption!
                                       .copyWith(fontWeight: FontWeight.bold),
                                 ),
                               ],
@@ -332,7 +356,7 @@ class UserActivityCard extends StatelessWidget {
                           ? disputesState.disputes.length.toString()
                           : "0",
                       maxLines: 1,
-                      style: context.textTheme.headline4!.copyWith(
+                      style: Theme.of(context).textTheme.headline4!.copyWith(
                           color: getColorBasedOnTheme(
                               context, kPrimaryColor, kDarkPriceColor),
                           fontWeight: FontWeight.bold),
@@ -343,7 +367,9 @@ class UserActivityCard extends StatelessWidget {
                   LocaleKeys.disputes.tr(),
                   maxLines: 1,
                   textAlign: TextAlign.center,
-                  style: context.textTheme.caption!
+                  style: Theme.of(context)
+                      .textTheme
+                      .caption!
                       .copyWith(fontWeight: FontWeight.bold),
                 )
               ],
@@ -377,16 +403,21 @@ class UserActivityCard extends StatelessWidget {
                                       ? wishListState.wishList.length.toString()
                                       : '0',
                                   maxLines: 1,
-                                  style: context.textTheme.headline4!.copyWith(
-                                      color: getColorBasedOnTheme(context,
-                                          kPrimaryColor, kDarkPriceColor),
-                                      fontWeight: FontWeight.bold),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline4!
+                                      .copyWith(
+                                          color: getColorBasedOnTheme(context,
+                                              kPrimaryColor, kDarkPriceColor),
+                                          fontWeight: FontWeight.bold),
                                 ),
                                 Text(
                                   LocaleKeys.wishlist_text.tr(),
                                   maxLines: 1,
                                   textAlign: TextAlign.center,
-                                  style: context.textTheme.caption!
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .caption!
                                       .copyWith(fontWeight: FontWeight.bold),
                                 )
                               ],
@@ -432,7 +463,9 @@ class ActionCard extends StatelessWidget {
                                   ).pOnly(bottom: 10),
                                   Text(
                                     LocaleKeys.messages.tr(),
-                                    style: context.textTheme.caption!
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .caption!
                                         .copyWith(fontWeight: FontWeight.bold),
                                   )
                                 ],
@@ -457,7 +490,9 @@ class ActionCard extends StatelessWidget {
                   const Icon(CupertinoIcons.location).pOnly(bottom: 10),
                   Text(
                     LocaleKeys.addresses.tr(),
-                    style: context.textTheme.caption!
+                    style: Theme.of(context)
+                        .textTheme
+                        .caption!
                         .copyWith(fontWeight: FontWeight.bold),
                   )
                 ],
@@ -476,7 +511,9 @@ class ActionCard extends StatelessWidget {
                   ).pOnly(bottom: 10),
                   Text(
                     LocaleKeys.account_text.tr(),
-                    style: context.textTheme.caption!
+                    style: Theme.of(context)
+                        .textTheme
+                        .caption!
                         .copyWith(fontWeight: FontWeight.bold),
                   )
                 ],
@@ -495,7 +532,9 @@ class ActionCard extends StatelessWidget {
                   ).pOnly(bottom: 10),
                   Text(
                     LocaleKeys.blogs.tr(),
-                    style: context.textTheme.caption!
+                    style: Theme.of(context)
+                        .textTheme
+                        .caption!
                         .copyWith(fontWeight: FontWeight.bold),
                   )
                 ],
@@ -518,7 +557,7 @@ class WalletCard extends ConsumerWidget {
     final _userState = watch(userNotifierProvider);
     Widget _zeroBalanceText = Text(
       "0.00",
-      style: context.textTheme.headline4!.copyWith(
+      style: Theme.of(context).textTheme.headline4!.copyWith(
           color: getColorBasedOnTheme(context, kDarkColor, kDarkPriceColor),
           fontWeight: FontWeight.bold),
     );
@@ -533,7 +572,7 @@ class WalletCard extends ConsumerWidget {
             children: [
               Text(
                 "Wallet",
-                style: context.textTheme.bodyText1!.copyWith(
+                style: Theme.of(context).textTheme.bodyText1!.copyWith(
                     color: kPrimaryFadeTextColor, fontWeight: FontWeight.bold),
               ),
               CupertinoButton(
@@ -556,7 +595,7 @@ class WalletCard extends ConsumerWidget {
               if (value != null) {
                 return Text(
                   value.data.balance,
-                  style: context.textTheme.headline4!.copyWith(
+                  style: Theme.of(context).textTheme.headline4!.copyWith(
                       color: getColorBasedOnTheme(
                           context, kDarkColor, kDarkPriceColor),
                       fontWeight: FontWeight.bold),
@@ -610,7 +649,7 @@ class WalletCard extends ConsumerWidget {
                     children: [
                       Text(
                         "Transactions (${_walletNotifierProvider is WalletLoadedState ? _walletNotifierProvider.total : 0})",
-                        style: context.textTheme.subtitle2!.copyWith(
+                        style: Theme.of(context).textTheme.subtitle2!.copyWith(
                             color: kPrimaryFadeTextColor,
                             fontWeight: FontWeight.bold),
                       ),
@@ -648,8 +687,9 @@ class WalletCard extends ConsumerWidget {
                                               padding: const EdgeInsets.all(16),
                                               child: Text(
                                                 LocaleKeys.no_item_found.tr(),
-                                                style: context
-                                                    .textTheme.subtitle2!
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .subtitle2!
                                                     .copyWith(
                                                         color:
                                                             kPrimaryFadeTextColor,
@@ -709,14 +749,14 @@ class WalletTransactionTile extends StatelessWidget {
         dense: true,
         title: Text(
           transaction.description ?? LocaleKeys.not_available.tr(),
-          style: context.textTheme.subtitle2!.copyWith(
+          style: Theme.of(context).textTheme.subtitle2!.copyWith(
               color: getColorBasedOnTheme(
                   context, kPrimaryDarkTextColor, kPrimaryLightTextColor),
               fontWeight: FontWeight.bold),
         ),
         trailing: Text(
           transaction.amount,
-          style: context.textTheme.subtitle2!.copyWith(
+          style: Theme.of(context).textTheme.subtitle2!.copyWith(
               color: getColorBasedOnTheme(
                   context,
                   transaction.amountRaw.isNegative ? kPriceColor : kGreenColor,

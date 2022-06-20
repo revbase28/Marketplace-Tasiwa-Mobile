@@ -24,7 +24,7 @@ class MoreOffersFromSellerCard extends StatelessWidget {
             title: Text(
               LocaleKeys.more_offers_from_others
                   .tr(args: ["${details.data!.product!.listingCount}"]),
-              style: context.textTheme.subtitle2!,
+              style: Theme.of(context).textTheme.subtitle2!,
             ),
             onTap: () {
               context

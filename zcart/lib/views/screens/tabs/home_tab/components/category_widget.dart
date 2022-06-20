@@ -62,7 +62,7 @@ class CategoryWidget extends StatelessWidget {
                     textAlign: TextAlign.center,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: context.textTheme.subtitle2!.copyWith(),
+                    style: Theme.of(context).textTheme.subtitle2!.copyWith(),
                   ),
                 ],
               )),

@@ -130,9 +130,10 @@ class _LoginScreenState extends State<LoginScreen> {
                               .map((e) => e.capitalizeFirstLetter())
                               .join(" "),
                           textAlign: TextAlign.start,
-                          style: context.textTheme.headline5!.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
+                          style:
+                              Theme.of(context).textTheme.headline5!.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
                         ),
                       ),
                       const SizedBox(height: 24),
@@ -209,9 +210,12 @@ class _LoginScreenState extends State<LoginScreen> {
                           },
                           child: Text(
                             LocaleKeys.forgot_password.tr(),
-                            style: context.textTheme.caption!.copyWith(
-                                color: kPrimaryColor,
-                                fontWeight: FontWeight.bold),
+                            style: Theme.of(context)
+                                .textTheme
+                                .caption!
+                                .copyWith(
+                                    color: kPrimaryColor,
+                                    fontWeight: FontWeight.bold),
                           ),
                         ),
                       ),
@@ -231,7 +235,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         Text(
                           LocaleKeys.or_continue_with.tr(),
                           textAlign: TextAlign.center,
-                          style: context.textTheme.caption!
+                          style: Theme.of(context)
+                              .textTheme
+                              .caption!
                               .copyWith(fontWeight: FontWeight.bold),
                         ),
                       const SizedBox(height: 16),
@@ -241,7 +247,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(LocaleKeys.dont_have_account.tr(),
-                              style: context.textTheme.subtitle2,
+                              style: Theme.of(context).textTheme.subtitle2,
                               textAlign: TextAlign.center),
                           TextButton(
                               onPressed: () {
@@ -250,9 +256,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                     nextScreenID: widget.nextScreenId));
                               },
                               child: Text(LocaleKeys.sign_up.tr(),
-                                  style: context.textTheme.subtitle2!.copyWith(
-                                      color: kPrimaryColor,
-                                      fontWeight: FontWeight.bold))),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .subtitle2!
+                                      .copyWith(
+                                          color: kPrimaryColor,
+                                          fontWeight: FontWeight.bold))),
                         ],
                       ),
                     ],

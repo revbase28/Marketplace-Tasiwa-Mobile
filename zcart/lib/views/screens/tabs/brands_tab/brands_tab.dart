@@ -181,7 +181,8 @@ class _BrandListBodyState extends State<BrandListBody> {
                           maxLines: null,
                           softWrap: true,
                           textAlign: TextAlign.center,
-                          style: context.textTheme.subtitle2!.copyWith(),
+                          style:
+                              Theme.of(context).textTheme.subtitle2!.copyWith(),
                         ),
                       ),
                     ],

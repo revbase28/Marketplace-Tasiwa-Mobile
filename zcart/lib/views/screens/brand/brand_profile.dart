@@ -61,10 +61,11 @@ class BrandProfileScreen extends ConsumerWidget {
                         child: Center(
                           child: Text(
                             _brandProfileState.brandProfile.data!.name!,
-                            style: context.textTheme.headline6!.copyWith(
-                              color: kLightColor.withOpacity(0.9),
-                              fontWeight: FontWeight.bold,
-                            ),
+                            style:
+                                Theme.of(context).textTheme.headline6!.copyWith(
+                                      color: kLightColor.withOpacity(0.9),
+                                      fontWeight: FontWeight.bold,
+                                    ),
                           ),
                         ),
                       ).pOnly(bottom: 5),
@@ -79,7 +80,7 @@ class BrandProfileScreen extends ConsumerWidget {
                   ListTile(
                     title: Text(
                       _brandProfileState.brandProfile.data!.name!,
-                      style: context.textTheme.headline6!,
+                      style: Theme.of(context).textTheme.headline6!,
                     ),
                     leading: Container(
                       padding: const EdgeInsets.symmetric(vertical: 5),
@@ -194,12 +195,12 @@ class BrandDescription extends StatelessWidget {
       color: getColorBasedOnTheme(context, kLightColor, kDarkCardBgColor),
       child: ListTile(
         title: Text(LocaleKeys.description.tr(),
-                style: context.textTheme.headline6!)
+                style: Theme.of(context).textTheme.headline6!)
             .pOnly(bottom: 10, top: 5),
         subtitle: HtmlWidget(
           brandProfile.data!.description ?? "",
           enableCaching: true,
-          textStyle: context.textTheme.subtitle2,
+          textStyle: Theme.of(context).textTheme.subtitle2,
           onTapUrl: (url) {
             launchURL(url);
             return true;
@@ -227,12 +228,12 @@ class BrandDetailsRowItem extends StatelessWidget {
       children: [
         Text(
           "$title  :  ",
-          style: context.textTheme.subtitle2,
+          style: Theme.of(context).textTheme.subtitle2,
         ),
         Flexible(
           child: SelectableText(
             value,
-            style: context.textTheme.subtitle2,
+            style: Theme.of(context).textTheme.subtitle2,
           ),
         )
       ],

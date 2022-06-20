@@ -60,7 +60,9 @@ class VendorCard extends StatelessWidget {
                 Flexible(
                   child: Text(
                     name!,
-                    style: context.textTheme.headline6!
+                    style: Theme.of(context)
+                        .textTheme
+                        .headline6!
                         .copyWith(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -94,11 +96,11 @@ class VendorCard extends StatelessWidget {
                 const SizedBox(width: 5),
                 Text(
                   rating ?? '',
-                  style: context.textTheme.caption!.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: getColorBasedOnTheme(
-                        context, kPriceColor, kDarkPriceColor),
-                  ),
+                  style: Theme.of(context).textTheme.caption!.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: getColorBasedOnTheme(
+                            context, kPriceColor, kDarkPriceColor),
+                      ),
                 ).visible(rating != null),
               ],
             ),

@@ -47,7 +47,7 @@ void updateLanguage(BuildContext context) {
                       .first),
                   trailing: Text(
                       isoLangs[locale.languageCode]!["name"]!.split(",").first,
-                      style: context.textTheme.caption),
+                      style: Theme.of(context).textTheme.caption),
                 ),
               ),
             );

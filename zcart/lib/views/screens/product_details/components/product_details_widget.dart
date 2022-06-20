@@ -29,7 +29,9 @@ class ProductDetailsWidget extends StatelessWidget {
                       details.data!.keyFeatures!.isEmpty
                   ? const SizedBox()
                   : Text('${LocaleKeys.key_features.tr()}\n',
-                      style: context.textTheme.subtitle2!
+                      style: Theme.of(context)
+                          .textTheme
+                          .subtitle2!
                           .copyWith(fontWeight: FontWeight.bold)),
               details.data!.keyFeatures != null
                   ? Column(
@@ -49,7 +51,8 @@ class ProductDetailsWidget extends StatelessWidget {
                                 Expanded(
                                   child: Text(
                                     e,
-                                    style: context.textTheme.subtitle2,
+                                    style:
+                                        Theme.of(context).textTheme.subtitle2,
                                   ),
                                 ),
                               ],
@@ -64,7 +67,9 @@ class ProductDetailsWidget extends StatelessWidget {
                   ? const SizedBox()
                   : const SizedBox(height: 8),
               Text('${LocaleKeys.technical_details.tr()}\n',
-                  style: context.textTheme.subtitle2!
+                  style: Theme.of(context)
+                      .textTheme
+                      .subtitle2!
                       .copyWith(fontWeight: FontWeight.bold)),
               Column(
                 children: [
@@ -138,7 +143,7 @@ class ProductDetailsWidget extends StatelessWidget {
                       childrenPadding: EdgeInsets.zero,
                       tilePadding: EdgeInsets.zero,
                       title: Text(LocaleKeys.product_desc.tr(),
-                          style: context.textTheme.subtitle2),
+                          style: Theme.of(context).textTheme.subtitle2),
                       iconColor: getColorBasedOnTheme(
                           context, kDarkColor, kLightColor),
                       collapsedIconColor: kPrimaryColor,
@@ -178,7 +183,7 @@ class ProductDetailsWidget extends StatelessWidget {
                           context, kLightColor, kDarkColor),
                       collapsedIconColor: kPrimaryColor,
                       title: Text(LocaleKeys.seller_spec.tr(),
-                          style: context.textTheme.subtitle2),
+                          style: Theme.of(context).textTheme.subtitle2),
                       children: [
                         HtmlWidget(
                           details.data!.description!,
@@ -224,7 +229,7 @@ class TechnicalDetailsItem extends StatelessWidget {
             child: Text(
               title,
               textAlign: TextAlign.end,
-              style: context.textTheme.subtitle2!.copyWith(
+              style: Theme.of(context).textTheme.subtitle2!.copyWith(
                   fontWeight: FontWeight.bold,
                   color: Theme.of(context).disabledColor),
             ),
@@ -234,7 +239,7 @@ class TechnicalDetailsItem extends StatelessWidget {
             flex: 65,
             child: Text(value,
                 textAlign: TextAlign.start,
-                style: context.textTheme.bodyText2!),
+                style: Theme.of(context).textTheme.bodyText2!),
           ),
         ],
       ),

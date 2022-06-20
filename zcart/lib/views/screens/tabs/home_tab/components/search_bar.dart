@@ -41,7 +41,9 @@ class CustomSearchBar extends StatelessWidget {
                       ),
                       Text(
                         LocaleKeys.search_keyword.tr(),
-                        style: context.textTheme.subtitle2!
+                        style: Theme.of(context)
+                            .textTheme
+                            .subtitle2!
                             .copyWith(color: kPrimaryFadeTextColor),
                       ).px(5),
                     ],

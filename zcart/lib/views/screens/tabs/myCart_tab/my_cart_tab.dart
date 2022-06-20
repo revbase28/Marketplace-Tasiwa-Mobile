@@ -379,11 +379,12 @@ class CartItemCard extends ConsumerWidget {
                         Text(cartItem.shop!.name!,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: context.textTheme.headline6!.copyWith(
-                              color: getColorBasedOnTheme(
-                                  context, kDarkColor, kLightColor),
-                              fontWeight: FontWeight.bold,
-                            )),
+                            style:
+                                Theme.of(context).textTheme.headline6!.copyWith(
+                                      color: getColorBasedOnTheme(
+                                          context, kDarkColor, kLightColor),
+                                      fontWeight: FontWeight.bold,
+                                    )),
                       ],
                     ),
                   ).pOnly(right: 4),
@@ -452,11 +453,14 @@ class CartItemCard extends ConsumerWidget {
                                       : LocaleKeys.unknown.tr(),
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
-                                  style: context.textTheme.headline6!.copyWith(
-                                    color: getColorBasedOnTheme(
-                                        context, kDarkColor, kLightColor),
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline6!
+                                      .copyWith(
+                                        color: getColorBasedOnTheme(
+                                            context, kDarkColor, kLightColor),
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                 ),
                               ),
                               const SizedBox(width: 4),
@@ -557,7 +561,8 @@ class _ItemCardState extends State<ItemCard> {
                         maxLines: 3,
                         softWrap: true,
                         overflow: TextOverflow.ellipsis,
-                        style: context.textTheme.subtitle2!.copyWith())
+                        style:
+                            Theme.of(context).textTheme.subtitle2!.copyWith())
                     .pOnly(right: 10),
                 const SizedBox(height: 4),
                 Row(
@@ -565,14 +570,16 @@ class _ItemCardState extends State<ItemCard> {
                   children: [
                     Text(
                       widget.item.unitPrice!,
-                      style: context.textTheme.bodyText2!.copyWith(
+                      style: Theme.of(context).textTheme.bodyText2!.copyWith(
                           color: getColorBasedOnTheme(
                               context, kPriceColor, kDarkPriceColor),
                           fontWeight: FontWeight.bold),
                     ),
                     Text(
                       " x " + widget.item.quantity.toString(),
-                      style: context.textTheme.bodyText2!
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyText2!
                           .copyWith(fontWeight: FontWeight.bold),
                     ),
                   ],
@@ -714,7 +721,7 @@ class PackagingDetails extends ConsumerWidget {
                     children: [
                       Text(
                         LocaleKeys.packaging.tr() + ':',
-                        style: context.textTheme.caption!.copyWith(
+                        style: Theme.of(context).textTheme.caption!.copyWith(
                             fontWeight: FontWeight.bold,
                             color: kPrimaryFadeTextColor),
                       ),
@@ -727,7 +734,7 @@ class PackagingDetails extends ConsumerWidget {
                         },
                         child: Text(
                           LocaleKeys.change.tr(),
-                          style: context.textTheme.caption!.copyWith(
+                          style: Theme.of(context).textTheme.caption!.copyWith(
                               fontWeight: FontWeight.bold, color: kFadeColor),
                         ),
                       ),
@@ -738,9 +745,10 @@ class PackagingDetails extends ConsumerWidget {
                       Expanded(
                         child: Text(
                           packagingModel?.name ?? '',
-                          style: context.textTheme.subtitle2!.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
+                          style:
+                              Theme.of(context).textTheme.subtitle2!.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
                         ),
                       ),
                       const SizedBox(width: 8),
@@ -748,7 +756,7 @@ class PackagingDetails extends ConsumerWidget {
                         double.parse(packagingModel?.costRaw ?? "0") <= 0.0
                             ? ""
                             : (packagingModel?.cost ?? "0"),
-                        style: context.textTheme.subtitle2!.copyWith(
+                        style: Theme.of(context).textTheme.subtitle2!.copyWith(
                             fontWeight: FontWeight.bold,
                             color: getColorBasedOnTheme(
                                 context, kPriceColor, kDarkPriceColor)),
@@ -867,7 +875,7 @@ class ShippingDetails extends ConsumerWidget {
                     const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
                 title: Text(
                   LocaleKeys.shipping.tr() + ':',
-                  style: context.textTheme.caption!.copyWith(
+                  style: Theme.of(context).textTheme.caption!.copyWith(
                       fontWeight: FontWeight.bold,
                       color: kPrimaryFadeTextColor),
                 ),
@@ -912,7 +920,7 @@ class ShippingDetails extends ConsumerWidget {
                   children: [
                     Text(
                       LocaleKeys.shipping.tr() + ':',
-                      style: context.textTheme.caption!.copyWith(
+                      style: Theme.of(context).textTheme.caption!.copyWith(
                           fontWeight: FontWeight.bold,
                           color: kPrimaryFadeTextColor),
                     ),
@@ -926,7 +934,7 @@ class ShippingDetails extends ConsumerWidget {
                       },
                       child: Text(
                         LocaleKeys.change.tr(),
-                        style: context.textTheme.caption!.copyWith(
+                        style: Theme.of(context).textTheme.caption!.copyWith(
                             fontWeight: FontWeight.bold, color: kFadeColor),
                       ),
                     ),
@@ -940,9 +948,9 @@ class ShippingDetails extends ConsumerWidget {
                             " by " +
                             (_shippingOption.carrierName ??
                                 LocaleKeys.unknown.tr()),
-                        style: context.textTheme.subtitle2!.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
+                        style: Theme.of(context).textTheme.subtitle2!.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
                       ),
                     ),
                     const SizedBox(width: 8),
@@ -950,7 +958,7 @@ class ShippingDetails extends ConsumerWidget {
                       double.parse(_shippingOption.costRaw ?? "0") <= 0.0
                           ? ""
                           : (_shippingOption.cost ?? "0"),
-                      style: context.textTheme.subtitle2!.copyWith(
+                      style: Theme.of(context).textTheme.subtitle2!.copyWith(
                           fontWeight: FontWeight.bold,
                           color: getColorBasedOnTheme(
                               context, kPriceColor, kDarkPriceColor)),
@@ -1133,13 +1141,13 @@ class CartGrandTotalPart extends StatelessWidget {
       children: [
         Text(
           LocaleKeys.grand_total.tr(),
-          style: context.textTheme.caption!.copyWith(
+          style: Theme.of(context).textTheme.caption!.copyWith(
               fontWeight: FontWeight.bold, color: kPrimaryFadeTextColor),
         ),
         Row(
           children: [
             Text(cartItem.grandTotal!,
-                style: context.textTheme.bodyText2!.copyWith(
+                style: Theme.of(context).textTheme.bodyText2!.copyWith(
                     color: getColorBasedOnTheme(
                         context, kPriceColor, kDarkPriceColor),
                     fontWeight: FontWeight.bold)),
@@ -1148,7 +1156,7 @@ class CartGrandTotalPart extends StatelessWidget {
             //   onTap: (){},
             //   child: Text(
             //     "[${LocaleKeys.apply_coupon.tr()}]",
-            //     style: context.textTheme.caption!.copyWith(
+            //     style: Theme.of(context).textTheme.caption!.copyWith(
             //         fontWeight: FontWeight.bold,
             //         color: getColorBasedOnTheme(
             //             context, kPrimaryColor, kLightColor)),

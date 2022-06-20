@@ -111,7 +111,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(LocaleKeys.rate_product.tr(),
-                          style: context.textTheme.headline6),
+                          style: Theme.of(context).textTheme.headline6),
                       const SizedBox(height: 16),
                       ListView(
                         padding: EdgeInsets.zero,
@@ -187,7 +187,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(LocaleKeys.rate_seller.tr(),
-                          style: context.textTheme.headline6),
+                          style: Theme.of(context).textTheme.headline6),
                       CustomShopCard(
                         image: widget.order.shop!.image!,
                         title:
@@ -270,7 +270,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
         //             crossAxisAlignment: CrossAxisAlignment.start,
         //             children: [
         //               Text(LocaleKeys.rate_seller.tr(),
-        //                   style: context.textTheme.headline6),
+        //                   style: Theme.of(context).textTheme.headline6),
         //               CustomShopCard(
         //                 image: widget.order.shop!.image!,
         //                 title: widget.order.shop!.name ?? "Unknown",
@@ -328,7 +328,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
         //             crossAxisAlignment: CrossAxisAlignment.start,
         //             children: [
         //               Text(LocaleKeys.rate_product.tr(),
-        //                   style: context.textTheme.headline6),
+        //                   style: Theme.of(context).textTheme.headline6),
         //               const SizedBox(height: 16),
         //               ListView(
         //                 shrinkWrap: true,
@@ -415,20 +415,20 @@ class _SingleProductRatingCardState extends State<_SingleProductRatingCard> {
             height: 50,
           ),
           title: Text(widget.order.items![widget.index].description!,
-              style: context.textTheme.subtitle2),
+              style: Theme.of(context).textTheme.subtitle2),
           subtitle: Row(
             children: [
               Text(
                 widget.order.items![widget.index].unitPrice!,
-                style: context.textTheme.subtitle2!.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: getColorBasedOnTheme(
-                      context, kPriceColor, kDarkPriceColor),
-                ),
+                style: Theme.of(context).textTheme.subtitle2!.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: getColorBasedOnTheme(
+                          context, kPriceColor, kDarkPriceColor),
+                    ),
               ),
               Text(
                 ' x ' + widget.order.items![widget.index].quantity.toString(),
-                style: context.textTheme.subtitle2!.copyWith(),
+                style: Theme.of(context).textTheme.subtitle2!.copyWith(),
               )
             ],
           ).py(8),

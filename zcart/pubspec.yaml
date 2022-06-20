@@ -23,7 +23,7 @@ dependencies:
   flutter_slidable: ^0.6.0
   nb_utils: ^4.2.3
   velocity_x: ^3.3.0
-  share_plus: ^3.0.4
+  share_plus: ^4.0.8
   datetime_picker_formfield: ^2.0.0
   flutter_countdown_timer: ^4.1.0
   font_awesome_flutter: ^9.1.0
@@ -39,7 +39,6 @@ dependencies:
   hive_flutter: ^1.1.0
   device_info: ^2.0.2
   awesome_card: ^1.1.7
-  flutter_paystack: ^1.0.5+1
   flutter_paypal: ^0.0.8
   sign_in_with_apple: ^3.2.0
   url_launcher: ^6.0.12
@@ -57,6 +56,10 @@ dependencies:
     git:
       url: https://github.com/devShakib015/razorpay-flutter
       ref: master
+  flutter_paystack:
+    git:
+      url: https://github.com/definitelyme/flutter_paystack.git
+      ref: a4a33c3dd0a12f46d655a2e63d11e9f20ba82d01
 
 dev_dependencies:
   flutter_test:

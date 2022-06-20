@@ -8,7 +8,6 @@ import 'package:zcart/helper/url_launcher_helper.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
 import 'package:zcart/views/shared_widgets/shared_widgets.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:velocity_x/velocity_x.dart';
 
 class AboutUsScreen extends StatelessWidget {
   const AboutUsScreen({Key? key}) : super(key: key);
@@ -29,7 +28,7 @@ class AboutUsScreen extends StatelessWidget {
               return aboutUsState is AboutUsLoadedState
                   ? HtmlWidget(
                       aboutUsState.aboutUsModel.data!.content!,
-                      textStyle: context.textTheme.bodyText2!,
+                      textStyle: Theme.of(context).textTheme.bodyText2!,
                       onTapUrl: (url) {
                         launchURL(url);
                         return true;

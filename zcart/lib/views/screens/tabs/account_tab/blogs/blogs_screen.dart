@@ -74,7 +74,9 @@ class BlogsScreen extends ConsumerWidget {
                           blogsState.blogList![index].title!,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
-                          style: context.textTheme.headline6!
+                          style: Theme.of(context)
+                              .textTheme
+                              .headline6!
                               .copyWith(fontWeight: FontWeight.bold),
                         ),
                         isThreeLine: true,
@@ -94,7 +96,7 @@ class BlogsScreen extends ConsumerWidget {
                                           60
                                       ? "..."
                                       : ""),
-                              textStyle: context.textTheme.subtitle2!,
+                              textStyle: Theme.of(context).textTheme.subtitle2!,
                               onTapUrl: (url) {
                                 launchURL(url);
                                 return true;
@@ -102,7 +104,7 @@ class BlogsScreen extends ConsumerWidget {
                             ).pOnly(bottom: 5),
                             Text(
                               "${LocaleKeys.author.tr()} : ${blogsState.blogList![index].author!.name}",
-                              style: context.textTheme.caption,
+                              style: Theme.of(context).textTheme.caption,
                             ),
                             const SizedBox(height: 8),
                             Row(

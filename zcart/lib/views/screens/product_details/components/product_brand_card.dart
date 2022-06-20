@@ -22,7 +22,7 @@ class ProductBrandCard extends StatelessWidget {
         "${LocaleKeys.brand.tr()}  :  ${details.data!.product!.manufacturer!.name}",
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
-        style: context.textTheme.subtitle2!,
+        style: Theme.of(context).textTheme.subtitle2!,
       ),
       trailing: const Icon(Icons.arrow_forward_ios, size: 15),
       onTap: () async {

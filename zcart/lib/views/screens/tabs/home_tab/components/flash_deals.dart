@@ -1,7 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:slide_countdown/slide_countdown.dart';
-import 'package:velocity_x/velocity_x.dart';
 import 'package:zcart/Theme/styles/colors.dart';
 import 'package:zcart/data/models/deals/flash_deals_model.dart';
 import 'package:zcart/views/shared_widgets/shared_widgets.dart';
@@ -25,7 +24,9 @@ class FlashDealsSection extends StatelessWidget {
             children: [
               Text(
                 flashDeals.meta!.dealTitle ?? "Flash Deals",
-                style: context.textTheme.headline6!
+                style: Theme.of(context)
+                    .textTheme
+                    .headline6!
                     .copyWith(fontWeight: FontWeight.bold),
               ),
               SlideCountdownSeparated(
@@ -45,10 +46,10 @@ class FlashDealsSection extends StatelessWidget {
                 ),
                 separator: "",
                 showZeroValue: false,
-                textStyle: context.textTheme.subtitle2!.copyWith(
-                  color: kPrimaryLightTextColor,
-                  fontWeight: FontWeight.bold,
-                ),
+                textStyle: Theme.of(context).textTheme.subtitle2!.copyWith(
+                      color: kPrimaryLightTextColor,
+                      fontWeight: FontWeight.bold,
+                    ),
                 width: 40,
               )
             ],

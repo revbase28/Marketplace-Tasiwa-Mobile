@@ -97,12 +97,14 @@ class BannerTextWidget extends StatelessWidget {
                 ? Text(text!,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: context.textTheme.overline!.copyWith(
-                      color: kPrimaryLightTextColor,
-                      fontWeight: FontWeight.bold,
-                    )).text.uppercase.make()
+                    style: Theme.of(context).textTheme.overline!.copyWith(
+                          color: kPrimaryLightTextColor,
+                          fontWeight: FontWeight.bold,
+                        )).text.uppercase.make()
                 : Text(text!,
-                    style: context.textTheme.caption!
+                    style: Theme.of(context)
+                        .textTheme
+                        .caption!
                         .copyWith(color: kPrimaryLightTextColor)),
           ),
         ],

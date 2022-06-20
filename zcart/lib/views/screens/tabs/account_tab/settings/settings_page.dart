@@ -51,7 +51,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   Card(
                     child: ListTile(
                       title: Text(LocaleKeys.language.tr(),
-                          style: context.textTheme.subtitle2!),
+                          style: Theme.of(context).textTheme.subtitle2!),
                       leading: const Icon(Icons.translate),
                       onTap: () {
                         updateLanguage(context);
@@ -62,7 +62,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     Card(
                       child: ListTile(
                         title: Text("Dark Mode",
-                            style: context.textTheme.subtitle2!),
+                            style: Theme.of(context).textTheme.subtitle2!),
                         trailing: EasyDynamicThemeSwitch(),
                         leading: const Icon(Icons.color_lens),
                       ),
@@ -72,7 +72,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       elevation: 0,
                       child: ListTile(
                         title: Text(LocaleKeys.clear_cache.tr(),
-                            style: context.textTheme.subtitle2!),
+                            style: Theme.of(context).textTheme.subtitle2!),
                         leading: const Icon(Icons.delete_forever),
                         onTap: () async {
                           await clearCache(context);
@@ -92,7 +92,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     child: ListTile(
                       leading: const Icon(Icons.logout_outlined),
                       title: Text(LocaleKeys.sign_out.tr(),
-                          style: context.textTheme.subtitle2!),
+                          style: Theme.of(context).textTheme.subtitle2!),
                       onTap: () async {
                         await showCustomConfirmDialog(
                           context,
@@ -175,7 +175,7 @@ class CompanyInfoWidgets extends StatelessWidget {
         Card(
           child: ListTile(
             title: Text(LocaleKeys.about_us.tr(),
-                style: context.textTheme.subtitle2!),
+                style: Theme.of(context).textTheme.subtitle2!),
             leading: const Icon(Icons.info_outline),
             onTap: () {
               context.read(aboutUsProvider.notifier).fetchAboutUs();
@@ -186,7 +186,7 @@ class CompanyInfoWidgets extends StatelessWidget {
         Card(
           child: ListTile(
             title: Text(LocaleKeys.privacy_policy.tr(),
-                style: context.textTheme.subtitle2!),
+                style: Theme.of(context).textTheme.subtitle2!),
             leading: const Icon(Icons.lock_outline),
             onTap: () {
               context.read(privacyPolicyProvider.notifier).fetchPrivacyPolicy();
@@ -197,7 +197,7 @@ class CompanyInfoWidgets extends StatelessWidget {
         Card(
           child: ListTile(
             title: Text(LocaleKeys.terms_condition.tr(),
-                style: context.textTheme.subtitle2!),
+                style: Theme.of(context).textTheme.subtitle2!),
             leading: const Icon(Icons.description),
             onTap: () {
               context

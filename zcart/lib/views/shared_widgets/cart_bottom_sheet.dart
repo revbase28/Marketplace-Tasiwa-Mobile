@@ -24,10 +24,10 @@ Future<dynamic> addToCartBottomSheet(BuildContext context, responseBody) async {
             Text(
               responseBody["message"],
               textAlign: TextAlign.center,
-              style: context.textTheme.subtitle2!.copyWith(
-                color: kPrimaryLightTextColor,
-                fontWeight: FontWeight.bold,
-              ),
+              style: Theme.of(context).textTheme.subtitle2!.copyWith(
+                    color: kPrimaryLightTextColor,
+                    fontWeight: FontWeight.bold,
+                  ),
             ),
             const SizedBox(height: 16),
             ElevatedButton(

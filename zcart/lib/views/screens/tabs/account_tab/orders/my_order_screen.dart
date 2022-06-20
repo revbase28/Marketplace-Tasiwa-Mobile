@@ -218,8 +218,11 @@ class OrderCard extends StatelessWidget {
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 10, vertical: 5),
                                 child: Text(order.orderStatus!,
-                                    style: context.textTheme.overline!.copyWith(
-                                        color: kPrimaryLightTextColor)),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .overline!
+                                        .copyWith(
+                                            color: kPrimaryLightTextColor)),
                               ),
                             ],
                           )
@@ -260,9 +263,9 @@ class OrderCard extends StatelessWidget {
                     children: [
                       Text(
                           "${LocaleKeys.order_number.tr()} : ${order.orderNumber}",
-                          style: context.textTheme.caption!),
+                          style: Theme.of(context).textTheme.caption!),
                       Text("${LocaleKeys.ordered_at.tr()} : ${order.orderDate}",
-                          style: context.textTheme.caption!),
+                          style: Theme.of(context).textTheme.caption!),
                     ],
                   ),
                   const SizedBox(width: 16),
@@ -270,12 +273,15 @@ class OrderCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text(order.grandTotal!,
-                          style: context.textTheme.bodyText2!.copyWith(
-                              color: getColorBasedOnTheme(
-                                  context, kPriceColor, kDarkPriceColor),
-                              fontWeight: FontWeight.bold)),
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyText2!
+                              .copyWith(
+                                  color: getColorBasedOnTheme(
+                                      context, kPriceColor, kDarkPriceColor),
+                                  fontWeight: FontWeight.bold)),
                       Text(LocaleKeys.total.tr(),
-                          style: context.textTheme.overline)
+                          style: Theme.of(context).textTheme.overline)
                     ],
                   ),
                 ],
@@ -361,11 +367,11 @@ class OrderCard extends StatelessWidget {
               padding: const EdgeInsets.only(top: 8, left: 10),
               child: Text(
                 "${index + 1}",
-                style: context.textTheme.overline!.copyWith(
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
-                  color: kLightColor,
-                ),
+                style: Theme.of(context).textTheme.overline!.copyWith(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: kLightColor,
+                    ),
               ),
             ),
           ),

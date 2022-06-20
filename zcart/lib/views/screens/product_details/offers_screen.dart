@@ -59,17 +59,19 @@ class OffersScreen extends ConsumerWidget {
                                       offersState.offersModel.data!.name!,
                                       maxLines: null,
                                       softWrap: true,
-                                      style: context.textTheme.bodyText2!),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyText2!),
                                 ),
                               ],
                             ).py(5),
                             Text(
                                 offersState.offersModel.data!.brand ??
                                     LocaleKeys.not_available.tr(),
-                                style: context.textTheme.subtitle2),
+                                style: Theme.of(context).textTheme.subtitle2),
                             Text(
                                 "${offersState.offersModel.data!.gtinType ?? ""} : ${offersState.offersModel.data!.gtin ?? LocaleKeys.not_available.tr()}",
-                                style: context.textTheme.subtitle2!),
+                                style: Theme.of(context).textTheme.subtitle2!),
                           ],
                         ),
                       ),

@@ -87,7 +87,9 @@ class _VendorChatScreenState extends State<VendorChatScreen> {
                         const SizedBox(height: 6),
                         Text(
                           widget.shopVerifiedText!,
-                          style: context.textTheme.caption!
+                          style: Theme.of(context)
+                              .textTheme
+                              .caption!
                               .copyWith(color: kFadeColor),
                         ),
                       ],
@@ -160,7 +162,9 @@ class _VendorChatScreenState extends State<VendorChatScreen> {
               color: getColorBasedOnTheme(context, kLightColor, kDarkBgColor),
             ),
             placeholder: LocaleKeys.type_a_message.tr(),
-            style: context.textTheme.subtitle2!
+            style: Theme.of(context)
+                .textTheme
+                .subtitle2!
                 .copyWith(fontWeight: FontWeight.bold),
             prefixMode: OverlayVisibilityMode.always,
             textAlignVertical: TextAlignVertical.center,
@@ -438,7 +442,9 @@ class FirstMessageBox extends StatelessWidget {
             visible: productChatModel.data!.subject != null,
             child: Text(
               "${productChatModel.data!.subject ?? "Hello"}",
-              style: context.textTheme.caption!
+              style: Theme.of(context)
+                  .textTheme
+                  .caption!
                   .copyWith(color: kPrimaryLightTextColor),
             ).paddingBottom(5),
           ),

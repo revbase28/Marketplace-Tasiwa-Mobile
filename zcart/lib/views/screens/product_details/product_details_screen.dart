@@ -361,10 +361,12 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
                                       const SizedBox(width: 8),
                                       Text(
                                         _quantity.toString(),
-                                        style: context.textTheme.headline6!
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headline6!
                                             .copyWith(
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                       ),
                                       const SizedBox(width: 8),
                                       CupertinoButton(
@@ -588,20 +590,24 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(LocaleKeys.add_to_cart.tr(),
-                                        style: context.textTheme.subtitle2!
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .subtitle2!
                                             .copyWith(
-                                          fontWeight: FontWeight.bold,
-                                          color: kLightColor,
-                                        )),
+                                              fontWeight: FontWeight.bold,
+                                              color: kLightColor,
+                                            )),
                                     _isNotAvailable
                                         ? const SizedBox()
                                         : Text(
                                             "${LocaleKeys.total.tr()} - ${_details.data!.currencySymbol!}${_totalPrice.toDoubleStringAsPrecised(length: 2)}",
-                                            style: context.textTheme.overline!
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .overline!
                                                 .copyWith(
-                                              fontWeight: FontWeight.bold,
-                                              color: kLightColor,
-                                            ),
+                                                  fontWeight: FontWeight.bold,
+                                                  color: kLightColor,
+                                                ),
                                           )
                                   ],
                                 ),
@@ -875,7 +881,7 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
                   Flexible(
                     child: Text(
                       _option?.deliveryTakes ?? "",
-                      style: context.textTheme.caption!,
+                      style: Theme.of(context).textTheme.caption!,
                     ).pOnly(right: 8),
                   ),
                   Text(

@@ -265,7 +265,9 @@ class DealOfTheDayWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(LocaleKeys.deal_of_the_day.tr(),
-                  style: context.textTheme.headline6!
+                  style: Theme.of(context)
+                      .textTheme
+                      .headline6!
                       .copyWith(color: kPrimaryFadeTextColor))
               .pOnly(bottom: 10),
           Flexible(
@@ -305,7 +307,7 @@ class DealOfTheDayWidget extends StatelessWidget {
                         dealOfTheDay.data!.title!.toUpperCase(),
                         maxLines: null,
                         softWrap: true,
-                        style: context.textTheme.headline6!.copyWith(
+                        style: Theme.of(context).textTheme.headline6!.copyWith(
                             color: kPrimaryLightTextColor,
                             fontWeight: FontWeight.bold),
                       ).pSymmetric(h: 16).pOnly(bottom: 10),
@@ -313,22 +315,32 @@ class DealOfTheDayWidget extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         child: dealOfTheDay.data!.hasOffer!
                             ? Text(dealOfTheDay.data!.offerPrice,
-                                style: context.textTheme.headline6!.copyWith(
-                                    color: kDarkPriceColor,
-                                    fontWeight: FontWeight.bold))
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headline6!
+                                    .copyWith(
+                                        color: kDarkPriceColor,
+                                        fontWeight: FontWeight.bold))
                             : Text(dealOfTheDay.data!.price!,
-                                style: context.textTheme.headline6!.copyWith(
-                                    color: kDarkPriceColor,
-                                    fontWeight: FontWeight.bold)),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headline6!
+                                    .copyWith(
+                                        color: kDarkPriceColor,
+                                        fontWeight: FontWeight.bold)),
                       ).pOnly(bottom: 10),
-                      Text(
-                        dealOfTheDay.data!.description!,
-                        maxLines: 2,
-                        softWrap: true,
-                        overflow: TextOverflow.ellipsis,
-                        style: context.textTheme.subtitle1!
-                            .copyWith(color: kPrimaryLightTextColor),
-                      ).pSymmetric(h: 16).pOnly(bottom: 10),
+                      dealOfTheDay.data?.description == null
+                          ? const SizedBox()
+                          : Text(
+                              dealOfTheDay.data!.description!,
+                              maxLines: 2,
+                              softWrap: true,
+                              overflow: TextOverflow.ellipsis,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .subtitle1!
+                                  .copyWith(color: kPrimaryLightTextColor),
+                            ).pSymmetric(h: 16).pOnly(bottom: 10),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: dealOfTheDay.data!.keyFeatures!
@@ -351,7 +363,9 @@ class DealOfTheDayWidget extends StatelessWidget {
                                         maxLines: 1,
                                         softWrap: true,
                                         overflow: TextOverflow.ellipsis,
-                                        style: context.textTheme.caption!
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .caption!
                                             .copyWith(
                                                 color: kPrimaryLightTextColor),
                                       ),
@@ -448,7 +462,7 @@ class DealOfTheDayWidget extends StatelessWidget {
                         transform: Matrix4.identity()..rotateZ(45 * pi / 180),
                         child: Text(
                           "HOT",
-                          style: context.textTheme.caption!.copyWith(
+                          style: Theme.of(context).textTheme.caption!.copyWith(
                               color: kDarkBgColor, fontWeight: FontWeight.bold),
                         ),
                       ),
@@ -503,7 +517,7 @@ class AppDrawer extends ConsumerWidget {
                   elevation: 0,
                   child: ListTile(
                     title: Text(LocaleKeys.home_text.tr(),
-                        style: context.textTheme.subtitle2!),
+                        style: Theme.of(context).textTheme.subtitle2!),
                     leading: const Icon(Icons.home_outlined),
                     onTap: () {
                       context.pop();
@@ -514,7 +528,7 @@ class AppDrawer extends ConsumerWidget {
                   elevation: 0,
                   child: ListTile(
                     title: Text(LocaleKeys.vendor_text.tr(),
-                        style: context.textTheme.subtitle2!),
+                        style: Theme.of(context).textTheme.subtitle2!),
                     leading: const Icon(Icons.store_outlined),
                     onTap: () {
                       context.pop();
@@ -528,7 +542,7 @@ class AppDrawer extends ConsumerWidget {
                   elevation: 0,
                   child: ListTile(
                     title: Text(LocaleKeys.brands.tr(),
-                        style: context.textTheme.subtitle2!),
+                        style: Theme.of(context).textTheme.subtitle2!),
                     leading: const Icon(Icons.local_mall_outlined),
                     onTap: () {
                       context.pop();
@@ -551,7 +565,9 @@ class AppDrawer extends ConsumerWidget {
                                   elevation: 0,
                                   child: ListTile(
                                     title: Text(LocaleKeys.wishlist_text.tr(),
-                                        style: context.textTheme.subtitle2!),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .subtitle2!),
                                     leading: const Icon(
                                         Icons.favorite_border_outlined),
                                     onTap: () {
@@ -573,7 +589,7 @@ class AppDrawer extends ConsumerWidget {
                   elevation: 0,
                   child: ListTile(
                     title: Text(LocaleKeys.cart_text.tr(),
-                        style: context.textTheme.subtitle2!),
+                        style: Theme.of(context).textTheme.subtitle2!),
                     leading: const Icon(Icons.shopping_cart_outlined),
                     trailing: CircleAvatar(
                       radius: 10,
@@ -581,10 +597,10 @@ class AppDrawer extends ConsumerWidget {
                       foregroundColor: kLightColor,
                       child: Text(
                         _cartItems.toString(),
-                        style: context.textTheme.caption!.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: kLightColor,
-                        ),
+                        style: Theme.of(context).textTheme.caption!.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: kLightColor,
+                            ),
                       ),
                     ),
                     onTap: () {
@@ -599,7 +615,7 @@ class AppDrawer extends ConsumerWidget {
                   elevation: 0,
                   child: ListTile(
                     title: Text(LocaleKeys.account_text.tr(),
-                        style: context.textTheme.subtitle2!),
+                        style: Theme.of(context).textTheme.subtitle2!),
                     leading: const Icon(Icons.person_outline),
                     onTap: () {
                       context.pop();
@@ -618,7 +634,7 @@ class AppDrawer extends ConsumerWidget {
               return Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 child: Text("v" + data.version + "+" + data.buildNumber,
-                    style: context.textTheme.subtitle2!.copyWith(
+                    style: Theme.of(context).textTheme.subtitle2!.copyWith(
                         fontWeight: FontWeight.bold, color: kFadeColor)),
               );
             },
@@ -675,7 +691,7 @@ class FeaturedCategoriesSection extends ConsumerWidget {
     //                         children: [
     //                           Text(
     //                             LocaleKeys.categories.tr(),
-    //                             style: context.textTheme.bodyMedium!.copyWith(
+    //                             style: Theme.of(context).textTheme.bodyMedium!.copyWith(
     //                                 fontWeight: FontWeight.bold,
     //                                 color: kFadeColor),
     //                           ),
@@ -685,7 +701,7 @@ class FeaturedCategoriesSection extends ConsumerWidget {
     //                             },
     //                             child: Text(
     //                               LocaleKeys.view_all.tr(),
-    //                               style: context.textTheme.subtitle2!.copyWith(
+    //                               style: Theme.of(context).textTheme.subtitle2!.copyWith(
     //                                   fontWeight: FontWeight.bold,
     //                                   color: kFadeColor),
     //                             ),
@@ -773,7 +789,7 @@ class FeaturedCategoriesSection extends ConsumerWidget {
     //                                         textAlign: TextAlign.center,
     //                                         overflow: TextOverflow.ellipsis,
     //                                         maxLines: 2,
-    //                                         style: context.textTheme.caption!
+    //                                         style: Theme.of(context).textTheme.caption!
     //                                             .copyWith(
     //                                           fontWeight: FontWeight.bold,
     //                                           color: kFadeColor,

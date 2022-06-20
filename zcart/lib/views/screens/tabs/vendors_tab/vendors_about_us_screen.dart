@@ -59,10 +59,10 @@ class VendorsAboutUsScreen extends StatelessWidget {
                   child: Center(
                     child: Text(
                       vendorDetails!.name!,
-                      style: context.textTheme.headline6!.copyWith(
-                        color: kLightColor.withOpacity(0.9),
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: Theme.of(context).textTheme.headline6!.copyWith(
+                            color: kLightColor.withOpacity(0.9),
+                            fontWeight: FontWeight.bold,
+                          ),
                     ),
                   ),
                 ).pOnly(bottom: 5),
@@ -133,11 +133,11 @@ class VendorsAboutUsScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(LocaleKeys.description.tr(),
-                      style: context.textTheme.headline6),
+                      style: Theme.of(context).textTheme.headline6),
                   const SizedBox(height: 10),
                   ResponsiveTextWidget(
                       title: vendorDetails!.description,
-                      textStyle: context.textTheme.subtitle2!)
+                      textStyle: Theme.of(context).textTheme.subtitle2!)
                 ],
               ),
             ).cornerRadius(10).p(10),

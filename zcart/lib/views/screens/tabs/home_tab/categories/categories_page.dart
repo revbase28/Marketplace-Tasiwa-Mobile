@@ -115,15 +115,17 @@ class _CategoryListState extends State<_CategoryList> {
                           textAlign: TextAlign.center,
                           overflow: TextOverflow.ellipsis,
                           maxLines: 2,
-                          style: context.textTheme.caption!.copyWith(
-                            color: getColorBasedOnTheme(
-                                context,
-                                _isSelected ? kPrimaryColor : kDarkCardBgColor,
-                                kLightColor),
-                            fontWeight: _isSelected
-                                ? FontWeight.bold
-                                : FontWeight.normal,
-                          ),
+                          style: Theme.of(context).textTheme.caption!.copyWith(
+                                color: getColorBasedOnTheme(
+                                    context,
+                                    _isSelected
+                                        ? kPrimaryColor
+                                        : kDarkCardBgColor,
+                                    kLightColor),
+                                fontWeight: _isSelected
+                                    ? FontWeight.bold
+                                    : FontWeight.normal,
+                              ),
                         ),
                       ),
                     ],
@@ -217,9 +219,9 @@ class _CategorySubGroupsList extends ConsumerWidget {
           collapsedIconColor: kPrimaryColor,
           title: Text(
             e.name ?? LocaleKeys.unknown.tr(),
-            style: context.textTheme.bodyMedium!.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
+            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
           ),
           subtitle: e.description == null
               ? null
@@ -227,7 +229,7 @@ class _CategorySubGroupsList extends ConsumerWidget {
                   e.description ?? "",
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
-                  style: context.textTheme.caption,
+                  style: Theme.of(context).textTheme.caption,
                 ),
           childrenPadding: const EdgeInsets.symmetric(vertical: 16),
           children: [
@@ -346,10 +348,10 @@ class _SubGroupCategoriesListView extends StatelessWidget {
                 Text(
                   category.name ?? "",
                   textAlign: TextAlign.center,
-                  style: context.textTheme.caption!.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: kFadeColor,
-                  ),
+                  style: Theme.of(context).textTheme.caption!.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: kFadeColor,
+                      ),
                 ),
               ],
             ),

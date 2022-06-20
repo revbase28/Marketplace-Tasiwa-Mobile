@@ -75,7 +75,9 @@ class DisputeDetailsScreen extends ConsumerWidget {
                                     child: Text(
                                         disputeDetailsState
                                             .disputeDetails!.reason!,
-                                        style: context.textTheme.subtitle2)),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .subtitle2)),
                               ],
                             ),
                             const SizedBox(height: 9),
@@ -92,7 +94,9 @@ class DisputeDetailsScreen extends ConsumerWidget {
                                     child: Text(
                                         disputeDetailsState
                                             .disputeDetails!.updatedAt!,
-                                        style: context.textTheme.subtitle2)),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .subtitle2)),
                               ],
                             ),
                             const SizedBox(height: 9),
@@ -110,7 +114,9 @@ class DisputeDetailsScreen extends ConsumerWidget {
                                         disputeDetailsState
                                                 .disputeDetails!.description ??
                                             LocaleKeys.not_available.tr(),
-                                        style: context.textTheme.subtitle2)),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .subtitle2)),
                               ],
                             ),
                             const SizedBox(height: 9),
@@ -130,7 +136,9 @@ class DisputeDetailsScreen extends ConsumerWidget {
                                                 false
                                             ? LocaleKeys.yes.tr()
                                             : LocaleKeys.no.tr(),
-                                        style: context.textTheme.subtitle2)),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .subtitle2)),
                               ],
                             ),
                             const SizedBox(height: 9),
@@ -150,7 +158,9 @@ class DisputeDetailsScreen extends ConsumerWidget {
                                                 false
                                             ? LocaleKeys.yes.tr()
                                             : LocaleKeys.no.tr(),
-                                        style: context.textTheme.subtitle2)),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .subtitle2)),
                               ],
                             ),
                             const SizedBox(height: 9),
@@ -168,12 +178,14 @@ class DisputeDetailsScreen extends ConsumerWidget {
                                     disputeDetailsState
                                             .disputeDetails!.refundAmount ??
                                         LocaleKeys.not_available.tr(),
-                                    style:
-                                        context.textTheme.subtitle2!.copyWith(
-                                      fontWeight: FontWeight.bold,
-                                      color: getColorBasedOnTheme(context,
-                                          kPriceColor, kDarkPriceColor),
-                                    ),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .subtitle2!
+                                        .copyWith(
+                                          fontWeight: FontWeight.bold,
+                                          color: getColorBasedOnTheme(context,
+                                              kPriceColor, kDarkPriceColor),
+                                        ),
                                   ),
                                 ),
                               ],
@@ -237,7 +249,9 @@ class DisputeDetailsScreen extends ConsumerWidget {
                                       Text(
                                         _item.description!,
                                         softWrap: true,
-                                        style: context.textTheme.subtitle2,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .subtitle2,
                                       ),
                                       const SizedBox(height: 8),
                                       Row(
@@ -246,18 +260,21 @@ class DisputeDetailsScreen extends ConsumerWidget {
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
                                           Text(_item.total!,
-                                              style: context
-                                                  .textTheme.subtitle2!
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .subtitle2!
                                                   .copyWith(
-                                                color: getColorBasedOnTheme(
-                                                    context,
-                                                    kPriceColor,
-                                                    kDarkPriceColor),
-                                                fontWeight: FontWeight.bold,
-                                              )),
+                                                    color: getColorBasedOnTheme(
+                                                        context,
+                                                        kPriceColor,
+                                                        kDarkPriceColor),
+                                                    fontWeight: FontWeight.bold,
+                                                  )),
                                           Text(
                                             " x ${_item.quantity}",
-                                            style: context.textTheme.subtitle2!
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .subtitle2!
                                                 .copyWith(
                                                     fontWeight:
                                                         FontWeight.bold),

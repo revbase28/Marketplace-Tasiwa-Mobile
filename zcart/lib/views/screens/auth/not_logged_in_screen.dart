@@ -44,7 +44,7 @@ import 'package:easy_localization/easy_localization.dart';
 //                     Text(
 //                       LocaleKeys.access_message.tr(),
 //                       textAlign: TextAlign.center,
-//                       style: context.textTheme.subtitle2!
+//                       style: Theme.of(context).textTheme.subtitle2!
 //                           .copyWith(fontWeight: FontWeight.bold),
 //                     ),
 //                     const SizedBox(
@@ -88,7 +88,7 @@ class NotLoggedInSettingItems extends StatelessWidget {
           elevation: 0,
           child: ListTile(
             title: Text(LocaleKeys.language.tr(),
-                style: context.textTheme.subtitle2!),
+                style: Theme.of(context).textTheme.subtitle2!),
             leading: const Icon(Icons.translate),
             onTap: () {
               updateLanguage(context);
@@ -99,7 +99,8 @@ class NotLoggedInSettingItems extends StatelessWidget {
           Card(
             elevation: 0,
             child: ListTile(
-              title: Text("Dark Mode", style: context.textTheme.subtitle2!),
+              title: Text("Dark Mode",
+                  style: Theme.of(context).textTheme.subtitle2!),
               trailing: EasyDynamicThemeSwitch(),
               leading: const Icon(Icons.color_lens),
             ),
@@ -109,7 +110,7 @@ class NotLoggedInSettingItems extends StatelessWidget {
             elevation: 0,
             child: ListTile(
               title: Text(LocaleKeys.clear_cache.tr(),
-                  style: context.textTheme.subtitle2!),
+                  style: Theme.of(context).textTheme.subtitle2!),
               leading: const Icon(Icons.delete_forever),
               onTap: () async {
                 await clearCache(context);
@@ -120,7 +121,7 @@ class NotLoggedInSettingItems extends StatelessWidget {
           elevation: 0,
           child: ListTile(
             title: Text(LocaleKeys.blogs.tr(),
-                style: context.textTheme.subtitle2!),
+                style: Theme.of(context).textTheme.subtitle2!),
             leading: const Icon(CupertinoIcons.doc_append),
             onTap: () {
               context.nextPage(const BlogsScreen());

@@ -70,10 +70,13 @@ class VendorsDetailsScreen extends ConsumerWidget {
                               child: Center(
                                 child: Text(
                                   _vendorDetailsState.vendorDetails!.name!,
-                                  style: context.textTheme.headline6!.copyWith(
-                                    color: kLightColor.withOpacity(0.9),
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline6!
+                                      .copyWith(
+                                        color: kLightColor.withOpacity(0.9),
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                 ),
                               ),
                             ).pOnly(bottom: 5),

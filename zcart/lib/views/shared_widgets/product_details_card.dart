@@ -31,7 +31,9 @@ class ProductDetailsCardGridView extends StatelessWidget {
                           textAlign: isTitleCentered
                               ? TextAlign.center
                               : TextAlign.left,
-                          style: context.textTheme.headline6!
+                          style: Theme.of(context)
+                              .textTheme
+                              .headline6!
                               .copyWith(color: kPrimaryFadeTextColor))
                       .pOnly(bottom: 5),
               productList.length - 1 == 0
@@ -109,15 +111,16 @@ class ProductDetailsCard extends StatelessWidget {
                                 .createShader(bounds),
                             child: Text(
                               "Hot Item",
-                              style: context.textTheme.caption!.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                  shadows: <Shadow>[
-                                    Shadow(
-                                        offset: const Offset(1, 1),
-                                        blurRadius: 10,
-                                        color: kDarkColor.withOpacity(0.4)),
-                                  ],
-                                  color: kPrimaryLightTextColor),
+                              style:
+                                  Theme.of(context).textTheme.caption!.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      shadows: <Shadow>[
+                                        Shadow(
+                                            offset: const Offset(1, 1),
+                                            blurRadius: 10,
+                                            color: kDarkColor.withOpacity(0.4)),
+                                      ],
+                                      color: kPrimaryLightTextColor),
                             ),
                           )
                         : const SizedBox(),
@@ -130,10 +133,13 @@ class ProductDetailsCard extends StatelessWidget {
                                 vertical: 4, horizontal: 6),
                             child: Text(
                               product.condition,
-                              style: context.textTheme.caption!.copyWith(
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.bold,
-                                  color: kPrimaryLightTextColor),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .caption!
+                                  .copyWith(
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.bold,
+                                      color: kPrimaryLightTextColor),
                             ),
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(30),
@@ -146,10 +152,13 @@ class ProductDetailsCard extends StatelessWidget {
                                 vertical: 4, horizontal: 6),
                             child: Text(
                               product.discount,
-                              style: context.textTheme.caption!.copyWith(
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.bold,
-                                  color: kPrimaryLightTextColor),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .caption!
+                                  .copyWith(
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.bold,
+                                      color: kPrimaryLightTextColor),
                             ),
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(30),
@@ -178,7 +187,7 @@ class ProductDetailsCard extends StatelessWidget {
                   softWrap: true,
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.start,
-                  style: context.textTheme.subtitle2,
+                  style: Theme.of(context).textTheme.subtitle2,
                 ).pOnly(bottom: 5, top: 5),
                 Row(
                   textBaseline: TextBaseline.alphabetic,
@@ -186,24 +195,33 @@ class ProductDetailsCard extends StatelessWidget {
                   children: [
                     product.hasOffer
                         ? Text(product.offerPrice,
-                            style: context.textTheme.subtitle2!.copyWith(
-                                color: getColorBasedOnTheme(
-                                    context, kPriceColor, kDarkPriceColor),
-                                fontWeight: FontWeight.bold))
+                            style: Theme.of(context)
+                                .textTheme
+                                .subtitle2!
+                                .copyWith(
+                                    color: getColorBasedOnTheme(
+                                        context, kPriceColor, kDarkPriceColor),
+                                    fontWeight: FontWeight.bold))
                         : Text(product.price,
-                            style: context.textTheme.subtitle2!.copyWith(
-                                color: getColorBasedOnTheme(
-                                    context, kPriceColor, kDarkPriceColor),
-                                fontWeight: FontWeight.bold)),
+                            style: Theme.of(context)
+                                .textTheme
+                                .subtitle2!
+                                .copyWith(
+                                    color: getColorBasedOnTheme(
+                                        context, kPriceColor, kDarkPriceColor),
+                                    fontWeight: FontWeight.bold)),
                     const SizedBox(width: 3),
                     product.hasOffer
                         ? Text(
                             product.price,
-                            style: context.textTheme.caption!.copyWith(
-                                decoration: TextDecoration.lineThrough,
-                                fontStyle: FontStyle.italic,
-                                fontSize: 10,
-                                color: kPrimaryFadeTextColor),
+                            style: Theme.of(context)
+                                .textTheme
+                                .caption!
+                                .copyWith(
+                                    decoration: TextDecoration.lineThrough,
+                                    fontStyle: FontStyle.italic,
+                                    fontSize: 10,
+                                    color: kPrimaryFadeTextColor),
                           )
                         : const SizedBox(),
                     product.rating != null
@@ -216,9 +234,12 @@ class ProductDetailsCard extends StatelessWidget {
                                 Text(
                                   product.rating.toString(),
                                   textAlign: TextAlign.end,
-                                  style: context.textTheme.caption!.copyWith(
-                                      fontSize: 10,
-                                      fontWeight: FontWeight.bold),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .caption!
+                                      .copyWith(
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.bold),
                                 ),
                               ],
                             ),

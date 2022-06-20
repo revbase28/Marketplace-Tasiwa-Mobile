@@ -49,7 +49,7 @@ class PersonalDetails extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(LocaleKeys.basic_info.tr(),
-                            style: context.textTheme.headline6!)
+                            style: Theme.of(context).textTheme.headline6!)
                         .pOnly(bottom: 10),
                     ElevatedButton(
                         onPressed: () async {

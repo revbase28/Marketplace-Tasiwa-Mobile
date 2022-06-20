@@ -20,7 +20,9 @@ class FrequentlyBoughtTogetherCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(LocaleKeys.frequently_bought_together.tr(),
-                      style: context.textTheme.subtitle2!
+                      style: Theme.of(context)
+                          .textTheme
+                          .subtitle2!
                           .copyWith(color: kPrimaryFadeTextColor))
                   .pOnly(top: 10, left: 10, bottom: 5),
               ProductDetailsCardGridView(

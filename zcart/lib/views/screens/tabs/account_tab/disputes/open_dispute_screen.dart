@@ -58,7 +58,7 @@ class _OpenDisputeScreenState extends State<OpenDisputeScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text('${LocaleKeys.order_details.tr()}\n',
-                                style: context.textTheme.headline6),
+                                style: Theme.of(context).textTheme.headline6),
                             Column(
                               children: [
                                 Row(
@@ -75,8 +75,9 @@ class _OpenDisputeScreenState extends State<OpenDisputeScreen> {
                                         child: Text(
                                             disputeInfoState
                                                 .disputeInfo!.orderNumber!,
-                                            style:
-                                                context.textTheme.subtitle2)),
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .subtitle2)),
                                   ],
                                 ),
                                 const SizedBox(height: 9),
@@ -94,8 +95,9 @@ class _OpenDisputeScreenState extends State<OpenDisputeScreen> {
                                         child: Text(
                                             disputeInfoState
                                                 .disputeInfo!.orderStatus!,
-                                            style:
-                                                context.textTheme.subtitle2)),
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .subtitle2)),
                                   ],
                                 ),
                                 const SizedBox(height: 9),
@@ -112,12 +114,16 @@ class _OpenDisputeScreenState extends State<OpenDisputeScreen> {
                                       flex: 3,
                                       child: Text(
                                         disputeInfoState.disputeInfo!.total!,
-                                        style: context.textTheme.subtitle2!
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .subtitle2!
                                             .copyWith(
-                                          fontWeight: FontWeight.bold,
-                                          color: getColorBasedOnTheme(context,
-                                              kPriceColor, kDarkPriceColor),
-                                        ),
+                                              fontWeight: FontWeight.bold,
+                                              color: getColorBasedOnTheme(
+                                                  context,
+                                                  kPriceColor,
+                                                  kDarkPriceColor),
+                                            ),
                                       ),
                                     ),
                                   ],
@@ -144,7 +150,7 @@ class _OpenDisputeScreenState extends State<OpenDisputeScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text('${LocaleKeys.open_dispute.tr()}\n',
-                                  style: context.textTheme.headline6),
+                                  style: Theme.of(context).textTheme.headline6),
                               CustomDropDownField(
                                 title: LocaleKeys.select_dispute_reason.tr(),
                                 optionsList: disputeInfoState
@@ -258,7 +264,9 @@ class _OpenDisputeScreenState extends State<OpenDisputeScreen> {
                                     padding: const EdgeInsets.only(bottom: 5.0),
                                     child: Text(
                                       LocaleKeys.open_dispute_note.tr(),
-                                      style: context.textTheme.subtitle2!
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .subtitle2!
                                           .copyWith(color: kPrimaryColor),
                                     ),
                                   )),
@@ -349,24 +357,24 @@ class _OpenDisputeScreenState extends State<OpenDisputeScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text('${LocaleKeys.how_to_open_dispute.tr()}\n',
-                                style: context.textTheme.headline6),
+                                style: Theme.of(context).textTheme.headline6),
                             Text('${LocaleKeys.first_step.tr()}:',
-                                style: context.textTheme.subtitle2),
+                                style: Theme.of(context).textTheme.subtitle2),
                             Text(
                               '${LocaleKeys.dispute_first_step.tr()}\n',
-                              style: context.textTheme.subtitle2,
+                              style: Theme.of(context).textTheme.subtitle2,
                             ),
                             Text('${LocaleKeys.second_step.tr()}:',
-                                style: context.textTheme.subtitle2),
+                                style: Theme.of(context).textTheme.subtitle2),
                             Text(
                               "${LocaleKeys.dispute_second_step.tr()}\n",
-                              style: context.textTheme.subtitle2,
+                              style: Theme.of(context).textTheme.subtitle2,
                             ),
                             Text('${LocaleKeys.third_step.tr()}:',
-                                style: context.textTheme.subtitle2),
+                                style: Theme.of(context).textTheme.subtitle2),
                             Text(
                               LocaleKeys.dispute_third_step.tr(),
-                              style: context.textTheme.subtitle2,
+                              style: Theme.of(context).textTheme.subtitle2,
                             ),
                           ],
                         ),

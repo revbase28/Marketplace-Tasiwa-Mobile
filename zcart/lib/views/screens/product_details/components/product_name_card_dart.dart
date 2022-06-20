@@ -68,13 +68,16 @@ class ProductNameCard extends StatelessWidget {
                                   ? productModel.data!.offerPrice!
                                   : productModel.data!.price!
                               : productModel.data!.price!,
-                          style: context.textTheme.headline6!.copyWith(
-                            color: _hasOffer
-                                ? kLightColor
-                                : getColorBasedOnTheme(
-                                    context, kPriceColor, kDarkPriceColor),
-                            fontWeight: FontWeight.w900,
-                          ),
+                          style: Theme.of(context)
+                              .textTheme
+                              .headline6!
+                              .copyWith(
+                                color: _hasOffer
+                                    ? kLightColor
+                                    : getColorBasedOnTheme(
+                                        context, kPriceColor, kDarkPriceColor),
+                                fontWeight: FontWeight.w900,
+                              ),
                         ),
                         Text(
                           productModel.data!.hasOffer!
@@ -82,14 +85,14 @@ class ProductNameCard extends StatelessWidget {
                                   ? productModel.data!.price!
                                   : ""
                               : "",
-                          style: context.textTheme.caption!.copyWith(
-                            decoration: TextDecoration.lineThrough,
-                            color: _hasOffer
-                                ? Colors.white60
-                                : kPrimaryFadeTextColor,
-                            fontStyle: FontStyle.italic,
-                            fontWeight: FontWeight.bold,
-                          ),
+                          style: Theme.of(context).textTheme.caption!.copyWith(
+                                decoration: TextDecoration.lineThrough,
+                                color: _hasOffer
+                                    ? Colors.white60
+                                    : kPrimaryFadeTextColor,
+                                fontStyle: FontStyle.italic,
+                                fontWeight: FontWeight.bold,
+                              ),
                         ).pOnly(left: 8),
                       ],
                     ),
@@ -120,7 +123,9 @@ class ProductNameCard extends StatelessWidget {
             Expanded(
               child: Text(productModel.data!.title!,
                   softWrap: true,
-                  style: context.textTheme.bodyText2!
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyText2!
                       .copyWith(fontWeight: FontWeight.bold)),
             ),
             const SizedBox(width: 8),
@@ -131,7 +136,8 @@ class ProductNameCard extends StatelessWidget {
                   CupertinoIcons.share,
                   size: 18,
                 ),
-                Text(LocaleKeys.share.tr(), style: context.textTheme.overline)
+                Text(LocaleKeys.share.tr(),
+                        style: Theme.of(context).textTheme.overline)
                     .pOnly(top: 3)
               ],
             ).pOnly(left: 10).onInkTap(() async {
@@ -163,7 +169,9 @@ class ProductNameCard extends StatelessWidget {
 
                   Text(
                     " (${(productModel.data!.rating).toString()}) ",
-                    style: context.textTheme.caption!
+                    style: Theme.of(context)
+                        .textTheme
+                        .caption!
                         .copyWith(fontWeight: FontWeight.bold),
                   ),
 
@@ -178,7 +186,7 @@ class ProductNameCard extends StatelessWidget {
                   //       // ),
                   //       const SizedBox(width: 4),
                   //       Text(productModel.data!.condition!,
-                  //           style: context.textTheme.subtitle2!.copyWith(
+                  //           style: Theme.of(context).textTheme.subtitle2!.copyWith(
                   //               fontWeight: FontWeight.bold,
                   //               decoration: TextDecoration.underline)),
                   //     ],
@@ -204,9 +212,12 @@ class ProductNameCard extends StatelessWidget {
                                 duration: const Duration(seconds: 8),
                                 content: Text(
                                   productModel.data!.conditionNote!,
-                                  style: context.textTheme.subtitle2!.copyWith(
-                                      fontWeight: FontWeight.bold,
-                                      color: kLightColor),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .subtitle2!
+                                      .copyWith(
+                                          fontWeight: FontWeight.bold,
+                                          color: kLightColor),
                                 ),
                               ),
                             );

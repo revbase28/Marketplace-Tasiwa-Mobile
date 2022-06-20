@@ -191,7 +191,8 @@ class WishListTab extends ConsumerWidget {
                                                                   vertical: 5),
                                                           child: Text(
                                                               "Staff Pick",
-                                                              style: context
+                                                              style: Theme.of(
+                                                                      context)
                                                                   .textTheme
                                                                   .overline!
                                                                   .copyWith(
@@ -222,7 +223,8 @@ class WishListTab extends ConsumerWidget {
                                                                   vertical: 5),
                                                           child: Text(
                                                               "Hot Item",
-                                                              style: context
+                                                              style: Theme.of(
+                                                                      context)
                                                                   .textTheme
                                                                   .overline!
                                                                   .copyWith(
@@ -253,7 +255,8 @@ class WishListTab extends ConsumerWidget {
                                                                   vertical: 5),
                                                           child: Text(
                                                               "Free Shipping",
-                                                              style: context
+                                                              style: Theme.of(
+                                                                      context)
                                                                   .textTheme
                                                                   .overline!
                                                                   .copyWith(
@@ -283,7 +286,8 @@ class WishListTab extends ConsumerWidget {
                                                                       .symmetric(
                                                                   vertical: 5),
                                                           child: Text("New",
-                                                              style: context
+                                                              style: Theme.of(
+                                                                      context)
                                                                   .textTheme
                                                                   .overline!
                                                                   .copyWith(
@@ -317,7 +321,8 @@ class WishListTab extends ConsumerWidget {
                                                                   .wishList[
                                                                       index]
                                                                   .discount!,
-                                                              style: context
+                                                              style: Theme.of(
+                                                                      context)
                                                                   .textTheme
                                                                   .overline!
                                                                   .copyWith(
@@ -337,10 +342,12 @@ class WishListTab extends ConsumerWidget {
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
                                             softWrap: true,
-                                            style: context.textTheme.bodyText2!
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyText2!
                                                 .copyWith(
-                                              fontSize: 14,
-                                            ),
+                                                  fontSize: 14,
+                                                ),
                                           ),
                                           const SizedBox(height: 8),
                                           Row(
@@ -363,8 +370,9 @@ class WishListTab extends ConsumerWidget {
                                                           : wishListState
                                                               .wishList[index]
                                                               .price!,
-                                                      style: context
-                                                          .textTheme.bodyText2!
+                                                      style: Theme.of(context)
+                                                          .textTheme
+                                                          .bodyText2!
                                                           .copyWith(
                                                               color: getColorBasedOnTheme(
                                                                   context,
@@ -379,18 +387,21 @@ class WishListTab extends ConsumerWidget {
                                                           wishListState
                                                               .wishList[index]
                                                               .price!,
-                                                          style: context
-                                                              .textTheme
-                                                              .caption!
-                                                              .copyWith(
-                                                            color:
-                                                                kPrimaryFadeTextColor,
-                                                            fontStyle: FontStyle
-                                                                .italic,
-                                                            decoration:
-                                                                TextDecoration
-                                                                    .lineThrough,
-                                                          )).pOnly(left: 3)
+                                                          style:
+                                                              Theme.of(context)
+                                                                  .textTheme
+                                                                  .caption!
+                                                                  .copyWith(
+                                                                    color:
+                                                                        kPrimaryFadeTextColor,
+                                                                    fontStyle:
+                                                                        FontStyle
+                                                                            .italic,
+                                                                    decoration:
+                                                                        TextDecoration
+                                                                            .lineThrough,
+                                                                  )).pOnly(
+                                                          left: 3)
                                                       : const SizedBox(),
                                                 ],
                                               ),
@@ -449,8 +460,9 @@ class WishListTab extends ConsumerWidget {
                                                           .rating
                                                           .toString(),
                                                       textAlign: TextAlign.end,
-                                                      style: context
-                                                          .textTheme.caption!
+                                                      style: Theme.of(context)
+                                                          .textTheme
+                                                          .caption!
                                                           .copyWith(
                                                               fontSize: 10,
                                                               fontWeight:

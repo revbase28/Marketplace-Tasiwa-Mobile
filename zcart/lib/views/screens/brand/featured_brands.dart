@@ -29,7 +29,9 @@ class FeaturedBrands extends ConsumerWidget {
                   children: [
                     Expanded(
                       child: Text(LocaleKeys.featured_brands.tr(),
-                          style: context.textTheme.headline6!
+                          style: Theme.of(context)
+                              .textTheme
+                              .headline6!
                               .copyWith(color: kPrimaryFadeTextColor)),
                     ),
                     GestureDetector(
@@ -38,7 +40,9 @@ class FeaturedBrands extends ConsumerWidget {
                       },
                       child: Text(
                         LocaleKeys.view_all.tr(),
-                        style: context.textTheme.subtitle2!
+                        style: Theme.of(context)
+                            .textTheme
+                            .subtitle2!
                             .copyWith(color: kPrimaryFadeTextColor),
                       ).pSymmetric(v: 5),
                     ),
@@ -103,7 +107,7 @@ class FeaturedBrands extends ConsumerWidget {
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   textAlign: TextAlign.center,
-                                  style: context.textTheme.caption!,
+                                  style: Theme.of(context).textTheme.caption!,
                                 ),
                               )
                             ],

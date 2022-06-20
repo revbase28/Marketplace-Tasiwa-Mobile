@@ -34,10 +34,10 @@ class VendorsActivityCard extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text("$activeListCount",
-                          style: context.textTheme.headline4!),
+                          style: Theme.of(context).textTheme.headline4!),
                       Text(LocaleKeys.activity_listing.tr(),
                           textAlign: TextAlign.center,
-                          style: context.textTheme.subtitle2!)
+                          style: Theme.of(context).textTheme.subtitle2!)
                     ],
                   )),
               Expanded(
@@ -46,10 +46,11 @@ class VendorsActivityCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text(rating, style: context.textTheme.headline4!),
+                      Text(rating,
+                          style: Theme.of(context).textTheme.headline4!),
                       Text(LocaleKeys.rating.tr(),
                           textAlign: TextAlign.center,
-                          style: context.textTheme.subtitle2!)
+                          style: Theme.of(context).textTheme.subtitle2!)
                     ],
                   )),
               Expanded(
@@ -58,10 +59,11 @@ class VendorsActivityCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text("$itemsSold", style: context.textTheme.headline4!),
+                      Text("$itemsSold",
+                          style: Theme.of(context).textTheme.headline4!),
                       Text(LocaleKeys.item_sold.tr(),
                           textAlign: TextAlign.center,
-                          style: context.textTheme.subtitle2!)
+                          style: Theme.of(context).textTheme.subtitle2!)
                     ],
                   )),
             ],

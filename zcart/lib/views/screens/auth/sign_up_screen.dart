@@ -106,9 +106,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   .map((e) => e.capitalizeFirstLetter())
                                   .join(" "),
                               textAlign: TextAlign.start,
-                              style: context.textTheme.headline5!.copyWith(
-                                fontWeight: FontWeight.bold,
-                              ),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline5!
+                                  .copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
                             ),
                           ),
                           const SizedBox(height: 24),
@@ -247,7 +250,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           )
                               .text
                               .center
-                              .textStyle(context.textTheme.caption!)
+                              .textStyle(Theme.of(context).textTheme.caption!)
                               .make()
                               .w(context.screenWidth * 0.8)
                               .onInkTap(() => context.nextReplacementPage(
@@ -300,7 +303,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             //                 children: [
             //                   Text(LocaleKeys.sign_up.tr(),
             //                           textAlign: TextAlign.center,
-            //                           style: context.textTheme.headline5!
+            //                           style: Theme.of(context).textTheme.headline5!
             //                               .copyWith(
             //                                   fontWeight: FontWeight.bold))
             //                       .paddingBottom(20),
@@ -360,7 +363,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             //                   )
             //                       .text
             //                       .center
-            //                       .textStyle(context.textTheme.caption!)
+            //                       .textStyle(Theme.of(context).textTheme.caption!)
             //                       .make()
             //                       .w(context.screenWidth * 0.8)
             //                       .onInkTap(() => context.nextReplacementPage(
@@ -374,7 +377,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             //                   )
             //                       .text
             //                       .center
-            //                       .textStyle(context.textTheme.caption!)
+            //                       .textStyle(Theme.of(context).textTheme.caption!)
             //                       .make()
             //                       .w(context.screenWidth * 0.8)
             //                       .onInkTap(() => context.pop()),

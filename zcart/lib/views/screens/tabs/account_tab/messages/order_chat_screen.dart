@@ -98,7 +98,9 @@ class _OrderChatScreenState extends State<OrderChatScreen> {
                         const SizedBox(height: 6),
                         Text(
                           widget.orders.shop!.name!,
-                          style: context.textTheme.caption!
+                          style: Theme.of(context)
+                              .textTheme
+                              .caption!
                               .copyWith(color: kFadeColor),
                         ),
                       ],
@@ -136,17 +138,26 @@ class _OrderChatScreenState extends State<OrderChatScreen> {
                     Text(
                       "${LocaleKeys.order_number.tr()} : \n${widget.orders.orderNumber}",
                       textAlign: TextAlign.center,
-                      style: context.textTheme.overline!.copyWith(fontSize: 11),
+                      style: Theme.of(context)
+                          .textTheme
+                          .overline!
+                          .copyWith(fontSize: 11),
                     ),
                     Text(
                       "${LocaleKeys.ordered_at.tr()} : \n${widget.orders.orderDate}",
                       textAlign: TextAlign.center,
-                      style: context.textTheme.overline!.copyWith(fontSize: 11),
+                      style: Theme.of(context)
+                          .textTheme
+                          .overline!
+                          .copyWith(fontSize: 11),
                     ),
                     Text(
                       "${LocaleKeys.order_status.tr()} : \n${widget.orders.orderStatus}",
                       textAlign: TextAlign.center,
-                      style: context.textTheme.overline!.copyWith(fontSize: 11),
+                      style: Theme.of(context)
+                          .textTheme
+                          .overline!
+                          .copyWith(fontSize: 11),
                     ),
                   ],
                 ).pOnly(top: 10, bottom: 10),
@@ -215,7 +226,7 @@ class _OrderChatScreenState extends State<OrderChatScreen> {
   //                     contentPadding: const EdgeInsets.all(8),
   //                     border: InputBorder.none,
   //                     hintText: LocaleKeys.type_a_message.tr(),
-  //                     hintStyle: context.textTheme.caption,
+  //                     hintStyle: Theme.of(context).textTheme.caption,
   //                   ),
   //                 ),
   //               ),
@@ -275,7 +286,9 @@ class _OrderChatScreenState extends State<OrderChatScreen> {
               color: getColorBasedOnTheme(context, kLightColor, kDarkBgColor),
             ),
             placeholder: LocaleKeys.type_a_message.tr(),
-            style: context.textTheme.subtitle2!
+            style: Theme.of(context)
+                .textTheme
+                .subtitle2!
                 .copyWith(fontWeight: FontWeight.bold),
             prefixMode: OverlayVisibilityMode.always,
             textAlignVertical: TextAlignVertical.center,
@@ -561,7 +574,9 @@ class FirstMessageBox extends StatelessWidget {
             visible: orderChatModel.data!.subject != null,
             child: Text(
               orderChatModel.data!.subject ?? "Hello",
-              style: context.textTheme.caption!
+              style: Theme.of(context)
+                  .textTheme
+                  .caption!
                   .copyWith(color: kPrimaryLightTextColor),
             ).paddingBottom(5),
           ),

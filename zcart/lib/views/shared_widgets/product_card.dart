@@ -31,7 +31,9 @@ class ProductCard extends StatelessWidget {
         title == null
             ? const SizedBox()
             : Text(title!,
-                    style: context.textTheme.headline6!
+                    style: Theme.of(context)
+                        .textTheme
+                        .headline6!
                         .copyWith(color: kPrimaryFadeTextColor))
                 .pOnly(bottom: 10),
         Flexible(
@@ -65,26 +67,31 @@ class ProductCard extends StatelessWidget {
                         ).pOnly(bottom: 10)),
                         Text(
                           "${productList![index].offerPrice ?? ''}",
-                          style: context.textTheme.subtitle2!.copyWith(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 12,
-                              color: getColorBasedOnTheme(
-                                  context, kPriceColor, kDarkPriceColor)),
+                          style: Theme.of(context)
+                              .textTheme
+                              .subtitle2!
+                              .copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 12,
+                                  color: getColorBasedOnTheme(
+                                      context, kPriceColor, kDarkPriceColor)),
                         )
                             .pOnly(bottom: 3)
                             .visible(productList![index].hasOffer),
                         Text("${productList![index].price}",
-                                style: context.textTheme.subtitle2!.copyWith(
+                            style: Theme.of(context)
+                                .textTheme
+                                .subtitle2!
+                                .copyWith(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 12,
                                   color: getColorBasedOnTheme(
                                       context, kPriceColor, kDarkPriceColor),
-                                ))
-                            .pOnly(bottom: 3)
-                            .visible(!productList![index].hasOffer),
+                                )).pOnly(bottom: 3).visible(
+                            !productList![index].hasOffer),
                         Text(
                           "${productList![index].price}",
-                          style: context.textTheme.caption!.copyWith(
+                          style: Theme.of(context).textTheme.caption!.copyWith(
                               decoration: TextDecoration.lineThrough,
                               fontSize: 10,
                               fontStyle: FontStyle.italic,
