@@ -188,8 +188,9 @@ class _WalletDepositPageState extends State<WalletDepositPage> {
                                 taxes: "0.0",
                                 packaging: "0.0",
                                 currency: symbol,
-                                grandTotal:
-                                    int.parse(_amountController.text.trim()) *
+                                grandTotal: _selectedpaymentMethod == paystack
+                                    ? int.parse(_amountController.text.trim())
+                                    : int.parse(_amountController.text.trim()) *
                                         100,
                               );
 

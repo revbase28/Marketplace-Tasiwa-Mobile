@@ -81,5 +81,7 @@
 		<string>To take input voices for search results.</string>
 		<key>UIStatusBarHidden</key>
 		<false/>
-	</dict>
+		<key>CADisableMinimumFrameDurationOnPhone</key>
+	<true/>
+</dict>
 </plist>
