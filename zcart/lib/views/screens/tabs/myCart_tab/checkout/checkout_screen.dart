@@ -83,7 +83,7 @@ class _CheckoutScreenState extends State<CheckoutScreen>
   @override
   void didChangeMetrics() {
     final bottomInset = WidgetsBinding.instance.window.viewInsets.bottom;
-    final newValue = bottomInset > 0.0;
+    final newValue = (bottomInset) > 0.0;
     if (newValue != _keyboardVisible) {
       setState(() {
         _keyboardVisible = newValue;

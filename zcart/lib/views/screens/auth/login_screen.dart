@@ -373,6 +373,9 @@ class SocialLoginButtons extends ConsumerWidget {
                     image: AppImages.facebook,
                     onPressed: _onPressedFacebookLogin);
               } else {
+                // return SocialIconButton(
+                //     image: AppImages.facebook,
+                //     onPressed: _onPressedFacebookLogin);
                 return const SizedBox();
               }
             },

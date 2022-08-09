@@ -190,7 +190,7 @@ class API {
   static const conversations = 'conversations';
 
   ///Plugins
-  static checkPluginAvailability(pluginSlug) => 'plugin/$pluginSlug';
+  static String checkPluginAvailability(pluginSlug) => 'plugin/$pluginSlug';
   static const flashDealPlugin = "deals/flash-deals";
 
   ///Wallet
