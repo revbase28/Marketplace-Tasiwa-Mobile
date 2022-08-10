@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:flutter/material.dart';
+import 'package:clean_api/clean_api.dart';
 import 'package:http/http.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:zcart/helper/constants.dart';
@@ -32,9 +32,9 @@ Future<Response> getRequest(String? endPoint,
     }
 
     if (!noBaseUrl) {
-      debugPrint('URL: ${API.base}$endPoint');
+      Logger.i('URL: ${API.base}$endPoint');
     } else {
-      debugPrint('URL: $endPoint');
+      Logger.i('URL: $endPoint');
     }
     //debugPrint('Header: $headers');
 
@@ -58,11 +58,11 @@ postRequest(String endPoint, Map? requestBody,
   if (await isNetworkAvailable()) {
     Response? response;
     if (!noBaseUrl) {
-      debugPrint('URL: ${API.base}$endPoint');
+      Logger.e('URL: ${API.base}$endPoint');
     } else {
-      debugPrint('URL: $endPoint');
+      Logger.i('URL: $endPoint');
     }
-    debugPrint('body: $requestBody');
+    Logger.i('body: $requestBody');
 
     var accessToken = getStringAsync(access);
 
@@ -75,7 +75,7 @@ postRequest(String endPoint, Map? requestBody,
       headers.addAll(header);
     }
 
-    debugPrint("Headers: $headers");
+    Logger.i("Headers: $headers");
     try {
       if (!noBaseUrl) {
         response = await post(Uri.parse('${API.base}$endPoint'),
@@ -85,7 +85,7 @@ postRequest(String endPoint, Map? requestBody,
             body: requestBody, headers: headers);
       }
     } catch (e) {
-      debugPrint(e.toString());
+      Logger.e(e.toString());
     }
     //debugPrint('Response: ${response.statusCode} ${response.body}');
     return response;
@@ -97,8 +97,8 @@ postRequest(String endPoint, Map? requestBody,
 putRequest(String endPoint, Map request, {bool bearerToken = true}) async {
   if (await isNetworkAvailable()) {
     late Response response;
-    debugPrint('URL: ${API.base}$endPoint');
-    debugPrint('Request: $request');
+    Logger.i('URL: ${API.base}$endPoint');
+    Logger.i('Request: $request');
 
     var accessToken = getStringAsync(access);
 
@@ -111,14 +111,14 @@ putRequest(String endPoint, Map request, {bool bearerToken = true}) async {
       headers.addAll(header);
     }
 
-    debugPrint("Headers: $headers");
+    Logger.i("Headers: $headers");
     try {
       response = await put(Uri.parse('${API.base}$endPoint'),
           body: request, headers: headers);
     } catch (e) {
-      debugPrint(e.toString());
+      Logger.e(e);
     }
-    debugPrint('Response: ${response.statusCode} ${response.body}');
+    Logger.i('Response: ${response.statusCode} ${response.body}');
     return response;
   } else {
     throw noInternetMsg;
@@ -182,7 +182,7 @@ patchRequest(String endPoint, Map request,
 deleteRequest(String endPoint, {bool bearerToken = true}) async {
   if (await isNetworkAvailable()) {
     var accessToken = getStringAsync(access);
-    debugPrint('URL: ${API.base}$endPoint');
+    Logger.i('URL: ${API.base}$endPoint');
 
     var headers = {
       HttpHeaders.acceptHeader: 'application/json; charset=utf-8',
@@ -193,10 +193,10 @@ deleteRequest(String endPoint, {bool bearerToken = true}) async {
       headers.addAll(header);
     }
 
-    debugPrint(headers.toString());
+    Logger.i(headers.toString());
     Response response =
         await delete(Uri.parse('${API.base}$endPoint'), headers: headers);
-    debugPrint('Response: ${response.statusCode} ${response.body}');
+    Logger.i('Response: ${response.statusCode} ${response.body}');
     return response;
   } else {
     throw noInternetMsg;
@@ -209,15 +209,15 @@ Future handleResponse(Response response, {bool showToast = true}) async {
   }
   if (isSuccessful(response.statusCode)) {
     if (response.body.isNotEmpty) {
-      debugPrint(response.statusCode.toString());
-      debugPrint(response.body);
+      Logger.i(response.statusCode.toString());
+      Logger.i(response.body);
       return jsonDecode(response.body);
     } else {
       return response.body;
     }
   } else {
     if (response.body.isJson()) {
-      debugPrint("handleResponse (json): ${jsonDecode(response.body)}");
+      Logger.i("handleResponse (json): ${jsonDecode(response.body)}");
       if (jsonDecode(response.body)['errors'] != null) {
         toast(
           jsonDecode(response.body)['errors']
@@ -237,9 +237,9 @@ Future handleResponse(Response response, {bool showToast = true}) async {
       return response.statusCode;
     } else {
       try {
-        debugPrint("handleResponse: ${jsonDecode(response.body)}");
+        Logger.i("handleResponse: ${jsonDecode(response.body)}");
       } catch (e) {
-        debugPrint(response.body);
+        Logger.e(response.body);
         return 500;
       }
       return response.statusCode;

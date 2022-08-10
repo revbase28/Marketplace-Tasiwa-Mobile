@@ -16,6 +16,7 @@ dependencies:
   awesome_card: ^1.1.7
   cached_network_image: ^3.2.0
   carousel_slider: ^4.0.0
+  clean_api: ^0.1.6
   cupertino_icons: ^1.0.0
   datetime_picker_formfield: ^2.0.0
   device_info: ^2.0.2

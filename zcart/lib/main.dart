@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:clean_api/clean_api.dart' hide Logger;
 import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +27,7 @@ void main() async {
 
   // Initialize the localizations
   await EasyLocalization.ensureInitialized();
-
+  CleanApi.instance.setup(baseUrl: MyConfig.appApiUrl);
   //Shared Pref Initialization
   await initialize();
 

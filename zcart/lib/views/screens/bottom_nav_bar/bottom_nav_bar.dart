@@ -43,7 +43,11 @@ class _BottomNavBarState extends State<BottomNavBar> {
 
     Future.delayed(const Duration(seconds: 5), () {
       _systemConfigFutureProvider.whenData((value) {
-        if (value?.data?.installVerion != apiVersion) {
+        final insTallVersion =
+            (value?.data?.installVerion ?? '').split('.').take(2).join('.');
+        final apiVersionx = apiVersion.split('.').take(2).join('.');
+
+        if (insTallVersion != apiVersionx) {
           showCustomConfirmDialog(
             context,
             dialogType: DialogType.RETRY,
