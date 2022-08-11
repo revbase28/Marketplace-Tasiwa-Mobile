@@ -10,11 +10,13 @@ class ProductDetailsCardGridView extends StatelessWidget {
   final List<dynamic> productList;
   final String? title;
   final bool isTitleCentered;
+  final bool loading;
 
   const ProductDetailsCardGridView(
       {required this.productList,
       this.title,
       this.isTitleCentered = false,
+      this.loading = false,
       Key? key})
       : super(key: key);
 

@@ -18,8 +18,22 @@ class RandomMoreItemLoadingState extends RandomItemState {
 
 class RandomItemLoadedState extends RandomItemState {
   final List<ProductList> randomItemList;
+  final bool loading;
 
-  const RandomItemLoadedState(this.randomItemList);
+  const RandomItemLoadedState(
+    this.randomItemList, {
+    this.loading = false,
+  });
+
+  RandomItemLoadedState copyWith({
+    List<ProductList>? randomItemList,
+    bool? loading,
+  }) {
+    return RandomItemLoadedState(
+      randomItemList ?? this.randomItemList,
+      loading: loading ?? this.loading,
+    );
+  }
 }
 
 class RandomItemErrorState extends RandomItemState {

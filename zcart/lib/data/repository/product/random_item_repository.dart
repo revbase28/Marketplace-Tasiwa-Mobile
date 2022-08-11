@@ -32,7 +32,6 @@ class RandomItemRepository implements IRandomItemRepository {
     debugPrint("fetchMoreRandomItems (before): ${randomItemList.length}");
 
     if (randomItemModel.links!.next != null) {
-      toast(LocaleKeys.loading.tr());
       responseBody = await handleResponse(
           await getRequest(randomItemModel.links!.next!.split('api/').last));
 

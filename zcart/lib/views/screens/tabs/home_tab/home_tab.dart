@@ -82,164 +82,180 @@ class HomeTab extends ConsumerWidget {
             // flexibleSpace: const SafeArea(child: CustomSearchBar()),
           ),
           drawer: const AppDrawer(),
-          body: SingleChildScrollView(
-            controller: scrollControllerProvider.controller,
-            physics: const AlwaysScrollableScrollPhysics(
-              parent: ClampingScrollPhysics(),
-            ),
-            child: Column(
-              children: [
-                /// Slider
-                sliderState is SliderLoadedState
-                    ? sliderState.sliderList == null ||
-                            sliderState.sliderList!.isEmpty
-                        ? const SizedBox()
-                        : SliderWidget(sliderState.sliderList).py(5)
-                    : sliderState is SliderErrorState
-                        ? ErrorMessageWidget(sliderState.message)
-                        : const SizedBox(),
+          body: Column(
+            children: [
+              Expanded(
+                child: SingleChildScrollView(
+                  controller: scrollControllerProvider.controller,
+                  physics: const AlwaysScrollableScrollPhysics(
+                    parent: ClampingScrollPhysics(),
+                  ),
+                  child: Column(
+                    children: [
+                      /// Slider
+                      sliderState is SliderLoadedState
+                          ? sliderState.sliderList == null ||
+                                  sliderState.sliderList!.isEmpty
+                              ? const SizedBox()
+                              : SliderWidget(sliderState.sliderList).py(5)
+                          : sliderState is SliderErrorState
+                              ? ErrorMessageWidget(sliderState.message)
+                              : const SizedBox(),
 
-                const FeaturedCategoriesSection(),
+                      const FeaturedCategoriesSection(),
 
-                ///Flash Deals
-                _flashDealsProvider.when(
-                  data: (value) => value == null
-                      ? const SizedBox()
-                      : FlashDealsSection(flashDeals: value).pOnly(bottom: 16),
-                  loading: () => const SizedBox(),
-                  error: (error, stackTrace) => const SizedBox(
-                      //  child: Text(error.toString()),
+                      ///Flash Deals
+                      _flashDealsProvider.when(
+                        data: (value) => value == null
+                            ? const SizedBox()
+                            : FlashDealsSection(flashDeals: value)
+                                .pOnly(bottom: 16),
+                        loading: () => const SizedBox(),
+                        error: (error, stackTrace) => const SizedBox(
+                            //  child: Text(error.toString()),
+                            ),
                       ),
+
+                      /// Banner
+                      bannerState is BannerLoadedState
+                          ? bannerState.bannerList == null ||
+                                  bannerState.bannerList!.isEmpty
+                              ? const SizedBox()
+                              : BannerWidget(bannerState.bannerList!.sublist(
+                                      0,
+                                      bannerState.bannerList!.length >= 3
+                                          ? 3
+                                          : bannerState.bannerList!.length))
+                                  .py(5)
+                          : bannerState is BannerErrorState
+                              ? ErrorMessageWidget(bannerState.message)
+                              : const SizedBox(),
+
+                      /// Trending Now
+                      trendingNowState is TrendingNowLoadedState
+                          ? ProductCard(
+                                  title: LocaleKeys.trending_now.tr(),
+                                  productList: trendingNowState.trendingNowList)
+                              .py(15)
+                          : trendingNowState is TrendingNowErrorState
+                              ? ErrorMessageWidget(trendingNowState.message)
+                              : const ProductLoadingWidget(),
+
+                      /// Banner
+                      bannerState is BannerLoadedState
+                          ? bannerState.bannerList == null
+                              ? const SizedBox()
+                              : bannerState.bannerList!.length <= 3
+                                  ? const SizedBox()
+                                  : BannerWidget(
+                                      bannerState.bannerList!.sublist(
+                                          3,
+                                          bannerState.bannerList!.length <= 5
+                                              ? bannerState.bannerList!.length
+                                              : 5),
+                                      isReverse: false,
+                                    )
+                          : bannerState is BannerErrorState
+                              ? ErrorMessageWidget(bannerState.message)
+                              : const SizedBox(),
+
+                      ///Deals under the price
+                      dealsUnderThePrice is DealsUnderThePriceStateLoadedState
+                          ? ProductCard(
+                                  title: dealsUnderThePrice
+                                      .dealsUnderThePrice!.meta!.dealTitle!,
+                                  productList: dealsUnderThePrice
+                                      .dealsUnderThePrice!.data)
+                              .py(15)
+                          : dealsUnderThePrice
+                                  is DealsUnderThePriceStateErrorState
+                              ? const SizedBox()
+                              : const ProductLoadingWidget(),
+
+                      ///Featured Brands
+                      const FeaturedBrands().pOnly(bottom: 10),
+
+                      ///Deal of the day
+                      dealOfTheDay is DealOfTheDayStateLoadedState
+                          ? DealOfTheDayWidget(
+                                  dealOfTheDay: dealOfTheDay.dealOfTheDay!)
+                              .pOnly(bottom: 15)
+                          : dealOfTheDay is DealOfTheDayStateErrorState
+                              ? const SizedBox()
+                              : const ProductLoadingWidget(),
+
+                      /// Recently Added (Latest Item)
+                      latestItemState is LatestItemLoadedState
+                          ? ProductCard(
+                                  title: LocaleKeys.recently_added.tr(),
+                                  productList: latestItemState.latestItemList)
+                              .pOnly(bottom: 15)
+                          : latestItemState is LatestItemErrorState
+                              ? ErrorMessageWidget(latestItemState.message)
+                              : const ProductLoadingWidget(),
+
+                      /// Banner
+                      bannerState is BannerLoadedState
+                          ? bannerState.bannerList == null
+                              ? const SizedBox()
+                              : bannerState.bannerList!.length <= 5
+                                  ? const SizedBox()
+                                  : BannerWidget(bannerState.bannerList!
+                                      .sublist(
+                                          5,
+                                          bannerState.bannerList!.length <= 7
+                                              ? bannerState.bannerList!.length
+                                              : 7))
+                          : bannerState is BannerErrorState
+                              ? ErrorMessageWidget(bannerState.message)
+                              : const SizedBox(),
+
+                      /// Popular Items
+                      popularItemState is PopularItemLoadedState
+                          ? ProductCard(
+                                  title: LocaleKeys.popular_items.tr(),
+                                  productList: popularItemState.popularItemList)
+                              .py(15)
+                          : popularItemState is PopularItemErrorState
+                              ? ErrorMessageWidget(popularItemState.message)
+                              : const ProductLoadingWidget(),
+
+                      /// Banner
+                      bannerState is BannerLoadedState
+                          ? bannerState.bannerList == null
+                              ? const SizedBox()
+                              : bannerState.bannerList!.length <= 7
+                                  ? const SizedBox()
+                                  : BannerWidget(
+                                      bannerState.bannerList!.sublist(7),
+                                      isReverse: false,
+                                    )
+                          : bannerState is BannerErrorState
+                              ? ErrorMessageWidget(bannerState.message)
+                              : const SizedBox(),
+
+                      /// Random Items (Additional Items to Explore in the UI)
+                      randomItemState is RandomItemLoadedState
+                          ? ProductDetailsCardGridView(
+                                  isTitleCentered: true,
+                                  title: LocaleKeys.additional_items.tr(),
+                                  loading: randomItemState.loading,
+                                  productList: randomItemState.randomItemList)
+                              .py(20)
+                          : randomItemState is RandomItemErrorState
+                              ? ErrorMessageWidget(randomItemState.message)
+                              : const ProductLoadingWidget(),
+                    ],
+                  ).px(10),
                 ),
-
-                /// Banner
-                bannerState is BannerLoadedState
-                    ? bannerState.bannerList == null ||
-                            bannerState.bannerList!.isEmpty
-                        ? const SizedBox()
-                        : BannerWidget(bannerState.bannerList!.sublist(
-                                0,
-                                bannerState.bannerList!.length >= 3
-                                    ? 3
-                                    : bannerState.bannerList!.length))
-                            .py(5)
-                    : bannerState is BannerErrorState
-                        ? ErrorMessageWidget(bannerState.message)
-                        : const SizedBox(),
-
-                /// Trending Now
-                trendingNowState is TrendingNowLoadedState
-                    ? ProductCard(
-                            title: LocaleKeys.trending_now.tr(),
-                            productList: trendingNowState.trendingNowList)
-                        .py(15)
-                    : trendingNowState is TrendingNowErrorState
-                        ? ErrorMessageWidget(trendingNowState.message)
-                        : const ProductLoadingWidget(),
-
-                /// Banner
-                bannerState is BannerLoadedState
-                    ? bannerState.bannerList == null
-                        ? const SizedBox()
-                        : bannerState.bannerList!.length <= 3
-                            ? const SizedBox()
-                            : BannerWidget(
-                                bannerState.bannerList!.sublist(
-                                    3,
-                                    bannerState.bannerList!.length <= 5
-                                        ? bannerState.bannerList!.length
-                                        : 5),
-                                isReverse: false,
-                              )
-                    : bannerState is BannerErrorState
-                        ? ErrorMessageWidget(bannerState.message)
-                        : const SizedBox(),
-
-                ///Deals under the price
-                dealsUnderThePrice is DealsUnderThePriceStateLoadedState
-                    ? ProductCard(
-                            title: dealsUnderThePrice
-                                .dealsUnderThePrice!.meta!.dealTitle!,
-                            productList:
-                                dealsUnderThePrice.dealsUnderThePrice!.data)
-                        .py(15)
-                    : dealsUnderThePrice is DealsUnderThePriceStateErrorState
-                        ? const SizedBox()
-                        : const ProductLoadingWidget(),
-
-                ///Featured Brands
-                const FeaturedBrands().pOnly(bottom: 10),
-
-                ///Deal of the day
-                dealOfTheDay is DealOfTheDayStateLoadedState
-                    ? DealOfTheDayWidget(
-                            dealOfTheDay: dealOfTheDay.dealOfTheDay!)
-                        .pOnly(bottom: 15)
-                    : dealOfTheDay is DealOfTheDayStateErrorState
-                        ? const SizedBox()
-                        : const ProductLoadingWidget(),
-
-                /// Recently Added (Latest Item)
-                latestItemState is LatestItemLoadedState
-                    ? ProductCard(
-                            title: LocaleKeys.recently_added.tr(),
-                            productList: latestItemState.latestItemList)
-                        .pOnly(bottom: 15)
-                    : latestItemState is LatestItemErrorState
-                        ? ErrorMessageWidget(latestItemState.message)
-                        : const ProductLoadingWidget(),
-
-                /// Banner
-                bannerState is BannerLoadedState
-                    ? bannerState.bannerList == null
-                        ? const SizedBox()
-                        : bannerState.bannerList!.length <= 5
-                            ? const SizedBox()
-                            : BannerWidget(bannerState.bannerList!.sublist(
-                                5,
-                                bannerState.bannerList!.length <= 7
-                                    ? bannerState.bannerList!.length
-                                    : 7))
-                    : bannerState is BannerErrorState
-                        ? ErrorMessageWidget(bannerState.message)
-                        : const SizedBox(),
-
-                /// Popular Items
-                popularItemState is PopularItemLoadedState
-                    ? ProductCard(
-                            title: LocaleKeys.popular_items.tr(),
-                            productList: popularItemState.popularItemList)
-                        .py(15)
-                    : popularItemState is PopularItemErrorState
-                        ? ErrorMessageWidget(popularItemState.message)
-                        : const ProductLoadingWidget(),
-
-                /// Banner
-                bannerState is BannerLoadedState
-                    ? bannerState.bannerList == null
-                        ? const SizedBox()
-                        : bannerState.bannerList!.length <= 7
-                            ? const SizedBox()
-                            : BannerWidget(
-                                bannerState.bannerList!.sublist(7),
-                                isReverse: false,
-                              )
-                    : bannerState is BannerErrorState
-                        ? ErrorMessageWidget(bannerState.message)
-                        : const SizedBox(),
-
-                /// Random Items (Additional Items to Explore in the UI)
-                randomItemState is RandomItemLoadedState
-                    ? ProductDetailsCardGridView(
-                            isTitleCentered: true,
-                            title: LocaleKeys.additional_items.tr(),
-                            productList: randomItemState.randomItemList)
-                        .py(20)
-                    : randomItemState is RandomItemErrorState
-                        ? ErrorMessageWidget(randomItemState.message)
-                        : const ProductLoadingWidget(),
-              ],
-            ).px(10),
+              ),
+              if (randomItemState is RandomItemLoadedState &&
+                  randomItemState.loading)
+                LinearProgressIndicator(
+                  color: kPrimaryColor,
+                  minHeight: 2,
+                )
+            ],
           ),
         ));
   }

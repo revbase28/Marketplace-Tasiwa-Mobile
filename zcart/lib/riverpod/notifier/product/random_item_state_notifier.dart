@@ -13,9 +13,10 @@ class RandomItemNotifier extends StateNotifier<RandomItemState> {
 
   Future<void> getRandomItems() async {
     try {
-      state = const RandomItemLoadingState();
+      state = const RandomMoreItemLoadingState();
+
       final randomItemList = await _iRandomItemRepository.fetchRandomItems();
-      state = RandomItemLoadedState(randomItemList);
+      state = RandomItemLoadedState(randomItemList, loading: false);
     } on NetworkException {
       state = RandomItemErrorState(LocaleKeys.something_went_wrong.tr());
     }
@@ -23,7 +24,9 @@ class RandomItemNotifier extends StateNotifier<RandomItemState> {
 
   Future<void> getMoreRandomItems() async {
     try {
-      //state = RandomMoreItemLoadingState();
+      if (state is RandomItemLoadedState) {
+        state = (state as RandomItemLoadedState).copyWith(loading: true);
+      }
       final randomItemList =
           await _iRandomItemRepository.fetchMoreRandomItems();
       state = RandomItemLoadedState(randomItemList);
