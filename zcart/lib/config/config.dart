@@ -13,7 +13,7 @@ class MyConfig {
   ///This is your app name. You must change this name as your own app name. Currently the app name is
   /// [zCart].
   ///
-  static const String appName = "zCart";
+  static const String appName = "appName";
 
   ///
 
@@ -21,7 +21,7 @@ class MyConfig {
   /// This is your app url. You must change this url as your own app url. Currently the app url is
   /// [https://zcart.incevio.com].
   ///
-  static const String appUrl = "https://test.incevio.cloud";
+  static const String appUrl = "https://your_url";
 
   ///
 
@@ -29,7 +29,7 @@ class MyConfig {
   ///This is your app api url. You must change this url as your own app api url. Currently the app api
   ///url is [https://test.incevio.com/api/]. This is the url that you will use to access the api. Don't ////forget the slash [/] at the end and [https://] at the front.
   ///
-  static const String appApiUrl = 'https://test.incevio.cloud/api/';
+  static const String appApiUrl = 'https://your_url/api/';
 
   ///
 
@@ -70,6 +70,7 @@ class MyConfig {
   /// [false] means that the theme and social logins are disabled.
   ///
   /// Social Logins
+  ///
   /// FACEBOOK LOGIN
   static const bool isFacebookLoginActive = true;
 
@@ -85,14 +86,14 @@ class MyConfig {
   ///
 
   /// PAYMENT GATEWAY CONFIGS
-  /// These are your payment gateway configs. You must change this configs as your own payment gateway API configs. If you don't have any payment gateway API configs then you can leave these configs as it is.
+  /// These are your payment gateway configs. You must change this configs as your own payment gateway API configs. You will find these to your admin panel.
   ///
   ///
   ///
   ///[Payment gateway API key]
-  static const String zcartApiKey = "ZDiCk73HVvKkxO9DlfDZ75fAyU4Nqfe9";
-  static const String zcartSecretKey = "W7GEp9KOdQWYX0HCbmZb1XNy3ygSquUU";
-  static const String zcartIV = "M9RzG4u5mJh5n9Og";
+  static const String zcartApiKey = "your_api_key";
+  static const String zcartSecretKey = "your_secret_key";
+  static const String zcartIV = "your_iv";
 
   ///
   ///
