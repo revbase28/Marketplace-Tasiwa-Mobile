@@ -140,7 +140,9 @@ class Data {
         condition: json["condition"],
         conditionNote: json["condition_note"],
         description: json["description"],
-        keyFeatures: List<String>.from(json["key_features"].map((x) => x)),
+        keyFeatures: json["key_features"] != null
+            ? List<String>.from(json["key_features"].map((x) => x))
+            : [],
         stockQuantity: json["stock_quantity"],
         hasOffer: json["has_offer"],
         rawPrice: json["raw_price"],
