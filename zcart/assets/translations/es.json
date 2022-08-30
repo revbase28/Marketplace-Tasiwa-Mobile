@@ -326,5 +326,9 @@
   "search_vendor": "Buscar proveedor",
   "contact_shop": "Contacto Tienda",
   "remove": "Eliminar",
-  "remove_from_wishlist": "Eliminar artículo de la lista de deseos"
+  "remove_from_wishlist": "Eliminar artículo de la lista de deseos",
+  "delete_account":"Borrar cuenta",
+  "delete_account_warning":"¿Estás segura de eliminar la cuenta?",
+  "delete_account_confirmation": "¿Estás segura de que quieres eliminar la cuenta?",
+  "account_deleted": "¡Cuenta borrada!"
 }

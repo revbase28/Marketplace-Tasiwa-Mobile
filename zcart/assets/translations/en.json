@@ -326,5 +326,9 @@
   "search_vendor": "Search Vendor",
   "contact_shop": "Contact Shop",
   "remove": "Remove",
-  "remove_from_wishlist": "Remove item from Wishlist"
+  "remove_from_wishlist": "Remove item from Wishlist", 
+  "delete_account":"Delete account",
+  "delete_account_warning":"Are you sure to delete account?",
+  "delete_account_confirmation": "Are you sure you want to delete account?",
+  "account_deleted": "Account deleted!"
 }

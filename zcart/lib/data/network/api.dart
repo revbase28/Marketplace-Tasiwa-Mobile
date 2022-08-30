@@ -25,6 +25,7 @@ class API {
   static const userInfo = 'account/update';
   static const dashboard = 'dashboard';
   static const updatePassword = 'password/update';
+  static const deleAccount = 'account/delete';
 
   /// Forgot password & Reset
   static const forgot = 'auth/forgot';

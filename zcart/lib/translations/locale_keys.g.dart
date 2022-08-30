@@ -1,6 +1,6 @@
 // DO NOT EDIT. This is code generated via package:easy_localization/generate.dart
 
-abstract class  LocaleKeys {
+abstract class LocaleKeys {
   static const home_text = 'home_text';
   static const vendor_text = 'vendor_text';
   static const wishlist_text = 'wishlist_text';
@@ -209,10 +209,14 @@ abstract class  LocaleKeys {
   static const no_shipping_zone = 'no_shipping_zone';
   static const payment = 'payment';
   static const select_shipping_address = 'select_shipping_address';
-  static const select_shipping_address_continue = 'select_shipping_address_continue';
-  static const select_shipping_option_continue = 'select_shipping_option_continue';
-  static const select_packaging_method_continue = 'select_packaging_method_continue';
-  static const select_payment_method_continue = 'select_payment_method_continue';
+  static const select_shipping_address_continue =
+      'select_shipping_address_continue';
+  static const select_shipping_option_continue =
+      'select_shipping_option_continue';
+  static const select_packaging_method_continue =
+      'select_packaging_method_continue';
+  static const select_payment_method_continue =
+      'select_payment_method_continue';
   static const please_wait_guest = 'please_wait_guest';
   static const all_categories = 'all_categories';
   static const sign_in_successfull = 'sign_in_successfull';
@@ -299,8 +303,10 @@ abstract class  LocaleKeys {
   static const expiry_date = 'expiry_date';
   static const please_enter_expiry_date = 'please_enter_expiry_date';
   static const expiry_date_must_be_5_digits = 'expiry_date_must_be_5_digits';
-  static const expiry_month_must_be_between_1_and_12 = 'expiry_month_must_be_between_1_and_12';
-  static const expiray_year_must_be_greater_than_current_date = 'expiray_year_must_be_greater_than_current_date';
+  static const expiry_month_must_be_between_1_and_12 =
+      'expiry_month_must_be_between_1_and_12';
+  static const expiray_year_must_be_greater_than_current_date =
+      'expiray_year_must_be_greater_than_current_date';
   static const cvv = 'cvv';
   static const please_enter_cvv = 'please_enter_cvv';
   static const cvv_must_be_3_digits = 'cvv_must_be_3_digits';
@@ -329,5 +335,8 @@ abstract class  LocaleKeys {
   static const contact_shop = 'contact_shop';
   static const remove = 'remove';
   static const remove_from_wishlist = 'remove_from_wishlist';
-
+  static const account_deleted = 'account_deleted';
+  static const delete_account = 'delete_account';
+  static const delete_account_confirmation = 'delete_account_confirmation';
+  static const delete_account_warning = 'delete_account_warning';
 }

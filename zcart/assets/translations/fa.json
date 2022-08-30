@@ -326,5 +326,9 @@
   "search_vendor": "جستجوی فروشنده",
   "contact_shop": "با فروشگاه تماس بگیرید",
   "remove": "برداشتن",
-  "remove_from_wishlist": "حذف مورد از لیست علاقه مندی ها"
+  "remove_from_wishlist": "حذف مورد از لیست علاقه مندی ها",
+  "delete_account":"حذف حساب کاربری",
+  "delete_account_warning":"آیا مطمئن هستید که اکانت را حذف می کنید؟",
+  "delete_account_confirmation": "آیا مطمئن هستید که می خواهید حساب کاربری را حذف کنید؟",
+  "account_deleted": "اکانت حذف شد!"
 }

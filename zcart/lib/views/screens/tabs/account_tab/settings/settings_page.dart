@@ -121,6 +121,40 @@ class _SettingsPageState extends State<SettingsPage> {
                       },
                     ),
                   ),
+                  Card(
+                    child: ListTile(
+                      leading: const Icon(Icons.delete_forever_outlined),
+                      title: Text(LocaleKeys.delete_account.tr(),
+                          style: Theme.of(context).textTheme.subtitle2!),
+                      onTap: () async {
+                        await showCustomConfirmDialog(
+                          context,
+                          title: LocaleKeys.delete_account_warning.tr(),
+                          dialogAnimation: DialogAnimation.SLIDE_BOTTOM_TOP,
+                          primaryColor: kPrimaryColor,
+                          negativeText: LocaleKeys.no.tr(),
+                          positiveText: LocaleKeys.yes.tr(),
+                          onAccept: () async {
+                            setState(() {
+                              _isLoading = true;
+                            });
+                            await FacebookAuth.instance.logOut();
+                            await GoogleSignIn().signOut();
+
+                            await context
+                                .read(userNotifierProvider.notifier)
+                                .deleteAccount();
+                            setState(() {
+                              _isLoading = false;
+                            });
+                            await setValue(loggedIn, false).then((value) =>
+                                context.nextAndRemoveUntilPage(
+                                    const BottomNavBar()));
+                          },
+                        );
+                      },
+                    ),
+                  ),
                 ],
               ).cornerRadius(10).p(10),
             ),

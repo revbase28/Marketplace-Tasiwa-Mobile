@@ -326,5 +326,9 @@
   "search_vendor": "বিক্রেতা অনুসন্ধান করুন",
   "contact_shop": "দোকানে যোগাযোগ করুন",
   "remove": "অপসারণ",
-  "remove_from_wishlist": "ইচ্ছা তালিকা থেকে আইটেম সরান"
+  "remove_from_wishlist": "ইচ্ছা তালিকা থেকে আইটেম সরান",
+  "delete_account":"একাউন্ট মুছে ফেলুন",
+  "delete_account_warning":"আপনি একাউন্ট মুছতে নিশ্চিত ?",
+  "delete_account_confirmation": "আপনি কি একাউন্ট মুছতে চান ?",
+  "account_deleted": "অ্যাকাউন্ট মুছে ফেলা হয়েছে!"
 }

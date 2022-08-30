@@ -70,6 +70,14 @@ class UserNotifier extends StateNotifier<UserState> {
     }
   }
 
+  Future<void> deleteAccount() async {
+    try {
+      await _iUserRepository.deleteAccount();
+    } on NetworkException {
+      state = UserErrorState(LocaleKeys.something_went_wrong.tr());
+    }
+  }
+
   Future<void> getUserInfo() async {
     try {
       state = const UserLoadingState();

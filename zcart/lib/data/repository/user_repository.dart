@@ -270,4 +270,22 @@ class UserRepository implements IUserRepository {
       LocaleKeys.password_reset_link_sent.tr(),
     );
   }
+
+  @override
+  Future deleteAccount() async {
+    dynamic responseBody;
+
+    try {
+      responseBody = await handleResponse(
+          await deleteRequest(API.deleAccount, bearerToken: true));
+    } catch (e) {
+      throw NetworkException();
+    }
+    if (responseBody.runtimeType == int && responseBody > 206) {
+      throw NetworkException();
+    }
+
+    toast(LocaleKeys.account_deleted.tr());
+    await getSharedPref().then((value) => value.clear());
+  }
 }

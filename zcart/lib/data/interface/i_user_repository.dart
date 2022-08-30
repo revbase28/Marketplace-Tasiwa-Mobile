@@ -13,6 +13,7 @@ abstract class IUserRepository {
       bool agreeToTermsAndCondition, acceptMarkeing);
 
   Future logout();
+  Future deleteAccount();
 
   Future<User?> fetchUserInfo();
 
