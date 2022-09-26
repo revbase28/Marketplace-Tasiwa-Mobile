@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nb_utils/nb_utils.dart';
 import 'package:zcart/data/models/address/address_model.dart';
 import 'package:zcart/helper/constants.dart';
 import 'package:zcart/helper/get_payment_method_creds.dart';
@@ -141,7 +142,7 @@ class PaymentMethods {
         requestBody: cartId != null ? {"cart_id": cartId.toString()} : null,
       );
       if (_paymentResult == null ||
-          (_paymentResult["api_key"] || _paymentResult["secret"])) {
+          (_paymentResult["api_key"] == null || _paymentResult["secret"] == null)) {
         return false;
       } else {
         if (cartId != null && address != null) {
