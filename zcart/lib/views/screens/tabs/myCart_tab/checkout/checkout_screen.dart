@@ -2460,6 +2460,9 @@ class _CheckoutPaymentPageState extends State<CheckoutPaymentPage> {
                                             if (_agreedToTerms) {
                                               if (_formKey.currentState!
                                                   .validate()) {
+                                                setState(() {
+                                                  _isLoading = true;
+                                                });
                                                 await PaymentMethods.pay(
                                                   context,
                                                   _selectedPaymentMethod,
@@ -2493,9 +2496,6 @@ class _CheckoutPaymentPageState extends State<CheckoutPaymentPage> {
                                                   taxes: _tax,
                                                 ).then((value) async {
                                                   if (value) {
-                                                    setState(() {
-                                                      _isLoading = true;
-                                                    });
                                                     await context
                                                         .read(
                                                             checkoutNotifierProvider
@@ -2529,9 +2529,15 @@ class _CheckoutPaymentPageState extends State<CheckoutPaymentPage> {
                                             toast(
                                                 LocaleKeys.invalid_email.tr());
                                           }
+                                          setState(() {
+                                            _isLoading = false;
+                                          });
                                         } else {
                                           if (_emailFormKey.currentState!
                                               .validate()) {
+                                            setState(() {
+                                              _isLoading = true;
+                                            });
                                             await PaymentMethods.pay(
                                               context,
                                               _selectedPaymentMethod,
@@ -2561,9 +2567,6 @@ class _CheckoutPaymentPageState extends State<CheckoutPaymentPage> {
                                               taxes: _tax,
                                             ).then((value) async {
                                               if (value) {
-                                                setState(() {
-                                                  _isLoading = true;
-                                                });
                                                 await context
                                                     .read(
                                                         checkoutNotifierProvider
@@ -2590,8 +2593,14 @@ class _CheckoutPaymentPageState extends State<CheckoutPaymentPage> {
                                             toast(
                                                 LocaleKeys.invalid_email.tr());
                                           }
+                                          setState(() {
+                                            _isLoading = false;
+                                          });
                                         }
                                       } else {
+                                        setState(() {
+                                          _isLoading = true;
+                                        });
                                         await PaymentMethods.pay(
                                           context,
                                           _selectedPaymentMethod,
@@ -2618,9 +2627,6 @@ class _CheckoutPaymentPageState extends State<CheckoutPaymentPage> {
                                           taxes: _tax,
                                         ).then((value) async {
                                           if (value) {
-                                            setState(() {
-                                              _isLoading = true;
-                                            });
                                             await context
                                                 .read(checkoutNotifierProvider
                                                     .notifier)
@@ -2641,6 +2647,9 @@ class _CheckoutPaymentPageState extends State<CheckoutPaymentPage> {
                                             toast(
                                                 LocaleKeys.payment_failed.tr());
                                           }
+                                          setState(() {
+                                            _isLoading = false;
+                                          });
                                         });
                                       }
                                     }

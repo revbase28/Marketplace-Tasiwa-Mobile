@@ -715,10 +715,17 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
             .map(
               (e) => _AttributeItem(
                 attribute: e,
-                value: _allAttributes![e.id.toString()]!,
+                value: _allAttributes != null
+                    ? _allAttributes![e.id.toString()] ??
+                        AttributeValue(name: '', value: {})
+                    : AttributeValue(name: '', value: {}),
                 onTap: () async {
-                  final _result =
-                      await _getAttribute(e, _allAttributes![e.id.toString()]!);
+                  final _result = await _getAttribute(
+                      e,
+                      _allAttributes != null
+                          ? _allAttributes![e.id.toString()] ??
+                              AttributeValue(name: '', value: {})
+                          : AttributeValue(name: '', value: {}));
 
                   if (_result != null) {
                     if (_result.value == e.value) {
