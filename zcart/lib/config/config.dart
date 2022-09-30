@@ -21,7 +21,10 @@ class MyConfig {
   /// This is your app url. You must change this url as your own app url. Currently the app url is
   /// [https://zcart.incevio.com].
   ///
-  static const String appUrl = "https://test.incevio.cloud";
+  ///
+  static const String testServer = "https://test.incevio.cloud";
+  static const String mainServer = "https://zcart.incevio.cloud/";
+  static const String appUrl = mainServer;
 
   ///
 
