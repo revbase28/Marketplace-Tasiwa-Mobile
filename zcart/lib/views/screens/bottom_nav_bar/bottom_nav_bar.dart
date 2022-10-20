@@ -135,7 +135,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
                         backgroundColor: kPrimaryColor,
                         type: BottomNavigationBarType.fixed,
                         unselectedItemColor: kBottomBarUnselectedColor,
-                        selectedItemColor: kLightColor,
+                        selectedItemColor: kBottomBarSelectedColor,
                         selectedFontSize: 11,
                         elevation: 0,
                         showUnselectedLabels: false,

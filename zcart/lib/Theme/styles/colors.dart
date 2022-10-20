@@ -11,6 +11,7 @@ final kAccentColor = MyConfig.accentColor;
 
 //Light Background Colors - Scaffold BG Color
 const kLightBgColor = Color(0xfff5f5f5);
+const kChipBgColor = Color(0xff1E40AF);
 
 //Dark Background Colors - Scaffold BG Color
 const kDarkBgColor = Color(0xFF2B2B2B);
@@ -20,9 +21,11 @@ const kLightColor = Colors.white;
 const kDarkColor = Color(0xFF282828);
 const kFadeColor = Color(0xFFB0B0B0);
 const kBottomBarUnselectedColor = Color(0xFFF3EBEB);
+const kBottomBarSelectedColor = Color(0xFFFBBF24);
 
 //Other Colors
 const kGreenColor = Colors.green;
+const kButtonBgColor = Color(0xFFFBBF24);
 
 //Primary Text Colors
 const kPrimaryLightTextColor = Colors.white;

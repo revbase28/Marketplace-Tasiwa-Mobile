@@ -145,7 +145,7 @@ class ProductDetailsCard extends StatelessWidget {
                             ),
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(30),
-                                color: kPrimaryColor),
+                                color: kChipBgColor),
                           ).pOnly(right: 3)
                         : const SizedBox(),
                     product.discount != null
@@ -164,7 +164,7 @@ class ProductDetailsCard extends StatelessWidget {
                             ),
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(30),
-                                color: kPrimaryColor),
+                                color: kChipBgColor),
                           )
                         : const SizedBox(),
                   ],

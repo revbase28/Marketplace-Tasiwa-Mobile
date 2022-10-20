@@ -221,6 +221,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       CustomButton(
                           buttonText: LocaleKeys.sign_in.tr(),
+                          buttonBGColor: kButtonBgColor,
                           onTap: () async {
                             if (_formKey.currentState!.validate()) {
                               context.read(userNotifierProvider.notifier).login(
