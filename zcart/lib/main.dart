@@ -70,7 +70,6 @@ class MyApp extends StatelessWidget {
       title: API.appName,
       themeMode: ThemeMode.light,
       theme: AppTheme.light(context),
-      darkTheme: AppTheme.dark(context),
       // home: const LoadingScreen(),
       home: SystemConfigBuilder(
         builder: (context, systemConfig) {

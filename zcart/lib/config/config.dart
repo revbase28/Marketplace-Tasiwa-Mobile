@@ -83,7 +83,7 @@ class MyConfig {
   static const bool isAppleLoginActive = true;
 
   // Theme
-  static const bool isDynamicThemeActive = true;
+  static const bool isDynamicThemeActive = false;
 
   ///
 
