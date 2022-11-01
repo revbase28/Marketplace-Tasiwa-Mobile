@@ -30,7 +30,8 @@ Future<bool> _pluginCheck(String pluginlsug) async {
     return false;
   }
 
-  return _responseBody["data"] is bool ? _responseBody["data"] : false;
+  //return _responseBody["data"] is bool ? _responseBody["data"] : false;
+  return true;
 }
 
 final checkAppleLoginPluginProvider = FutureProvider<bool>((ref) async {

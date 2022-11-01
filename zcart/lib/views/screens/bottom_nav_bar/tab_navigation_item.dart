@@ -32,22 +32,22 @@ class TabNavigationItem {
           title: Text(LocaleKeys.home_text.tr()),
           label: LocaleKeys.home_text.tr(),
         ),
-        TabNavigationItem(
-          id: vendorTabId,
-          page: const VendorsTab(),
-          icon: const Icon(Icons.store_outlined),
-          selectedIcon: const Icon(Icons.store),
-          title: Text(LocaleKeys.vendor_text.tr()),
-          label: LocaleKeys.vendor_text.tr(),
-        ),
-        TabNavigationItem(
-          id: brandTabId,
-          page: const BrandsTab(),
-          icon: const Icon(Icons.local_mall_outlined),
-          selectedIcon: const Icon(Icons.local_mall),
-          title: Text(LocaleKeys.brands.tr()),
-          label: LocaleKeys.brands.tr(),
-        ),
+        // TabNavigationItem(
+        //   id: vendorTabId,
+        //   page: const VendorsTab(),
+        //   icon: const Icon(Icons.store_outlined),
+        //   selectedIcon: const Icon(Icons.store),
+        //   title: Text(LocaleKeys.vendor_text.tr()),
+        //   label: LocaleKeys.vendor_text.tr(),
+        // ),
+        // TabNavigationItem(
+        //   id: brandTabId,
+        //   page: const BrandsTab(),
+        //   icon: const Icon(Icons.local_mall_outlined),
+        //   selectedIcon: const Icon(Icons.local_mall),
+        //   title: Text(LocaleKeys.brands.tr()),
+        //   label: LocaleKeys.brands.tr(),
+        // ),
         TabNavigationItem(
           id: wishlistTabId,
           page: accessAllowed

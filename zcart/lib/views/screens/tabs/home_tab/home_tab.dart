@@ -81,7 +81,6 @@ class HomeTab extends ConsumerWidget {
             ],
             // flexibleSpace: const SafeArea(child: CustomSearchBar()),
           ),
-          drawer: const AppDrawer(),
           body: Column(
             children: [
               Expanded(
@@ -171,9 +170,6 @@ class HomeTab extends ConsumerWidget {
                                   is DealsUnderThePriceStateErrorState
                               ? const SizedBox()
                               : const ProductLoadingWidget(),
-
-                      ///Featured Brands
-                      const FeaturedBrands().pOnly(bottom: 10),
 
                       ///Deal of the day
                       dealOfTheDay is DealOfTheDayStateLoadedState
