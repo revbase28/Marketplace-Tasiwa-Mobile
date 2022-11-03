@@ -446,7 +446,6 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
-                    // mainAxisAlignment: MainAxisAlignment.,
                     children: [
                       Consumer(
                         builder: (context, watch, child) {
@@ -515,7 +514,7 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
                                               },
                                             ),
                                           ),
-                                          const SizedBox(width: 10),
+                                          //const SizedBox(width: 10),
                                         ],
                                       )
                                     : const SizedBox();
@@ -524,28 +523,28 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
                               error: (_, __) => const SizedBox());
                         },
                       ),
-                      Tooltip(
-                        message: LocaleKeys.vendor_details.tr(),
-                        child: ProductDetailsPageIconButton(
-                          icon: const Icon(Icons.store),
-                          backgroundColor: getColorBasedOnTheme(
-                              context, kLightColor, kDarkBgColor),
-                          onPressed: () {
-                            context
-                                .read(vendorDetailsNotifierProvider.notifier)
-                                .getVendorDetails(_details.data!.shop!.slug);
-                            context
-                                .read(vendorItemsNotifierProvider.notifier)
-                                .getVendorItems(_details.data!.shop!.slug);
-                            context.nextPage(const VendorsDetailsScreen());
-                          },
-                        ),
-                      ),
+                      // Tooltip(
+                      //   message: LocaleKeys.vendor_details.tr(),
+                      //   child: ProductDetailsPageIconButton(
+                      //     icon: const Icon(Icons.store),
+                      //     backgroundColor: getColorBasedOnTheme(
+                      //         context, kLightColor, kDarkBgColor),
+                      //     onPressed: () {
+                      //       context
+                      //           .read(vendorDetailsNotifierProvider.notifier)
+                      //           .getVendorDetails(_details.data!.shop!.slug);
+                      //       context
+                      //           .read(vendorItemsNotifierProvider.notifier)
+                      //           .getVendorItems(_details.data!.shop!.slug);
+                      //       context.nextPage(const VendorsDetailsScreen());
+                      //     },
+                      //   ),
+                      // ),
                       const SizedBox(width: 10),
                       Expanded(
                         child: ProductDetailsPageIconButton(
                           backgroundColor:
-                              _isNotAvailable ? kFadeColor : kPrimaryColor,
+                              _isNotAvailable ? kFadeColor : kButtonBgColor,
                           isNoWidth: true,
                           onPressed: _isNotAvailable
                               ? () {}
@@ -638,7 +637,7 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
             ),
             Positioned(
               top: 8,
-              right: 70,
+              right: 8,
               child: Consumer(
                 builder: (context, watch, child) {
                   final wishlistPluginCheck =
@@ -677,28 +676,28 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
                 },
               ),
             ),
-            Positioned(
-              top: 8,
-              right: 8,
-              child: ProductDetailsPageIconButton(
-                backgroundColor: kPrimaryColor,
-                icon: Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: VxBadge(
-                    position: VxBadgePosition.rightBottom,
-                    child: const Icon(CupertinoIcons.cart, color: kLightColor),
-                    size: 16,
-                    count: widget.cartItemsCount,
-                    textStyle: Theme.of(context).textTheme.caption!.copyWith(
-                        fontWeight: FontWeight.bold, color: kPrimaryColor),
-                    color: kLightColor,
-                  ),
-                ),
-                onPressed: () {
-                  context.nextPage(const MyCartTab());
-                },
-              ),
-            ),
+            // Positioned(
+            //   top: 8,
+            //   right: 8,
+            //   child: ProductDetailsPageIconButton(
+            //     backgroundColor: kPrimaryColor,
+            //     icon: Padding(
+            //       padding: const EdgeInsets.all(10),
+            //       child: VxBadge(
+            //         position: VxBadgePosition.rightBottom,
+            //         child: const Icon(CupertinoIcons.cart, color: kLightColor),
+            //         size: 16,
+            //         count: widget.cartItemsCount,
+            //         textStyle: Theme.of(context).textTheme.caption!.copyWith(
+            //             fontWeight: FontWeight.bold, color: kPrimaryColor),
+            //         color: kLightColor,
+            //       ),
+            //     ),
+            //     onPressed: () {
+            //       context.nextPage(const MyCartTab());
+            //     },
+            //   ),
+            // ),
           ],
         ),
       ),

@@ -25,7 +25,7 @@ const kBottomBarSelectedColor = Color(0xFFFBBF24);
 
 //Other Colors
 const kGreenColor = Colors.green;
-const kButtonBgColor = Color(0xFFFBBF24);
+const kButtonBgColor = Color(0xFFF59E0B);
 const kTileColor = Color(0xFFFEF3C7);
 const kTileTextColor = Color(0xFFF59E0B);
 

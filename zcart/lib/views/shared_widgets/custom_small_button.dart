@@ -4,10 +4,12 @@ import 'package:zcart/Theme/styles/colors.dart';
 class CustomSmallButton extends StatelessWidget {
   final String text;
   final VoidCallback onPressed;
+  final Color bgColor;
   const CustomSmallButton({
     Key? key,
     required this.text,
     required this.onPressed,
+    this.bgColor = kChipBgColor
   }) : super(key: key);
 
   @override
@@ -16,7 +18,7 @@ class CustomSmallButton extends StatelessWidget {
       onTap: onPressed,
       child: Container(
         decoration: BoxDecoration(
-            color: kPrimaryColor, borderRadius: BorderRadius.circular(6)),
+            color: bgColor, borderRadius: BorderRadius.circular(6)),
         padding: const EdgeInsets.all(8),
         child: Text(
           text,

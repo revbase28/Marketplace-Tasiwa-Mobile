@@ -196,7 +196,7 @@ class _CheckoutScreenState extends State<CheckoutScreen>
                                 title: e.title,
                                 icon: e.icon,
                                 progressColor:
-                                    _isDone ? kPrimaryColor : kFadeColor,
+                                    _isDone ? kTileTextColor : kFadeColor,
                               ),
                             );
                           }).toList(),

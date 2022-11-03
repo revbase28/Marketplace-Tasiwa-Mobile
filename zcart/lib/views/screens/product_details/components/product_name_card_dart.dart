@@ -229,7 +229,7 @@ class ProductNameCard extends StatelessWidget {
             if (productModel.data!.labels != null &&
                 productModel.data!.labels!.isNotEmpty)
               ...productModel.data!.labels!.map(
-                  (label) => CustomSmallButton(text: label, onPressed: () {})),
+                  (label) => CustomSmallButton(bgColor: kChipBgColor,text: label, onPressed: () {})),
           ],
         ),
       ],

@@ -684,6 +684,7 @@ class _ItemCardState extends State<ItemCard> {
 
 class PackagingDetails extends ConsumerWidget {
   final CartItem cartItem;
+
   const PackagingDetails({
     Key? key,
     required this.cartItem,
@@ -978,6 +979,7 @@ class ShippingDetails extends ConsumerWidget {
                       final _isGuestCheckout =
                           watch(checkGuestCheckoutPluginProvider);
                       return ElevatedButton(
+                          style: ElevatedButton.styleFrom(backgroundColor: kButtonBgColor),
                           onPressed: () async {
                             String? _customerEmail;
 
@@ -1174,6 +1176,7 @@ class _SelectSippingCountryPage extends StatefulWidget {
   final List<Countries> items;
   final int? selected;
   final Function(Countries) onCountrySelected;
+
   const _SelectSippingCountryPage({
     Key? key,
     required this.title,
@@ -1274,6 +1277,7 @@ class _SelectSippingStatePage extends StatefulWidget {
   final List<States> items;
   final int? selected;
   final Function(States) onCountrySelected;
+
   const _SelectSippingStatePage({
     Key? key,
     required this.title,

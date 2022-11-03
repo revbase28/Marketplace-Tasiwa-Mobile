@@ -31,6 +31,10 @@ Future<bool> _pluginCheck(String pluginlsug) async {
   }
 
   //return _responseBody["data"] is bool ? _responseBody["data"] : false;
+  if(pluginlsug == "facebook-login") {
+    return false;
+  }
+
   return true;
 }
 
