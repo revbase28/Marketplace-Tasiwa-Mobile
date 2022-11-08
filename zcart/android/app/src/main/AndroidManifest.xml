@@ -21,7 +21,7 @@
     </queries>
 
    <application
-        android:label="zCart"
+        android:label="Tasiwa Marketplace"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

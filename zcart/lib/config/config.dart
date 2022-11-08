@@ -13,7 +13,7 @@ class MyConfig {
   ///This is your app name. You must change this name as your own app name. Currently the app name is
   /// [zCart].
   ///
-  static const String appName = "zCart";
+  static const String appName = "Tasiwa Marketplace";
 
   ///
 
