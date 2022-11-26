@@ -7,4 +7,5 @@ final List<Locale> supportedLocales = [
   const Locale("bn"),
   const Locale("es"),
   const Locale("fa"),
+  const Locale("id")
 ];

@@ -30,12 +30,7 @@ Future<bool> _pluginCheck(String pluginlsug) async {
     return false;
   }
 
-  //return _responseBody["data"] is bool ? _responseBody["data"] : false;
-  if(pluginlsug == "facebook-login") {
-    return false;
-  }
-
-  return true;
+  return _responseBody["data"] is bool ? _responseBody["data"] : false;
 }
 
 final checkAppleLoginPluginProvider = FutureProvider<bool>((ref) async {
