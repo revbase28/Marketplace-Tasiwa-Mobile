@@ -582,7 +582,7 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
                               children: [
                                 const Icon(
                                   CupertinoIcons.cart_fill_badge_plus,
-                                  color: kLightColor,
+                                  color: kDarkColor,
                                 ).pOnly(right: 8),
                                 Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -594,7 +594,7 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
                                             .subtitle2!
                                             .copyWith(
                                               fontWeight: FontWeight.bold,
-                                              color: kLightColor,
+                                              color: kDarkColor,
                                             )),
                                     _isNotAvailable
                                         ? const SizedBox()
@@ -605,7 +605,7 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
                                                 .overline!
                                                 .copyWith(
                                                   fontWeight: FontWeight.bold,
-                                                  color: kLightColor,
+                                                  color: kDarkColor,
                                                 ),
                                           )
                                   ],

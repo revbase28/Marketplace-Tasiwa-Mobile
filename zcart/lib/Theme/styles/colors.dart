@@ -20,18 +20,18 @@ const kDarkBgColor = Color(0xFF2B2B2B);
 const kLightColor = Colors.white;
 const kDarkColor = Color(0xFF282828);
 const kFadeColor = Color(0xFFB0B0B0);
-const kBottomBarUnselectedColor = Color(0xFFF3EBEB);
-const kBottomBarSelectedColor = Color(0xFFFBBF24);
+const kBottomBarUnselectedColor = Color(0xFFB6A000);
+const kBottomBarSelectedColor = Color(0xFF202938);
 
 //Other Colors
 const kGreenColor = Colors.green;
-const kButtonBgColor = Color(0xFFF59E0B);
+const kButtonBgColor = Color(0xFFEDD104);
 const kTileColor = Color(0xFFFEF3C7);
 const kTileTextColor = Color(0xFFF59E0B);
 
 //Primary Text Colors
 const kPrimaryLightTextColor = Colors.white;
-const kPrimaryDarkTextColor = Color(0xFF282828);
+const kPrimaryDarkTextColor = Color(0xFF202938);
 const kPrimaryFadeTextColor = Color(0xFFB4B2B2);
 
 //Price Text Colors

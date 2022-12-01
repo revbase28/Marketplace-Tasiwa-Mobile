@@ -37,6 +37,7 @@ class CartItem {
     this.packagingId,
     this.coupon,
     this.total,
+    this.snapToken,
     this.totalRaw,
     this.shipping,
     this.shippingRaw,
@@ -70,6 +71,7 @@ class CartItem {
   dynamic packagingId;
   dynamic coupon;
   String? total;
+  String? snapToken;
   String? totalRaw;
   String? shipping;
   String? shippingRaw;
@@ -103,6 +105,7 @@ class CartItem {
         packagingId: json["packaging_id"],
         coupon: json["coupon"],
         total: json["total"],
+        snapToken: json["snap_token"],
         totalRaw: json["total_raw"],
         shipping: json["shipping"],
         shippingRaw: json["shipping_raw"],

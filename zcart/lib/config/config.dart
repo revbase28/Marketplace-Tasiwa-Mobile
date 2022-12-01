@@ -33,8 +33,8 @@ class MyConfig {
   ///url is [https://test.incevio.com/api/]. This is the url that you will use to access the api. Don't ////forget the slash [/] at the end and [https://] at the front.
   ///
   // static const String appApiUrl = 'https://test.incevio.cloud/api/';
-  // static const String appApiUrl = 'https://buymeonline.id/api/';
-  static const String appApiUrl = 'http://192.168.100.245:8000/api/';
+  static const String appApiUrl = 'https://buymeonline.id/api/';
+  //static const String appApiUrl = 'http://192.168.100.245:8000/api/';
 
   ///
 
@@ -42,7 +42,7 @@ class MyConfig {
   /// These are your app colors. You must change this colors as your own app colors.
   ///Only change the hex values of the colors. Format of the color is [#FFFFFF].
   ///
-  static final Color primaryColor = HexColor("#B91C1C");
+  static final Color primaryColor = HexColor("#EDD104");
   static final Color accentColor = HexColor("#5c5ffC");
 
   ///App Gradient Colors
@@ -98,6 +98,9 @@ class MyConfig {
   static const String zcartApiKey = "ZDiCk73HVvKkxO9DlfDZ75fAyU4Nqfe9";
   static const String zcartSecretKey = "W7GEp9KOdQWYX0HCbmZb1XNy3ygSquUU";
   static const String zcartIV = "M9RzG4u5mJh5n9Og";
+
+  static const MIDTRANS_CLIENT_KEY="SB-Mid-client-DW4Klv2muo8ExPxU";
+
 
   ///
   ///

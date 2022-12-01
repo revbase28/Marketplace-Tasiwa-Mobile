@@ -6,7 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:velocity_x/velocity_x.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 import 'package:zcart/Theme/styles/colors.dart';
 import 'package:zcart/data/controller/cart/coupon_controller.dart';
 import 'package:zcart/data/models/address/address_model.dart';
@@ -41,6 +43,7 @@ import 'package:zcart/views/shared_widgets/shared_widgets.dart';
 class CheckoutScreen extends StatefulWidget {
   final String? customerEmail;
   final bool isOneCheckout;
+
   const CheckoutScreen({
     Key? key,
     this.customerEmail,
@@ -365,6 +368,7 @@ class CheckoutLoggedInAddressScreen extends StatelessWidget {
   final bool isOneCheckout;
   final Function(Addresses) onSelectedAddress;
   final Addresses? selectedAddress;
+
   const CheckoutLoggedInAddressScreen({
     Key? key,
     required this.isOneCheckout,
@@ -468,6 +472,7 @@ class CheckOutGuestAddressForm extends StatefulWidget {
   final int? stateId;
   final GlobalKey<FormState> formKey;
   final bool isOneCheckout;
+
   const CheckOutGuestAddressForm({
     Key? key,
     required this.cartId,
@@ -1060,6 +1065,7 @@ class CheckOutItemDetailsPage extends ConsumerWidget {
   final VoidCallback onPressedNext;
   final VoidCallback onPressedBack;
   final bool isKeyboardVisible;
+
   const CheckOutItemDetailsPage({
     Key? key,
     required this.isOneCheckout,
@@ -1565,6 +1571,7 @@ class CheckOutItemDetailsPage extends ConsumerWidget {
 
 class ApplyCouponSection extends StatefulWidget {
   final int cartId;
+
   const ApplyCouponSection({
     Key? key,
     required this.cartId,
@@ -1576,6 +1583,7 @@ class ApplyCouponSection extends StatefulWidget {
 
 class _ApplyCouponSectionState extends State<ApplyCouponSection> {
   final _couponCodeController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -1634,6 +1642,7 @@ class CustomShopCard extends StatelessWidget {
   final String? image;
   final String title;
   final String verifiedText;
+
   const CustomShopCard({
     Key? key,
     required this.image,
@@ -1685,6 +1694,7 @@ class CheckOutDetailsPriceWidget extends StatelessWidget {
   final String price;
   final bool isGrandTotal;
   final String? subtitle;
+
   const CheckOutDetailsPriceWidget({
     Key? key,
     required this.title,
@@ -1720,6 +1730,7 @@ class CheckOutDetailsPriceWidget extends StatelessWidget {
 
 class CheckoutDetailsSingleCartItemCard extends StatelessWidget {
   final List<dynamic> cartItems;
+
   const CheckoutDetailsSingleCartItemCard({
     Key? key,
     required this.cartItems,
@@ -1818,6 +1829,7 @@ class CheckoutPaymentPage extends StatefulWidget {
   final Addresses? address;
   final bool isKeyboardVisible;
   final bool isOneCheckout;
+
   const CheckoutPaymentPage({
     Key? key,
     this.customerEmail,
@@ -1846,6 +1858,8 @@ class _CheckoutPaymentPageState extends State<CheckoutPaymentPage> {
   bool _createNewAccount = false;
   bool _agreedToTerms = false;
   bool _isLoading = false;
+  var loadingPercentage = 0;
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -2034,629 +2048,671 @@ class _CheckoutPaymentPageState extends State<CheckoutPaymentPage> {
                   )
                 : Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
+                    // children: [
+                    //   Expanded(
+                    //     child: SingleChildScrollView(
+                    //       child: Column(
+                    //         children: [
+                    //           const SizedBox(height: 12),
+                    //           Container(
+                    //             margin:
+                    //                 const EdgeInsets.symmetric(horizontal: 12),
+                    //             decoration: BoxDecoration(
+                    //               color: getColorBasedOnTheme(
+                    //                   context, kLightColor, kDarkCardBgColor),
+                    //               borderRadius: BorderRadius.circular(10),
+                    //             ),
+                    //             child: Column(
+                    //               crossAxisAlignment:
+                    //                   CrossAxisAlignment.stretch,
+                    //               children: [
+                    //                 const SizedBox(height: 16),
+                    //                 Padding(
+                    //                   padding: const EdgeInsets.symmetric(
+                    //                       horizontal: 12),
+                    //                   child: Text(
+                    //                     LocaleKeys.payment_method.tr(),
+                    //                     style: Theme.of(context)
+                    //                         .textTheme
+                    //                         .headline6!
+                    //                         .copyWith(
+                    //                           fontWeight: FontWeight.bold,
+                    //                         ),
+                    //                   ),
+                    //                 ),
+                    //                 const SizedBox(height: 10),
+                    //                 const Divider(),
+                    //                 ListView(
+                    //                     padding: const EdgeInsets.symmetric(
+                    //                         horizontal: 24),
+                    //                     shrinkWrap: true,
+                    //                     physics:
+                    //                         const NeverScrollableScrollPhysics(),
+                    //                     children:
+                    //                         _implementedPaymentOptions.map((e) {
+                    //                       String _code = e.code!;
+                    //                       return ListTile(
+                    //                         contentPadding:
+                    //                             const EdgeInsets.all(0),
+                    //                         onTap: () async {
+                    //                           setState(() {
+                    //                             _selectedPaymentMethod = _code;
+                    //                           });
+                    //
+                    //                           context
+                    //                               .read(checkoutNotifierProvider
+                    //                                   .notifier)
+                    //                               .paymentMethod = e.code;
+                    //                         },
+                    //                         title: Text(
+                    //                           e.name!,
+                    //                           style: Theme.of(context)
+                    //                               .textTheme
+                    //                               .subtitle2!
+                    //                               .copyWith(
+                    //                                 fontWeight: _code ==
+                    //                                         _selectedPaymentMethod
+                    //                                     ? FontWeight.bold
+                    //                                     : FontWeight.normal,
+                    //                               ),
+                    //                         ),
+                    //                         trailing: _code ==
+                    //                                 _selectedPaymentMethod
+                    //                             ? Icon(Icons.check_circle,
+                    //                                 color: kPrimaryColor)
+                    //                             : Icon(
+                    //                                 Icons
+                    //                                     .radio_button_unchecked,
+                    //                                 color: getColorBasedOnTheme(
+                    //                                     context,
+                    //                                     kDarkColor,
+                    //                                     kLightColor),
+                    //                               ),
+                    //                       );
+                    //                     }).toList()),
+                    //                 const SizedBox(height: 4),
+                    //               ],
+                    //             ),
+                    //           ),
+                    //           const SizedBox(height: 12),
+                    //           _pharmacyCheckProvider.when(
+                    //             data: (value) {
+                    //               if (value) {
+                    //                 return Column(
+                    //                   children: [
+                    //                     Row(
+                    //                       children: [
+                    //                         Text(LocaleKeys.prescription.tr(),
+                    //                             style: Theme.of(context)
+                    //                                 .textTheme
+                    //                                 .bodyText2),
+                    //                       ],
+                    //                     ).pOnly(top: 10, bottom: 10),
+                    //                     GestureDetector(
+                    //                       onTap: () async {
+                    //                         await pickImageToBase64()
+                    //                             .then((value) {
+                    //                           if (value != null) {
+                    //                             setState(() {
+                    //                               _prescriptionImage = value;
+                    //                             });
+                    //
+                    //                             context
+                    //                                 .read(
+                    //                                     checkoutNotifierProvider
+                    //                                         .notifier)
+                    //                                 .prescription = value;
+                    //                           }
+                    //                         });
+                    //                       },
+                    //                       child: Container(
+                    //                         color: getColorBasedOnTheme(context,
+                    //                             kLightColor, kDarkCardBgColor),
+                    //                         padding: const EdgeInsets.all(10),
+                    //                         height: 200,
+                    //                         child: _prescriptionImage != null
+                    //                             ? Image.memory(
+                    //                                 base64Decode(
+                    //                                     _prescriptionImage!),
+                    //                                 fit: BoxFit.cover,
+                    //                               )
+                    //                             : Column(
+                    //                                 mainAxisAlignment:
+                    //                                     MainAxisAlignment
+                    //                                         .center,
+                    //                                 crossAxisAlignment:
+                    //                                     CrossAxisAlignment
+                    //                                         .stretch,
+                    //                                 children: [
+                    //                                   const Icon(Icons.image)
+                    //                                       .pOnly(bottom: 5),
+                    //                                   Text(
+                    //                                     LocaleKeys.choose_image
+                    //                                         .tr(),
+                    //                                     textAlign:
+                    //                                         TextAlign.center,
+                    //                                   ),
+                    //                                 ],
+                    //                               ),
+                    //                       ).cornerRadius(10),
+                    //                     ),
+                    //                     const SizedBox(height: 12),
+                    //                   ],
+                    //                 );
+                    //               } else {
+                    //                 return const SizedBox();
+                    //               }
+                    //             },
+                    //             loading: () {
+                    //               return const SizedBox();
+                    //             },
+                    //             error: (error, stackTrace) {
+                    //               return Center(
+                    //                   child: Padding(
+                    //                 padding: const EdgeInsets.all(16),
+                    //                 child: Text(
+                    //                     LocaleKeys.something_went_wrong.tr()),
+                    //               ));
+                    //             },
+                    //           ),
+                    //           Container(
+                    //             margin:
+                    //                 const EdgeInsets.symmetric(horizontal: 12),
+                    //             decoration: BoxDecoration(
+                    //               color: getColorBasedOnTheme(
+                    //                   context, kLightColor, kDarkCardBgColor),
+                    //               borderRadius: BorderRadius.circular(10),
+                    //             ),
+                    //             padding: const EdgeInsets.all(16),
+                    //             child: Column(
+                    //               crossAxisAlignment:
+                    //                   CrossAxisAlignment.stretch,
+                    //               children: [
+                    //                 Text(
+                    //                   LocaleKeys.note_for_seller.tr(),
+                    //                   style: Theme.of(context)
+                    //                       .textTheme
+                    //                       .headline6!
+                    //                       .copyWith(
+                    //                         fontWeight: FontWeight.bold,
+                    //                       ),
+                    //                 ),
+                    //                 const SizedBox(height: 8),
+                    //                 CustomTextField(
+                    //                   controller: _aditionalNotesController,
+                    //                   maxLines: 5,
+                    //                   hintText: LocaleKeys.note_for_seller.tr(),
+                    //                   onChanged: (value) {
+                    //                     context
+                    //                         .read(checkoutNotifierProvider
+                    //                             .notifier)
+                    //                         .buyerNote = value;
+                    //                   },
+                    //                 )
+                    //               ],
+                    //             ),
+                    //           ),
+                    //           const SizedBox(height: 12),
+                    //           accessAllowed
+                    //               ? const SizedBox()
+                    //               : Container(
+                    //                   margin: const EdgeInsets.symmetric(
+                    //                       horizontal: 12),
+                    //                   padding: const EdgeInsets.all(16),
+                    //                   decoration: BoxDecoration(
+                    //                       color: getColorBasedOnTheme(context,
+                    //                           kLightColor, kDarkCardBgColor),
+                    //                       borderRadius:
+                    //                           BorderRadius.circular(10),
+                    //                       boxShadow: [
+                    //                         BoxShadow(
+                    //                           blurRadius: 10,
+                    //                           color:
+                    //                               Colors.black.withOpacity(0.1),
+                    //                           offset: const Offset(0, 10),
+                    //                         ),
+                    //                       ]),
+                    //                   child: Column(
+                    //                       crossAxisAlignment:
+                    //                           CrossAxisAlignment.start,
+                    //                       children: [
+                    //                         Text(LocaleKeys.guest_checkout.tr(),
+                    //                                 style: Theme.of(context)
+                    //                                     .textTheme
+                    //                                     .headline6)
+                    //                             .pOnly(bottom: 10),
+                    //                         Form(
+                    //                           key: _emailFormKey,
+                    //                           child: CustomTextField(
+                    //                             hintText:
+                    //                                 LocaleKeys.your_email.tr(),
+                    //                             controller: _emailController,
+                    //                             keyboardType:
+                    //                                 TextInputType.emailAddress,
+                    //                             validator: (value) {
+                    //                               if (value != null) {
+                    //                                 if (!value.contains('@') ||
+                    //                                     !value.contains('.')) {
+                    //                                   return LocaleKeys
+                    //                                       .invalid_email
+                    //                                       .tr();
+                    //                                 }
+                    //                               }
+                    //                               return null;
+                    //                             },
+                    //                             onChanged: (value) {
+                    //                               context
+                    //                                   .read(
+                    //                                       checkoutNotifierProvider
+                    //                                           .notifier)
+                    //                                   .email = value;
+                    //                             },
+                    //                           ),
+                    //                         ),
+                    //                         ListTile(
+                    //                           title: Text(LocaleKeys
+                    //                               .create_account
+                    //                               .tr()),
+                    //                           minLeadingWidth: 0,
+                    //                           onTap: () {
+                    //                             setState(() {
+                    //                               _createNewAccount =
+                    //                                   !_createNewAccount;
+                    //                             });
+                    //                             context
+                    //                                     .read(
+                    //                                         checkoutNotifierProvider
+                    //                                             .notifier)
+                    //                                     .createAccount =
+                    //                                 _createNewAccount;
+                    //                           },
+                    //                           leading: Icon(_createNewAccount
+                    //                               ? Icons.check_circle
+                    //                               : Icons
+                    //                                   .radio_button_unchecked),
+                    //                         ),
+                    //                         Visibility(
+                    //                           visible: _createNewAccount,
+                    //                           child: Form(
+                    //                             key: _formKey,
+                    //                             child: Column(
+                    //                               children: [
+                    //                                 CustomTextField(
+                    //                                   isPassword: true,
+                    //                                   title: LocaleKeys
+                    //                                       .your_password
+                    //                                       .tr(),
+                    //                                   hintText: LocaleKeys
+                    //                                       .your_password
+                    //                                       .tr(),
+                    //                                   keyboardType:
+                    //                                       TextInputType
+                    //                                           .visiblePassword,
+                    //                                   controller:
+                    //                                       _passWordController,
+                    //                                   validator: (value) {
+                    //                                     if (value != null) {
+                    //                                       if (value.length <
+                    //                                           6) {
+                    //                                         return LocaleKeys
+                    //                                             .password_validation
+                    //                                             .tr();
+                    //                                       }
+                    //                                     }
+                    //                                     return null;
+                    //                                   },
+                    //                                   onChanged: (value) {
+                    //                                     context
+                    //                                         .read(
+                    //                                             checkoutNotifierProvider
+                    //                                                 .notifier)
+                    //                                         .password = value;
+                    //                                   },
+                    //                                 ),
+                    //                                 CustomTextField(
+                    //                                   isPassword: true,
+                    //                                   title: LocaleKeys
+                    //                                       .your_confirm_password
+                    //                                       .tr(),
+                    //                                   hintText: LocaleKeys
+                    //                                       .your_confirm_password
+                    //                                       .tr(),
+                    //                                   keyboardType:
+                    //                                       TextInputType
+                    //                                           .visiblePassword,
+                    //                                   controller:
+                    //                                       _confirmPassWordController,
+                    //                                   validator: (value) {
+                    //                                     if (value != null) {
+                    //                                       if (value.length <
+                    //                                           6) {
+                    //                                         return LocaleKeys
+                    //                                             .password_validation
+                    //                                             .tr();
+                    //                                       }
+                    //                                       {
+                    //                                         if (value !=
+                    //                                             _passWordController
+                    //                                                 .text) {
+                    //                                           return LocaleKeys
+                    //                                               .dont_match_password
+                    //                                               .tr();
+                    //                                         }
+                    //                                       }
+                    //                                     }
+                    //                                     return null;
+                    //                                   },
+                    //                                   onChanged: (value) {
+                    //                                     context
+                    //                                         .read(
+                    //                                             checkoutNotifierProvider
+                    //                                                 .notifier)
+                    //                                         .passwordConfirm = value;
+                    //                                   },
+                    //                                 ),
+                    //                                 ListTile(
+                    //                                   onTap: () {
+                    //                                     setState(() {
+                    //                                       _agreedToTerms =
+                    //                                           !_agreedToTerms;
+                    //                                     });
+                    //                                     context
+                    //                                             .read(checkoutNotifierProvider
+                    //                                                 .notifier)
+                    //                                             .agreeToTerms =
+                    //                                         _agreedToTerms;
+                    //                                   },
+                    //                                   minLeadingWidth: 0,
+                    //                                   leading: Icon(_agreedToTerms
+                    //                                       ? Icons.check_circle
+                    //                                       : Icons
+                    //                                           .radio_button_unchecked),
+                    //                                   title: GestureDetector(
+                    //                                     onTap: () {
+                    //                                       Navigator.push(
+                    //                                           context,
+                    //                                           MaterialPageRoute(
+                    //                                               builder:
+                    //                                                   (context) =>
+                    //                                                       const TermsAndConditionScreen()));
+                    //                                     },
+                    //                                     child: Text(LocaleKeys
+                    //                                         .agree_terms
+                    //                                         .tr()),
+                    //                                   ),
+                    //                                 ),
+                    //                               ],
+                    //                             ),
+                    //                           ),
+                    //                         ),
+                    //                       ]),
+                    //                 ),
+                    //           const SizedBox(height: 12),
+                    //         ],
+                    //       ),
+                    //     ),
+                    //   ),
+                    //   if (!widget.isKeyboardVisible)
+                    //     Padding(
+                    //       padding: const EdgeInsets.all(16),
+                    //       child: ElevatedButton(
+                    //         style: ElevatedButton.styleFrom(
+                    //             padding:
+                    //                 const EdgeInsets.symmetric(vertical: 16)),
+                    //         onPressed: _isLoading
+                    //             ? null
+                    //             : () async {
+                    //                 if (_selectedPaymentMethod.isEmpty) {
+                    //                   toast(LocaleKeys
+                    //                       .select_payment_method_continue
+                    //                       .tr());
+                    //                 } else {
+                    //                   if (!accessAllowed) {
+                    //                     if (_createNewAccount) {
+                    //                       if (_emailFormKey.currentState!
+                    //                           .validate()) {
+                    //                         if (_agreedToTerms) {
+                    //                           if (_formKey.currentState!
+                    //                               .validate()) {
+                    //                             setState(() {
+                    //                               _isLoading = true;
+                    //                             });
+                    //                             await PaymentMethods.pay(
+                    //                               context,
+                    //                               _selectedPaymentMethod,
+                    //                               email: _emailController.text
+                    //                                   .trim(),
+                    //                               grandTotal: _grandTotal,
+                    //                               invoiceNumber: widget
+                    //                                   .cartItemDetails!
+                    //                                   .data!
+                    //                                   .id!
+                    //                                   .toString(),
+                    //                               shippingId: widget
+                    //                                   .cartItemDetails!
+                    //                                   .data!
+                    //                                   .shippingOptionId,
+                    //                               address: widget.address,
+                    //                               cartId: widget.isOneCheckout
+                    //                                   ? null
+                    //                                   : widget.cartItemDetails!
+                    //                                       .data!.id,
+                    //                               currency: widget
+                    //                                   .cartItemDetails!
+                    //                                   .meta!
+                    //                                   .currency,
+                    //                               cartItems: _cartItems,
+                    //                               discount: _discount,
+                    //                               handling: _handling,
+                    //                               packaging: _packaging,
+                    //                               shipping: _shipping,
+                    //                               subtotal: _subtotal,
+                    //                               taxes: _tax,
+                    //                             ).then((value) async {
+                    //                               if (value) {
+                    //                                 await context
+                    //                                     .read(
+                    //                                         checkoutNotifierProvider
+                    //                                             .notifier)
+                    //                                     .guestCheckout(
+                    //                                         isOneCheckout: widget
+                    //                                             .isOneCheckout);
+                    //                                 setState(() {
+                    //                                   _isLoading = false;
+                    //                                 });
+                    //                                 if (_selectedPaymentMethod ==
+                    //                                     zcartWallet) {
+                    //                                   context.refresh(
+                    //                                       walletBalanceProvider);
+                    //                                   context.refresh(
+                    //                                       walletTransactionFutureProvider);
+                    //                                 }
+                    //                               } else {
+                    //                                 toast(LocaleKeys
+                    //                                     .payment_failed
+                    //                                     .tr());
+                    //                               }
+                    //                             });
+                    //                           }
+                    //                         } else {
+                    //                           toast(LocaleKeys
+                    //                               .please_agree_terms
+                    //                               .tr());
+                    //                         }
+                    //                       } else {
+                    //                         toast(
+                    //                             LocaleKeys.invalid_email.tr());
+                    //                       }
+                    //                       setState(() {
+                    //                         _isLoading = false;
+                    //                       });
+                    //                     } else {
+                    //                       if (_emailFormKey.currentState!
+                    //                           .validate()) {
+                    //                         setState(() {
+                    //                           _isLoading = true;
+                    //                         });
+                    //                         await PaymentMethods.pay(
+                    //                           context,
+                    //                           _selectedPaymentMethod,
+                    //                           email:
+                    //                               _emailController.text.trim(),
+                    //                           grandTotal: _grandTotal,
+                    //                           invoiceNumber: widget
+                    //                               .cartItemDetails!.data!.id!
+                    //                               .toString(),
+                    //                           shippingId: widget
+                    //                               .cartItemDetails!
+                    //                               .data!
+                    //                               .shippingOptionId,
+                    //                           address: widget.address,
+                    //                           cartId: widget.isOneCheckout
+                    //                               ? null
+                    //                               : widget.cartItemDetails!
+                    //                                   .data!.id,
+                    //                           currency: widget.cartItemDetails!
+                    //                               .meta!.currency,
+                    //                           cartItems: _cartItems,
+                    //                           discount: _discount,
+                    //                           handling: _handling,
+                    //                           packaging: _packaging,
+                    //                           shipping: _shipping,
+                    //                           subtotal: _subtotal,
+                    //                           taxes: _tax,
+                    //                         ).then((value) async {
+                    //                           if (value) {
+                    //                             await context
+                    //                                 .read(
+                    //                                     checkoutNotifierProvider
+                    //                                         .notifier)
+                    //                                 .guestCheckout(
+                    //                                     isOneCheckout: widget
+                    //                                         .isOneCheckout);
+                    //                             setState(() {
+                    //                               _isLoading = false;
+                    //                             });
+                    //                             if (_selectedPaymentMethod ==
+                    //                                 zcartWallet) {
+                    //                               context.refresh(
+                    //                                   walletBalanceProvider);
+                    //                               context.refresh(
+                    //                                   walletTransactionFutureProvider);
+                    //                             }
+                    //                           } else {
+                    //                             toast(LocaleKeys.payment_failed
+                    //                                 .tr());
+                    //                           }
+                    //                         });
+                    //                       } else {
+                    //                         toast(
+                    //                             LocaleKeys.invalid_email.tr());
+                    //                       }
+                    //                       setState(() {
+                    //                         _isLoading = false;
+                    //                       });
+                    //                     }
+                    //                   } else {
+                    //                     setState(() {
+                    //                       _isLoading = true;
+                    //                     });
+                    //                     await PaymentMethods.pay(
+                    //                       context,
+                    //                       _selectedPaymentMethod,
+                    //                       email: widget.customerEmail!,
+                    //                       grandTotal: _grandTotal,
+                    //                       shippingId: widget.cartItemDetails!
+                    //                           .data!.shippingOptionId,
+                    //                       invoiceNumber: widget
+                    //                           .cartItemDetails!.data!.id!
+                    //                           .toString(),
+                    //                       address: widget.address,
+                    //                       cartId: widget.isOneCheckout
+                    //                           ? null
+                    //                           : widget
+                    //                               .cartItemDetails!.data!.id,
+                    //                       currency: widget
+                    //                           .cartItemDetails!.meta!.currency,
+                    //                       cartItems: _cartItems,
+                    //                       discount: _discount,
+                    //                       handling: _handling,
+                    //                       packaging: _packaging,
+                    //                       shipping: _shipping,
+                    //                       subtotal: _subtotal,
+                    //                       taxes: _tax,
+                    //                     ).then((value) async {
+                    //                       if (value) {
+                    //                         await context
+                    //                             .read(checkoutNotifierProvider
+                    //                                 .notifier)
+                    //                             .checkout(
+                    //                                 isOneCheckout:
+                    //                                     widget.isOneCheckout);
+                    //                         setState(() {
+                    //                           _isLoading = false;
+                    //                         });
+                    //                         if (_selectedPaymentMethod ==
+                    //                             zcartWallet) {
+                    //                           context.refresh(
+                    //                               walletBalanceProvider);
+                    //                           context.refresh(
+                    //                               walletTransactionFutureProvider);
+                    //                         }
+                    //                       } else {
+                    //                         toast(
+                    //                             LocaleKeys.payment_failed.tr());
+                    //                       }
+                    //                       setState(() {
+                    //                         _isLoading = false;
+                    //                       });
+                    //                     });
+                    //                   }
+                    //                 }
+                    //               },
+                    //         child: Text(LocaleKeys.proceed_to_checkout.tr()),
+                    //       ),
+                    //     ),
+                    // ],
                     children: [
                       Expanded(
-                        child: SingleChildScrollView(
-                          child: Column(
-                            children: [
-                              const SizedBox(height: 12),
-                              Container(
-                                margin:
-                                    const EdgeInsets.symmetric(horizontal: 12),
-                                decoration: BoxDecoration(
-                                  color: getColorBasedOnTheme(
-                                      context, kLightColor, kDarkCardBgColor),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.stretch,
-                                  children: [
-                                    const SizedBox(height: 16),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 12),
-                                      child: Text(
-                                        LocaleKeys.payment_method.tr(),
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headline6!
-                                            .copyWith(
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                      ),
-                                    ),
-                                    const SizedBox(height: 10),
-                                    const Divider(),
-                                    ListView(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 24),
-                                        shrinkWrap: true,
-                                        physics:
-                                            const NeverScrollableScrollPhysics(),
-                                        children:
-                                            _implementedPaymentOptions.map((e) {
-                                          String _code = e.code!;
-                                          return ListTile(
-                                            contentPadding:
-                                                const EdgeInsets.all(0),
-                                            onTap: () async {
-                                              setState(() {
-                                                _selectedPaymentMethod = _code;
-                                              });
-
-                                              context
-                                                  .read(checkoutNotifierProvider
-                                                      .notifier)
-                                                  .paymentMethod = e.code;
-                                            },
-                                            title: Text(
-                                              e.name!,
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .subtitle2!
-                                                  .copyWith(
-                                                    fontWeight: _code ==
-                                                            _selectedPaymentMethod
-                                                        ? FontWeight.bold
-                                                        : FontWeight.normal,
-                                                  ),
-                                            ),
-                                            trailing: _code ==
-                                                    _selectedPaymentMethod
-                                                ? Icon(Icons.check_circle,
-                                                    color: kPrimaryColor)
-                                                : Icon(
-                                                    Icons
-                                                        .radio_button_unchecked,
-                                                    color: getColorBasedOnTheme(
-                                                        context,
-                                                        kDarkColor,
-                                                        kLightColor),
-                                                  ),
-                                          );
-                                        }).toList()),
-                                    const SizedBox(height: 4),
-                                  ],
-                                ),
-                              ),
-                              const SizedBox(height: 12),
-                              _pharmacyCheckProvider.when(
-                                data: (value) {
-                                  if (value) {
-                                    return Column(
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Text(LocaleKeys.prescription.tr(),
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .bodyText2),
-                                          ],
-                                        ).pOnly(top: 10, bottom: 10),
-                                        GestureDetector(
-                                          onTap: () async {
-                                            await pickImageToBase64()
-                                                .then((value) {
-                                              if (value != null) {
-                                                setState(() {
-                                                  _prescriptionImage = value;
-                                                });
-
-                                                context
-                                                    .read(
-                                                        checkoutNotifierProvider
-                                                            .notifier)
-                                                    .prescription = value;
-                                              }
-                                            });
-                                          },
-                                          child: Container(
-                                            color: getColorBasedOnTheme(context,
-                                                kLightColor, kDarkCardBgColor),
-                                            padding: const EdgeInsets.all(10),
-                                            height: 200,
-                                            child: _prescriptionImage != null
-                                                ? Image.memory(
-                                                    base64Decode(
-                                                        _prescriptionImage!),
-                                                    fit: BoxFit.cover,
-                                                  )
-                                                : Column(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .stretch,
-                                                    children: [
-                                                      const Icon(Icons.image)
-                                                          .pOnly(bottom: 5),
-                                                      Text(
-                                                        LocaleKeys.choose_image
-                                                            .tr(),
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                      ),
-                                                    ],
-                                                  ),
-                                          ).cornerRadius(10),
-                                        ),
-                                        const SizedBox(height: 12),
-                                      ],
-                                    );
-                                  } else {
-                                    return const SizedBox();
-                                  }
-                                },
-                                loading: () {
-                                  return const SizedBox();
-                                },
-                                error: (error, stackTrace) {
-                                  return Center(
-                                      child: Padding(
-                                    padding: const EdgeInsets.all(16),
-                                    child: Text(
-                                        LocaleKeys.something_went_wrong.tr()),
-                                  ));
-                                },
-                              ),
-                              Container(
-                                margin:
-                                    const EdgeInsets.symmetric(horizontal: 12),
-                                decoration: BoxDecoration(
-                                  color: getColorBasedOnTheme(
-                                      context, kLightColor, kDarkCardBgColor),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                padding: const EdgeInsets.all(16),
-                                child: Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.stretch,
-                                  children: [
-                                    Text(
-                                      LocaleKeys.note_for_seller.tr(),
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headline6!
-                                          .copyWith(
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                    ),
-                                    const SizedBox(height: 8),
-                                    CustomTextField(
-                                      controller: _aditionalNotesController,
-                                      maxLines: 5,
-                                      hintText: LocaleKeys.note_for_seller.tr(),
-                                      onChanged: (value) {
-                                        context
-                                            .read(checkoutNotifierProvider
-                                                .notifier)
-                                            .buyerNote = value;
-                                      },
-                                    )
-                                  ],
-                                ),
-                              ),
-                              const SizedBox(height: 12),
-                              accessAllowed
-                                  ? const SizedBox()
-                                  : Container(
-                                      margin: const EdgeInsets.symmetric(
-                                          horizontal: 12),
-                                      padding: const EdgeInsets.all(16),
-                                      decoration: BoxDecoration(
-                                          color: getColorBasedOnTheme(context,
-                                              kLightColor, kDarkCardBgColor),
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          boxShadow: [
-                                            BoxShadow(
-                                              blurRadius: 10,
-                                              color:
-                                                  Colors.black.withOpacity(0.1),
-                                              offset: const Offset(0, 10),
-                                            ),
-                                          ]),
-                                      child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(LocaleKeys.guest_checkout.tr(),
-                                                    style: Theme.of(context)
-                                                        .textTheme
-                                                        .headline6)
-                                                .pOnly(bottom: 10),
-                                            Form(
-                                              key: _emailFormKey,
-                                              child: CustomTextField(
-                                                hintText:
-                                                    LocaleKeys.your_email.tr(),
-                                                controller: _emailController,
-                                                keyboardType:
-                                                    TextInputType.emailAddress,
-                                                validator: (value) {
-                                                  if (value != null) {
-                                                    if (!value.contains('@') ||
-                                                        !value.contains('.')) {
-                                                      return LocaleKeys
-                                                          .invalid_email
-                                                          .tr();
-                                                    }
-                                                  }
-                                                  return null;
-                                                },
-                                                onChanged: (value) {
-                                                  context
-                                                      .read(
-                                                          checkoutNotifierProvider
-                                                              .notifier)
-                                                      .email = value;
-                                                },
-                                              ),
-                                            ),
-                                            ListTile(
-                                              title: Text(LocaleKeys
-                                                  .create_account
-                                                  .tr()),
-                                              minLeadingWidth: 0,
-                                              onTap: () {
-                                                setState(() {
-                                                  _createNewAccount =
-                                                      !_createNewAccount;
-                                                });
-                                                context
-                                                        .read(
-                                                            checkoutNotifierProvider
-                                                                .notifier)
-                                                        .createAccount =
-                                                    _createNewAccount;
-                                              },
-                                              leading: Icon(_createNewAccount
-                                                  ? Icons.check_circle
-                                                  : Icons
-                                                      .radio_button_unchecked),
-                                            ),
-                                            Visibility(
-                                              visible: _createNewAccount,
-                                              child: Form(
-                                                key: _formKey,
-                                                child: Column(
-                                                  children: [
-                                                    CustomTextField(
-                                                      isPassword: true,
-                                                      title: LocaleKeys
-                                                          .your_password
-                                                          .tr(),
-                                                      hintText: LocaleKeys
-                                                          .your_password
-                                                          .tr(),
-                                                      keyboardType:
-                                                          TextInputType
-                                                              .visiblePassword,
-                                                      controller:
-                                                          _passWordController,
-                                                      validator: (value) {
-                                                        if (value != null) {
-                                                          if (value.length <
-                                                              6) {
-                                                            return LocaleKeys
-                                                                .password_validation
-                                                                .tr();
-                                                          }
-                                                        }
-                                                        return null;
-                                                      },
-                                                      onChanged: (value) {
-                                                        context
-                                                            .read(
-                                                                checkoutNotifierProvider
-                                                                    .notifier)
-                                                            .password = value;
-                                                      },
-                                                    ),
-                                                    CustomTextField(
-                                                      isPassword: true,
-                                                      title: LocaleKeys
-                                                          .your_confirm_password
-                                                          .tr(),
-                                                      hintText: LocaleKeys
-                                                          .your_confirm_password
-                                                          .tr(),
-                                                      keyboardType:
-                                                          TextInputType
-                                                              .visiblePassword,
-                                                      controller:
-                                                          _confirmPassWordController,
-                                                      validator: (value) {
-                                                        if (value != null) {
-                                                          if (value.length <
-                                                              6) {
-                                                            return LocaleKeys
-                                                                .password_validation
-                                                                .tr();
-                                                          }
-                                                          {
-                                                            if (value !=
-                                                                _passWordController
-                                                                    .text) {
-                                                              return LocaleKeys
-                                                                  .dont_match_password
-                                                                  .tr();
-                                                            }
-                                                          }
-                                                        }
-                                                        return null;
-                                                      },
-                                                      onChanged: (value) {
-                                                        context
-                                                            .read(
-                                                                checkoutNotifierProvider
-                                                                    .notifier)
-                                                            .passwordConfirm = value;
-                                                      },
-                                                    ),
-                                                    ListTile(
-                                                      onTap: () {
-                                                        setState(() {
-                                                          _agreedToTerms =
-                                                              !_agreedToTerms;
-                                                        });
-                                                        context
-                                                                .read(checkoutNotifierProvider
-                                                                    .notifier)
-                                                                .agreeToTerms =
-                                                            _agreedToTerms;
-                                                      },
-                                                      minLeadingWidth: 0,
-                                                      leading: Icon(_agreedToTerms
-                                                          ? Icons.check_circle
-                                                          : Icons
-                                                              .radio_button_unchecked),
-                                                      title: GestureDetector(
-                                                        onTap: () {
-                                                          Navigator.push(
-                                                              context,
-                                                              MaterialPageRoute(
-                                                                  builder:
-                                                                      (context) =>
-                                                                          const TermsAndConditionScreen()));
-                                                        },
-                                                        child: Text(LocaleKeys
-                                                            .agree_terms
-                                                            .tr()),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                          ]),
-                                    ),
-                              const SizedBox(height: 12),
-                            ],
-                          ),
+                        child: WebView(
+                          initialUrl: "https://sample-demo-dot-midtrans-support-tools.et.r.appspot.com/snap-redirect/",
+                          onPageStarted: (url) {
+                            setState(() {
+                              loadingPercentage = 0;
+                            });
+                          },
+                          onProgress: (progress) {
+                            setState(() {
+                              loadingPercentage = progress;
+                            });
+                          },
+                          onPageFinished: (url) {
+                            setState(() {
+                              loadingPercentage = 100;
+                            });
+                          },
+                          navigationDelegate: (navigation) {
+                            final host = Uri.parse(navigation.url).toString();
+                            if (host.contains('gojek://') ||
+                                host.contains('shopeeid://') ||
+                                host.contains('//wsa.wallet.airpay.co.id/') ||
+                                // This is handle for sandbox Simulator
+                                host.contains('/gopay/partner/') ||
+                                host.contains('/shopeepay/') ||
+                                host.contains('/pdf')) {
+                              //_launchInExternalBrowser(Uri.parse(navigation.url));
+                              launchUrl(
+                                Uri.parse(navigation.url),
+                                mode: LaunchMode.externalApplication,
+                              );
+                              return NavigationDecision.prevent;
+                            } else {
+                              return NavigationDecision.navigate;
+                            }
+                          },
+                          javascriptMode: JavascriptMode.unrestricted,
                         ),
                       ),
-                      if (!widget.isKeyboardVisible)
-                        Padding(
-                          padding: const EdgeInsets.all(16),
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 16)),
-                            onPressed: _isLoading
-                                ? null
-                                : () async {
-                                    if (_selectedPaymentMethod.isEmpty) {
-                                      toast(LocaleKeys
-                                          .select_payment_method_continue
-                                          .tr());
-                                    } else {
-                                      if (!accessAllowed) {
-                                        if (_createNewAccount) {
-                                          if (_emailFormKey.currentState!
-                                              .validate()) {
-                                            if (_agreedToTerms) {
-                                              if (_formKey.currentState!
-                                                  .validate()) {
-                                                setState(() {
-                                                  _isLoading = true;
-                                                });
-                                                await PaymentMethods.pay(
-                                                  context,
-                                                  _selectedPaymentMethod,
-                                                  email: _emailController.text
-                                                      .trim(),
-                                                  grandTotal: _grandTotal,
-                                                  invoiceNumber: widget
-                                                      .cartItemDetails!
-                                                      .data!
-                                                      .id!
-                                                      .toString(),
-                                                  shippingId: widget
-                                                      .cartItemDetails!
-                                                      .data!
-                                                      .shippingOptionId,
-                                                  address: widget.address,
-                                                  cartId: widget.isOneCheckout
-                                                      ? null
-                                                      : widget.cartItemDetails!
-                                                          .data!.id,
-                                                  currency: widget
-                                                      .cartItemDetails!
-                                                      .meta!
-                                                      .currency,
-                                                  cartItems: _cartItems,
-                                                  discount: _discount,
-                                                  handling: _handling,
-                                                  packaging: _packaging,
-                                                  shipping: _shipping,
-                                                  subtotal: _subtotal,
-                                                  taxes: _tax,
-                                                ).then((value) async {
-                                                  if (value) {
-                                                    await context
-                                                        .read(
-                                                            checkoutNotifierProvider
-                                                                .notifier)
-                                                        .guestCheckout(
-                                                            isOneCheckout: widget
-                                                                .isOneCheckout);
-                                                    setState(() {
-                                                      _isLoading = false;
-                                                    });
-                                                    if (_selectedPaymentMethod ==
-                                                        zcartWallet) {
-                                                      context.refresh(
-                                                          walletBalanceProvider);
-                                                      context.refresh(
-                                                          walletTransactionFutureProvider);
-                                                    }
-                                                  } else {
-                                                    toast(LocaleKeys
-                                                        .payment_failed
-                                                        .tr());
-                                                  }
-                                                });
-                                              }
-                                            } else {
-                                              toast(LocaleKeys
-                                                  .please_agree_terms
-                                                  .tr());
-                                            }
-                                          } else {
-                                            toast(
-                                                LocaleKeys.invalid_email.tr());
-                                          }
-                                          setState(() {
-                                            _isLoading = false;
-                                          });
-                                        } else {
-                                          if (_emailFormKey.currentState!
-                                              .validate()) {
-                                            setState(() {
-                                              _isLoading = true;
-                                            });
-                                            await PaymentMethods.pay(
-                                              context,
-                                              _selectedPaymentMethod,
-                                              email:
-                                                  _emailController.text.trim(),
-                                              grandTotal: _grandTotal,
-                                              invoiceNumber: widget
-                                                  .cartItemDetails!.data!.id!
-                                                  .toString(),
-                                              shippingId: widget
-                                                  .cartItemDetails!
-                                                  .data!
-                                                  .shippingOptionId,
-                                              address: widget.address,
-                                              cartId: widget.isOneCheckout
-                                                  ? null
-                                                  : widget.cartItemDetails!
-                                                      .data!.id,
-                                              currency: widget.cartItemDetails!
-                                                  .meta!.currency,
-                                              cartItems: _cartItems,
-                                              discount: _discount,
-                                              handling: _handling,
-                                              packaging: _packaging,
-                                              shipping: _shipping,
-                                              subtotal: _subtotal,
-                                              taxes: _tax,
-                                            ).then((value) async {
-                                              if (value) {
-                                                await context
-                                                    .read(
-                                                        checkoutNotifierProvider
-                                                            .notifier)
-                                                    .guestCheckout(
-                                                        isOneCheckout: widget
-                                                            .isOneCheckout);
-                                                setState(() {
-                                                  _isLoading = false;
-                                                });
-                                                if (_selectedPaymentMethod ==
-                                                    zcartWallet) {
-                                                  context.refresh(
-                                                      walletBalanceProvider);
-                                                  context.refresh(
-                                                      walletTransactionFutureProvider);
-                                                }
-                                              } else {
-                                                toast(LocaleKeys.payment_failed
-                                                    .tr());
-                                              }
-                                            });
-                                          } else {
-                                            toast(
-                                                LocaleKeys.invalid_email.tr());
-                                          }
-                                          setState(() {
-                                            _isLoading = false;
-                                          });
-                                        }
-                                      } else {
-                                        setState(() {
-                                          _isLoading = true;
-                                        });
-                                        await PaymentMethods.pay(
-                                          context,
-                                          _selectedPaymentMethod,
-                                          email: widget.customerEmail!,
-                                          grandTotal: _grandTotal,
-                                          shippingId: widget.cartItemDetails!
-                                              .data!.shippingOptionId,
-                                          invoiceNumber: widget
-                                              .cartItemDetails!.data!.id!
-                                              .toString(),
-                                          address: widget.address,
-                                          cartId: widget.isOneCheckout
-                                              ? null
-                                              : widget
-                                                  .cartItemDetails!.data!.id,
-                                          currency: widget
-                                              .cartItemDetails!.meta!.currency,
-                                          cartItems: _cartItems,
-                                          discount: _discount,
-                                          handling: _handling,
-                                          packaging: _packaging,
-                                          shipping: _shipping,
-                                          subtotal: _subtotal,
-                                          taxes: _tax,
-                                        ).then((value) async {
-                                          if (value) {
-                                            await context
-                                                .read(checkoutNotifierProvider
-                                                    .notifier)
-                                                .checkout(
-                                                    isOneCheckout:
-                                                        widget.isOneCheckout);
-                                            setState(() {
-                                              _isLoading = false;
-                                            });
-                                            if (_selectedPaymentMethod ==
-                                                zcartWallet) {
-                                              context.refresh(
-                                                  walletBalanceProvider);
-                                              context.refresh(
-                                                  walletTransactionFutureProvider);
-                                            }
-                                          } else {
-                                            toast(
-                                                LocaleKeys.payment_failed.tr());
-                                          }
-                                          setState(() {
-                                            _isLoading = false;
-                                          });
-                                        });
-                                      }
-                                    }
-                                  },
-                            child: Text(LocaleKeys.proceed_to_checkout.tr()),
-                          ),
-                        ),
                     ],
                   );
           } else {
@@ -2678,6 +2734,7 @@ class CheckOutProgressItem extends StatelessWidget {
   final VoidCallback onTap;
 
   final Color progressColor;
+
   const CheckOutProgressItem({
     Key? key,
     required this.isFirst,
@@ -2735,6 +2792,7 @@ class CheckOutProgressItem extends StatelessWidget {
 class CheckOutProgress {
   String title;
   IconData icon;
+
   CheckOutProgress({
     required this.title,
     required this.icon,

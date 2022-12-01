@@ -1026,7 +1026,7 @@ class ShippingDetails extends ConsumerWidget {
                                       .read(cartItemDetailsNotifierProvider
                                           .notifier)
                                       .getCartItemDetails(cartItem.id);
-
+                                  toast("Snap Token ${cartItem.snapToken}");
                                   context.nextPage(CheckoutScreen(
                                       customerEmail: _customerEmail));
                                 }
