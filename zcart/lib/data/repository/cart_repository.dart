@@ -11,7 +11,7 @@ import 'package:zcart/views/shared_widgets/cart_bottom_sheet.dart';
 class CartRepository implements ICartRepository {
   @override
   Future<List<CartItem>?> fetchCarts() async {
-    var responseBody = await handleResponse(await getRequest(API.carts));
+    var responseBody = await handleResponse(await getRequest(API.carts, bearerToken:true));
     if (responseBody.runtimeType == int && responseBody > 206) {
       throw NetworkException();
     }
@@ -112,7 +112,7 @@ class CartRepository implements ICartRepository {
     try {
       responseBody = await handleResponse(await postRequest(
           API.addToCart(slug), requestBody,
-          bearerToken: false));
+          bearerToken: true));
 
       if (responseBody.runtimeType != int) {
         addToCartBottomSheet(context, responseBody);

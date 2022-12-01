@@ -60,7 +60,7 @@ class _MyCartTabState extends State<MyCartTab> {
 
   final List<bool> _isAllCartCheckout = [];
 
-  void _onOneCheckOut(int cartId, String? userEmail) {
+  void _onOneCheckOut(int cartId, String? userEmail, String? snapToken) {
     setState(() {});
 
     if (_isAllCartCheckout.any((element) => element == false)) {
@@ -79,7 +79,7 @@ class _MyCartTabState extends State<MyCartTab> {
               .getCartItemDetails(cartId);
 
           context.nextPage(
-              CheckoutScreen(customerEmail: userEmail, isOneCheckout: true));
+              CheckoutScreen(customerEmail: userEmail, isOneCheckout: true, snapToken: snapToken));
         } else {
           if (accessAllowed == false) {
             context.nextPage(const LoginScreen(
@@ -94,7 +94,7 @@ class _MyCartTabState extends State<MyCartTab> {
                 .getCartItemDetails(cartId);
 
             context.nextPage(
-                CheckoutScreen(customerEmail: userEmail, isOneCheckout: true));
+                CheckoutScreen(customerEmail: userEmail, isOneCheckout: true, snapToken: snapToken));
           }
         }
       });
@@ -172,7 +172,7 @@ class _MyCartTabState extends State<MyCartTab> {
                           }
                           if (_cartState is CartLoadedState) {
                             _onOneCheckOut(
-                                _cartState.cartList!.first.id!, _customerEmail);
+                                _cartState.cartList!.first.id!, _customerEmail, _cartState.cartList!.first.snapToken!);
                           }
                         },
                         icon: const Icon(Icons.double_arrow),
@@ -1026,9 +1026,8 @@ class ShippingDetails extends ConsumerWidget {
                                       .read(cartItemDetailsNotifierProvider
                                           .notifier)
                                       .getCartItemDetails(cartItem.id);
-                                  toast("Snap Token ${cartItem.snapToken}");
                                   context.nextPage(CheckoutScreen(
-                                      customerEmail: _customerEmail));
+                                      customerEmail: _customerEmail, snapToken: cartItem.snapToken));
                                 }
                               }
                             });

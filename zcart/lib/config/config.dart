@@ -100,6 +100,7 @@ class MyConfig {
   static const String zcartIV = "M9RzG4u5mJh5n9Og";
 
   static const MIDTRANS_CLIENT_KEY="SB-Mid-client-DW4Klv2muo8ExPxU";
+  static const MIDTRANS_URL = "https://app.sandbox.midtrans.com/snap/snap.js";
 
 
   ///
