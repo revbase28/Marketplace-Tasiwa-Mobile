@@ -2067,12 +2067,11 @@ class _CheckoutPaymentPageState extends State<CheckoutPaymentPage> {
                               loadingPercentage = 0;
                             });
                           },
-                          javascriptChannels: <JavascriptChannel>[
+                          javascriptChannels: <JavascriptChannel>{
                             JavascriptChannel(
                               name: 'Print',
                               onMessageReceived: (JavascriptMessage receiver) {
-                                print('==========>>>>>>>>>>>>>> BEGIN');
-                                print(receiver.message);
+                                toast(receiver.message);
                                 if (receiver.message != null || receiver.message != 'undefined') {
                                   if (receiver.message == 'close') {
                                     Navigator.pop(context);
@@ -2081,14 +2080,12 @@ class _CheckoutPaymentPageState extends State<CheckoutPaymentPage> {
                                     toast(receiver.message);
                                   }
                                 }
-                                print('==========>>>>>>>>>>>>>> END');
                               },
                             ),
                             JavascriptChannel(
                               name: 'Android',
                               onMessageReceived: (JavascriptMessage receiver) {
-                                print('==========>>>>>>>>>>>>>> BEGIN');
-                                print(receiver.message);
+                                toast(receiver.message);
                                 if (Platform.isAndroid) {
                                   if (receiver.message != null || receiver.message != 'undefined') {
                                     if (receiver.message == 'close') {
@@ -2098,42 +2095,12 @@ class _CheckoutPaymentPageState extends State<CheckoutPaymentPage> {
                                     }
                                   }
                                 }
-                                print('==========>>>>>>>>>>>>>> END');
                               },
                             ),
-                          ].toSet(),
-                          onProgress: (progress) {
-                            setState(() {
-                              loadingPercentage = progress;
-                            });
-                          },
-                          onPageFinished: (url) {
-                            setState(() {
-                              loadingPercentage = 100;
-                            });
                           },
                           onWebViewCreated: (_controller){
                             webViewController = _controller;
                             _loadHtmlFromAssets(webViewController!, widget.snapToken!);
-                          },
-                          navigationDelegate: (navigation) {
-                            final host = Uri.parse(navigation.url).toString();
-                            if (host.contains('gojek://') ||
-                                host.contains('shopeeid://') ||
-                                host.contains('//wsa.wallet.airpay.co.id/') ||
-                                // This is handle for sandbox Simulator
-                                host.contains('/gopay/partner/') ||
-                                host.contains('/shopeepay/') ||
-                                host.contains('/pdf')) {
-                              //_launchInExternalBrowser(Uri.parse(navigation.url));
-                              launchUrl(
-                                Uri.parse(navigation.url),
-                                mode: LaunchMode.externalApplication,
-                              );
-                              return NavigationDecision.prevent;
-                            } else {
-                              return NavigationDecision.navigate;
-                            }
                           },
                           javascriptMode: JavascriptMode.unrestricted,
                         ),
