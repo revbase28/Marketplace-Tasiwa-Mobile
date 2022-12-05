@@ -338,6 +338,8 @@ class CartItemCard extends ConsumerWidget {
       return _state;
     }
 
+    final _shopName = cartItem.shop!.name!;
+
     return Container(
       decoration: BoxDecoration(
           color: getColorBasedOnTheme(context, kLightColor, kDarkCardBgColor),
@@ -376,7 +378,8 @@ class CartItemCard extends ConsumerWidget {
                       children: [
                         const Icon(Icons.store_outlined),
                         const SizedBox(width: 4),
-                        Text(cartItem.shop!.name!,
+                        Text(
+                            (_shopName).length > 15 ? '${_shopName.substring(0,15)}...' : _shopName,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style:
