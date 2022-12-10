@@ -1,3 +1,5 @@
+import '../../data/models/checkout/Checkout_model2.dart';
+
 abstract class CheckoutState {
   const CheckoutState();
 }
@@ -12,9 +14,13 @@ class CheckoutLoadingState extends CheckoutState {
 
 class CheckoutLoadedState extends CheckoutState {
   String? accessToken;
-  CheckoutLoadedState({
-    this.accessToken,
-  });
+  // CheckoutLoadedState({
+  //   this.accessToken,
+  // });
+
+  final CheckoutModel2? checkoutModel;
+
+  CheckoutLoadedState({this.checkoutModel, this.accessToken});
 }
 
 class CheckoutErrorState extends CheckoutState {

@@ -1561,7 +1561,20 @@ class CheckOutItemDetailsPage extends ConsumerWidget {
                                 style: ElevatedButton.styleFrom(
                                     padding: const EdgeInsets.symmetric(
                                         vertical: 16)),
-                                onPressed: onPressedNext,
+                                onPressed: (){
+                                  {
+                                    showCustomConfirmDialog(
+                                      context,
+                                      dialogAnimation: DialogAnimation.SLIDE_RIGHT_LEFT,
+                                      dialogType: DialogType.DELETE,
+                                      title: LocaleKeys.want_delete_item_from_cart.tr(),
+                                      onAccept: () {
+                                        onPressedNext();
+                                      },
+                                    );
+                                  }
+                                },
+                                //onPressed: onPressedNext,
                                 child: Text(LocaleKeys.next.tr()),
                               ),
                             ),
@@ -2084,13 +2097,14 @@ class _CheckoutPaymentPageState extends State<CheckoutPaymentPage> {
                             ),
                             JavascriptChannel(
                               name: 'Android',
-                              onMessageReceived: (JavascriptMessage receiver) {
+                              onMessageReceived: (JavascriptMessage receiver) async {
                                 toast(receiver.message);
                                 if (Platform.isAndroid) {
                                   if (receiver.message != null || receiver.message != 'undefined') {
                                     if (receiver.message == 'close') {
                                       Navigator.pop(context);
                                     } else {
+                                      context.read(checkoutNotifierProvider.notifier).checkout();
                                       toast(receiver.message);
                                     }
                                   }
@@ -2100,7 +2114,7 @@ class _CheckoutPaymentPageState extends State<CheckoutPaymentPage> {
                           },
                           onWebViewCreated: (_controller){
                             webViewController = _controller;
-                            _loadHtmlFromAssets(webViewController!, widget.snapToken!);
+                            _loadHtmlFromAssets(webViewController!, widget.snapToken ?? "");
                           },
                           javascriptMode: JavascriptMode.unrestricted,
                         ),
@@ -2219,6 +2233,7 @@ _loadHtmlFromAssets(WebViewController webViewController, String snapToken) {
       <body onload="setTimeout(function(){pay()}, 1000)">
         <script type="text/javascript">
             function pay() {
+                Android.postMessage('loaded');
                 snap.pay('$snapToken', {
                   // Optional
                   onSuccess: function(result) {

@@ -1,5 +1,7 @@
+import '../models/checkout/Checkout_model2.dart';
+
 abstract class ICheckoutRepository {
-  Future checkout(int cartId, requestBody);
+  Future<CheckoutModel2> checkout(int cartId, requestBody);
   Future<String?> guestCheckout(int cartId, requestBody);
 
   Future checkoutAll(requestBody);
