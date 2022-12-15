@@ -63,23 +63,24 @@ class AccountTab extends StatelessWidget {
               const AccountDashboard(),
               const ActionCard(),
               const UserActivityCard(),
-              Consumer(
-                builder: (context, watch, child) {
-                  final _checkWalletPluginProvider =
-                      watch(checkWalletPluginProvider);
-                  return _checkWalletPluginProvider.when(
-                    data: (value) {
-                      if (value) {
-                        return const WalletCard();
-                      } else {
-                        return const SizedBox();
-                      }
-                    },
-                    loading: () => const SizedBox(),
-                    error: (error, stackTrace) => const SizedBox(),
-                  );
-                },
-              ),
+              // Consumer(
+              //   builder: (context, watch, child) {
+              //     final _checkWalletPluginProvider =
+              //         watch(checkWalletPluginProvider);
+              //     return _checkWalletPluginProvider.when(
+              //       data: (value) {
+              //         if (value) {
+              //           return const WalletCard();
+              //         } else {
+              //           return const SizedBox();
+              //         }
+              //       },
+              //       loading: () => const SizedBox(),
+              //       error: (error, stackTrace) => const SizedBox(),
+              //     );
+              //   },
+              // ),
+              const SizedBox(),
 
               /// Recently viewed
               const RecentlyViewed()
@@ -332,47 +333,47 @@ class UserActivityCard extends StatelessWidget {
                 error: (_, __) => const SizedBox());
           },
         ),
-        Expanded(
-          flex: 1,
-          child: Container(
-            margin: const EdgeInsets.all(4),
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: kTileColor,
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Consumer(
-                  builder: (context, watch, _) {
-                    final disputesState = watch(disputesProvider);
-                    return Text(
-                      disputesState is DisputesLoadedState
-                          ? disputesState.disputes.length.toString()
-                          : "0",
-                      maxLines: 1,
-                      style: Theme.of(context).textTheme.headline4!.copyWith(
-                          color: kTileTextColor,
-                          fontWeight: FontWeight.bold),
-                    );
-                  },
-                ),
-                Text(
-                  LocaleKeys.disputes.tr(),
-                  maxLines: 1,
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context)
-                      .textTheme
-                      .caption!
-                      .copyWith(fontWeight: FontWeight.bold),
-                )
-              ],
-            ).onInkTap(() {
-              context.nextPage(const DisputeScreen());
-            }),
-          ),
-        ),
+        // Expanded(
+        //   flex: 1,
+        //   child: Container(
+        //     margin: const EdgeInsets.all(4),
+        //     padding: const EdgeInsets.all(8),
+        //     decoration: BoxDecoration(
+        //       borderRadius: BorderRadius.circular(10),
+        //       color: kTileColor,
+        //     ),
+        //     child: Column(
+        //       mainAxisSize: MainAxisSize.min,
+        //       children: [
+        //         Consumer(
+        //           builder: (context, watch, _) {
+        //             final disputesState = watch(disputesProvider);
+        //             return Text(
+        //               disputesState is DisputesLoadedState
+        //                   ? disputesState.disputes.length.toString()
+        //                   : "0",
+        //               maxLines: 1,
+        //               style: Theme.of(context).textTheme.headline4!.copyWith(
+        //                   color: kTileTextColor,
+        //                   fontWeight: FontWeight.bold),
+        //             );
+        //           },
+        //         ),
+        //         Text(
+        //           LocaleKeys.disputes.tr(),
+        //           maxLines: 1,
+        //           textAlign: TextAlign.center,
+        //           style: Theme.of(context)
+        //               .textTheme
+        //               .caption!
+        //               .copyWith(fontWeight: FontWeight.bold),
+        //         )
+        //       ],
+        //     ).onInkTap(() {
+        //       context.nextPage(const DisputeScreen());
+        //     }),
+        //   ),
+        // ),
         Consumer(
           builder: (context, watch, child) {
             final wishlistPluginCheck = watch(checkWishlistPluginProvider);

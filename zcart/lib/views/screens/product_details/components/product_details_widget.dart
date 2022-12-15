@@ -83,16 +83,16 @@ class ProductDetailsWidget extends StatelessWidget {
                     value: details.data!.product!.modelNumber ??
                         LocaleKeys.not_available.tr(),
                   ),
-                  TechnicalDetailsItem(
-                    title: "${details.data!.product!.gtinType}: ",
-                    value: details.data!.product!.gtin ??
-                        LocaleKeys.not_available.tr(),
-                  ),
-                  TechnicalDetailsItem(
-                    title: "${LocaleKeys.part_no.tr()}: ",
-                    value: details.data!.product!.mpn ??
-                        LocaleKeys.not_available.tr(),
-                  ),
+                  // TechnicalDetailsItem(
+                  //   title: "${details.data!.product!.gtinType}: ",
+                  //   value: details.data!.product!.gtin ??
+                  //       LocaleKeys.not_available.tr(),
+                  // ),
+                  // TechnicalDetailsItem(
+                  //   title: "${LocaleKeys.part_no.tr()}: ",
+                  //   value: details.data!.product!.mpn ??
+                  //       LocaleKeys.not_available.tr(),
+                  // ),
                   TechnicalDetailsItem(
                     title: "${LocaleKeys.seller_sku.tr()}: ",
                     value: details.data!.sku ?? LocaleKeys.not_available.tr(),
@@ -102,11 +102,11 @@ class ProductDetailsWidget extends StatelessWidget {
                     value: details.data!.condition ??
                         LocaleKeys.not_available.tr(),
                   ),
-                  TechnicalDetailsItem(
-                    title: "${LocaleKeys.manufacturer.tr()}: ",
-                    value: details.data!.product!.manufacturer!.name ??
-                        LocaleKeys.not_available.tr(),
-                  ),
+                  // TechnicalDetailsItem(
+                  //   title: "${LocaleKeys.manufacturer.tr()}: ",
+                  //   value: details.data!.product!.manufacturer!.name ??
+                  //       LocaleKeys.not_available.tr(),
+                  // ),
                   TechnicalDetailsItem(
                     title: "${LocaleKeys.origin.tr()}: ",
                     value: details.data!.product!.origin ??
@@ -171,37 +171,37 @@ class ProductDetailsWidget extends StatelessWidget {
                   const SizedBox(height: 10),
                 ],
               ),
-        details.data!.description == null
-            ? const SizedBox()
-            : Column(
-                children: [
-                  ProductPageDefaultContainer(
-                    child: ExpansionTile(
-                      childrenPadding: EdgeInsets.zero,
-                      tilePadding: EdgeInsets.zero,
-                      iconColor: getColorBasedOnTheme(
-                          context, kLightColor, kDarkColor),
-                      collapsedIconColor: kPrimaryColor,
-                      title: Text(LocaleKeys.seller_spec.tr(),
-                          style: Theme.of(context).textTheme.subtitle2),
-                      children: [
-                        HtmlWidget(
-                          details.data!.description!,
-                          enableCaching: true,
-                          factoryBuilder: () => WidgetFactory(),
-                          isSelectable: true,
-                          textStyle: Theme.of(context).textTheme.subtitle2,
-                          onTapUrl: (url) {
-                            launchURL(url);
-                            return true;
-                          },
-                        ).px(10).py(5),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                ],
-              ),
+        // details.data!.description == null
+        //     ? const SizedBox()
+        //     : Column(
+        //         children: [
+        //           ProductPageDefaultContainer(
+        //             child: ExpansionTile(
+        //               childrenPadding: EdgeInsets.zero,
+        //               tilePadding: EdgeInsets.zero,
+        //               iconColor: getColorBasedOnTheme(
+        //                   context, kLightColor, kDarkColor),
+        //               collapsedIconColor: kPrimaryColor,
+        //               title: Text(LocaleKeys.seller_spec.tr(),
+        //                   style: Theme.of(context).textTheme.subtitle2),
+        //               children: [
+        //                 HtmlWidget(
+        //                   details.data!.description!,
+        //                   enableCaching: true,
+        //                   factoryBuilder: () => WidgetFactory(),
+        //                   isSelectable: true,
+        //                   textStyle: Theme.of(context).textTheme.subtitle2,
+        //                   onTapUrl: (url) {
+        //                     launchURL(url);
+        //                     return true;
+        //                   },
+        //                 ).px(10).py(5),
+        //               ],
+        //             ),
+        //           ),
+        //           const SizedBox(height: 10),
+        //         ],
+        //       ),
       ],
     );
   }

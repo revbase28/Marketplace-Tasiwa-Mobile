@@ -475,7 +475,9 @@ class Shop {
 class ShippingOption {
   ShippingOption({
     this.id,
+    this.code,
     this.name,
+    this.services,
     this.shippingZoneId,
     this.carrierId,
     this.carrierName,
@@ -485,7 +487,9 @@ class ShippingOption {
   });
 
   int? id;
+  String? code;
   String? name;
+  String? services;
   int? shippingZoneId;
   int? carrierId;
   String? carrierName;
@@ -500,14 +504,16 @@ class ShippingOption {
 
   factory ShippingOption.fromJson(Map<String, dynamic> json) => ShippingOption(
         id: json["id"],
+        code: json["code"],
         name: json["name"],
+        services: json["service"],
         shippingZoneId: json["shipping_zone_id"],
         carrierId: json["carrier_id"],
         carrierName: json["carrier_name"],
         cost: json["cost"].toString(),
         costRaw: json["cost_raw"].toString(),
         //costRaw: json["cost_raw"],
-        deliveryTakes: json["delivery_takes"],
+        deliveryTakes: json["estimated"],
       );
 
   Map<String, dynamic> toJson() => {

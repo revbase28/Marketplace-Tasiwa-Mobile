@@ -24,6 +24,9 @@ abstract class ICartRepository {
     int? shippingZoneId,
     int? shippingOptionId,
     int? packagingId,
+    String? shippingCarrier,
+    String? shippingCarrierType,
+    String? shippingCost
   });
 
   Future removeCart({

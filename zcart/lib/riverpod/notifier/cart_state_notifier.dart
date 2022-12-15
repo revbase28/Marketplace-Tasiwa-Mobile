@@ -49,17 +49,18 @@ class CartNotifier extends StateNotifier<CartState> {
     getCartList();
   }
 
-  Future<void> updateCart(
-    int item, {
-    int? listingID,
-    int? quantity,
-    int? shipTo,
-    int? countryId,
-    int? stateId,
-    int? shippingZoneId,
-    int? shippingOptionId,
-    int? packagingId,
-  }) async {
+  Future<void> updateCart(int item,
+      {int? listingID,
+      int? quantity,
+      int? shipTo,
+      int? countryId,
+      int? stateId,
+      int? shippingZoneId,
+      int? shippingOptionId,
+      int? packagingId,
+      String? shippingCarrier,
+      String? shippingCarrierType,
+      String? shippingCost}) async {
     try {
       await _iCartRepository.updateCart(
           item: item,
@@ -70,7 +71,10 @@ class CartNotifier extends StateNotifier<CartState> {
           shipTo: shipTo,
           shippingZoneId: shippingZoneId,
           shippingOptionId: shippingOptionId,
-          packagingId: packagingId);
+          packagingId: packagingId,
+          shippingCarrier: shippingCarrier,
+          shippingCarrierType: shippingCarrierType,
+          shippingCost: shippingCost);
       getCartList();
     } on NetworkException {
       state = CartErrorState(LocaleKeys.something_went_wrong.tr());

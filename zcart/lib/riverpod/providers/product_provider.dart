@@ -160,7 +160,7 @@ class GetProductDetailsModel {
     try {
       _responseBody = await handleResponse(await getRequest(url));
       _shippingOptions = List<ShippingOption>.from(
-          _responseBody["data"].map((x) => ShippingOption.fromJson(x)));
+          _responseBody["message"].map((x) => ShippingOption.fromJson(x)));
     } catch (e) {
       return null;
     }

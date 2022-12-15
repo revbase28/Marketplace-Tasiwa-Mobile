@@ -31,6 +31,9 @@ class CartItem {
     this.shipToStateId,
     this.shippingZoneId,
     this.shippingOptionId,
+    this.shippingCarrier,
+    this.shippingCarrierType,
+    this.shippingCost,
     this.shippingAddress,
     this.billingAddress,
     this.shippingWeight,
@@ -68,6 +71,9 @@ class CartItem {
   String? shippingAddress;
   String? billingAddress;
   String? shippingWeight;
+  String? shippingCarrier;
+  String? shippingCost;
+  String? shippingCarrierType;
   dynamic packagingId;
   dynamic coupon;
   String? total;
@@ -100,6 +106,9 @@ class CartItem {
         shippingZoneId: json["shipping_zone_id"],
         shippingOptionId: json["shipping_option_id"],
         shippingAddress: json["shipping_address"],
+        shippingCarrier: json["shipping_carrier"],
+        shippingCarrierType: json["shipping_carrier_type"],
+        shippingCost: json["shipping_cost"],
         billingAddress: json["billing_address"],
         shippingWeight: json["shipping_weight"],
         packagingId: json["packaging_id"],
@@ -137,6 +146,9 @@ class CartItem {
         "shipping_address": shippingAddress,
         "billing_address": billingAddress,
         "shipping_weight": shippingWeight,
+        "shipping_carrier": shippingCarrier,
+        "shipping_cost": shippingCost,
+        "shipping_carrier_type": shippingCarrierType,
         "packaging_id": packagingId,
         "coupon": coupon,
         "total": total,

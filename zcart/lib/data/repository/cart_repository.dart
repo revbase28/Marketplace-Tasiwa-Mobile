@@ -30,6 +30,9 @@ class CartRepository implements ICartRepository {
     int? shippingZoneId,
     int? shippingOptionId,
     int? packagingId,
+    String? shippingCarrier,
+    String? shippingCarrierType,
+    String? shippingCost
   }) async {
     var requestBody = {
       if (listingID != null) 'item': listingID.toString(),
@@ -40,7 +43,10 @@ class CartRepository implements ICartRepository {
       if (shippingZoneId != null) 'shipping_zone_id': shippingZoneId.toString(),
       if (shippingOptionId != null)
         'shipping_option_id': shippingOptionId.toString(),
-      if (packagingId != null) 'packaging_id': packagingId.toString()
+      if (packagingId != null) 'packaging_id': packagingId.toString(),
+      if (shippingCarrier != null) 'shipping_carrier': shippingCarrier.toString(),
+      if (shippingCarrierType != null) 'shipping_carrier_type': shippingCarrierType.toString(),
+      if (shippingCost != null) 'shipping_cost' : shippingCost.toString()
     };
     dynamic responseBody;
     try {

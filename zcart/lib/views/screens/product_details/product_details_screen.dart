@@ -281,14 +281,15 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
                               isNotAvailable: _isNotAvailable)),
                       const SizedBox(height: 10),
 
-                      _countries.isEmpty
-                          ? const SizedBox()
-                          : Column(
-                              children: [
-                                _shippingZoneSelection(context),
-                                const SizedBox(height: 10),
-                              ],
-                            ),
+                      // _countries.isEmpty
+                      //     ? const SizedBox()
+                      //     : Column(
+                      //         children: [
+                      //           _shippingZoneSelection(context),
+                      //           const SizedBox(height: 10),
+                      //         ],
+                      //       ),
+                      const SizedBox(),
 
                       ProductPageDefaultContainer(
                         isFullPadding: true,
