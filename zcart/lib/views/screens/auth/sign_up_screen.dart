@@ -258,6 +258,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           const SizedBox(height: 16),
                           CustomButton(
                             buttonText: LocaleKeys.sign_up.tr(),
+                            buttonBGColor: kButtonBgColor,
                             onTap: () async {
                               if (_formKey.currentState!.validate()) {
                                 hideKeyboard(context);

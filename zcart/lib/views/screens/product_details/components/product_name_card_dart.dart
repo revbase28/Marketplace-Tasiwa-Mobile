@@ -129,21 +129,21 @@ class ProductNameCard extends StatelessWidget {
                       .copyWith(fontWeight: FontWeight.bold)),
             ),
             const SizedBox(width: 8),
-            Column(
-              children: [
-                const SizedBox(height: 8),
-                const Icon(
-                  CupertinoIcons.share,
-                  size: 18,
-                ),
-                Text(LocaleKeys.share.tr(),
-                        style: Theme.of(context).textTheme.overline)
-                    .pOnly(top: 3)
-              ],
-            ).pOnly(left: 10).onInkTap(() async {
-              await Share.share(
-                  '${productModel.data!.title}.\n${API.appUrl}/product/${productModel.data!.slug}');
-            }),
+            // Column(
+            //   children: [
+            //     const SizedBox(height: 8),
+            //     const Icon(
+            //       CupertinoIcons.share,
+            //       size: 18,
+            //     ),
+            //     Text(LocaleKeys.share.tr(),
+            //             style: Theme.of(context).textTheme.overline)
+            //         .pOnly(top: 3)
+            //   ],
+            // ).pOnly(left: 10).onInkTap(() async {
+            //   await Share.share(
+            //       '${productModel.data!.title}.\n${API.appUrl}/product/${productModel.data!.slug}');
+            // }),
           ],
         ),
         productModel.data!.rating == null
@@ -229,7 +229,7 @@ class ProductNameCard extends StatelessWidget {
             if (productModel.data!.labels != null &&
                 productModel.data!.labels!.isNotEmpty)
               ...productModel.data!.labels!.map(
-                  (label) => CustomSmallButton(text: label, onPressed: () {})),
+                  (label) => CustomSmallButton(bgColor: kChipBgColor,text: label, onPressed: () {})),
           ],
         ),
       ],

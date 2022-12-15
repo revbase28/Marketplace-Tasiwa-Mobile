@@ -60,7 +60,7 @@ class _MyCartTabState extends State<MyCartTab> {
 
   final List<bool> _isAllCartCheckout = [];
 
-  void _onOneCheckOut(int cartId, String? userEmail) {
+  void _onOneCheckOut(int cartId, String? userEmail, String? snapToken) {
     setState(() {});
 
     if (_isAllCartCheckout.any((element) => element == false)) {
@@ -78,8 +78,10 @@ class _MyCartTabState extends State<MyCartTab> {
               .read(cartItemDetailsNotifierProvider.notifier)
               .getCartItemDetails(cartId);
 
-          context.nextPage(
-              CheckoutScreen(customerEmail: userEmail, isOneCheckout: true));
+          context.nextPage(CheckoutScreen(
+              customerEmail: userEmail,
+              isOneCheckout: true,
+              snapToken: snapToken));
         } else {
           if (accessAllowed == false) {
             context.nextPage(const LoginScreen(
@@ -93,8 +95,10 @@ class _MyCartTabState extends State<MyCartTab> {
                 .read(cartItemDetailsNotifierProvider.notifier)
                 .getCartItemDetails(cartId);
 
-            context.nextPage(
-                CheckoutScreen(customerEmail: userEmail, isOneCheckout: true));
+            context.nextPage(CheckoutScreen(
+                customerEmail: userEmail,
+                isOneCheckout: true,
+                snapToken: snapToken));
           }
         }
       });
@@ -172,7 +176,9 @@ class _MyCartTabState extends State<MyCartTab> {
                           }
                           if (_cartState is CartLoadedState) {
                             _onOneCheckOut(
-                                _cartState.cartList!.first.id!, _customerEmail);
+                                _cartState.cartList!.first.id!,
+                                _customerEmail,
+                                _cartState.cartList!.first.snapToken!);
                           }
                         },
                         icon: const Icon(Icons.double_arrow),
@@ -338,6 +344,8 @@ class CartItemCard extends ConsumerWidget {
       return _state;
     }
 
+    final _shopName = cartItem.shop!.name!;
+
     return Container(
       decoration: BoxDecoration(
           color: getColorBasedOnTheme(context, kLightColor, kDarkCardBgColor),
@@ -376,7 +384,10 @@ class CartItemCard extends ConsumerWidget {
                       children: [
                         const Icon(Icons.store_outlined),
                         const SizedBox(width: 4),
-                        Text(cartItem.shop!.name!,
+                        Text(
+                            (_shopName).length > 15
+                                ? '${_shopName.substring(0, 15)}...'
+                                : _shopName,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style:
@@ -684,6 +695,7 @@ class _ItemCardState extends State<ItemCard> {
 
 class PackagingDetails extends ConsumerWidget {
   final CartItem cartItem;
+
   const PackagingDetails({
     Key? key,
     required this.cartItem,
@@ -897,12 +909,24 @@ class ShippingDetails extends ConsumerWidget {
         } else {
           onChecked(true);
           ShippingOption? _shippingOption;
-          if (value.any((element) => element.id == cartItem.shippingOptionId)) {
+          if (value.any((element) =>
+              element.name == cartItem.shippingCarrier &&
+              element.services == cartItem.shippingCarrierType)) {
             _shippingOption = value.firstWhere(
-              (element) => element.id == cartItem.shippingOptionId,
+              (element) =>
+                  element.name == cartItem.shippingCarrier &&
+                  element.services == cartItem.shippingCarrierType,
             );
           } else {
             _shippingOption = value.first;
+            context.read(cartNotifierProvider.notifier).updateCart(
+                  cartItem.id!,
+                  shippingCarrier: _shippingOption.name,
+                  shippingCarrierType: _shippingOption.services,
+                  shippingCost: _shippingOption.costRaw,
+                  shippingOptionId: _shippingOption.id,
+                  shippingZoneId: _shippingOption.shippingZoneId,
+                );
           }
 
           return Column(
@@ -973,11 +997,16 @@ class ShippingDetails extends ConsumerWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    CartGrandTotalPart(cartItem: cartItem),
+                    CartGrandTotalPart(
+                        cartItem: cartItem,
+                        shippingCost:
+                            _shippingOption.costRaw!.toInt(defaultValue: 0)),
                     Consumer(builder: (context, watch, _) {
                       final _isGuestCheckout =
                           watch(checkGuestCheckoutPluginProvider);
                       return ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: kButtonBgColor),
                           onPressed: () async {
                             String? _customerEmail;
 
@@ -1024,9 +1053,9 @@ class ShippingDetails extends ConsumerWidget {
                                       .read(cartItemDetailsNotifierProvider
                                           .notifier)
                                       .getCartItemDetails(cartItem.id);
-
                                   context.nextPage(CheckoutScreen(
-                                      customerEmail: _customerEmail));
+                                      customerEmail: _customerEmail,
+                                      snapToken: cartItem.snapToken));
                                 }
                               }
                             });
@@ -1103,6 +1132,9 @@ class ShippingDetails extends ConsumerWidget {
                                   .read(cartNotifierProvider.notifier)
                                   .updateCart(
                                     cartItem.id!,
+                                    shippingCarrier: e.name,
+                                    shippingCarrierType: e.services,
+                                    shippingCost: e.costRaw,
                                     shippingOptionId: e.id,
                                     shippingZoneId: e.shippingZoneId,
                                   );
@@ -1127,12 +1159,12 @@ class ShippingDetails extends ConsumerWidget {
 }
 
 class CartGrandTotalPart extends StatelessWidget {
-  const CartGrandTotalPart({
-    Key? key,
-    required this.cartItem,
-  }) : super(key: key);
+  const CartGrandTotalPart(
+      {Key? key, required this.cartItem, this.shippingCost})
+      : super(key: key);
 
   final CartItem cartItem;
+  final int? shippingCost;
 
   @override
   Widget build(BuildContext context) {
@@ -1174,6 +1206,7 @@ class _SelectSippingCountryPage extends StatefulWidget {
   final List<Countries> items;
   final int? selected;
   final Function(Countries) onCountrySelected;
+
   const _SelectSippingCountryPage({
     Key? key,
     required this.title,
@@ -1274,6 +1307,7 @@ class _SelectSippingStatePage extends StatefulWidget {
   final List<States> items;
   final int? selected;
   final Function(States) onCountrySelected;
+
   const _SelectSippingStatePage({
     Key? key,
     required this.title,

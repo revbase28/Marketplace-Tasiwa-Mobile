@@ -50,8 +50,10 @@ class _SettingsPageState extends State<SettingsPage> {
                 children: [
                   Card(
                     child: ListTile(
+                      tileColor: kTileColor,
+                      iconColor: kTileTextColor,
                       title: Text(LocaleKeys.language.tr(),
-                          style: Theme.of(context).textTheme.subtitle2!),
+                          style: Theme.of(context).textTheme.subtitle2!.merge(const TextStyle(color: kTileTextColor))),
                       leading: const Icon(Icons.translate),
                       onTap: () {
                         updateLanguage(context);
@@ -61,8 +63,10 @@ class _SettingsPageState extends State<SettingsPage> {
                   if (MyConfig.isDynamicThemeActive)
                     Card(
                       child: ListTile(
+                        tileColor: kTileColor,
+                        iconColor: kTileTextColor,
                         title: Text("Dark Mode",
-                            style: Theme.of(context).textTheme.subtitle2!),
+                            style: Theme.of(context).textTheme.subtitle2!.merge(const TextStyle(color: kTileTextColor))),
                         trailing: EasyDynamicThemeSwitch(),
                         leading: const Icon(Icons.color_lens),
                       ),
@@ -71,8 +75,10 @@ class _SettingsPageState extends State<SettingsPage> {
                     Card(
                       elevation: 0,
                       child: ListTile(
+                        tileColor: kTileColor,
+                        iconColor: kTileTextColor,
                         title: Text(LocaleKeys.clear_cache.tr(),
-                            style: Theme.of(context).textTheme.subtitle2!),
+                            style: Theme.of(context).textTheme.subtitle2!.merge(const TextStyle(color: kTileTextColor))),
                         leading: const Icon(Icons.delete_forever),
                         onTap: () async {
                           await clearCache(context);
@@ -90,9 +96,11 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                   Card(
                     child: ListTile(
+                      tileColor: kTileColor,
+                      iconColor: kTileTextColor,
                       leading: const Icon(Icons.logout_outlined),
                       title: Text(LocaleKeys.sign_out.tr(),
-                          style: Theme.of(context).textTheme.subtitle2!),
+                          style: Theme.of(context).textTheme.subtitle2!.merge(const TextStyle(color: kTileTextColor))),
                       onTap: () async {
                         await showCustomConfirmDialog(
                           context,
@@ -123,9 +131,11 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                   Card(
                     child: ListTile(
+                      tileColor: kTileColor,
+                      iconColor: kTileTextColor,
                       leading: const Icon(Icons.delete_forever_outlined),
                       title: Text(LocaleKeys.delete_account.tr(),
-                          style: Theme.of(context).textTheme.subtitle2!),
+                          style: Theme.of(context).textTheme.subtitle2!.merge(const TextStyle(color: kTileTextColor))),
                       onTap: () async {
                         await showCustomConfirmDialog(
                           context,
@@ -208,8 +218,10 @@ class CompanyInfoWidgets extends StatelessWidget {
       children: [
         Card(
           child: ListTile(
+            tileColor: kTileColor,
+            iconColor: kTileTextColor,
             title: Text(LocaleKeys.about_us.tr(),
-                style: Theme.of(context).textTheme.subtitle2!),
+                style: Theme.of(context).textTheme.subtitle2!.merge(const TextStyle(color: kTileTextColor))),
             leading: const Icon(Icons.info_outline),
             onTap: () {
               context.read(aboutUsProvider.notifier).fetchAboutUs();
@@ -219,8 +231,10 @@ class CompanyInfoWidgets extends StatelessWidget {
         ),
         Card(
           child: ListTile(
+            tileColor: kTileColor,
+            iconColor: kTileTextColor,
             title: Text(LocaleKeys.privacy_policy.tr(),
-                style: Theme.of(context).textTheme.subtitle2!),
+                style: Theme.of(context).textTheme.subtitle2!.merge(const TextStyle(color: kTileTextColor))),
             leading: const Icon(Icons.lock_outline),
             onTap: () {
               context.read(privacyPolicyProvider.notifier).fetchPrivacyPolicy();
@@ -230,8 +244,10 @@ class CompanyInfoWidgets extends StatelessWidget {
         ),
         Card(
           child: ListTile(
+            tileColor: kTileColor,
+            iconColor: kTileTextColor,
             title: Text(LocaleKeys.terms_condition.tr(),
-                style: Theme.of(context).textTheme.subtitle2!),
+                style: Theme.of(context).textTheme.subtitle2!.merge(const TextStyle(color: kTileTextColor))),
             leading: const Icon(Icons.description),
             onTap: () {
               context

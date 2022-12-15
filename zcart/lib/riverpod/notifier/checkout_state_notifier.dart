@@ -18,14 +18,19 @@ class CheckoutNotifier extends StateNotifier<CheckoutState> {
   final DeviceInfoPlugin _deviceInfo = DeviceInfoPlugin();
 
   int? cartId;
+
   //Customer address ID
   int? shipTo;
+
   //Payment method ID
   dynamic paymentMethod;
+
   //Shipping method ID
   dynamic shippingOptionId;
+
   //Packaging method ID
   dynamic packagingId;
+
   //Buyer note
   dynamic buyerNote;
   dynamic deviceId;
@@ -78,7 +83,7 @@ class CheckoutNotifier extends StateNotifier<CheckoutState> {
     deviceId = await _getDeviceId();
     var requestBody = {
       "ship_to": shipTo.toString(),
-      "payment_method": paymentMethod.toString(),
+      "payment_method": "midtrans", //paymentMethod.toString(),
       if (!isOneCheckout) "shipping_option_id": shippingOptionId.toString(),
       if (!isOneCheckout) "packaging_id": packagingId.toString(),
       "agree": "1",
@@ -106,12 +111,14 @@ class CheckoutNotifier extends StateNotifier<CheckoutState> {
       state = CheckoutLoadingState();
       toast(LocaleKeys.please_wait.tr());
       if (isOneCheckout) {
-        await _iCheckoutRepository.checkoutAll(requestBody);
+        final checkoutData =
+            await _iCheckoutRepository.checkoutAll(requestBody);
+        state = CheckoutLoadedState(checkoutModel: checkoutData);
       } else {
-        await _iCheckoutRepository.checkout(cartId!, requestBody);
+        final checkoutData =
+            await _iCheckoutRepository.checkout(cartId!, requestBody);
+        state = CheckoutLoadedState(checkoutModel: checkoutData);
       }
-
-      state = CheckoutLoadedState();
     } catch (e) {
       state = CheckoutErrorState(LocaleKeys.something_went_wrong.tr());
     }
@@ -120,7 +127,7 @@ class CheckoutNotifier extends StateNotifier<CheckoutState> {
   Future<void> guestCheckout({bool isOneCheckout = false}) async {
     deviceId = await _getDeviceId();
     var requestBody = {
-      "payment_method": paymentMethod.toString(),
+      "payment_method": "midtrans", //paymentMethod.toString(),
       if (!isOneCheckout) "shipping_option_id": shippingOptionId.toString(),
       if (!isOneCheckout) "packaging_id": packagingId.toString(),
       "device_id": deviceId.toString(),

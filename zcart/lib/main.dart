@@ -68,15 +68,8 @@ class MyApp extends StatelessWidget {
       locale: context.locale,
       debugShowCheckedModeBanner: false,
       title: API.appName,
-      themeMode: MyConfig.isDynamicThemeActive
-          ? EasyDynamicTheme.of(context).themeMode == ThemeMode.system
-              ? _brightness == Brightness.dark
-                  ? ThemeMode.dark
-                  : ThemeMode.light
-              : EasyDynamicTheme.of(context).themeMode
-          : ThemeMode.light,
+      themeMode: ThemeMode.light,
       theme: AppTheme.light(context),
-      darkTheme: AppTheme.dark(context),
       // home: const LoadingScreen(),
       home: SystemConfigBuilder(
         builder: (context, systemConfig) {

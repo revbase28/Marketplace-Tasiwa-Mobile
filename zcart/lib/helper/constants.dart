@@ -23,6 +23,8 @@ const String paypal = 'paypal-express';
 const String razorpay = 'razorpay';
 const String zcartWallet = 'zcart-wallet';
 
+const PAYMENT_STATUS = {'unpaid': 1, 'pending': 2, 'paid': 3};
+
 final List<String> paymentMethods = [
   cod,
   wire,

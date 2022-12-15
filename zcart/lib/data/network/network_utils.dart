@@ -40,6 +40,7 @@ Future<Response> getRequest(String? endPoint,
 
     if (bearerToken) {
       response = await get(Uri.parse('${API.base}$endPoint'), headers: headers);
+      Logger.i('Bearer Token: $accessToken');
     } else if (noBaseUrl) {
       response = await get(Uri.parse('$endPoint'));
     } else {

@@ -132,7 +132,6 @@ class ConversationRepository extends StateNotifier<ConversationState> {
       responseBody = await handleResponse(
           await getRequest(API.conversations, bearerToken: true));
       if (responseBody is int) if (responseBody > 206) throw NetworkException();
-
       ConversationModel conversationModel =
           ConversationModel.fromJson(responseBody);
       state = ConversationLoadedState(conversationModel);

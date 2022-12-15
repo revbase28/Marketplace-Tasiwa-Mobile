@@ -214,13 +214,14 @@ class _LoginScreenState extends State<LoginScreen> {
                                 .textTheme
                                 .caption!
                                 .copyWith(
-                                    color: kPrimaryColor,
+                                    color: kPriceColor,
                                     fontWeight: FontWeight.bold),
                           ),
                         ),
                       ),
                       CustomButton(
                           buttonText: LocaleKeys.sign_in.tr(),
+                          buttonBGColor: kButtonBgColor,
                           onTap: () async {
                             if (_formKey.currentState!.validate()) {
                               context.read(userNotifierProvider.notifier).login(

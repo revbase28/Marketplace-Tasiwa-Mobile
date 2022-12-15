@@ -208,36 +208,22 @@ class _AddressListBuilderState extends State<AddressListBuilder> {
                                     .bodyText2!
                                     .copyWith(
                                       fontWeight: FontWeight.bold,
-                                      color: widget.cartItem != null
-                                          ? e.country!.id ==
-                                                      widget.cartItem!
-                                                          .shipToCountryId &&
-                                                  e.state?.id ==
-                                                      widget.cartItem!
-                                                          .shipToStateId
-                                              ? kPrimaryColor
-                                              : widget.isOneCheckout
-                                                  ? kFadeColor
-                                                  : getColorBasedOnTheme(
-                                                      context,
-                                                      kPrimaryDarkTextColor,
-                                                      kPrimaryLightTextColor)
-                                          : getColorBasedOnTheme(
-                                              context,
-                                              kPrimaryDarkTextColor,
-                                              kPrimaryLightTextColor),
+                                      color: kTileTextColor
                                     ),
                               ),
+                              const SizedBox(height: 5),
                               Text(e.addressTitle!,
                                   style: Theme.of(context)
                                       .textTheme
                                       .subtitle2!
                                       .copyWith(color: _textColor)),
+                              const SizedBox(height: 3),
                               Text('(${e.phone})',
                                   style: Theme.of(context)
                                       .textTheme
                                       .subtitle2!
                                       .copyWith(color: _textColor)),
+                              const SizedBox(height: 3),
                             ],
                           ),
                           subtitle: Column(
@@ -248,6 +234,7 @@ class _AddressListBuilderState extends State<AddressListBuilder> {
                                       .textTheme
                                       .caption!
                                       .copyWith(color: _textColor)),
+                              const SizedBox(height: 3),
                               Text(
                                   '${e.state != null ? e.state!.name! + ',' : ''} ${e.country == null ? '' : e.country!.name! + ','} ${e.zipCode}'
                                       .trim(),

@@ -61,31 +61,30 @@ class AccountTab extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const AccountDashboard(),
-              const UserActivityCard(),
               const ActionCard(),
-              Consumer(
-                builder: (context, watch, child) {
-                  final _checkWalletPluginProvider =
-                      watch(checkWalletPluginProvider);
-                  return _checkWalletPluginProvider.when(
-                    data: (value) {
-                      if (value) {
-                        return const WalletCard();
-                      } else {
-                        return const SizedBox();
-                      }
-                    },
-                    loading: () => const SizedBox(),
-                    error: (error, stackTrace) => const SizedBox(),
-                  );
-                },
-              ),
+              const UserActivityCard(),
+              // Consumer(
+              //   builder: (context, watch, child) {
+              //     final _checkWalletPluginProvider =
+              //         watch(checkWalletPluginProvider);
+              //     return _checkWalletPluginProvider.when(
+              //       data: (value) {
+              //         if (value) {
+              //           return const WalletCard();
+              //         } else {
+              //           return const SizedBox();
+              //         }
+              //       },
+              //       loading: () => const SizedBox(),
+              //       error: (error, stackTrace) => const SizedBox(),
+              //     );
+              //   },
+              // ),
+              const SizedBox(),
 
               /// Recently viewed
               const RecentlyViewed()
                   .pOnly(bottom: 0, top: 10, right: 10, left: 10),
-              const FeaturedBrands()
-                  .pOnly(bottom: 10, top: 0, right: 10, left: 10),
             ],
           ),
         ));
@@ -248,7 +247,7 @@ class UserActivityCard extends StatelessWidget {
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              color: kLightCardBgColor,
+              color: kTileColor,
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -262,8 +261,7 @@ class UserActivityCard extends StatelessWidget {
                         : "0",
                     maxLines: 1,
                     style: Theme.of(context).textTheme.headline4!.copyWith(
-                        color: getColorBasedOnTheme(
-                            context, kPrimaryColor, kDarkPriceColor),
+                        color: kTileTextColor,
                         fontWeight: FontWeight.bold),
                   );
                 }),
@@ -297,7 +295,7 @@ class UserActivityCard extends StatelessWidget {
                             padding: const EdgeInsets.all(8),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
-                              color: kLightCardBgColor,
+                              color: kTileColor,
                             ),
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
@@ -311,8 +309,7 @@ class UserActivityCard extends StatelessWidget {
                                       .textTheme
                                       .headline4!
                                       .copyWith(
-                                          color: getColorBasedOnTheme(context,
-                                              kPrimaryColor, kDarkPriceColor),
+                                          color: kTileTextColor,
                                           fontWeight: FontWeight.bold),
                                 ),
                                 Text(
@@ -336,48 +333,47 @@ class UserActivityCard extends StatelessWidget {
                 error: (_, __) => const SizedBox());
           },
         ),
-        Expanded(
-          flex: 1,
-          child: Container(
-            margin: const EdgeInsets.all(4),
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: kLightCardBgColor,
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Consumer(
-                  builder: (context, watch, _) {
-                    final disputesState = watch(disputesProvider);
-                    return Text(
-                      disputesState is DisputesLoadedState
-                          ? disputesState.disputes.length.toString()
-                          : "0",
-                      maxLines: 1,
-                      style: Theme.of(context).textTheme.headline4!.copyWith(
-                          color: getColorBasedOnTheme(
-                              context, kPrimaryColor, kDarkPriceColor),
-                          fontWeight: FontWeight.bold),
-                    );
-                  },
-                ),
-                Text(
-                  LocaleKeys.disputes.tr(),
-                  maxLines: 1,
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context)
-                      .textTheme
-                      .caption!
-                      .copyWith(fontWeight: FontWeight.bold),
-                )
-              ],
-            ).onInkTap(() {
-              context.nextPage(const DisputeScreen());
-            }),
-          ),
-        ),
+        // Expanded(
+        //   flex: 1,
+        //   child: Container(
+        //     margin: const EdgeInsets.all(4),
+        //     padding: const EdgeInsets.all(8),
+        //     decoration: BoxDecoration(
+        //       borderRadius: BorderRadius.circular(10),
+        //       color: kTileColor,
+        //     ),
+        //     child: Column(
+        //       mainAxisSize: MainAxisSize.min,
+        //       children: [
+        //         Consumer(
+        //           builder: (context, watch, _) {
+        //             final disputesState = watch(disputesProvider);
+        //             return Text(
+        //               disputesState is DisputesLoadedState
+        //                   ? disputesState.disputes.length.toString()
+        //                   : "0",
+        //               maxLines: 1,
+        //               style: Theme.of(context).textTheme.headline4!.copyWith(
+        //                   color: kTileTextColor,
+        //                   fontWeight: FontWeight.bold),
+        //             );
+        //           },
+        //         ),
+        //         Text(
+        //           LocaleKeys.disputes.tr(),
+        //           maxLines: 1,
+        //           textAlign: TextAlign.center,
+        //           style: Theme.of(context)
+        //               .textTheme
+        //               .caption!
+        //               .copyWith(fontWeight: FontWeight.bold),
+        //         )
+        //       ],
+        //     ).onInkTap(() {
+        //       context.nextPage(const DisputeScreen());
+        //     }),
+        //   ),
+        // ),
         Consumer(
           builder: (context, watch, child) {
             final wishlistPluginCheck = watch(checkWishlistPluginProvider);
@@ -393,7 +389,7 @@ class UserActivityCard extends StatelessWidget {
                             padding: const EdgeInsets.all(8),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
-                              color: kLightCardBgColor,
+                              color: kTileColor,
                             ),
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
@@ -407,8 +403,7 @@ class UserActivityCard extends StatelessWidget {
                                       .textTheme
                                       .headline4!
                                       .copyWith(
-                                          color: getColorBasedOnTheme(context,
-                                              kPrimaryColor, kDarkPriceColor),
+                                          color: kTileTextColor,
                                           fontWeight: FontWeight.bold),
                                 ),
                                 Text(
@@ -520,26 +515,6 @@ class ActionCard extends StatelessWidget {
               ).onInkTap(() {
                 // context.read(userNotifierProvider.notifier).getUserInfo();
                 context.nextPage(const AccountDetailsScreen());
-              }),
-            ),
-            Expanded(
-              flex: 1,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const Icon(
-                    CupertinoIcons.doc_append,
-                  ).pOnly(bottom: 10),
-                  Text(
-                    LocaleKeys.blogs.tr(),
-                    style: Theme.of(context)
-                        .textTheme
-                        .caption!
-                        .copyWith(fontWeight: FontWeight.bold),
-                  )
-                ],
-              ).onInkTap(() {
-                context.nextPage(const BlogsScreen());
               }),
             ),
           ],
@@ -740,7 +715,7 @@ class WalletTransactionTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       elevation: 0,
-      color: kLightCardBgColor,
+      color: kTileColor,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),

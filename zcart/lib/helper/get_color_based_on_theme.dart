@@ -3,16 +3,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 
+// Color getColorBasedOnTheme(
+//     BuildContext context, Color lightColor, Color darkColor) {
+//   return EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+//       ? darkColor
+//       : EasyDynamicTheme.of(context).themeMode == ThemeMode.system
+//           ? SchedulerBinding.instance.window.platformBrightness ==
+//                   Brightness.dark
+//               ? darkColor
+//               : lightColor
+//           : lightColor;
+// }
+
 Color getColorBasedOnTheme(
     BuildContext context, Color lightColor, Color darkColor) {
-  return EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-      ? darkColor
-      : EasyDynamicTheme.of(context).themeMode == ThemeMode.system
-          ? SchedulerBinding.instance.window.platformBrightness ==
-                  Brightness.dark
-              ? darkColor
-              : lightColor
-          : lightColor;
+  return lightColor;
 }
 
 SystemUiOverlayStyle getOverlayStyleBasedOnTheme(BuildContext context) {
