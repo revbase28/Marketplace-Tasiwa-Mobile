@@ -636,47 +636,47 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
                 },
               ),
             ),
-            Positioned(
-              top: 8,
-              right: 8,
-              child: Consumer(
-                builder: (context, watch, child) {
-                  final wishlistPluginCheck =
-                      watch(checkWishlistPluginProvider);
-
-                  return wishlistPluginCheck.when(
-                      data: (data) {
-                        return data
-                            ? ProductDetailsPageIconButton(
-                                backgroundColor: getColorBasedOnTheme(
-                                    context, kLightColor, kDarkBgColor),
-                                icon: Icon(
-                                  widget.isWishlist
-                                      ? CupertinoIcons.heart_fill
-                                      : CupertinoIcons.heart,
-                                  size: 28,
-                                  color: widget.isWishlist ? Colors.red : null,
-                                ),
-                                onPressed: () async {
-                                  if (widget.isWishlist) {
-                                    toast(
-                                        LocaleKeys.item_already_wishlist.tr());
-                                  } else {
-                                    toast(LocaleKeys.adding_to_wishlist.tr());
-                                    await context
-                                        .read(wishListNotifierProvider.notifier)
-                                        .addToWishList(
-                                            _details.data!.slug, context);
-                                  }
-                                },
-                              )
-                            : const SizedBox();
-                      },
-                      loading: () => const SizedBox(),
-                      error: (_, __) => const SizedBox());
-                },
-              ),
-            ),
+            // Positioned(
+            //   top: 8,
+            //   right: 8,
+            //   child: Consumer(
+            //     builder: (context, watch, child) {
+            //       final wishlistPluginCheck =
+            //           watch(checkWishlistPluginProvider);
+            //
+            //       return wishlistPluginCheck.when(
+            //           data: (data) {
+            //             return data
+            //                 ? ProductDetailsPageIconButton(
+            //                     backgroundColor: getColorBasedOnTheme(
+            //                         context, kLightColor, kDarkBgColor),
+            //                     icon: Icon(
+            //                       widget.isWishlist
+            //                           ? CupertinoIcons.heart_fill
+            //                           : CupertinoIcons.heart,
+            //                       size: 28,
+            //                       color: widget.isWishlist ? Colors.red : null,
+            //                     ),
+            //                     onPressed: () async {
+            //                       if (widget.isWishlist) {
+            //                         toast(
+            //                             LocaleKeys.item_already_wishlist.tr());
+            //                       } else {
+            //                         toast(LocaleKeys.adding_to_wishlist.tr());
+            //                         await context
+            //                             .read(wishListNotifierProvider.notifier)
+            //                             .addToWishList(
+            //                                 _details.data!.slug, context);
+            //                       }
+            //                     },
+            //                   )
+            //                 : const SizedBox();
+            //           },
+            //           loading: () => const SizedBox(),
+            //           error: (_, __) => const SizedBox());
+            //     },
+            //   ),
+            // ),
             // Positioned(
             //   top: 8,
             //   right: 8,

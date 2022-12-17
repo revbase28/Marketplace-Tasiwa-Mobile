@@ -5,26 +5,32 @@ import 'package:zcart/data/network/api.dart';
 import 'package:zcart/data/network/network_utils.dart';
 import 'package:zcart/data/repository/address_repository.dart';
 import 'package:zcart/riverpod/notifier/address/address_state_notifier.dart';
+import 'package:zcart/riverpod/notifier/address/city_state_notifier.dart';
 import 'package:zcart/riverpod/notifier/address/country_state_notifier.dart';
 import 'package:zcart/riverpod/notifier/address/states_state_notifier.dart';
 import 'package:zcart/riverpod/state/address/address_state.dart';
+import 'package:zcart/riverpod/state/address/city_state.dart';
 import 'package:zcart/riverpod/state/address/country_state.dart'
-    as country_state;
+as country_state;
 import 'package:zcart/riverpod/state/address/states_state.dart';
 
 final addressRepositoryProvider =
-    Provider<IAddressRepository>((ref) => AddressRepository());
+Provider<IAddressRepository>((ref) => AddressRepository());
 
 final countryNotifierProvider =
-    StateNotifierProvider<CountryNotifier, country_state.CountryState>(
+StateNotifierProvider<CountryNotifier, country_state.CountryState>(
         (ref) => CountryNotifier(ref.watch(addressRepositoryProvider)));
 
 final statesNotifierProvider =
-    StateNotifierProvider<StatesNotifier, StatesState>(
+StateNotifierProvider<StatesNotifier, StatesState>(
         (ref) => StatesNotifier(ref.watch(addressRepositoryProvider)));
 
+final cityNotifierProvider =
+StateNotifierProvider<CityNotifier, CityState>(
+        (ref) => CityNotifier(ref.watch(addressRepositoryProvider)));
+
 final paymentOptionsNotifierProvider =
-    StateNotifierProvider<PaymentOptionsNotifier, PaymentOptionsState>(
+StateNotifierProvider<PaymentOptionsNotifier, PaymentOptionsState>(
         (ref) => PaymentOptionsNotifier(ref.watch(addressRepositoryProvider)));
 
 final getAddressFutureProvider = FutureProvider<List<Addresses>?>((ref) async {

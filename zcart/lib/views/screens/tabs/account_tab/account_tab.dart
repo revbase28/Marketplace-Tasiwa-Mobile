@@ -374,59 +374,59 @@ class UserActivityCard extends StatelessWidget {
         //     }),
         //   ),
         // ),
-        Consumer(
-          builder: (context, watch, child) {
-            final wishlistPluginCheck = watch(checkWishlistPluginProvider);
-            final wishListState = watch(wishListNotifierProvider);
-
-            return wishlistPluginCheck.when(
-                data: (data) {
-                  return data
-                      ? Expanded(
-                          flex: 1,
-                          child: Container(
-                            margin: const EdgeInsets.all(4),
-                            padding: const EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: kTileColor,
-                            ),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                  wishListState is WishListLoadedState
-                                      ? wishListState.wishList.length.toString()
-                                      : '0',
-                                  maxLines: 1,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headline4!
-                                      .copyWith(
-                                          color: kTileTextColor,
-                                          fontWeight: FontWeight.bold),
-                                ),
-                                Text(
-                                  LocaleKeys.wishlist_text.tr(),
-                                  maxLines: 1,
-                                  textAlign: TextAlign.center,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .caption!
-                                      .copyWith(fontWeight: FontWeight.bold),
-                                )
-                              ],
-                            ).onInkTap(() {
-                              context.nextPage(const WishListTab());
-                            }),
-                          ),
-                        )
-                      : const SizedBox();
-                },
-                loading: () => const SizedBox(),
-                error: (_, __) => const SizedBox());
-          },
-        ),
+        // Consumer(
+        //   builder: (context, watch, child) {
+        //     final wishlistPluginCheck = watch(checkWishlistPluginProvider);
+        //     final wishListState = watch(wishListNotifierProvider);
+        //
+        //     return wishlistPluginCheck.when(
+        //         data: (data) {
+        //           return data
+        //               ? Expanded(
+        //                   flex: 1,
+        //                   child: Container(
+        //                     margin: const EdgeInsets.all(4),
+        //                     padding: const EdgeInsets.all(8),
+        //                     decoration: BoxDecoration(
+        //                       borderRadius: BorderRadius.circular(10),
+        //                       color: kTileColor,
+        //                     ),
+        //                     child: Column(
+        //                       mainAxisSize: MainAxisSize.min,
+        //                       children: [
+        //                         Text(
+        //                           wishListState is WishListLoadedState
+        //                               ? wishListState.wishList.length.toString()
+        //                               : '0',
+        //                           maxLines: 1,
+        //                           style: Theme.of(context)
+        //                               .textTheme
+        //                               .headline4!
+        //                               .copyWith(
+        //                                   color: kTileTextColor,
+        //                                   fontWeight: FontWeight.bold),
+        //                         ),
+        //                         Text(
+        //                           LocaleKeys.wishlist_text.tr(),
+        //                           maxLines: 1,
+        //                           textAlign: TextAlign.center,
+        //                           style: Theme.of(context)
+        //                               .textTheme
+        //                               .caption!
+        //                               .copyWith(fontWeight: FontWeight.bold),
+        //                         )
+        //                       ],
+        //                     ).onInkTap(() {
+        //                       context.nextPage(const WishListTab());
+        //                     }),
+        //                   ),
+        //                 )
+        //               : const SizedBox();
+        //         },
+        //         loading: () => const SizedBox(),
+        //         error: (_, __) => const SizedBox());
+        //   },
+        // ),
       ],
     ).cornerRadius(10).p(10);
   }

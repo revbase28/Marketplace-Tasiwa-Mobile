@@ -140,7 +140,10 @@ class API {
   static const countries = 'countries';
 
   /// States
-  static states(countryId) => 'states/$countryId';
+  static states(countryId) => 'states/360';
+
+  //Cities
+  static cities(stateId) => 'city/$stateId';
 
   /// Packaging
   static packaging(shopSlug) => 'packaging/$shopSlug';

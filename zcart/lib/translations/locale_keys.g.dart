@@ -261,6 +261,7 @@ abstract class LocaleKeys {
   static const search = 'search';
   static const please_select_a_country = 'please_select_a_country';
   static const please_select_a_state = 'please_select_a_state';
+  static const please_select_a_city = 'please_select_a_city';
   static const delete_address_warning = 'delete_address_warning';
   static const redeem_coupon = 'redeem_coupon';
   static const code_is_copied = 'code_is_copied';

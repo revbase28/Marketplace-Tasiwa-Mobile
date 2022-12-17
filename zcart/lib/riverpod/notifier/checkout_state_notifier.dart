@@ -52,6 +52,11 @@ class CheckoutNotifier extends StateNotifier<CheckoutState> {
   String? zipCode;
   String? phone;
 
+  //Shipping
+  String? shippingCarrier;
+  String? shippingCarrierType;
+  String? shippingCost;
+
   //For Credit Cards
   String? cardNumber;
   String? expMonth;
@@ -105,6 +110,9 @@ class CheckoutNotifier extends StateNotifier<CheckoutState> {
       if (expYear != null && paymentMethod == stripe) "exp_year": expYear,
       if (cvc != null && paymentMethod == stripe) "cvc": cvc,
       if (razorpayOrderId != null) "razorpay_order_id": razorpayOrderId,
+      if (shippingCarrier != null) "shipping_carrier": shippingCarrier,
+      if (shippingCarrierType != null) "shipping_carrier_type": shippingCarrierType,
+      if (shippingCost != null) "shipping_cost": shippingCost
     };
     try {
       // ignore: prefer_const_constructors

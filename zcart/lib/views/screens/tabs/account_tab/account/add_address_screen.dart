@@ -5,6 +5,7 @@ import 'package:zcart/Theme/styles/colors.dart';
 import 'package:zcart/helper/get_color_based_on_theme.dart';
 import 'package:zcart/riverpod/providers/address_provider.dart';
 import 'package:zcart/riverpod/providers/system_config_provider.dart';
+import 'package:zcart/riverpod/state/address/city_state.dart';
 import 'package:zcart/riverpod/state/address/country_state.dart';
 import 'package:zcart/riverpod/state/address/states_state.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
@@ -43,8 +44,9 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
   int? _selectedCountryID;
 
   int? _selectedStateID;
+  String? _selectedCityName;
 
-  final List<String> _addressTypes = ["Primary", "Billing", "Shipping"];
+  final List<String> _addressTypes = ["Primary", "Shipping"];
 
   @override
   void initState() {
@@ -111,55 +113,55 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
                         return null;
                       },
                     ),
-                    Consumer(
-                      builder: (context, watch, _) {
-                        final _countryState = watch(countryNotifierProvider);
-
-                        return _countryState is CountryLoadedState
-                            ? CustomDropDownField(
-                                title: LocaleKeys.country.tr(),
-                                optionsList: _countryState.countryList!
-                                    .map((e) => e.name)
-                                    .toList(),
-                                controller: _countryController,
-                                hintText: _selectedCountryID == null
-                                    ? LocaleKeys.country.tr()
-                                    : null,
-                                value: _selectedCountryID == null
-                                    ? null
-                                    : _countryState.countryList!.any(
-                                            (element) =>
-                                                element.id ==
-                                                _selectedCountryID)
-                                        ? _countryState.countryList!
-                                            .firstWhere((element) =>
-                                                element.id ==
-                                                _selectedCountryID)
-                                            .name
-                                        : null,
-                                isCallback: true,
-                                callbackFunction: (int index) {
-                                  _selectedCountryID =
-                                      _countryState.countryList![index].id;
-
-                                  context
-                                      .read(statesNotifierProvider.notifier)
-                                      .getState(
-                                          _countryState.countryList![index].id);
-                                },
-                                validator: (text) {
-                                  if (text == null || text.isEmpty) {
-                                    return LocaleKeys.please_select_a_country
-                                        .tr();
-                                  }
-                                  return null;
-                                },
-                              )
-                            : _countryState is CountryLoadingState
-                                ? const FieldLoading()
-                                : const SizedBox();
-                      },
-                    ),
+                    // Consumer(
+                    //   builder: (context, watch, _) {
+                    //     final _countryState = watch(countryNotifierProvider);
+                    //
+                    //     return _countryState is CountryLoadedState
+                    //         ? CustomDropDownField(
+                    //             title: LocaleKeys.country.tr(),
+                    //             optionsList: _countryState.countryList!
+                    //                 .map((e) => e.name)
+                    //                 .toList(),
+                    //             controller: _countryController,
+                    //             hintText: _selectedCountryID == null
+                    //                 ? LocaleKeys.country.tr()
+                    //                 : null,
+                    //             value: _selectedCountryID == null
+                    //                 ? null
+                    //                 : _countryState.countryList!.any(
+                    //                         (element) =>
+                    //                             element.id ==
+                    //                             _selectedCountryID)
+                    //                     ? _countryState.countryList!
+                    //                         .firstWhere((element) =>
+                    //                             element.id ==
+                    //                             _selectedCountryID)
+                    //                         .name
+                    //                     : null,
+                    //             isCallback: true,
+                    //             callbackFunction: (int index) {
+                    //               _selectedCountryID =
+                    //                   _countryState.countryList![index].id;
+                    //
+                    //               context
+                    //                   .read(statesNotifierProvider.notifier)
+                    //                   .getState(
+                    //                       _countryState.countryList![index].id);
+                    //             },
+                    //             validator: (text) {
+                    //               if (text == null || text.isEmpty) {
+                    //                 return LocaleKeys.please_select_a_country
+                    //                     .tr();
+                    //               }
+                    //               return null;
+                    //             },
+                    //           )
+                    //         : _countryState is CountryLoadingState
+                    //             ? const FieldLoading()
+                    //             : const SizedBox();
+                    //   },
+                    // ),
                     Consumer(
                       builder: (context, watch, _) {
                         final _statesState = watch(statesNotifierProvider);
@@ -188,6 +190,8 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
                                     ? (int index) {
                                         _selectedStateID =
                                             _statesState.statesList![index].id;
+
+                                        context.read(cityNotifierProvider.notifier).getCities(_selectedStateID);
                                       }
                                     : null,
                                 validator: (text) {
@@ -232,24 +236,60 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
                       title: LocaleKeys.address_line_2.tr(),
                       hintText: LocaleKeys.address_line_2.tr(),
                       controller: _addressLine2Controller,
-                      validator: (text) {
-                        if (_addressLine2Controller.text.isEmpty) {
-                          if (text == null || text.isEmpty) {
-                            return LocaleKeys.field_required.tr();
-                          }
-                        }
-                        return null;
-                      },
+                      // validator: (text) {
+                      //   if (_addressLine2Controller.text.isEmpty) {
+                      //     if (text == null || text.isEmpty) {
+                      //       return LocaleKeys.field_required.tr();
+                      //     }
+                      //   }
+                      //   return null;
+                      // },
                     ),
-                    CustomTextField(
-                      title: LocaleKeys.city.tr(),
-                      hintText: LocaleKeys.city.tr(),
-                      controller: _cityController,
-                      validator: (text) {
-                        if (text == null || text.isEmpty) {
-                          return LocaleKeys.field_required.tr();
-                        }
-                        return null;
+                    // CustomTextField(
+                    //   title: LocaleKeys.city.tr(),
+                    //   hintText: LocaleKeys.city.tr(),
+                    //   controller: _cityController,
+                    //   validator: (text) {
+                    //     if (text == null || text.isEmpty) {
+                    //       return LocaleKeys.field_required.tr();
+                    //     }
+                    //     return null;
+                    //   },
+                    // ),
+                    Consumer(
+                      builder: (context, watch, _) {
+                        final _cityState = watch(cityNotifierProvider);
+
+                        return _cityState is CityLoadedState &&
+                            _cityState.cityList!.isNotEmpty
+                            ? CustomDropDownField(
+                          title: LocaleKeys.city.tr(),
+                          optionsList: _cityState.cityList!.isEmpty
+                              ? ["Select"]
+                              : _cityState.cityList!
+                              .map((e) => e.name)
+                              .toList(),
+                          controller: _cityController,
+                          hintText: LocaleKeys.city.tr(),
+                          isCallback: true,
+                          callbackFunction: _cityState
+                              .cityList!.isNotEmpty
+                              ? (int index) {
+                            _selectedCityName =
+                                _cityState.cityList![index].name;
+                          }
+                              : null,
+                          validator: (text) {
+                            if (text == null || text.isEmpty) {
+                              return LocaleKeys.please_select_a_city
+                                  .tr();
+                            }
+                            return null;
+                          },
+                        )
+                            : _cityState is CityLoadingState
+                            ? const FieldLoading()
+                            : const SizedBox();
                       },
                     ),
                     CustomButton(
@@ -266,7 +306,7 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
                                 //countryId: _selectedCountryID ?? 4,
                                 countryId: 360,
                                 stateId: _selectedStateID,
-                                cityId: _cityController.text,
+                                cityId: _selectedCityName,
                                 addressLine1: _addressLine1Controller.text,
                                 addressLine2: _addressLine2Controller.text,
                                 zipCode: _zipCodeController.text,

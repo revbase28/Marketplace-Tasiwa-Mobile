@@ -255,6 +255,7 @@
   "search": "Search",
   "please_select_a_country": "Please select a country",
   "please_select_a_state": "Please select a state",
+  "please_select_a_city": "Please select a city",
   "delete_address_warning": "Are you sure you want to delete this address?",
   "redeem_coupon": "Redeem Coupon",
   "code_is_copied": "Code is copied to clipboard",

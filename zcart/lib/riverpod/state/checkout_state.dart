@@ -1,4 +1,6 @@
-import '../../data/models/checkout/Checkout_model2.dart';
+
+
+import 'package:zcart/data/models/checkout/checkout_model_2.dart';
 
 abstract class CheckoutState {
   const CheckoutState();

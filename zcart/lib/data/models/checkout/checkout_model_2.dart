@@ -1,23 +1,19 @@
-import 'Order.dart';
-
 class CheckoutModel2 {
   CheckoutModel2({
-      this.message,
-      this.order,});
+      this.message, 
+      this.snapToken,});
 
   CheckoutModel2.fromJson(dynamic json) {
     message = json['message'];
-    order = json['order'] != null ? Order.fromJson(json['order']) : null;
+    snapToken = json['snap_token'];
   }
   String? message;
-  Order? order;
+  String? snapToken;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     map['message'] = message;
-    if (order != null) {
-      map['order'] = order!.toJson();
-    }
+    map['snap_token'] = snapToken;
     return map;
   }
 

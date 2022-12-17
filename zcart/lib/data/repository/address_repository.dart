@@ -1,4 +1,5 @@
 import 'package:zcart/data/interface/i_address_repository.dart';
+import 'package:zcart/data/models/address/city_model.dart';
 import 'package:zcart/data/models/address/country_model.dart';
 import 'package:zcart/data/models/address/payment_options_model.dart';
 import 'package:zcart/data/models/address/states_model.dart';
@@ -137,6 +138,7 @@ class AddressRepository implements IAddressRepository {
     return statesModel.data;
   }
 
+
   @override
   Future<List<PaymentOptions>?> fetchPaymentMethods(
       {required String cartId}) async {
@@ -156,6 +158,23 @@ class AddressRepository implements IAddressRepository {
       }
     }
     return paymentOptionsModel.data;
+  }
+
+  @override
+  Future<List<City>?> fetchCity(int? stateId) async {
+    dynamic responseBody;
+    CityModel cityModel;
+    try {
+      responseBody = await handleResponse(
+          await getRequest(API.cities(stateId), bearerToken: true));
+      cityModel = CityModel.fromJson(responseBody);
+    } catch (e) {
+      throw NetworkException();
+    }
+    if (responseBody.runtimeType == int && responseBody > 206) {
+      throw NetworkException();
+    }
+    return cityModel.data;
   }
 
   // @override

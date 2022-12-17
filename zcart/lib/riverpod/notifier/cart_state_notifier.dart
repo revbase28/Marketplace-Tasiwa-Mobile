@@ -119,6 +119,9 @@ class CartItemDetailsNotifier extends StateNotifier<CartItemDetailsState> {
     int? shippingZoneId,
     int? shippingOptionId,
     int? packagingId,
+    String? shippingCarrier,
+    String? shippingCarrierType,
+    String? shippingCost,
   }) async {
     try {
       await _iCartRepository.updateCart(
@@ -130,7 +133,10 @@ class CartItemDetailsNotifier extends StateNotifier<CartItemDetailsState> {
           stateId: stateId,
           shippingZoneId: shippingZoneId,
           shippingOptionId: shippingOptionId,
-          packagingId: packagingId);
+          packagingId: packagingId,
+          shippingCarrierType: shippingCarrierType,
+          shippingCarrier: shippingCarrier,
+          shippingCost: shippingCost);
       getCartItemDetails(item);
     } on NetworkException {
       state = CartItemDetailsErrorState(LocaleKeys.something_went_wrong.tr());

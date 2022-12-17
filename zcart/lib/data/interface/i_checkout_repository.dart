@@ -1,4 +1,5 @@
-import '../models/checkout/Checkout_model2.dart';
+
+import 'package:zcart/data/models/checkout/checkout_model_2.dart';
 
 abstract class ICheckoutRepository {
   Future<CheckoutModel2> checkout(int cartId, requestBody);

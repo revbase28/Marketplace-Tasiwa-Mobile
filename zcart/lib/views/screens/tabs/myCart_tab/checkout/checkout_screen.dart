@@ -30,6 +30,8 @@ import 'package:zcart/riverpod/state/address/states_state.dart';
 import 'package:zcart/riverpod/state/cart_state.dart';
 import 'package:zcart/riverpod/state/checkout_state.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
+import 'package:zcart/views/screens/bottom_nav_bar/bottom_nav_bar.dart';
+import 'package:zcart/views/screens/bottom_nav_bar/tab_navigation_item.dart';
 import 'package:zcart/views/screens/product_details/product_details_screen.dart';
 import 'package:zcart/views/screens/tabs/account_tab/account/add_address_screen.dart';
 import 'package:zcart/views/screens/tabs/account_tab/others/terms_and_conditions_screen.dart';
@@ -123,8 +125,8 @@ class _CheckoutScreenState extends State<CheckoutScreen>
             context.read(checkoutNotifierProvider.notifier).createAccount =
                 false;
             context.read(checkoutNotifierProvider.notifier).email = null;
-            context.nextReplacementPage(
-                OrderPlacedPage(accessToken: state.accessToken));
+            // context.nextReplacementPage(
+            //     OrderPlacedPage(accessToken: state.accessToken));
           }
         },
         child: ProviderListener<CartItemDetailsState>(
@@ -865,10 +867,23 @@ class ShippingDetails extends ConsumerWidget {
                   ),
                 );
         } else {
+          // ShippingOption? _shippingOption;
+          // if (value.any((element) => element.id == cartItem.shippingOptionId)) {
+          //   _shippingOption = value.firstWhere(
+          //     (element) => element.id == cartItem.shippingOptionId,
+          //   );
+          // } else {
+          //   _shippingOption = value.first;
+          // }
+
           ShippingOption? _shippingOption;
-          if (value.any((element) => element.id == cartItem.shippingOptionId)) {
+          if (value.any((element) =>
+              element.name == cartItem.shippingCarrier &&
+              element.services == cartItem.shippingCarrierType)) {
             _shippingOption = value.firstWhere(
-              (element) => element.id == cartItem.shippingOptionId,
+              (element) =>
+                  element.name == cartItem.shippingCarrier &&
+                  element.services == cartItem.shippingCarrierType,
             );
           } else {
             _shippingOption = value.first;
@@ -928,10 +943,7 @@ class ShippingDetails extends ConsumerWidget {
                             Expanded(
                               child: Text(
                                 (_shippingOption.name ??
-                                        LocaleKeys.unknown.tr()) +
-                                    " by " +
-                                    (_shippingOption.carrierName ??
-                                        LocaleKeys.unknown.tr()),
+                                    LocaleKeys.unknown.tr()),
                                 style: Theme.of(context)
                                     .textTheme
                                     .subtitle2!
@@ -1006,9 +1018,7 @@ class ShippingDetails extends ConsumerWidget {
                         .map(
                           (e) => ListTile(
                             title: Text(
-                              (e.name ?? LocaleKeys.unknown.tr()) +
-                                  " by " +
-                                  (e.carrierName ?? LocaleKeys.unknown.tr()),
+                              (e.name ?? LocaleKeys.unknown.tr()),
                               style: Theme.of(context)
                                   .textTheme
                                   .subtitle2!
@@ -1035,6 +1045,9 @@ class ShippingDetails extends ConsumerWidget {
                                   .read(cartNotifierProvider.notifier)
                                   .updateCart(
                                     cartItem.id!,
+                                    shippingCarrier: e.name,
+                                    shippingCarrierType: e.services,
+                                    shippingCost: e.costRaw,
                                     shippingOptionId: e.id,
                                     shippingZoneId: e.shippingZoneId,
                                   );
@@ -1043,6 +1056,9 @@ class ShippingDetails extends ConsumerWidget {
                                       cartItemDetailsNotifierProvider.notifier)
                                   .updateCart(
                                     cartItem.id!,
+                                    shippingCarrier: e.name,
+                                    shippingCarrierType: e.services,
+                                    shippingCost: e.costRaw,
                                     shippingOptionId: e.id,
                                     shippingZoneId: e.shippingZoneId,
                                   );
@@ -1479,7 +1495,7 @@ class CheckOutItemDetailsPage extends ConsumerWidget {
                                         .cartItemDetails!.data!.total ??
                                     "0"),
                             if (double.parse(_cartDetailsProvider
-                                        .cartItemDetails!.data!.shippingRaw ??
+                                        .cartItemDetails!.data!.shippingCost ??
                                     "0") >
                                 0)
                               CheckOutDetailsPriceWidget(
@@ -1561,20 +1577,25 @@ class CheckOutItemDetailsPage extends ConsumerWidget {
                                 style: ElevatedButton.styleFrom(
                                     padding: const EdgeInsets.symmetric(
                                         vertical: 16)),
-                                onPressed: (){
-                                  {
-                                    showCustomConfirmDialog(
-                                      context,
-                                      dialogAnimation: DialogAnimation.SLIDE_RIGHT_LEFT,
-                                      dialogType: DialogType.DELETE,
-                                      title: LocaleKeys.want_delete_item_from_cart.tr(),
-                                      onAccept: () {
-                                        onPressedNext();
-                                      },
-                                    );
-                                  }
+                                // onPressed: () {
+                                //   {
+                                //     showCustomConfirmDialog(
+                                //       context,
+                                //       dialogAnimation:
+                                //           DialogAnimation.SLIDE_RIGHT_LEFT,
+                                //       dialogType: DialogType.DELETE,
+                                //       title: LocaleKeys
+                                //           .want_delete_item_from_cart
+                                //           .tr(),
+                                //       onAccept: () {
+                                //         onPressedNext();
+                                //       },
+                                //     );
+                                //   }
+                                // },
+                                onPressed: () {
+                                  onPressedNext();
                                 },
-                                //onPressed: onPressedNext,
                                 child: Text(LocaleKeys.next.tr()),
                               ),
                             ),
@@ -1884,6 +1905,21 @@ class _CheckoutPaymentPageState extends State<CheckoutPaymentPage> {
   WebViewController? webViewController;
 
   @override
+  void initState() {
+    super.initState();
+    context.read(checkoutNotifierProvider.notifier).shippingCost =
+        widget.cartItemDetails!.data!.shippingCost;
+
+    context.read(checkoutNotifierProvider.notifier).shippingCarrierType =
+        widget.cartItemDetails!.data!.shippingCarrierType;
+
+    context.read(checkoutNotifierProvider.notifier).shippingCarrier =
+        widget.cartItemDetails!.data!.shippingCarrier;
+
+    context.read(checkoutNotifierProvider.notifier).checkout();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
@@ -1892,6 +1928,7 @@ class _CheckoutPaymentPageState extends State<CheckoutPaymentPage> {
       child: Consumer(
         builder: (context, watch, _) {
           final _paymentOptionsState = watch(paymentOptionsNotifierProvider);
+          final _checkoutState = watch(checkoutNotifierProvider);
           final _pharmacyCheckProvider = watch(checkPharmacyPluginProvider);
           int _grandTotal = 0;
           final List<CartItemForPayment> _cartItems = [];
@@ -2069,58 +2106,73 @@ class _CheckoutPaymentPageState extends State<CheckoutPaymentPage> {
                       ],
                     ),
                   )
-                : Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Expanded(
-                        child: WebView(
-                          initialUrl: '',
-                          onPageStarted: (url) {
-                            setState(() {
-                              loadingPercentage = 0;
-                            });
-                          },
-                          javascriptChannels: <JavascriptChannel>{
-                            JavascriptChannel(
-                              name: 'Print',
-                              onMessageReceived: (JavascriptMessage receiver) {
-                                toast(receiver.message);
-                                if (receiver.message != null || receiver.message != 'undefined') {
-                                  if (receiver.message == 'close') {
-                                    Navigator.pop(context);
-                                  } else {
-                                    //_handleResponse(receiver.message);
-                                    toast(receiver.message);
-                                  }
-                                }
+                : _checkoutState is CheckoutLoadedState
+                    ? Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Expanded(
+                            child: WebView(
+                              initialUrl: '',
+                              onPageStarted: (url) {
+                                setState(() {
+                                  loadingPercentage = 0;
+                                });
                               },
-                            ),
-                            JavascriptChannel(
-                              name: 'Android',
-                              onMessageReceived: (JavascriptMessage receiver) async {
-                                toast(receiver.message);
-                                if (Platform.isAndroid) {
-                                  if (receiver.message != null || receiver.message != 'undefined') {
-                                    if (receiver.message == 'close') {
-                                      Navigator.pop(context);
-                                    } else {
-                                      context.read(checkoutNotifierProvider.notifier).checkout();
-                                      toast(receiver.message);
+                              javascriptChannels: <JavascriptChannel>{
+                                JavascriptChannel(
+                                  name: 'Print',
+                                  onMessageReceived:
+                                      (JavascriptMessage receiver) {
+                                    //toast(receiver.message);
+                                    if (receiver.message != null ||
+                                        receiver.message != 'undefined') {
+                                      if (receiver.message == 'close') {
+                                        Navigator.pop(context);
+                                      } else {
+                                        //_handleResponse(receiver.message);
+                                        //toast(receiver.message);
+                                      }
                                     }
-                                  }
-                                }
+                                  },
+                                ),
+                                JavascriptChannel(
+                                  name: 'Android',
+                                  onMessageReceived:
+                                      (JavascriptMessage receiver) async {
+                                    //toast(receiver.message);
+                                    if (Platform.isAndroid) {
+                                      if (receiver.message != null ||
+                                          receiver.message != 'undefined') {
+                                        if (receiver.message == 'close') {
+                                          //Navigator.pop(context);
+                                          context.nextAndRemoveUntilPage(
+                                              const BottomNavBar(selectedTabId: homeTabId));
+                                        } else if (receiver.message == 'ok'){
+                                          context.nextReplacementPage(const OrderPlacedPage());
+                                        } else {
+                                          toast(receiver.message);
+                                          context.nextAndRemoveUntilPage(
+                                              const BottomNavBar(selectedTabId: homeTabId));
+                                        }
+                                      }
+                                    }
+                                  },
+                                ),
                               },
+                              onWebViewCreated: (_controller) {
+                                webViewController = _controller;
+                                _loadHtmlFromAssets(
+                                    webViewController!,
+                                    _checkoutState
+                                            .checkoutModel!.snapToken ??
+                                        "");
+                              },
+                              javascriptMode: JavascriptMode.unrestricted,
                             ),
-                          },
-                          onWebViewCreated: (_controller){
-                            webViewController = _controller;
-                            _loadHtmlFromAssets(webViewController!, widget.snapToken ?? "");
-                          },
-                          javascriptMode: JavascriptMode.unrestricted,
-                        ),
-                      ),
-                    ],
-                  );
+                          ),
+                        ],
+                      )
+                    : const SizedBox();
           } else {
             return Center(
               child: Text(LocaleKeys.something_went_wrong.tr()),
@@ -2233,7 +2285,6 @@ _loadHtmlFromAssets(WebViewController webViewController, String snapToken) {
       <body onload="setTimeout(function(){pay()}, 1000)">
         <script type="text/javascript">
             function pay() {
-                Android.postMessage('loaded');
                 snap.pay('$snapToken', {
                   // Optional
                   onSuccess: function(result) {
@@ -2258,5 +2309,6 @@ _loadHtmlFromAssets(WebViewController webViewController, String snapToken) {
             }
         </script>
       </body>
-    </html>''', mimeType: 'text/html', encoding: Encoding.getByName('utf-8')).toString());
+    </html>''', mimeType: 'text/html', encoding: Encoding.getByName('utf-8'))
+      .toString());
 }

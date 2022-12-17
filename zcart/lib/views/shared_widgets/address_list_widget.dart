@@ -144,25 +144,33 @@ class _AddressListBuilderState extends State<AddressListBuilder> {
                                   context
                                       .read(cartItemDetailsNotifierProvider
                                           .notifier)
-                                      .updateCart(
-                                        widget.cartItem!.id!,
-                                        countryId: e.country!.id,
-                                        stateId: e.state?.id,
-                                        shipTo: e.id,
-                                        shippingOptionId: _shippingOptionId,
-                                        shippingZoneId: _shippingZoneId,
-                                      );
+                                      .updateCart(widget.cartItem!.id!,
+                                          countryId: e.country!.id,
+                                          stateId: e.state?.id,
+                                          shipTo: e.id,
+                                          shippingOptionId: _shippingOptionId,
+                                          shippingZoneId: _shippingZoneId,
+                                          shippingCost:
+                                              widget.cartItem!.shippingCost,
+                                          shippingCarrier:
+                                              widget.cartItem!.shippingCarrier,
+                                          shippingCarrierType: widget
+                                              .cartItem!.shippingCarrierType);
 
                                   context
                                       .read(cartNotifierProvider.notifier)
-                                      .updateCart(
-                                        widget.cartItem!.id!,
-                                        countryId: e.country!.id,
-                                        stateId: e.state?.id,
-                                        shipTo: e.id,
-                                        shippingOptionId: _shippingOptionId,
-                                        shippingZoneId: _shippingZoneId,
-                                      );
+                                      .updateCart(widget.cartItem!.id!,
+                                          countryId: e.country!.id,
+                                          stateId: e.state?.id,
+                                          shipTo: e.id,
+                                          shippingOptionId: _shippingOptionId,
+                                          shippingZoneId: _shippingZoneId,
+                                          shippingCost:
+                                              widget.cartItem!.shippingCost,
+                                          shippingCarrier:
+                                              widget.cartItem!.shippingCarrier,
+                                          shippingCarrierType: widget
+                                              .cartItem!.shippingCarrierType);
 
                                   _checkoutProvider.shipTo = e.id;
                                   if (widget.onAddressSelected != null) {
@@ -207,9 +215,8 @@ class _AddressListBuilderState extends State<AddressListBuilder> {
                                     .textTheme
                                     .bodyText2!
                                     .copyWith(
-                                      fontWeight: FontWeight.bold,
-                                      color: kTileTextColor
-                                    ),
+                                        fontWeight: FontWeight.bold,
+                                        color: kTileTextColor),
                               ),
                               const SizedBox(height: 5),
                               Text(e.addressTitle!,
@@ -229,7 +236,8 @@ class _AddressListBuilderState extends State<AddressListBuilder> {
                           subtitle: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('${e.addressLine1}, ${e.addressLine2}',
+                              Text(
+                                  '${e.addressLine1} ${e.addressLine2 == null ? "" : ', ${e.addressLine2}'}',
                                   style: Theme.of(context)
                                       .textTheme
                                       .caption!
@@ -259,6 +267,13 @@ class _AddressListBuilderState extends State<AddressListBuilder> {
                                       context
                                           .read(statesNotifierProvider.notifier)
                                           .getState(e.country?.id);
+                                    }
+
+                                    if (e.state?.id != null) {
+                                      debugPrint(e.state?.id.toString());
+                                      context
+                                          .read(cityNotifierProvider.notifier)
+                                          .getCities(e.state?.id);
                                     }
                                     context.nextPage(
                                       EditAddressScreen(address: e),

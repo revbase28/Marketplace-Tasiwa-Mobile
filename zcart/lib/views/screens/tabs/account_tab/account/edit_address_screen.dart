@@ -5,6 +5,7 @@ import 'package:velocity_x/velocity_x.dart';
 import 'package:zcart/data/models/address/address_model.dart';
 import 'package:zcart/helper/get_color_based_on_theme.dart';
 import 'package:zcart/riverpod/providers/address_provider.dart';
+import 'package:zcart/riverpod/state/address/city_state.dart';
 import 'package:zcart/riverpod/state/address/country_state.dart';
 import 'package:zcart/riverpod/state/address/states_state.dart';
 import 'package:zcart/translations/locale_keys.g.dart';
@@ -18,6 +19,7 @@ import 'package:zcart/views/shared_widgets/shared_widgets.dart';
 
 class EditAddressScreen extends StatefulWidget {
   final Addresses address;
+
   const EditAddressScreen({
     Key? key,
     required this.address,
@@ -60,9 +62,11 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
 
   int? _selectedStateID;
 
+  String? _selectedCityName;
+
   bool _isLoading = false;
 
-  final List<String> _addressTypes = ["Primary", "Billing", "Shipping"];
+  final List<String> _addressTypes = ["Primary", "Shipping"];
 
   @override
   Widget build(BuildContext context) {
@@ -152,47 +156,47 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
                               return null;
                             },
                           ),
-                          Consumer(
-                            builder: (context, watch, _) {
-                              final countryState =
-                                  watch(countryNotifierProvider);
-
-                              return countryState is CountryLoadedState
-                                  ? CustomDropDownField(
-                                      title: LocaleKeys.country.tr(),
-                                      optionsList: countryState.countryList!
-                                          .map((e) => e.name)
-                                          .toList(),
-                                      controller: _countryController,
-                                      value: countryState.countryList!
-                                          .firstWhere((e) =>
-                                              e.id ==
-                                              widget.address.country!.id)
-                                          .name,
-                                      isCallback: true,
-                                      callbackFunction: (int countryId) {
-                                        _selectedCountryID = countryState
-                                            .countryList![countryId].id;
-                                        context
-                                            .read(
-                                                statesNotifierProvider.notifier)
-                                            .getState(countryState
-                                                .countryList![countryId].id);
-                                      },
-                                      validator: (text) {
-                                        if (text == null || text.isEmpty) {
-                                          return LocaleKeys
-                                              .please_select_a_country
-                                              .tr();
-                                        }
-                                        return null;
-                                      },
-                                    )
-                                  : countryState is CountryLoadingState
-                                      ? const FieldLoading()
-                                      : const SizedBox();
-                            },
-                          ),
+                          // Consumer(
+                          //   builder: (context, watch, _) {
+                          //     final countryState =
+                          //         watch(countryNotifierProvider);
+                          //
+                          //     return countryState is CountryLoadedState
+                          //         ? CustomDropDownField(
+                          //             title: LocaleKeys.country.tr(),
+                          //             optionsList: countryState.countryList!
+                          //                 .map((e) => e.name)
+                          //                 .toList(),
+                          //             controller: _countryController,
+                          //             value: countryState.countryList!
+                          //                 .firstWhere((e) =>
+                          //                     e.id ==
+                          //                     widget.address.country!.id)
+                          //                 .name,
+                          //             isCallback: true,
+                          //             callbackFunction: (int countryId) {
+                          //               _selectedCountryID = countryState
+                          //                   .countryList![countryId].id;
+                          //               context
+                          //                   .read(
+                          //                       statesNotifierProvider.notifier)
+                          //                   .getState(countryState
+                          //                       .countryList![countryId].id);
+                          //             },
+                          //             validator: (text) {
+                          //               if (text == null || text.isEmpty) {
+                          //                 return LocaleKeys
+                          //                     .please_select_a_country
+                          //                     .tr();
+                          //               }
+                          //               return null;
+                          //             },
+                          //           )
+                          //         : countryState is CountryLoadingState
+                          //             ? const FieldLoading()
+                          //             : const SizedBox();
+                          //   },
+                          // ),
                           Consumer(
                             builder: (context, watch, _) {
                               final statesState = watch(statesNotifierProvider);
@@ -242,6 +246,12 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
                                               ? (int stateId) {
                                                   _selectedStateID = statesState
                                                       .statesList![stateId].id;
+                                                  context
+                                                      .read(cityNotifierProvider
+                                                          .notifier)
+                                                      .getCities(statesState
+                                                          .statesList![stateId]
+                                                          .id);
                                                 }
                                               : null,
                                       validator: (text) {
@@ -279,7 +289,7 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
                               controller: _addressLine1Controller,
                               validator: (text) {
                                 if (text == null || text.isEmpty) {
-                                  if (_addressLine2Controller.text.isEmpty) {
+                                  if (_addressLine1Controller.text.isEmpty) {
                                     return LocaleKeys.field_required.tr();
                                   }
                                 }
@@ -289,24 +299,77 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
                             title: LocaleKeys.address_line_2.tr(),
                             hintText: LocaleKeys.address_line_2.tr(),
                             controller: _addressLine2Controller,
-                            validator: (text) {
-                              if (_addressLine1Controller.text.isEmpty) {
-                                if (text == null || text.isEmpty) {
-                                  return LocaleKeys.field_required.tr();
-                                }
-                              }
-                              return null;
-                            },
                           ),
-                          CustomTextField(
-                            title: LocaleKeys.city.tr(),
-                            hintText: LocaleKeys.city.tr(),
-                            controller: _cityController,
-                            validator: (text) {
-                              if (text == null || text.isEmpty) {
-                                return LocaleKeys.field_required.tr();
+                          // CustomTextField(
+                          //   title: LocaleKeys.city.tr(),
+                          //   hintText: LocaleKeys.city.tr(),
+                          //   controller: _cityController,
+                          //   validator: (text) {
+                          //     if (text == null || text.isEmpty) {
+                          //       return LocaleKeys.field_required.tr();
+                          //     }
+                          //     return null;
+                          //   },
+                          // ),
+                          Consumer(
+                            builder: (context, watch, _) {
+                              final cityState = watch(cityNotifierProvider);
+                              if (cityState is CityLoadedState) {
+                                _selectedCityName = cityState.cityList!.isEmpty
+                                    ? null
+                                    : cityState.cityList![0].name;
                               }
-                              return null;
+                              return cityState is CityLoadedState &&
+                                      cityState.cityList!.isNotEmpty
+                                  ? CustomDropDownField(
+                                      title: LocaleKeys.city.tr(),
+                                      optionsList: cityState.cityList!.isEmpty
+                                          ? ["Select"]
+                                          : cityState.cityList!
+                                              .map((e) => e.name)
+                                              .toList(),
+                                      controller: _cityController,
+                                      value: widget.address.city != null
+                                          ? cityState.cityList!.isEmpty
+                                              ? "Select"
+                                              : widget.address.city!=
+                                                      _cityController.text
+                                                  ? cityState
+                                                      .cityList!.first.name
+                                                  : cityState.cityList!.any(
+                                                          (element) =>
+                                                              element.name ==
+                                                              widget.address
+                                                                  .city!)
+                                                      ? cityState.cityList!
+                                                          .firstWhere((e) =>
+                                                              e.name ==
+                                                              widget.address
+                                                                  .city!)
+                                                          .name
+                                                      : cityState.cityList!.first.name
+                                          : cityState.cityList!.isEmpty
+                                              ? "Select"
+                                              : cityState.cityList!.first.name,
+                                      isCallback: true,
+                                      callbackFunction:
+                                          cityState.cityList!.isNotEmpty
+                                              ? (int stateId) {
+                                                  _selectedCityName = cityState
+                                                      .cityList![stateId].name;
+                                                }
+                                              : null,
+                                      validator: (text) {
+                                        if (text == null || text.isEmpty) {
+                                          return LocaleKeys.please_select_a_city
+                                              .tr();
+                                        }
+                                        return null;
+                                      },
+                                    )
+                                  : cityState is StatesLoadingState
+                                      ? const FieldLoading()
+                                      : const SizedBox();
                             },
                           ),
                           CustomButton(
@@ -330,7 +393,7 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
                                                 .toString()
                                             : _selectedCountryID.toString(),
                                         stateId: _selectedStateID?.toString(),
-                                        cityId: _cityController.text,
+                                        cityId: _selectedCityName,
                                         addressLine1:
                                             _addressLine1Controller.text,
                                         addressLine2:

@@ -1,3 +1,4 @@
+import 'package:zcart/data/models/address/city_model.dart';
 import 'package:zcart/data/models/address/country_model.dart';
 import 'package:zcart/data/models/address/payment_options_model.dart';
 import 'package:zcart/data/models/address/states_model.dart';
@@ -45,4 +46,6 @@ abstract class IAddressRepository {
   // Future<List<PackagingModel>> fetchPackagingInfo(String? shopSlug);
 
   Future<List<PaymentOptions>?> fetchPaymentMethods({required String cartId});
+
+  Future<List<City>?> fetchCity(int? stateId);
 }
