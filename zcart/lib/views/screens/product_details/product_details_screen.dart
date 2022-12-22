@@ -34,6 +34,7 @@ import 'components/product_name_card_dart.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
   final String productSlug;
+
   const ProductDetailsScreen({
     Key? key,
     required this.productSlug,
@@ -549,32 +550,24 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
                           isNoWidth: true,
                           onPressed: _isNotAvailable
                               ? () {}
-                              : _selectedShippingOption == null
-                                  ? () {
-                                      toast(LocaleKeys
-                                          .please_select_shipping_option
-                                          .tr());
-                                    }
-                                  : () async {
-                                      if (_details.data!.stockQuantity ==
-                                              null ||
-                                          _details.data!.stockQuantity! < 0) {
-                                        toast(LocaleKeys.out_of_stock.tr());
-                                        return;
-                                      } else {
-                                        toast(LocaleKeys.please_wait.tr());
-                                        await context
-                                            .read(cartNotifierProvider.notifier)
-                                            .addToCart(
-                                                context, _details.data!.slug!,
-                                                countryId: _countryId,
-                                                quantity: _quantity,
-                                                shippingOptionId: _shippingId,
-                                                stateId: _stateId,
-                                                shippingZoneId:
-                                                    _shippingZoneId);
-                                      }
-                                    },
+                              : () async {
+                                  if (_details.data!.stockQuantity == null ||
+                                      _details.data!.stockQuantity! < 0) {
+                                    toast(LocaleKeys.out_of_stock.tr());
+                                    return;
+                                  } else {
+                                    toast(LocaleKeys.please_wait.tr());
+                                    await context
+                                        .read(cartNotifierProvider.notifier)
+                                        .addToCart(
+                                            context, _details.data!.slug!,
+                                            countryId: _countryId,
+                                            quantity: _quantity,
+                                            shippingOptionId: _shippingId,
+                                            stateId: _stateId,
+                                            shippingZoneId: _shippingZoneId);
+                                  }
+                                },
                           icon: Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 16),
                             child: Row(
@@ -636,47 +629,47 @@ class __ProductDetailsBodyState extends State<_ProductDetailsBody> {
                 },
               ),
             ),
-            // Positioned(
-            //   top: 8,
-            //   right: 8,
-            //   child: Consumer(
-            //     builder: (context, watch, child) {
-            //       final wishlistPluginCheck =
-            //           watch(checkWishlistPluginProvider);
-            //
-            //       return wishlistPluginCheck.when(
-            //           data: (data) {
-            //             return data
-            //                 ? ProductDetailsPageIconButton(
-            //                     backgroundColor: getColorBasedOnTheme(
-            //                         context, kLightColor, kDarkBgColor),
-            //                     icon: Icon(
-            //                       widget.isWishlist
-            //                           ? CupertinoIcons.heart_fill
-            //                           : CupertinoIcons.heart,
-            //                       size: 28,
-            //                       color: widget.isWishlist ? Colors.red : null,
-            //                     ),
-            //                     onPressed: () async {
-            //                       if (widget.isWishlist) {
-            //                         toast(
-            //                             LocaleKeys.item_already_wishlist.tr());
-            //                       } else {
-            //                         toast(LocaleKeys.adding_to_wishlist.tr());
-            //                         await context
-            //                             .read(wishListNotifierProvider.notifier)
-            //                             .addToWishList(
-            //                                 _details.data!.slug, context);
-            //                       }
-            //                     },
-            //                   )
-            //                 : const SizedBox();
-            //           },
-            //           loading: () => const SizedBox(),
-            //           error: (_, __) => const SizedBox());
-            //     },
-            //   ),
-            // ),
+            Positioned(
+              top: 8,
+              right: 8,
+              child: Consumer(
+                builder: (context, watch, child) {
+                  final wishlistPluginCheck =
+                      watch(checkWishlistPluginProvider);
+
+                  return wishlistPluginCheck.when(
+                      data: (data) {
+                        return data
+                            ? ProductDetailsPageIconButton(
+                                backgroundColor: getColorBasedOnTheme(
+                                    context, kLightColor, kDarkBgColor),
+                                icon: Icon(
+                                  widget.isWishlist
+                                      ? CupertinoIcons.heart_fill
+                                      : CupertinoIcons.heart,
+                                  size: 28,
+                                  color: widget.isWishlist ? Colors.red : null,
+                                ),
+                                onPressed: () async {
+                                  if (widget.isWishlist) {
+                                    toast(
+                                        LocaleKeys.item_already_wishlist.tr());
+                                  } else {
+                                    toast(LocaleKeys.adding_to_wishlist.tr());
+                                    await context
+                                        .read(wishListNotifierProvider.notifier)
+                                        .addToWishList(
+                                            _details.data!.slug, context);
+                                  }
+                                },
+                              )
+                            : const SizedBox();
+                      },
+                      loading: () => const SizedBox(),
+                      error: (_, __) => const SizedBox());
+                },
+              ),
+            ),
             // Positioned(
             //   top: 8,
             //   right: 8,
@@ -1154,6 +1147,7 @@ class _AttributeItem extends StatelessWidget {
   final Attribute attribute;
   final AttributeValue value;
   final VoidCallback onTap;
+
   const _AttributeItem({
     Key? key,
     required this.attribute,
@@ -1347,6 +1341,7 @@ class ProductDetailsPageIconButton extends StatelessWidget {
   final bool isNoWidth;
   final bool isNoHeight;
   final Color backgroundColor;
+
   const ProductDetailsPageIconButton({
     Key? key,
     required this.icon,
@@ -1384,6 +1379,7 @@ class ProductDetailsPageIconButton extends StatelessWidget {
 class _ProductCountry {
   int id;
   String name;
+
   _ProductCountry({
     required this.id,
     required this.name,
@@ -1395,6 +1391,7 @@ class _SelectSippingCountryPage extends StatefulWidget {
   final List<_ProductCountry> items;
   final int? selected;
   final Function(_ProductCountry) onCountrySelected;
+
   const _SelectSippingCountryPage({
     Key? key,
     required this.title,
@@ -1495,6 +1492,7 @@ class _SelectSippingStatePage extends StatefulWidget {
   final List<States> items;
   final int? selected;
   final Function(States) onCountrySelected;
+
   const _SelectSippingStatePage({
     Key? key,
     required this.title,

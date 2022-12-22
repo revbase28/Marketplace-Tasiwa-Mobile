@@ -48,17 +48,17 @@ class TabNavigationItem {
         //   title: Text(LocaleKeys.brands.tr()),
         //   label: LocaleKeys.brands.tr(),
         // ),
-        // TabNavigationItem(
-        //   id: wishlistTabId,
-        //   page: accessAllowed
-        //       ? const WishListTab()
-        //       : const LoginScreen(
-        //           needBackButton: false, nextScreenId: wishlistTabId),
-        //   icon: const Icon(Icons.favorite_border),
-        //   selectedIcon: const Icon(Icons.favorite),
-        //   title: Text(LocaleKeys.wishlist_text.tr()),
-        //   label: LocaleKeys.wishlist_text.tr(),
-        // ),
+        TabNavigationItem(
+          id: wishlistTabId,
+          page: accessAllowed
+              ? const WishListTab()
+              : const LoginScreen(
+                  needBackButton: false, nextScreenId: wishlistTabId),
+          icon: const Icon(Icons.favorite_border),
+          selectedIcon: const Icon(Icons.favorite),
+          title: Text(LocaleKeys.wishlist_text.tr()),
+          label: LocaleKeys.wishlist_text.tr(),
+        ),
         TabNavigationItem(
           id: cartTabId,
           page: const MyCartTab(),

@@ -60,7 +60,7 @@ class _MyCartTabState extends State<MyCartTab> {
 
   final List<bool> _isAllCartCheckout = [];
 
-  void _onOneCheckOut(int cartId, String? userEmail, String? snapToken) {
+  void _onOneCheckOut(int cartId, String? userEmail) {
     setState(() {});
 
     if (_isAllCartCheckout.any((element) => element == false)) {
@@ -80,8 +80,7 @@ class _MyCartTabState extends State<MyCartTab> {
 
           context.nextPage(CheckoutScreen(
               customerEmail: userEmail,
-              isOneCheckout: true,
-              snapToken: snapToken));
+              isOneCheckout: true));
         } else {
           if (accessAllowed == false) {
             context.nextPage(const LoginScreen(
@@ -97,8 +96,7 @@ class _MyCartTabState extends State<MyCartTab> {
 
             context.nextPage(CheckoutScreen(
                 customerEmail: userEmail,
-                isOneCheckout: true,
-                snapToken: snapToken));
+                isOneCheckout: true));
           }
         }
       });
@@ -138,8 +136,8 @@ class _MyCartTabState extends State<MyCartTab> {
                   )
                 ],
               ),
-              // floatingActionButtonLocation:
-              //     FloatingActionButtonLocation.endFloat,
+              floatingActionButtonLocation:
+                  FloatingActionButtonLocation.endFloat,
               // floatingActionButton: _oneCheckoutPluginCheckProvider.when(
               //   data: (value) {
               //     if (value) {
@@ -177,8 +175,7 @@ class _MyCartTabState extends State<MyCartTab> {
               //             if (_cartState is CartLoadedState) {
               //               _onOneCheckOut(
               //                   _cartState.cartList!.first.id!,
-              //                   _customerEmail,
-              //                   _cartState.cartList!.first.snapToken!);
+              //                   _customerEmail);
               //             }
               //           },
               //           icon: const Icon(Icons.double_arrow),
@@ -205,7 +202,7 @@ class _MyCartTabState extends State<MyCartTab> {
               //   loading: () => const SizedBox(),
               //   error: (error, stackTrace) => Text(error.toString()),
               // ),
-              // floatingActionButton: ,
+              //floatingActionButton: ,
               body: _cartState is CartLoadedState
                   ? _cartState.cartList == null || _cartState.cartList!.isEmpty
                       ? ProviderListener(

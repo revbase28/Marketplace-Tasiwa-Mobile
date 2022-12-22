@@ -190,6 +190,8 @@
   "grand_total": "Total Keseluruhan",
   "checkout": "Checkout",
   "want_delete_item_from_cart": "Apakah Anda ingin menghapus item ini dari keranjang?",
+  "reassure_checkout": "Sudah yakit dengan pesanan anda?",
+  "reassure_checkout_msg": "Jika anda menekan Ya, anda tidak bisa kembali untuk merubah pesanan anda",
   "order_place_confirmation": "Berhasil dipesan!",
   "place_order": "Lakukan pemesanan",
   "order_summary": "Ringkasan Pesanan",

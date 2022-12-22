@@ -192,6 +192,8 @@ abstract class LocaleKeys {
   static const grand_total = 'grand_total';
   static const checkout = 'checkout';
   static const want_delete_item_from_cart = 'want_delete_item_from_cart';
+  static const reassure_checkout = 'reassure_checkout';
+  static const reassure_checkout_msg = 'reassure_checkout_msg';
   static const order_place_confirmation = 'order_place_confirmation';
   static const place_order = 'place_order';
   static const order_summary = 'order_summary';
