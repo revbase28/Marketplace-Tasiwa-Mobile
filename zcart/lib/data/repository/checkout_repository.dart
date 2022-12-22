@@ -31,7 +31,7 @@ class CheckoutRepository implements ICheckoutRepository {
   }
 
   @override
-  Future checkoutAll(requestBody) async {
+  Future<CheckoutModel2> checkoutAll(requestBody) async {
     dynamic responseBody;
     try {
       responseBody = await handleResponse(await postRequest(
@@ -45,6 +45,7 @@ class CheckoutRepository implements ICheckoutRepository {
     } catch (e) {
       throw NetworkException();
     }
+    return CheckoutModel2.fromJson(responseBody);
   }
 
   @override

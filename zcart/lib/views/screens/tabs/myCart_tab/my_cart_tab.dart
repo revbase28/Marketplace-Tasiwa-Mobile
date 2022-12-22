@@ -138,70 +138,70 @@ class _MyCartTabState extends State<MyCartTab> {
               ),
               floatingActionButtonLocation:
                   FloatingActionButtonLocation.endFloat,
-              // floatingActionButton: _oneCheckoutPluginCheckProvider.when(
-              //   data: (value) {
-              //     if (value) {
-              //       bool _canOneCheckout = false;
-              //       debugPrint("_isAllCartCheckout: $_isAllCartCheckout");
-              //
-              //       if (_cartState is CartLoadedState) {
-              //         if (_cartState.cartList != null &&
-              //             _cartState.cartList!.isNotEmpty &&
-              //             _cartState.cartList!.length > 1) {
-              //           if (_cartState.cartList!.every((element) =>
-              //               element.shipToCountryId ==
-              //                   _cartState.cartList!.first.shipToCountryId &&
-              //               element.shipToStateId ==
-              //                   _cartState.cartList!.first.shipToStateId)) {
-              //             _canOneCheckout = true;
-              //           }
-              //         }
-              //       }
-              //
-              //       if (_canOneCheckout) {
-              //         return FloatingActionButton.extended(
-              //           backgroundColor: Colors.black,
-              //           shape: RoundedRectangleBorder(
-              //             borderRadius: BorderRadius.circular(10),
-              //           ),
-              //           onPressed: () {
-              //             String? _customerEmail;
-              //
-              //             if (accessAllowed) {
-              //               if (_userState is UserLoadedState) {
-              //                 _customerEmail = _userState.user!.email!;
-              //               }
-              //             }
-              //             if (_cartState is CartLoadedState) {
-              //               _onOneCheckOut(
-              //                   _cartState.cartList!.first.id!,
-              //                   _customerEmail);
-              //             }
-              //           },
-              //           icon: const Icon(Icons.double_arrow),
-              //           label: Text(
-              //             LocaleKeys.checkout_all.tr(),
-              //             style: Theme.of(context)
-              //                 .textTheme
-              //                 .headline6!
-              //                 .copyWith(
-              //                     fontWeight: FontWeight.w900,
-              //                     color: kLightColor),
-              //           ),
-              //           elevation: 20,
-              //           heroTag: "checkout_all",
-              //           foregroundColor: kLightColor,
-              //           tooltip: LocaleKeys.checkout_all.tr(),
-              //         );
-              //       } else {
-              //         return const SizedBox();
-              //       }
-              //     }
-              //     return const SizedBox();
-              //   },
-              //   loading: () => const SizedBox(),
-              //   error: (error, stackTrace) => Text(error.toString()),
-              // ),
+              floatingActionButton: _oneCheckoutPluginCheckProvider.when(
+                data: (value) {
+                  if (value) {
+                    bool _canOneCheckout = false;
+                    debugPrint("_isAllCartCheckout: $_isAllCartCheckout");
+
+                    if (_cartState is CartLoadedState) {
+                      if (_cartState.cartList != null &&
+                          _cartState.cartList!.isNotEmpty &&
+                          _cartState.cartList!.length > 1) {
+                        if (_cartState.cartList!.every((element) =>
+                            element.shipToCountryId ==
+                                _cartState.cartList!.first.shipToCountryId &&
+                            element.shipToStateId ==
+                                _cartState.cartList!.first.shipToStateId)) {
+                          _canOneCheckout = true;
+                        }
+                      }
+                    }
+
+                    if (_canOneCheckout) {
+                      return FloatingActionButton.extended(
+                        backgroundColor: Colors.black,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        onPressed: () {
+                          String? _customerEmail;
+
+                          if (accessAllowed) {
+                            if (_userState is UserLoadedState) {
+                              _customerEmail = _userState.user!.email!;
+                            }
+                          }
+                          if (_cartState is CartLoadedState) {
+                            _onOneCheckOut(
+                                _cartState.cartList!.first.id!,
+                                _customerEmail);
+                          }
+                        },
+                        icon: const Icon(Icons.double_arrow),
+                        label: Text(
+                          LocaleKeys.checkout_all.tr(),
+                          style: Theme.of(context)
+                              .textTheme
+                              .headline6!
+                              .copyWith(
+                                  fontWeight: FontWeight.w900,
+                                  color: kLightColor),
+                        ),
+                        elevation: 20,
+                        heroTag: "checkout_all",
+                        foregroundColor: kLightColor,
+                        tooltip: LocaleKeys.checkout_all.tr(),
+                      );
+                    } else {
+                      return const SizedBox();
+                    }
+                  }
+                  return const SizedBox();
+                },
+                loading: () => const SizedBox(),
+                error: (error, stackTrace) => Text(error.toString()),
+              ),
               //floatingActionButton: ,
               body: _cartState is CartLoadedState
                   ? _cartState.cartList == null || _cartState.cartList!.isEmpty
