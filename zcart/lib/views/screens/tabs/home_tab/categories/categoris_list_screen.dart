@@ -71,7 +71,7 @@ class CategoryListScreen extends ConsumerWidget {
                                   ),
                                 ),
                                 footer: Center(
-                                    child: Text(e.name ?? "")
+                                    child: Text(e.name ?? "", textAlign: TextAlign.center)
                                         .pOnly(bottom: 24, top: 16)),
                               ).onInkTap(() {
                                 context

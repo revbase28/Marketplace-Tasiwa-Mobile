@@ -485,7 +485,7 @@ class OrderDetailsScreen extends ConsumerWidget {
       child: Wrap(
         spacing: 8,
         runSpacing: 8,
-        alignment: WrapAlignment.end,
+        alignment: WrapAlignment.start,
         children: [
           CustomSmallButton(
             text: LocaleKeys.generate_invoice.tr(),
@@ -515,16 +515,16 @@ class OrderDetailsScreen extends ConsumerWidget {
                 }
               },
             ),
-          if (orderDetailsState.orderDetails!.disputeId == null)
-            CustomSmallButton(
-              text: LocaleKeys.open_dispute.tr(),
-              onPressed: () {
-                context
-                    .read(disputeInfoProvider.notifier)
-                    .getDisputeInfo(orderDetailsState.orderDetails!.id);
-                context.nextPage(const OpenDisputeScreen());
-              },
-            ),
+          // if (orderDetailsState.orderDetails!.disputeId == null)
+          //   CustomSmallButton(
+          //     text: LocaleKeys.open_dispute.tr(),
+          //     onPressed: () {
+          //       context
+          //           .read(disputeInfoProvider.notifier)
+          //           .getDisputeInfo(orderDetailsState.orderDetails!.id);
+          //       context.nextPage(const OpenDisputeScreen());
+          //     },
+          //   ),
           if (orderDetailsState.orderDetails!.disputeId != null)
             CustomSmallButton(
               text: LocaleKeys.dispute_details.tr(),

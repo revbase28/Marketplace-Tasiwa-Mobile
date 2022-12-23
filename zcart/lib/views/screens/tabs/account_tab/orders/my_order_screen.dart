@@ -310,16 +310,16 @@ class OrderCard extends StatelessWidget {
                       context.nextPage(OrderChatScreen(orders: order));
                     },
                   ),
-                  if (order.disputeId == null)
-                    CustomSmallButton(
-                      text: LocaleKeys.open_a_dispute.tr(),
-                      onPressed: () {
-                        context
-                            .read(disputeInfoProvider.notifier)
-                            .getDisputeInfo(order.id);
-                        context.nextPage(const OpenDisputeScreen());
-                      },
-                    ),
+                  // if (order.disputeId == null)
+                  //   CustomSmallButton(
+                  //     text: LocaleKeys.open_a_dispute.tr(),
+                  //     onPressed: () {
+                  //       context
+                  //           .read(disputeInfoProvider.notifier)
+                  //           .getDisputeInfo(order.id);
+                  //       context.nextPage(const OpenDisputeScreen());
+                  //     },
+                  //   ),
                   if (order.orderStatus != "DELIVERED")
                     CustomSmallButton(
                       text: LocaleKeys.confirm_received.tr(),

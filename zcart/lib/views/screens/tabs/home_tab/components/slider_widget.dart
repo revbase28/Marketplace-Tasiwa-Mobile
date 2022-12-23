@@ -38,16 +38,16 @@ class SliderWidget extends StatelessWidget {
                     ),
                   ),
                 ).cornerRadius(10).onInkTap(() {
-                  if (item.link != null && item.link!.isNotEmpty) {
-                    context
-                        .read(categoryItemNotifierProvider.notifier)
-                        .getCategoryItem(item.link);
-                    context.nextPage(const ProductListScreen());
-                  } else {
-                    toast(
-                      LocaleKeys.no_offer.tr(),
-                    );
-                  }
+                  // if (item.link != null && item.link!.isNotEmpty) {
+                  //   context
+                  //       .read(categoryItemNotifierProvider.notifier)
+                  //       .getCategoryItem(item.link);
+                  //   context.nextPage(const ProductListScreen());
+                  // } else {
+                  //   toast(
+                  //     LocaleKeys.no_offer.tr(),
+                  //   );
+                  // }
                 }))
             .toList());
   }

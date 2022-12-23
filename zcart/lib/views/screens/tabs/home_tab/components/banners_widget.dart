@@ -62,19 +62,19 @@ class BannerWidget extends StatelessWidget {
                     )
                   ],
                 ).onInkTap(() {
-                  if (item.link!.isNotEmpty) {
-                    debugPrint(item.link);
-
-                    context
-                        .read(categoryItemNotifierProvider.notifier)
-                        .getCategoryItem(item.link.splitAfter(
-                            '.${API.base.split(".").last.split("/").first}'));
-                    context.nextPage(ProductListScreen(title: item.title));
-                  } else {
-                    toast(
-                      LocaleKeys.no_offer.tr(),
-                    );
-                  }
+                  // if (item.link!.isNotEmpty) {
+                  //   debugPrint(item.link);
+                  //
+                  //   context
+                  //       .read(categoryItemNotifierProvider.notifier)
+                  //       .getCategoryItem(item.link.splitAfter(
+                  //           '.${API.base.split(".").last.split("/").first}'));
+                  //   context.nextPage(ProductListScreen(title: item.title));
+                  // } else {
+                  //   toast(
+                  //     LocaleKeys.no_offer.tr(),
+                  //   );
+                  // }
                 }))
             .toList());
   }

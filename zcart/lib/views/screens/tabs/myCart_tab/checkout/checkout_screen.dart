@@ -20,6 +20,7 @@ import 'package:zcart/data/models/product/product_details_model.dart';
 import 'package:zcart/data/network/network_utils.dart';
 import 'package:zcart/helper/constants.dart';
 import 'package:zcart/helper/get_color_based_on_theme.dart';
+import 'package:zcart/helper/number_currency_formatter.dart';
 import 'package:zcart/helper/pick_image_helper.dart';
 import 'package:zcart/riverpod/providers/plugin_provider.dart';
 import 'package:zcart/riverpod/providers/provider.dart';
@@ -1319,7 +1320,8 @@ class CheckOutItemDetailsPage extends ConsumerWidget {
                                     )
                                   : CheckOutDetailsPriceWidget(
                                       title: LocaleKeys.subtotal.tr(),
-                                      price: symbol + _subTotal,
+                                      price: formatCurrency(symbol, _subTotal),
+                                      //symbol + _subTotal,
                                       subtitle: _subTotalSubtitle,
                                     ),
                             ),
@@ -1334,7 +1336,8 @@ class CheckOutItemDetailsPage extends ConsumerWidget {
                                       )
                                     : CheckOutDetailsPriceWidget(
                                         title: LocaleKeys.shipping.tr(),
-                                        price: symbol + _shipping,
+                                        price:
+                                            formatCurrency(symbol, _shipping),
                                         subtitle: _shippingSubtitle,
                                       ),
                               ),
@@ -1349,7 +1352,8 @@ class CheckOutItemDetailsPage extends ConsumerWidget {
                                       )
                                     : CheckOutDetailsPriceWidget(
                                         title: LocaleKeys.handling.tr(),
-                                        price: symbol + _handling,
+                                        price:
+                                            formatCurrency(symbol, _handling),
                                         subtitle: _handlingSubtitle,
                                       ),
                               ),
@@ -1364,7 +1368,8 @@ class CheckOutItemDetailsPage extends ConsumerWidget {
                                       )
                                     : CheckOutDetailsPriceWidget(
                                         title: LocaleKeys.packaging.tr(),
-                                        price: symbol + _packaging,
+                                        price:
+                                            formatCurrency(symbol, _packaging),
                                         subtitle: _packagingSubtitle,
                                       ),
                               ),
@@ -1394,7 +1399,7 @@ class CheckOutItemDetailsPage extends ConsumerWidget {
                                       )
                                     : CheckOutDetailsPriceWidget(
                                         title: LocaleKeys.total.tr(),
-                                        price: symbol + _total,
+                                        price: formatCurrency(symbol, _total),
                                         isGrandTotal: true,
                                       )),
                             const SizedBox(height: 16),
